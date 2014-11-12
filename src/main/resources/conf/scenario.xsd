@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+
+	<element name="scenario">
+		<complexType>
+			<sequence>
+				<!-- General Configuration Information -->
+				<element maxOccurs="1" name="general">
+					<complexType>
+						<sequence>
+							<element name="numberReplications" type="nonNegativeInteger" />
+							<element name="numberCycles" type="double" />
+							<element maxOccurs="1" name="seeds">
+								<complexType>
+									<choice maxOccurs="unbounded" minOccurs="0">
+										<element name="seed" type="nonNegativeInteger" />
+									</choice>
+								</complexType>
+							</element>
+							<element maxOccurs="1" name="output">
+								<complexType>
+									<sequence>
+										<element name="directory" type="string" />
+										<element name="filename" type="string" />
+										<element name="append" type="boolean" />
+										<element name="separator" type="string" />
+										<element name="writeFrequency" type="nonNegativeInteger" />
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+				<!-- Consumers Configuration Information -->
+				<element maxOccurs="1" name="consumers">
+					<complexType>
+						<sequence>
+							<element maxOccurs="unbounded" name="consumer">
+								<complexType>
+									<sequence>
+										<element name="numberConsumers" type="nonNegativeInteger" />
+
+										<!-- Reputation -->
+										<element name="reputation">
+											<complexType>
+												<sequence>
+													<element name="entrepreneurPayer">
+														<simpleType>
+															<restriction base="double">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+
+										<!-- Normative -->
+										<element name="normativeXML" type="string" />
+										<element name="normativeXSD" type="string" />
+										<element name="individualWeight">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="normativeWeight">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element maxOccurs="1" name="normsSalience">
+											<complexType>
+												<sequence>
+													<element maxOccurs="unbounded" name="normSalience">
+														<complexType>
+															<attribute name="id" type="nonNegativeInteger" />
+															<attribute name="salience">
+																<simpleType>
+																	<restriction base="double">
+																		<minInclusive value="0.0" />
+																		<maxInclusive value="1.0" />
+																	</restriction>
+																</simpleType>
+															</attribute>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+				<!-- Entrepreneurs Configuration Information -->
+				<element maxOccurs="1" name="entrepreneurs">
+					<complexType>
+						<sequence>
+							<element maxOccurs="unbounded" name="entrepreneur">
+								<complexType>
+									<sequence>
+										<element name="numberEntrepreneurs" type="nonNegativeInteger" />
+
+										<!-- Economic -->
+										<element name="wealth">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="periodicityWage" type="nonNegativeInteger" />
+										<element name="minimumWage">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="maximumWage">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="variationWage">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+
+										<!-- State -->
+										<element name="collaborationProbability">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+
+										<!-- Intermediary Organization -->
+										<element name="affiliated" type="boolean" />
+
+										<!-- Reputation -->
+										<element name="reputation">
+											<complexType>
+												<sequence>
+													<element name="stateProtector">
+														<simpleType>
+															<restriction base="double">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+													<element name="statePunisher">
+														<simpleType>
+															<restriction base="double">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+													<element name="mafiaPunisher">
+														<simpleType>
+															<restriction base="double">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+
+										<!-- Normative -->
+										<element name="normativeXML" type="string" />
+										<element name="normativeXSD" type="string" />
+										<element name="individualWeight">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="normativeWeight">
+											<simpleType>
+												<restriction base="double">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element maxOccurs="1" name="normsSalience">
+											<complexType>
+												<sequence>
+													<element maxOccurs="unbounded" name="normSalience">
+														<complexType>
+															<attribute name="id" type="nonNegativeInteger" />
+															<attribute name="salience">
+																<simpleType>
+																	<restriction base="double">
+																		<minInclusive value="0.0" />
+																		<maxInclusive value="1.0" />
+																	</restriction>
+																</simpleType>
+															</attribute>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+				<!-- State Configuration Information -->
+				<element maxOccurs="1" name="state">
+					<complexType>
+						<sequence>
+							<!-- Police -->
+							<element name="numberPoliceOfficers" type="nonNegativeInteger" />
+							<element name="investigativeDuration" type="nonNegativeInteger" />
+							<element name="captureProbability">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+
+							<!-- Justice -->
+							<element name="incarcerationProbability">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="incarcerationDuration" type="nonNegativeInteger" />
+							<element name="proportionTransferFondo">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+				<!-- Mafia Configuration Information -->
+				<element maxOccurs="1" name="mafia">
+					<complexType>
+						<sequence>
+							<element name="numberMafiosi" type="nonNegativeInteger" />
+							<element name="wealth">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="demandMean">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="demandStDev">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="extortionLevel">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="punishmentSeverity">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="punishmentProbability">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+										<maxExclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="minimumBenefit">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="maximumBenefit">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="pentitiProbability">
+								<simpleType>
+									<restriction base="double">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
+				<!-- Intermediary Organization Configuration Information -->
+				<element maxOccurs="1" name="intermediaryOrg" />
+
+			</sequence>
+		</complexType>
+	</element>
+</schema>

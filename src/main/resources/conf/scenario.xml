@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="scenario.xsd">
+
+	<!-- General Configuration Information -->
+	<general>
+		<numberReplications>2</numberReplications>
+		<numberCycles>10000</numberCycles>
+		<seeds>
+			<seed>1</seed>
+			<seed>2</seed>
+		</seeds>
+		<output>
+			<directory>./output</directory>
+			<filename>database.csv</filename>
+			<append>false</append>
+			<separator>;</separator>
+			<writeFrequency>1000</writeFrequency>
+		</output>
+	</general>
+
+	<!-- Consumers Configuration Information -->
+	<consumers>
+		<consumer>
+			<numberConsumers>10</numberConsumers>
+
+			<!-- Reputation -->
+			<reputation>
+				<entrepreneurPayer>0.5</entrepreneurPayer>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<normSalience id="4" salience="0.3" />
+				<normSalience id="5" salience="0.9" />
+			</normsSalience>
+		</consumer>
+	</consumers>
+
+	<!-- Entrepreneurs Configuration Information -->
+	<entrepreneurs>
+		<entrepreneur>
+			<numberEntrepreneurs>10</numberEntrepreneurs>
+
+			<!-- Economic -->
+			<wealth>1000.00</wealth>
+			<periodicityWage>30</periodicityWage>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+
+			<!-- State -->
+			<collaborationProbability>0.9</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliated>false</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.9</statePunisher>
+				<mafiaPunisher>0.9</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<normSalience id="0" salience="0.3" />
+				<normSalience id="1" salience="0.9" />
+				<normSalience id="2" salience="0.9" />
+				<normSalience id="3" salience="0.9" />
+			</normsSalience>
+		</entrepreneur>
+	</entrepreneurs>
+
+	<!-- State Configuration Information -->
+	<state>
+		<!-- Police -->
+		<numberPoliceOfficers>10</numberPoliceOfficers>
+		<investigativeDuration>3</investigativeDuration>
+		<captureProbability>0.7</captureProbability>
+
+		<!-- Justice -->
+		<incarcerationProbability>0.8</incarcerationProbability>
+		<incarcerationDuration>15</incarcerationDuration>
+		<proportionTransferFondo>0.5</proportionTransferFondo>
+	</state>
+
+	<!-- Mafia Configuration Information -->
+	<mafia>
+		<numberMafiosi>5</numberMafiosi>
+		<wealth>0.00</wealth>
+		<demandMean>30</demandMean>
+		<demandStDev>2</demandStDev>
+		<extortionLevel>0.1</extortionLevel>
+		<punishmentSeverity>0.6</punishmentSeverity>
+		<punishmentProbability>0.5</punishmentProbability>
+		<minimumBenefit>0.0</minimumBenefit>
+		<maximumBenefit>1.5</maximumBenefit>
+		<pentitiProbability>0.0</pentitiProbability>
+	</mafia>
+
+	<!-- Intermediary Organization Configuration Information -->
+	<intermediaryOrg>
+	</intermediaryOrg>
+
+</scenario>

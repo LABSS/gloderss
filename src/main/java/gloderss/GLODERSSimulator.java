@@ -182,7 +182,7 @@ public class GLODERSSimulator extends EventSimulator {
 				c.initializeSim();
 			}
 			
-			for(EntrepreneurAgent e : entrepreneurs.values()) {
+			for(EntrepreneurAgent e : this.entrepreneurs.values()) {
 				e.initializeSim();
 			}
 			

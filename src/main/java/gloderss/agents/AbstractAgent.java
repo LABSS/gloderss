@@ -1,11 +1,7 @@
 package gloderss.agents;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import gloderss.communication.CommunicationController;
 import gloderss.communication.IComm;
 import gloderss.communication.InfoAbstract;
@@ -24,9 +20,9 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	// Communication controller
 	protected CommunicationController	comm;
 	
-	// Inbox messages
-	protected Queue<Message>					inbox;
 	
+	// Inbox messages
+	// protected Queue<Message> inbox;
 	
 	/**
 	 * Constructor
@@ -44,7 +40,7 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 		this.comm = CommunicationController.getInstance();
 		this.comm.subscribe(id, this);
 		
-		this.inbox = new LinkedList<Message>();
+		// this.inbox = new LinkedList<Message>();
 	}
 	
 	
@@ -100,7 +96,7 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 */
 	@Override
 	public synchronized void handleMessage(Message msg) {
-		this.inbox.add(msg);
+		// this.inbox.add(msg);
 	}
 	
 	
@@ -109,15 +105,15 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 * 
 	 * @param none
 	 * @return True There is message, False otherwise
+	 * 
+	 *         public boolean hasMsg() {
+	 *         if(!this.inbox.isEmpty()) {
+	 *         return true;
+	 *         }
+	 * 
+	 *         return false;
+	 *         }
 	 */
-	public boolean hasMsg() {
-		if(!this.inbox.isEmpty()) {
-			return true;
-		}
-		
-		return false;
-	}
-	
 	
 	/**
 	 * Check whether there is a message of a specific type in the Inbox
@@ -125,38 +121,39 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 * @param clazz
 	 *          Class type to search in the Inbox
 	 * @return True if found the content of this class type, False otherwise
+	 * 
+	 *         public boolean hasMsg(Class<?> clazz) {
+	 *         boolean found = false;
+	 *         Iterator<Message> it = this.inbox.iterator();
+	 *         Message msg;
+	 *         while((it.hasNext()) && (!found)) {
+	 *         msg = it.next();
+	 *         if((msg.getContent() != null) &&
+	 *         (clazz.isInstance(msg.getContent()))) {
+	 *         found = true;
+	 *         }
+	 *         }
+	 * 
+	 *         return found;
+	 *         }
 	 */
-	public boolean hasMsg(Class<?> clazz) {
-		boolean found = false;
-		Iterator<Message> it = this.inbox.iterator();
-		Message msg;
-		while((it.hasNext()) && (!found)) {
-			msg = it.next();
-			if((msg.getContent() != null) && (clazz.isInstance(msg.getContent()))) {
-				found = true;
-			}
-		}
-		
-		return found;
-	}
-	
 	
 	/**
 	 * Get the next oldest message
 	 * 
 	 * @param none
 	 * @return Oldest message in the Inbox
+	 * 
+	 *         public Message nextMsg() {
+	 *         Message msg = null;
+	 * 
+	 *         if(!this.inbox.isEmpty()) {
+	 *         msg = this.inbox.poll();
+	 *         }
+	 * 
+	 *         return msg;
+	 *         }
 	 */
-	public Message nextMsg() {
-		Message msg = null;
-		
-		if(!this.inbox.isEmpty()) {
-			msg = this.inbox.poll();
-		}
-		
-		return msg;
-	}
-	
 	
 	/**
 	 * Get all the messages of a specific class type
@@ -164,23 +161,23 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 * @param clazz
 	 *          Class type to search in the Inbox
 	 * @return List of messages of the specified type
+	 * 
+	 *         public List<Message> retriveMsgs(Class<?> clazz) {
+	 *         List<Message> msgs = new ArrayList<Message>();
+	 * 
+	 *         Iterator<Message> it = this.inbox.iterator();
+	 *         Message msg;
+	 *         while(it.hasNext()) {
+	 *         msg = it.next();
+	 *         if(clazz.isInstance(msg.getContent())) {
+	 *         msgs.add(msg);
+	 *         }
+	 *         }
+	 *         this.inbox.removeAll(msgs);
+	 * 
+	 *         return msgs;
+	 *         }
 	 */
-	public List<Message> retriveMsgs(Class<?> clazz) {
-		List<Message> msgs = new ArrayList<Message>();
-		
-		Iterator<Message> it = this.inbox.iterator();
-		Message msg;
-		while(it.hasNext()) {
-			msg = it.next();
-			if(clazz.isInstance(msg.getContent())) {
-				msgs.add(msg);
-			}
-		}
-		this.inbox.removeAll(msgs);
-		
-		return msgs;
-	}
-	
 	
 	/**
 	 * Get the list of observations
@@ -202,9 +199,8 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 *          List of agents to be observed
 	 * @return none
 	 */
-	public void addObservation(Integer observer, List<Integer> observedList) {
-		if((observer != null) && (observedList != null)
-				&& (!observedList.isEmpty())) {
+	public void addObservation(int observer, List<Integer> observedList) {
+		if((observedList != null) && (!observedList.isEmpty())) {
 			this.comm.addObservation(observer, observedList);
 		}
 	}
@@ -219,10 +215,8 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 *          Observed agent
 	 * @return none
 	 */
-	public void addObservation(Integer observer, Integer observed) {
-		if((observer != null) && (observed != null)) {
-			this.comm.addObservation(observer, observed);
-		}
+	public void addObservation(int observer, int observed) {
+		this.comm.addObservation(observer, observed);
 	}
 	
 	
@@ -235,9 +229,8 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 *          List of agents to remove observation
 	 * @return none
 	 */
-	public void removeObservation(Integer observer, List<Integer> observedList) {
-		if((observer != null) && (observedList != null)
-				&& (!observedList.isEmpty())) {
+	public void removeObservation(int observer, List<Integer> observedList) {
+		if((observedList != null) && (!observedList.isEmpty())) {
 			this.comm.removeObservation(observer, observedList);
 		}
 	}
@@ -252,9 +245,7 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	 *          Observed agent
 	 * @return none
 	 */
-	public void removeObservation(Integer observer, Integer observed) {
-		if((observer != null) && (observed != null)) {
-			this.comm.removeObservation(observer, observed);
-		}
+	public void removeObservation(int observer, int observed) {
+		this.comm.removeObservation(observer, observed);
 	}
 }

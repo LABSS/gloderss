@@ -4,7 +4,7 @@
 
 	<!-- General Configuration Information -->
 	<general>
-		<numberReplications>2</numberReplications>
+		<numberReplications>1</numberReplications>
 		<numberCycles>10000</numberCycles>
 		<seeds>
 			<seed>1</seed>
@@ -23,6 +23,9 @@
 	<consumers>
 		<consumer>
 			<numberConsumers>10</numberConsumers>
+
+			<!-- Economic -->
+			<buyPDF>NORMAL(60,5)</buyPDF>
 
 			<!-- Reputation -->
 			<reputation>
@@ -48,10 +51,13 @@
 
 			<!-- Economic -->
 			<wealth>1000.00</wealth>
-			<periodicityWage>30</periodicityWage>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
 			<minimumWage>500.00</minimumWage>
 			<maximumWage>1000.00</maximumWage>
 			<variationWage>0.5</variationWage>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
 
 			<!-- State -->
 			<collaborationProbability>0.9</collaborationProbability>
@@ -84,12 +90,20 @@
 	<state>
 		<!-- Police -->
 		<numberPoliceOfficers>10</numberPoliceOfficers>
-		<investigativeDuration>3</investigativeDuration>
+		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
+		<specificInvestigationDurationPDF>CONSTANT(100)</specificInvestigationDurationPDF>
+		<investigateProbability>0.9</investigateProbability>
 		<captureProbability>0.7</captureProbability>
 
 		<!-- Justice -->
-		<incarcerationProbability>0.8</incarcerationProbability>
-		<incarcerationDuration>15</incarcerationDuration>
+		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
+		<imprisonmentProbability>0.8</imprisonmentProbability>
+		<imprisonmentDurationPDF>NORMAL(1000,100)</imprisonmentDurationPDF>
+		
+		<!-- Fondo di Solidarieta -->
+		<timeToCompensationPDF>CONSTANT(120)</timeToCompensationPDF>
+		<resourceFondo>4000</resourceFondo>
+		<periodicityFondoPDF>NORMAL(500,2)</periodicityFondoPDF>
 		<proportionTransferFondo>0.5</proportionTransferFondo>
 	</state>
 
@@ -97,14 +111,14 @@
 	<mafia>
 		<numberMafiosi>5</numberMafiosi>
 		<wealth>0.00</wealth>
-		<demandMean>30</demandMean>
-		<demandStDev>2</demandStDev>
+		<demandPDF>NORMAL(30,2)</demandPDF>
+		<demandAffiliatedProbability>0.01</demandAffiliatedProbability>
 		<extortionLevel>0.1</extortionLevel>
 		<punishmentSeverity>0.6</punishmentSeverity>
 		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
 		<maximumBenefit>1.5</maximumBenefit>
-		<pentitiProbability>0.0</pentitiProbability>
+		<pentitiProbability>0.001</pentitiProbability>
 	</mafia>
 
 	<!-- Intermediary Organization Configuration Information -->

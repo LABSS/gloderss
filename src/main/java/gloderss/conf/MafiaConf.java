@@ -11,9 +11,9 @@ public class MafiaConf {
 	
 	private double	wealth;
 	
-	private double	demandMean;
+	private String	demandPDF;
 	
-	private double	demandStDev;
+	private double	demandAffiliatedProbability;
 	
 	private double	extortionLevel;
 	
@@ -50,25 +50,25 @@ public class MafiaConf {
 	}
 	
 	
-	public double getDemandMean() {
-		return this.demandMean;
+	public String getDemandPDF() {
+		return this.demandPDF;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_MAFIA_DEMAND_MEAN)
-	public void setDemandMean(double demandMean) {
-		this.demandMean = demandMean;
+	@XmlElement(name = Constants.TAG_MAFIA_DEMAND_PDF)
+	public void setDemandPDF(String demandPDF) {
+		this.demandPDF = demandPDF;
 	}
 	
 	
-	public double getDemandStDev() {
-		return this.demandStDev;
+	public double getDemandAffiliatedProbability() {
+		return this.demandAffiliatedProbability;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_MAFIA_DEMAND_STANDARD_DEVIATION)
-	public void setDemandStDev(double demandStDev) {
-		this.demandStDev = demandStDev;
+	@XmlElement(name = Constants.TAG_MAFIA_DEMAND_AFFILIATED_PROBABILITY)
+	public void setDemandAffiliatedProbability(double demandAffiliatedProbability) {
+		this.demandAffiliatedProbability = demandAffiliatedProbability;
 	}
 	
 	

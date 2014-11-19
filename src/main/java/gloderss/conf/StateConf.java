@@ -9,13 +9,25 @@ public class StateConf {
 	
 	private int			numberPoliceOfficers;
 	
-	private int			investigativeDuration;
+	private String	generalInvestigationDurationPDF;
+	
+	private String	specificInvestigationDurationPDF;
+	
+	private double	investigateProbability;
 	
 	private double	captureProbability;
 	
-	private double	incarcerationProbability;
+	private String	custodyDurationPDF;
 	
-	private int			incarcerationDuration;
+	private double	imprisonmentProbability;
+	
+	private String	imprisonmentDurationPDF;
+	
+	private String	timeToCompensationPDF;
+	
+	private double	resourceFondo;
+	
+	private String	periodicityFondoPDF;
 	
 	private double	proportionTransferFondo;
 	
@@ -31,14 +43,38 @@ public class StateConf {
 	}
 	
 	
-	public int getInvestigativeDuration() {
-		return this.investigativeDuration;
+	public String getGeneralInvestigationDurationPDF() {
+		return this.generalInvestigationDurationPDF;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_INVESTIGATIVE_DURATION)
-	public void setInvestigativeDuration(int investigativeDuration) {
-		this.investigativeDuration = investigativeDuration;
+	@XmlElement(name = Constants.TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF)
+	public void setGeneralInvestigationDurationPDF(
+			String generalInvestigationDurationPDF) {
+		this.generalInvestigationDurationPDF = generalInvestigationDurationPDF;
+	}
+	
+	
+	public String getSpecificInvestigationDurationPDF() {
+		return this.specificInvestigationDurationPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF)
+	public void setSpecificInvestigationDurationPDF(
+			String specificInvestigationDurationPDF) {
+		this.specificInvestigationDurationPDF = specificInvestigationDurationPDF;
+	}
+	
+	
+	public double getInvestigateProbability() {
+		return this.investigateProbability;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_INVESTIGATE_PROBABILITY)
+	public void setInvestigateProbability(double investigateProbability) {
+		this.investigateProbability = investigateProbability;
 	}
 	
 	
@@ -53,25 +89,69 @@ public class StateConf {
 	}
 	
 	
-	public double getIncarcerationProbability() {
-		return this.incarcerationProbability;
+	public String getCustodyDurationPDF() {
+		return this.custodyDurationPDF;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_INCARCERATION_PROBABILITY)
-	public void setIncarcerationProbability(double incarcerationProbability) {
-		this.incarcerationProbability = incarcerationProbability;
+	@XmlElement(name = Constants.TAG_STATE_CUSTODY_DURATION_PDF)
+	public void setCustodyDurationPDF(String custodyDurationPDF) {
+		this.custodyDurationPDF = custodyDurationPDF;
 	}
 	
 	
-	public int getIncarcerationDuration() {
-		return this.incarcerationDuration;
+	public double getImprisonmentProbability() {
+		return this.imprisonmentProbability;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_INCARCERATION_DURATION)
-	public void setIncarcerationDuration(int incarcerationDuration) {
-		this.incarcerationDuration = incarcerationDuration;
+	@XmlElement(name = Constants.TAG_STATE_IMPRISONMENT_PROBABILITY)
+	public void setImprisonmentProbability(double imprisonmentProbability) {
+		this.imprisonmentProbability = imprisonmentProbability;
+	}
+	
+	
+	public String getImprisonmentDurationPDF() {
+		return this.imprisonmentDurationPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF)
+	public void setImprisonmentDurationPDF(String imprisonmentDurationPDF) {
+		this.imprisonmentDurationPDF = imprisonmentDurationPDF;
+	}
+	
+	
+	public String getTimeToCompensationPDF() {
+		return this.timeToCompensationPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_TIME_TO_COMPENSATION_PDF)
+	public void setTimeToCompensationPDFPDF(String timeToCompensationPDF) {
+		this.timeToCompensationPDF = timeToCompensationPDF;
+	}
+	
+	
+	public double getResourceFondo() {
+		return this.resourceFondo;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_RESOURCE_FONDO)
+	public void setResourceFondo(double resourceFondo) {
+		this.resourceFondo = resourceFondo;
+	}
+	
+	
+	public String getPeriodicityFondoPDF() {
+		return this.periodicityFondoPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_PERIODICITY_FONDO_PDF)
+	public void setPeriodicityFondoPDF(String periodicityFondoPDF) {
+		this.periodicityFondoPDF = periodicityFondoPDF;
 	}
 	
 	

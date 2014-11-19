@@ -14,6 +14,6 @@ public class AbstractEventSimulator {
 	
 	
 	public AbstractEvent cancel(AbstractEvent e) {
-		return (AbstractEvent) events.remove(e);
+		return (AbstractEvent) this.events.remove(e);
 	}
 }

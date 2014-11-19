@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema">
 
+	<!-- PDF (Probability Distribution Function -->
+	<!-- CONSTANT(value) - Constant value -->
+	<!-- UNIFORM(minValue, maxValue) - Uniform distribution between minimum 
+		and maximum value -->
+	<!-- NORMAL(mean,stdDev) - Normal distribution with mean and standard deviation 
+		specified -->
+	<!-- POISSON(lambda) - Poisson distribution generated based on the lambda -->
+
 	<element name="scenario">
 		<complexType>
 			<sequence>
@@ -9,7 +17,7 @@
 					<complexType>
 						<sequence>
 							<element name="numberReplications" type="nonNegativeInteger" />
-							<element name="numberCycles" type="double" />
+							<element name="numberCycles" type="decimal" />
 							<element maxOccurs="1" name="seeds">
 								<complexType>
 									<choice maxOccurs="unbounded" minOccurs="0">
@@ -41,13 +49,16 @@
 									<sequence>
 										<element name="numberConsumers" type="nonNegativeInteger" />
 
+										<!-- Economic -->
+										<element name="buyPDF" type="string" />
+
 										<!-- Reputation -->
 										<element name="reputation">
 											<complexType>
 												<sequence>
 													<element name="entrepreneurPayer">
 														<simpleType>
-															<restriction base="double">
+															<restriction base="decimal">
 																<minInclusive value="0.0" />
 																<maxInclusive value="1.0" />
 															</restriction>
@@ -62,7 +73,7 @@
 										<element name="normativeXSD" type="string" />
 										<element name="individualWeight">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -70,7 +81,7 @@
 										</element>
 										<element name="normativeWeight">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -84,7 +95,7 @@
 															<attribute name="id" type="nonNegativeInteger" />
 															<attribute name="salience">
 																<simpleType>
-																	<restriction base="double">
+																	<restriction base="decimal">
 																		<minInclusive value="0.0" />
 																		<maxInclusive value="1.0" />
 																	</restriction>
@@ -114,29 +125,37 @@
 										<!-- Economic -->
 										<element name="wealth">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 												</restriction>
 											</simpleType>
 										</element>
-										<element name="periodicityWage" type="nonNegativeInteger" />
+										<element name="periodicityWagePDF" type="string" />
 										<element name="minimumWage">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="maximumWage">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="variationWage">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="denounceAlpha">
+											<simpleType>
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -146,7 +165,7 @@
 										<!-- State -->
 										<element name="collaborationProbability">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -162,7 +181,7 @@
 												<sequence>
 													<element name="stateProtector">
 														<simpleType>
-															<restriction base="double">
+															<restriction base="decimal">
 																<minInclusive value="0.0" />
 																<maxInclusive value="1.0" />
 															</restriction>
@@ -170,7 +189,7 @@
 													</element>
 													<element name="statePunisher">
 														<simpleType>
-															<restriction base="double">
+															<restriction base="decimal">
 																<minInclusive value="0.0" />
 																<maxInclusive value="1.0" />
 															</restriction>
@@ -178,7 +197,7 @@
 													</element>
 													<element name="mafiaPunisher">
 														<simpleType>
-															<restriction base="double">
+															<restriction base="decimal">
 																<minInclusive value="0.0" />
 																<maxInclusive value="1.0" />
 															</restriction>
@@ -193,7 +212,7 @@
 										<element name="normativeXSD" type="string" />
 										<element name="individualWeight">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -201,7 +220,7 @@
 										</element>
 										<element name="normativeWeight">
 											<simpleType>
-												<restriction base="double">
+												<restriction base="decimal">
 													<minInclusive value="0.0" />
 													<maxInclusive value="1.0" />
 												</restriction>
@@ -215,7 +234,7 @@
 															<attribute name="id" type="nonNegativeInteger" />
 															<attribute name="salience">
 																<simpleType>
-																	<restriction base="double">
+																	<restriction base="decimal">
 																		<minInclusive value="0.0" />
 																		<maxInclusive value="1.0" />
 																	</restriction>
@@ -240,10 +259,19 @@
 						<sequence>
 							<!-- Police -->
 							<element name="numberPoliceOfficers" type="nonNegativeInteger" />
-							<element name="investigativeDuration" type="nonNegativeInteger" />
+							<element name="generalInvestigationDurationPDF" type="string" />
+							<element name="specificInvestigationDurationPDF" type="string" />
+							<element name="investigateProbability">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
 							<element name="captureProbability">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 										<maxInclusive value="1.0" />
 									</restriction>
@@ -251,18 +279,30 @@
 							</element>
 
 							<!-- Justice -->
-							<element name="incarcerationProbability">
+							<element name="custodyDurationPDF" type="string" />
+							<element name="imprisonmentProbability">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 										<maxInclusive value="1.0" />
 									</restriction>
 								</simpleType>
 							</element>
-							<element name="incarcerationDuration" type="nonNegativeInteger" />
+							<element name="imprisonmentDurationPDF" type="string" />
+
+							<!-- Fondo Solidarieta -->
+							<element name="timeToCompensationPDF" type="string" />
+							<element name="resourceFondo">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="periodicityFondoPDF" type="string" />
 							<element name="proportionTransferFondo">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 										<maxInclusive value="1.0" />
 									</restriction>
@@ -279,42 +319,37 @@
 							<element name="numberMafiosi" type="nonNegativeInteger" />
 							<element name="wealth">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 									</restriction>
 								</simpleType>
 							</element>
-							<element name="demandMean">
+							<element name="demandPDF" type="string" />
+							<element name="demandAffiliatedProbability">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
-									</restriction>
-								</simpleType>
-							</element>
-							<element name="demandStDev">
-								<simpleType>
-									<restriction base="double">
-										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="extortionLevel">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="punishmentSeverity">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="punishmentProbability">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 										<maxExclusive value="1.0" />
 									</restriction>
@@ -322,21 +357,21 @@
 							</element>
 							<element name="minimumBenefit">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="maximumBenefit">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="pentitiProbability">
 								<simpleType>
-									<restriction base="double">
+									<restriction base="decimal">
 										<minInclusive value="0.0" />
 										<maxInclusive value="1.0" />
 									</restriction>

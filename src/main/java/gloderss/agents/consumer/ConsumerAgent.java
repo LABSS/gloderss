@@ -12,9 +12,13 @@ import gloderss.communication.Message;
 import gloderss.conf.ConsumerConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
+import gloderss.util.distribution.PDFAbstract;
 
 public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		NormEnforcementListener {
+	
+	private PDFAbstract	buyPDF;
+	
 	
 	/**
 	 * Consumer constructor
@@ -29,6 +33,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	 */
 	public ConsumerAgent(Integer id, EventSimulator simulator, ConsumerConf conf) {
 		super(id, simulator);
+		
+		this.buyPDF = PDFAbstract.getInstance(conf.getBuyPDF());
 	}
 	
 	

@@ -1,5 +1,7 @@
 package gloderss.agents.mafia;
 
+import gloderss.actions.CustodyAction;
+import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 
@@ -20,7 +22,19 @@ public interface IMafioso {
 	public void decideBenefit(PayExtortionAction action);
 	
 	
-	public void decidePentiti();
+	public void custody(CustodyAction action);
+	
+	
+	public void releaseCustody();
+	
+	
+	public void imprisonment(ImprisonmentAction action);
+	
+	
+	public void releasePrison();
+	
+	
+	public void decidePentito();
 	
 	
 	public void receiveStateSpreadInformation();

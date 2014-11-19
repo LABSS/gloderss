@@ -3,6 +3,7 @@ package gloderss.util.random;
 import cern.jet.random.engine.MersenneTwister64;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.Normal;
+import cern.jet.random.Poisson;
 import cern.jet.random.Uniform;
 
 public class RandomUtil {
@@ -61,14 +62,14 @@ public class RandomUtil {
 	}
 	
 	
-	public static double nextNormalDouble(double mean, double stDev) {
+	public static double nextNormal(double mean, double stDev) {
 		Normal normal = new Normal(mean, stDev, generator);
 		return normal.nextDouble();
 	}
 	
 	
-	public static int nextNormalInt(double mean, double stDev) {
-		Normal normal = new Normal(mean, stDev, generator);
-		return normal.nextInt();
+	public static double nextPoisson(double lambda) {
+		Poisson poisson = new Poisson(lambda, generator);
+		return poisson.nextDouble();
 	}
 }

@@ -12,6 +12,7 @@ import gloderss.Constants;
 import gloderss.Constants.Actions;
 import gloderss.Constants.Norms;
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.ExtortionAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
@@ -32,6 +33,7 @@ import gloderss.output.ExtortionOutputEntity.Field;
 import gloderss.reputation.MafiaPunisherReputation;
 import gloderss.reputation.StateProtectorReputation;
 import gloderss.reputation.StateFinderReputation;
+import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
 import gloderss.normative.entity.norm.NormContent;
 import gloderss.normative.entity.norm.NormEntity;
@@ -50,6 +52,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
 	
 	private EntrepreneurConf					conf;
+	
+	private PDFAbstract								periodicityWagePDF;
 	
 	private int												stateId;
 	
@@ -88,6 +92,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			EntrepreneurConf conf) {
 		super(id, simulator);
 		this.conf = conf;
+		
+		this.periodicityWagePDF = PDFAbstract.getInstance(this.conf
+				.getPeriodicityWagePDF());
 		
 		/**
 		 * Economic
@@ -277,14 +284,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		}
 		
 		Event event = new Event(this.simulator.now()
-				+ this.conf.getPeriodicityWage(), this, Constants.EVENT_RECEIVE_WAGE);
+				+ this.periodicityWagePDF.nextValue(), this,
+				Constants.EVENT_RECEIVE_WAGE);
 		this.simulator.insert(event);
 	}
 	
 	
 	@Override
 	public void decidePayment(ExtortionAction action) {
-		double paidExtortion = 0.0;
 		
 		int extortionId = (Integer) action
 				.getParam(ExtortionAction.Param.EXTORTION_ID);
@@ -292,61 +299,66 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		int mafiosoId = (Integer) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
+		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
-		int victimId = (Integer) action.getParam(ExtortionAction.Param.VICTIM_ID);
+		int victimId = (int) action.getParam(ExtortionAction.Param.VICTIM_ID);
 		
-		double extortion = (Double) action
+		double extortion = (double) action
 				.getParam(ExtortionAction.Param.EXTORTION);
 		
+		boolean decideNotPay = false;
 		if((this.currentWage > extortion) && (!this.affiliated)) {
 			
-			double punishment = (Double) action
+			double punishment = (double) action
 					.getParam(ExtortionAction.Param.PUNISHMENT);
 			
-			double benefit = (Double) action.getParam(ExtortionAction.Param.BENEFIT);
+			double benefit = (double) action.getParam(ExtortionAction.Param.BENEFIT);
 			
-			double payND = this.normative.getNormSalience(Norms.PAY.ordinal());
+			double TpayNG = this.normative.getNormSalience(Norms.PAY.ordinal());
 			
-			double payID = (benefit - extortion)
+			double TpayIG = (benefit - extortion)
 					- (this.punishmentState * this.stateFinderRep.getReputation() * (1 - this.conf
 							.getCollaborationProbability()));
 			
-			double notPayND = this.normative.getNormSalience(Norms.NOT_PAY.ordinal());
+			double TnotPayNG = this.normative
+					.getNormSalience(Norms.NOT_PAY.ordinal());
 			
-			double notPayID = (extortion - benefit)
+			double TnotPayIG = (extortion - benefit)
 					- (punishment * this.mafiaPunisherRep.getReputation());
 			
-			System.out.println(this.conf.getIndividualWeight() + " " + payID + " "
-					+ payND + " " + this.conf.getNormativeWeight() + " " + notPayID + " "
-					+ notPayND);
+			System.out.println(this.conf.getIndividualWeight() + " " + TpayIG + " "
+					+ TpayNG + " " + this.conf.getNormativeWeight() + " " + TnotPayIG
+					+ " " + TnotPayNG);
 			
+			// TODO
+			// Need to be adjusted with ARC TAN
 			double probPay = 0.0;
-			if(payND > notPayND) {
+			if(TpayNG > TnotPayNG) {
 				
-				double ID = (Math.abs(payID) / (Math.abs(payID) + Math.abs(notPayID)));
-				if((payID < 0) || (notPayID < 0)) {
-					ID = 1 - ID;
+				double IG = (Math.abs(TpayIG) / (Math.abs(TpayIG) + Math.abs(TnotPayIG)));
+				if((TpayIG < 0) || (TnotPayIG < 0)) {
+					IG = 1 - IG;
 				}
 				
-				probPay = (this.conf.getIndividualWeight() * ID)
-						+ (this.conf.getNormativeWeight() * payND);
+				probPay = (this.conf.getIndividualWeight() * IG)
+						+ (this.conf.getNormativeWeight() * TpayNG);
 				
-				System.out.println(this.conf.getIndividualWeight() + " " + ID + " "
-						+ this.conf.getNormativeWeight() + " " + notPayND);
+				System.out.println(this.conf.getIndividualWeight() + " " + IG + " "
+						+ this.conf.getNormativeWeight() + " " + TnotPayNG);
 				
 			} else {
 				
-				double id = (Math.abs(notPayID) / (Math.abs(payID) + Math.abs(notPayID)));
-				if((payID < 0) || (notPayID < 0)) {
+				double id = (Math.abs(TnotPayIG) / (Math.abs(TpayIG) + Math
+						.abs(TnotPayIG)));
+				if((TpayIG < 0) || (TnotPayIG < 0)) {
 					id = 1 - id;
 				}
 				
 				probPay = (this.conf.getIndividualWeight() * id)
-						+ (this.conf.getNormativeWeight() * notPayND);
+						+ (this.conf.getNormativeWeight() * TnotPayNG);
 				
 				System.out.println(this.conf.getIndividualWeight() + " " + id + " "
-						+ this.conf.getNormativeWeight() + " " + notPayND);
+						+ this.conf.getNormativeWeight() + " " + TnotPayNG);
 			}
 			
 			// Decide paying extortion
@@ -358,76 +370,78 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						mafiosoId, payAction);
 				this.sendMsg(replyMsg);
 				
-				paidExtortion += extortion;
+				this.currentWage -= extortion;
 				
 				outputEntity.setValue(Field.PAID.name(), true);
 				
 				// Decide not paying extortion
 			} else {
-				NotPayExtortionAction notPayAction = new NotPayExtortionAction(
-						extortionId, mafiosoId, victimId, extortion);
-				
-				Message replyMsg = new Message(this.simulator.now(), victimId,
-						mafiosoId, notPayAction);
-				this.sendMsg(replyMsg);
-				
-				outputEntity.setValue(Field.PAID.name(), false);
-				
-				this.decideDenounceExtortion(action);
+				decideNotPay = true;
 			}
 		}
 		
-		this.currentWage -= paidExtortion;
+		// If the Entrepreneur decided not to pay
+		if(decideNotPay) {
+			NotPayExtortionAction notPayAction = new NotPayExtortionAction(
+					extortionId, mafiosoId, victimId, extortion);
+			
+			Message replyMsg = new Message(this.simulator.now(), victimId, mafiosoId,
+					notPayAction);
+			this.sendMsg(replyMsg);
+			
+			outputEntity.setValue(Field.PAID.name(), false);
+			
+			this.decideDenounceExtortion(action);
+		}
 	}
 	
 	
 	@Override
+	// TODO
+	// Should the affiliated Entrepreneur always denounce????
 	public void decideDenounceExtortion(ExtortionAction action) {
 		
-		int extortionId = (Integer) action
-				.getParam(ExtortionAction.Param.EXTORTION_ID);
+		int extortionId = (int) action.getParam(ExtortionAction.Param.EXTORTION_ID);
 		
 		AbstractEntity outputEntity = OutputController.getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		boolean paid = (Boolean) outputEntity.getValue(Field.PAID.name());
-		if(!paid) {
+		// TODO
+		// Should we include the Critical Consumers here????
+		// Should an denouncer affiliate to the IO????
+		// How to consider Proportion of critical consumers (slide 9 - 2014-10-21)
+		// this.conf.getDenounceAlpha() - balance between risk and opportunity
+		double idDenounce = this.mafiaPunisherRep.getReputation()
+				* (1 - this.stateProtectorRep.getReputation());
+		
+		double denounceNG = this.normative
+				.getNormSalience(Norms.DENOUNCE.ordinal());
+		
+		double notDenounceNG = this.normative.getNormSalience(Norms.NOT_DENOUNCE
+				.ordinal());
+		
+		double probDenounce;
+		if(denounceNG > notDenounceNG) {
 			
-			double idDenounce = this.mafiaPunisherRep.getReputation()
-					* (1 - this.stateProtectorRep.getReputation());
+			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+					+ (this.conf.getNormativeWeight() * denounceNG);
 			
-			double denounceND = this.normative.getNormSalience(Norms.DENOUNCE
-					.ordinal());
+		} else {
 			
-			double notDenounceND = this.normative.getNormSalience(Norms.NOT_DENOUNCE
-					.ordinal());
+			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
+					.getNormativeWeight() * notDenounceNG));
 			
-			double probDenounce;
-			if(denounceND > notDenounceND) {
-				
-				probDenounce = (this.conf.getIndividualWeight() * idDenounce)
-						+ (this.conf.getNormativeWeight() * denounceND);
-				
-			} else {
-				
-				probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
-						.getNormativeWeight() * notDenounceND));
-				
-			}
+		}
+		
+		if(RandomUtil.nextDouble() < probDenounce) {
+			DenounceExtortionAction denounceAction = new DenounceExtortionAction(
+					this.id, (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID));
 			
-			if(RandomUtil.nextDouble() < probDenounce) {
-				DenounceExtortionAction denounceAction = new DenounceExtortionAction(
-						this.getId(),
-						(Integer) action.getParam(ExtortionAction.Param.MAFIOSO_ID));
-				
-				Message replyMsg = new Message(System.currentTimeMillis(),
-						this.getId(), this.stateId, denounceAction);
-				this.sendMsg(replyMsg);
-				
-				outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), true);
-			} else {
-				outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), false);
-			}
+			Message replyMsg = new Message(this.simulator.now(), this.id,
+					this.stateId, denounceAction);
+			this.sendMsg(replyMsg);
+			
+			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), true);
 		} else {
 			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), false);
 		}
@@ -439,12 +453,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		AbstractEntity outputEntity = OutputController.getEntity(
 				EntityType.EXTORTION,
-				(Integer) action.getParam(MafiaBenefitAction.Param.EXTORTION_ID));
+				(int) action.getParam(MafiaBenefitAction.Param.EXTORTION_ID));
 		
 		outputEntity.setValue(Field.MAFIA_PUNISHED.name(), false);
 		outputEntity.setValue(Field.MAFIA_BENEFITED.name(), true);
 		
-		this.wealth += (Double) outputEntity.getValue(Field.MAFIA_BENEFIT.name());
+		this.wealth += (double) outputEntity.getValue(Field.MAFIA_BENEFIT.name());
 	}
 	
 	
@@ -452,12 +466,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	public void receiveMafiaPunishment(MafiaPunishmentAction action) {
 		AbstractEntity outputEntity = OutputController.getEntity(
 				EntityType.EXTORTION,
-				(Integer) action.getParam(MafiaPunishmentAction.Param.EXTORTION_ID));
+				(int) action.getParam(MafiaPunishmentAction.Param.EXTORTION_ID));
 		
 		outputEntity.setValue(Field.MAFIA_PUNISHED.name(), true);
 		outputEntity.setValue(Field.MAFIA_BENEFITED.name(), false);
 		
-		this.wealth -= (Double) outputEntity
+		this.wealth -= (double) outputEntity
 				.getValue(Field.MAFIA_PUNISHMENT.name());
 		
 		this.decideDenouncePunishment(action);
@@ -466,6 +480,58 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	@Override
 	public void decideDenouncePunishment(MafiaPunishmentAction action) {
+		
+		int extortionId = (int) action
+				.getParam(MafiaPunishmentAction.Param.EXTORTION_ID);
+		
+		AbstractEntity outputEntity = OutputController.getEntity(
+				EntityType.EXTORTION, extortionId);
+		
+		// TODO
+		// Should we include the Critical Consumers here????
+		// Should an denouncer affiliate to the IO????
+		// How to consider Proportion of critical consumers (slide 9 - 2014-10-21)
+		// this.conf.getDenounceAlpha() - balance between risk and opportunity
+		double idDenounce = this.mafiaPunisherRep.getReputation()
+				* (1 - this.stateProtectorRep.getReputation());
+		
+		double denounceNG = this.normative
+				.getNormSalience(Norms.DENOUNCE.ordinal());
+		
+		double notDenounceNG = this.normative.getNormSalience(Norms.NOT_DENOUNCE
+				.ordinal());
+		
+		double probDenounce;
+		if(denounceNG > notDenounceNG) {
+			
+			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+					+ (this.conf.getNormativeWeight() * denounceNG);
+			
+		} else {
+			
+			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
+					.getNormativeWeight() * notDenounceNG));
+			
+		}
+		
+		if(RandomUtil.nextDouble() < probDenounce) {
+			
+			int mafioso_id = (int) outputEntity.getValue(Field.MAFIOSO_ID.name());
+			
+			double punishment = (double) outputEntity.getValue(Field.MAFIA_PUNISHMENT
+					.name());
+			
+			DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
+					this.id, mafioso_id, punishment);
+			
+			Message replyMsg = new Message(this.simulator.now(), this.id,
+					this.stateId, denounceAction);
+			this.sendMsg(replyMsg);
+			
+			outputEntity.setValue(Field.DENOUNCED_PUNISHMENT.name(), true);
+		} else {
+			outputEntity.setValue(Field.DENOUNCED_PUNISHMENT.name(), false);
+		}
 	}
 	
 	
@@ -528,12 +594,15 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
 			
+			// Extortion demand
 			if(content instanceof ExtortionAction) {
 				this.decidePayment((ExtortionAction) content);
 				
+				// Mafia benefit
 			} else if(content instanceof MafiaBenefitAction) {
 				this.receiveMafiaBenefit((MafiaBenefitAction) content);
 				
+				// Mafia punishment
 			} else if(content instanceof MafiaPunishmentAction) {
 				this.receiveMafiaPunishment((MafiaPunishmentAction) content);
 				
@@ -549,6 +618,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			InfoRequest request = (InfoRequest) info;
 			switch(request.getInfoRequest()) {
+				case Constants.REQUEST_AFFILIATION:
+					infoRequested = this.getAffiliated();
+					break;
 				case Constants.REQUEST_ID:
 					infoRequested = this.getId();
 					break;
@@ -610,7 +682,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_RECEIVE_WAGE:
 				this.receiveWage();
-				System.out.println(this.simulator.now());
 				break;
 		}
 	}

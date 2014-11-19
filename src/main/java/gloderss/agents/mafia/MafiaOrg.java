@@ -113,7 +113,7 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	 * 
 	 *******************************/
 	
-	public synchronized int decideTarget() {
+	public int decideTarget() {
 		
 		if(this.domain.isEmpty()) {
 			this.domain.addAll(this.entrepreneurs.keySet());
@@ -174,6 +174,7 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 					break;
 				case Constants.REQUEST_TARGET_ID:
 					infoRequested = this.decideTarget();
+					break;
 			}
 			
 		} else if(info.getType().equals(InfoAbstract.Type.SET)) {

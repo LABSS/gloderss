@@ -1,23 +1,32 @@
 package gloderss.agents.state;
 
+import gloderss.actions.CaptureMafiosoAction;
+import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.PentitiAction;
+import gloderss.actions.ReleaseInvestigationAction;
+
 public interface IStateOrg {
 	
 	public void initializeSim();
 	
 	
-	public void receiveDenouceExtortion();
+	public void decideInvestigateExtortion(DenounceExtortionAction action);
 	
 	
-	public void decideInvestigateExtortion();
+	public void decideInvestigatePunishment(DenouncePunishmentAction action);
 	
 	
-	public void receiveDenoucePunishment();
+	public void releaseInvestigation(ReleaseInvestigationAction action);
 	
 	
-	public void decideInvestigatePunishment();
+	public void decideCustody(CaptureMafiosoAction action);
 	
 	
-	public void receivePentiti();
+	public void decideImprisonment(CaptureMafiosoAction action);
+	
+	
+	public void receivePentiti(PentitiAction action);
 	
 	
 	public void decideCollaborationRequest();

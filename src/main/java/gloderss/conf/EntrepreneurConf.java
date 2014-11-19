@@ -16,7 +16,7 @@ public class EntrepreneurConf {
 	private double								wealth;
 	
 	// Periodicity of receiving wage
-	private int										periodicityWage;
+	private String								periodicityWagePDF;
 	
 	// Minimum wage
 	private double								minimumWage;
@@ -26,6 +26,9 @@ public class EntrepreneurConf {
 	
 	// Variation on the wage at each round
 	private double								variationWage;
+	
+	// Balance between risk and opportunity
+	private double								denounceAlpha;
 	
 	// Probability of collaborating to the Police if requested
 	private double								collaborationProbability;
@@ -74,14 +77,14 @@ public class EntrepreneurConf {
 	}
 	
 	
-	public int getPeriodicityWage() {
-		return this.periodicityWage;
+	public String getPeriodicityWagePDF() {
+		return this.periodicityWagePDF;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_ENTREPRENEUR_PERIODICITY_WAGE)
-	public void setPeriodicityWage(int periodicityWage) {
-		this.periodicityWage = periodicityWage;
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_PERIODICITY_WAGE_PDF)
+	public void setPeriodicityWagePDF(String periodicityWagePDF) {
+		this.periodicityWagePDF = periodicityWagePDF;
 	}
 	
 	
@@ -107,14 +110,24 @@ public class EntrepreneurConf {
 	}
 	
 	
-	public Double getVariationWage() {
-		return variationWage;
+	public double getVariationWage() {
+		return this.variationWage;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_ENTREPRENEUR_VARIATION_WAGE)
 	public void setVariationWage(double variationWage) {
 		this.variationWage = variationWage;
+	}
+
+	public double getDenounceAlpha() {
+		return this.denounceAlpha;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_DENOUNCE_ALPHA)
+	public void setDenounceAlpha(double denounceAlpha) {
+		this.denounceAlpha = denounceAlpha;
 	}
 	
 	

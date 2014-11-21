@@ -3,8 +3,10 @@ package gloderss.util.distribution;
 public abstract class PDFAbstract {
 	
 	private enum PDF {
-		CONSTANT("^CONSTANT\\([0-9]+\\)"), UNIFORM("^UNIFORM\\([0-9]+,[0-9]+\\)"), NORMAL(
-				"^NORMAL\\([0-9]+,[0-9]+\\)"), POISSON("^POISSON\\([0-9]+\\)");
+		CONSTANT("^CONSTANT\\([0-9]+\\)"),
+		UNIFORM("^UNIFORM\\([0-9]+,[0-9]+\\)"),
+		NORMAL("^NORMAL\\([0-9]+,[0-9]+\\)"),
+		POISSON("^POISSON\\([0-9]+\\)");
 		
 		private String	regex;
 		

@@ -9,7 +9,12 @@ public class NormSalienceController extends NormSalienceAbstract {
 	
 	// Weight values
 	public enum Weight {
-		WC(0.99), WO(0.33), WNPV(-0.66), WP(0.33), WS(0.99), WE(0.99);
+		WC(0.99),
+		WO(0.33),
+		WNPV(-0.66),
+		WP(0.33),
+		WS(0.99),
+		WE(0.99);
 		
 		private final Double	value;
 		

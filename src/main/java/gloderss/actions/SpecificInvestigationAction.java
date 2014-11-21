@@ -7,7 +7,8 @@ import java.util.HashMap;
 public class SpecificInvestigationAction extends ActionAbstract {
 	
 	public enum Param {
-		POLICE_OFFICER_ID, ENTREPRENEUR_ID;
+		POLICE_OFFICER_ID,
+		ENTREPRENEUR_ID;
 	}
 	
 	

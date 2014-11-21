@@ -1,6 +1,10 @@
 package gloderss.output;
 
+import gloderss.Constants;
 import gloderss.conf.OutputConf;
+import gloderss.engine.devs.EventSimulator;
+import gloderss.engine.event.Event;
+import gloderss.engine.event.EventHandler;
 import gloderss.output.AbstractEntity.EntityType;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,76 +16,85 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class OutputController {
+public class OutputController implements EventHandler {
 	
-	private static OutputController																instance;
+	private static OutputController												instance;
 	
-	private static int																						replication;
+	private EventSimulator																simulator;
 	
-	private static String																					directory;
+	private int																						replication;
 	
-	private static boolean																				append;
+	private String																				directory;
 	
-	private static String																					separator;
+	private boolean																				append;
 	
-	private static Map<EntityType, BufferedWriter>								file;
+	private String																				separator;
 	
-	private static Map<EntityType, Integer>												entityId;
+	private int																						writeFrequency;
 	
-	private static Map<EntityType, Map<Integer, AbstractEntity>>	entities;
+	private Map<EntityType, BufferedWriter>								file;
 	
-	private static Map<EntityType, Boolean>												firstWrite;
+	private Map<EntityType, Integer>											entityId;
+	
+	private Map<EntityType, Map<Integer, AbstractEntity>>	entities;
+	
+	private Map<EntityType, Boolean>											firstWrite;
 	
 	
-	public static OutputController getInstance(OutputConf conf, int replica) {
-		if(instance == null) {
-			instance = new OutputController();
-			replication = replica;
-			
-			directory = conf.getDirectory();
-			append = conf.getAppend();
-			separator = conf.getSeparator();
-			
-			file = new HashMap<EntityType, BufferedWriter>();
-			entities = new LinkedHashMap<EntityType, Map<Integer, AbstractEntity>>();
-			entityId = new HashMap<EntityType, Integer>();
-			firstWrite = new HashMap<EntityType, Boolean>();
-		} else {
-			if(replication != replica) {
-				instance = new OutputController();
-				replication = replica;
-				
-				directory = conf.getDirectory();
-				append = conf.getAppend();
-				separator = conf.getSeparator();
-				
-				file = new HashMap<EntityType, BufferedWriter>();
-				entities = new LinkedHashMap<EntityType, Map<Integer, AbstractEntity>>();
-				entityId = new HashMap<EntityType, Integer>();
-				firstWrite = new HashMap<EntityType, Boolean>();
-			}
-		}
+	public OutputController(EventSimulator simulator, OutputConf conf) {
+		this.simulator = simulator;
 		
+		this.directory = conf.getDirectory();
+		this.append = conf.getAppend();
+		this.separator = conf.getSeparator();
+		this.writeFrequency = conf.getWriteFrequency();
+		
+		this.replication = -1;
+		
+		instance = this;
+	}
+	
+	
+	public void initializeSim() {
+		Event event = new Event(this.simulator.now() + this.writeFrequency, this,
+				Constants.EVENT_WRITE_DATA);
+		this.simulator.insert(event);
+	}
+	
+	
+	public static OutputController getInstance() {
 		return instance;
 	}
 	
 	
-	public static void init(EntityType type, String filename) {
+	public void newInstance(int replica) {
+		if(this.replication != replica) {
+			this.file = new HashMap<EntityType, BufferedWriter>();
+			this.entities = new LinkedHashMap<EntityType, Map<Integer, AbstractEntity>>();
+			this.entityId = new HashMap<EntityType, Integer>();
+			this.firstWrite = new HashMap<EntityType, Boolean>();
+			
+			this.replication = replica;
+		}
+	}
+	
+	
+	public void init(EntityType type, String filename) {
 		
-		if(!file.containsKey(type)) {
-			File dir = new File(directory + File.separator + replication);
+		if(!this.file.containsKey(type)) {
+			File dir = new File(this.directory + File.separator + this.replication);
 			dir.mkdirs();
 			try {
 				BufferedWriter pFile = new BufferedWriter(new FileWriter(new File(
-						directory + File.separator + replication + File.separator
-								+ filename), append));
-				file.put(type, pFile);
+						this.directory + File.separator + this.replication + File.separator
+								+ filename), this.append));
+				this.file.put(type, pFile);
 				
 				Map<Integer, AbstractEntity> typeEntities = new HashMap<Integer, AbstractEntity>();
-				entities.put(type, typeEntities);
+				this.entities.put(type, typeEntities);
 				
-				entityId.put(type, 0);
-				firstWrite.put(type, true);
+				this.entityId.put(type, 0);
+				this.firstWrite.put(type, true);
 			} catch(IOException e) {
 				e.printStackTrace();
 			}
@@ -89,39 +102,39 @@ public class OutputController {
 	}
 	
 	
-	public static Collection<AbstractEntity> getEntities(EntityType type) {
-		if(entities.containsKey(type)) {
-			return entities.get(type).values();
+	public Collection<AbstractEntity> getEntities(EntityType type) {
+		if(this.entities.containsKey(type)) {
+			return this.entities.get(type).values();
 		}
 		
 		return new LinkedList<AbstractEntity>();
 	}
 	
 	
-	public synchronized static AbstractEntity getEntity(EntityType type) {
+	public synchronized AbstractEntity getEntity(EntityType type) {
 		AbstractEntity entity = null;
 		
-		if(entityId.containsKey(type)) {
+		if(this.entityId.containsKey(type)) {
 			
-			int id = entityId.get(type);
+			int id = this.entityId.get(type);
 			switch(type) {
 				case EXTORTION:
-					entity = new ExtortionOutputEntity(id, separator);
+					entity = new ExtortionOutputEntity(id, this.separator);
 					break;
 			}
 			
 			if(entity != null) {
 				
 				Map<Integer, AbstractEntity> typeEntities;
-				if(entities.containsKey(type)) {
-					typeEntities = entities.get(type);
+				if(this.entities.containsKey(type)) {
+					typeEntities = this.entities.get(type);
 				} else {
 					typeEntities = new HashMap<Integer, AbstractEntity>();
 				}
 				
 				typeEntities.put(id, entity);
-				entities.put(type, typeEntities);
-				entityId.put(type, id + 1);
+				this.entities.put(type, typeEntities);
+				this.entityId.put(type, id + 1);
 			}
 		}
 		
@@ -129,11 +142,11 @@ public class OutputController {
 	}
 	
 	
-	public static AbstractEntity getEntity(EntityType type, int id) {
+	public AbstractEntity getEntity(EntityType type, int id) {
 		AbstractEntity record = null;
 		
-		if(entities.containsKey(type)) {
-			Map<Integer, AbstractEntity> typeEntities = entities.get(type);
+		if(this.entities.containsKey(type)) {
+			Map<Integer, AbstractEntity> typeEntities = this.entities.get(type);
 			if(typeEntities.containsKey(id)) {
 				record = typeEntities.get(id);
 			}
@@ -143,55 +156,70 @@ public class OutputController {
 	}
 	
 	
-	public static void setEntity(EntityType type, AbstractEntity entity) {
+	public void setEntity(EntityType type, AbstractEntity entity) {
 		int id = entity.getEntityId();
 		
 		Map<Integer, AbstractEntity> typeEntities;
-		if(entities.containsKey(type)) {
-			typeEntities = entities.get(type);
+		if(this.entities.containsKey(type)) {
+			typeEntities = this.entities.get(type);
 		} else {
 			typeEntities = new HashMap<Integer, AbstractEntity>();
 		}
 		
 		typeEntities.put(id, entity);
-		entities.put(type, typeEntities);
+		this.entities.put(type, typeEntities);
 	}
 	
 	
-	public static void write() throws IOException {
+	public void write() throws IOException {
 		
 		for(EntityType type : EntityType.values()) {
 			
-			Map<Integer, AbstractEntity> typeEntities = entities.remove(type);
+			Map<Integer, AbstractEntity> typeEntities = this.entities.remove(type);
 			
 			if((typeEntities != null) && (!typeEntities.isEmpty())) {
 				
 				for(Integer id : typeEntities.keySet()) {
-					if(firstWrite.get(type)) {
-						file.get(type).write(typeEntities.get(id).getHeader());
-						file.get(type).newLine();
-						firstWrite.put(type, false);
+					if(this.firstWrite.get(type)) {
+						this.file.get(type).write(typeEntities.get(id).getHeader());
+						this.file.get(type).newLine();
+						this.firstWrite.put(type, false);
 					}
 					
 					if(typeEntities.get(id).isActive()) {
 						AbstractEntity entity = typeEntities.remove(id);
-						file.get(type).write(entity.getLine());
-						file.get(type).newLine();
+						this.file.get(type).write(entity.getLine());
+						this.file.get(type).newLine();
 					}
 				}
 				
-				entities.put(type, typeEntities);
-				file.get(type).flush();
+				this.entities.put(type, typeEntities);
+				this.file.get(type).flush();
 			}
 		}
 	}
 	
 	
-	public static void close() throws IOException {
-		write();
+	public void close() throws IOException {
+		this.write();
 		
 		for(EntityType type : EntityType.values()) {
-			file.get(type).close();
+			this.file.get(type).close();
+		}
+	}
+	
+	
+	@Override
+	public void handleEvent(Event event) {
+		
+		switch((String) event.getCommand()) {
+			case Constants.EVENT_WRITE_DATA:
+				try {
+					this.write();
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+				break;
 		}
 	}
 }

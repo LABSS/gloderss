@@ -4,10 +4,11 @@ import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
 import java.util.HashMap;
 
-public class AssistEntrepreneurAction extends ActionAbstract {
+public class StateCompensationAction extends ActionAbstract {
 	
 	public enum Param {
-		ENTREPRENEUR_ID, ASSISTANCE;
+		ENTREPRENEUR_ID,
+		COMPENSATION;
 	}
 	
 	
@@ -16,15 +17,16 @@ public class AssistEntrepreneurAction extends ActionAbstract {
 	 * 
 	 * @param entrepreneurId
 	 *          Entrepreneur identification
-	 * @param assistance
-	 *          Assistance amount
+	 * @param compensation
+	 *          Compensation amount
 	 * @return none
 	 */
-	public AssistEntrepreneurAction(int entrepreneurId, double assistance) {
-		super(Actions.ASSISTANCE.ordinal(), Actions.ASSISTANCE.name());
+	public StateCompensationAction(int entrepreneurId, double assistance) {
+		super(Actions.STATE_COMPENSATION.ordinal(), Actions.STATE_COMPENSATION
+				.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
-		this.params.put(Param.ASSISTANCE, assistance);
+		this.params.put(Param.COMPENSATION, assistance);
 	}
 }

@@ -23,6 +23,8 @@ public class StateConf {
 	
 	private String	imprisonmentDurationPDF;
 	
+	private double	noCollaborationPunishment;
+	
 	private String	timeToCompensationPDF;
 	
 	private double	resourceFondo;
@@ -119,6 +121,17 @@ public class StateConf {
 	@XmlElement(name = Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF)
 	public void setImprisonmentDurationPDF(String imprisonmentDurationPDF) {
 		this.imprisonmentDurationPDF = imprisonmentDurationPDF;
+	}
+	
+	
+	public double getNoCollaborationPunishment() {
+		return this.noCollaborationPunishment;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT)
+	public void setNoCollaborationPunishment(double noCollaborationPunishment) {
+		this.noCollaborationPunishment = noCollaborationPunishment;
 	}
 	
 	

@@ -7,7 +7,8 @@ import java.util.HashMap;
 public class ReleaseInvestigationAction extends ActionAbstract {
 	
 	public enum Param {
-		POLICE_OFFICER_ID, ENTREPRENEUR_ID;
+		POLICE_OFFICER_ID,
+		ENTREPRENEUR_ID;
 	}
 	
 	
@@ -20,8 +21,7 @@ public class ReleaseInvestigationAction extends ActionAbstract {
 	 *          Entrepreneur identification
 	 * @return none
 	 */
-	public ReleaseInvestigationAction(int policeOfficerId,
-			int entrepreneurId) {
+	public ReleaseInvestigationAction(int policeOfficerId, int entrepreneurId) {
 		super(Actions.SPECIFIC_INVESTIGATION.ordinal(),
 				Actions.SPECIFIC_INVESTIGATION.name());
 		

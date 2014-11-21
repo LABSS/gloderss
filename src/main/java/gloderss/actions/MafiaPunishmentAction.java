@@ -7,7 +7,9 @@ import java.util.HashMap;
 public class MafiaPunishmentAction extends ActionAbstract {
 	
 	public enum Param {
-		EXTORTION_ID, MAFIOSO_ID, PUNISHMENT;
+		EXTORTION_ID,
+		MAFIOSO_ID,
+		PUNISHMENT;
 	}
 	
 	

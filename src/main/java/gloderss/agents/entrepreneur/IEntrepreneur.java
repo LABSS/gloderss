@@ -1,8 +1,13 @@
 package gloderss.agents.entrepreneur;
 
+import gloderss.actions.BuyProductAction;
+import gloderss.actions.CollaborationRequestAction;
+import gloderss.actions.CollectAction;
 import gloderss.actions.ExtortionAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
+import gloderss.actions.StateCompensationAction;
+import gloderss.actions.StatePunishmentAction;
 
 public interface IEntrepreneur {
 	
@@ -18,6 +23,9 @@ public interface IEntrepreneur {
 	public void decideDenounceExtortion(ExtortionAction action);
 	
 	
+	public void collectExtortion(CollectAction action);
+	
+	
 	public void receiveMafiaBenefit(MafiaBenefitAction action);
 	
 	
@@ -27,13 +35,13 @@ public interface IEntrepreneur {
 	public void decideDenouncePunishment(MafiaPunishmentAction action);
 	
 	
-	public void decideCollaboration();
+	public void decideCollaboration(CollaborationRequestAction action);
 	
 	
-	public void receiveStatePunishment();
+	public void receiveStatePunishment(StatePunishmentAction action);
 	
 	
-	public void receiveStateCompensation();
+	public void receiveStateCompensation(StateCompensationAction action);
 	
 	
 	public void receiveStateSpreadInformation();
@@ -51,7 +59,7 @@ public interface IEntrepreneur {
 	public void receiveConsumerSpreadInformation();
 	
 	
-	public void receiveBuy();
+	public void receiveBuy(BuyProductAction action);
 	
 	
 	public void decideAffiliation();

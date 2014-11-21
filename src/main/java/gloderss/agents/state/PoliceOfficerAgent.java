@@ -113,11 +113,11 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	
 	@Override
 	public void initializeSim() {
+		this.specificInvestigation = false;
+		
 		this.event = new Event(this.simulator.now() + 1, this,
 				Constants.EVENT_GENERAL_INVESTIGATION);
 		this.simulator.insert(this.event);
-		
-		this.specificInvestigation = false;
 	}
 	
 	

@@ -7,8 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import gloderss.Constants;
-import gloderss.actions.AssistEntrepreneurAction;
+import gloderss.actions.CollaborateAction;
+import gloderss.actions.NotCollaborateAction;
+import gloderss.actions.StateCompensationAction;
 import gloderss.actions.CaptureMafiosoAction;
+import gloderss.actions.CollaborationRequestAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
@@ -17,6 +20,7 @@ import gloderss.actions.PentitiAction;
 import gloderss.actions.ReleaseCustodyAction;
 import gloderss.actions.ReleaseInvestigationAction;
 import gloderss.actions.SpecificInvestigationAction;
+import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.AbstractAgent;
 import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
@@ -322,6 +326,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		int mafiosoId = (int) action
 				.getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
 		
+		// Decide whether the Mafioso is going to be imprisoned
 		if(RandomUtil.nextDouble() < this.conf.getImprisonmentProbability()) {
 			
 			InfoRequest wealthRequest = new InfoRequest(this.id, mafiosoId,
@@ -342,7 +347,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
 					imprisonment);
 			this.sendMsg(msg);
+			
+			// Release the Mafioso of custody
 		} else {
+			
 			ReleaseCustodyAction releaseCustody = new ReleaseCustodyAction();
 			
 			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
@@ -354,21 +362,60 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	@Override
 	public void receivePentiti(PentitiAction action) {
+		
+		@SuppressWarnings("unchecked")
+		List<Integer> mafiosoList = (List<Integer>) action
+				.getParam(PentitiAction.Param.MAFIOSI_LIST);
+		
+		if(mafiosoList != null) {
+			for(Integer mafiosoId : mafiosoList) {
+				if(!this.mafiosiBlackList.contains(mafiosoId)) {
+					this.mafiosiBlackList.add(mafiosoId);
+				}
+			}
+		}
+		
+		int mafiosoId = (int) action.getParam(PentitiAction.Param.MAFIOSO_ID);
+		
+		@SuppressWarnings("unchecked")
+		List<Integer> entrepreneurList = (List<Integer>) action
+				.getParam(PentitiAction.Param.ENTREPRENEUR_LIST);
+		
+		if(entrepreneurList != null) {
+			for(Integer entrepreneurId : entrepreneurList) {
+				CollaborationRequestAction collaboration = new CollaborationRequestAction(
+						mafiosoId, entrepreneurId);
+				
+				Message msg = new Message(this.simulator.now(), this.id,
+						entrepreneurId, collaboration);
+				this.sendMsg(msg);
+			}
+		}
 	}
 	
 	
 	@Override
-	public void decideCollaborationRequest() {
+	public void receiveCollaboration(CollaborateAction action) {
+		// Purposefully left blank
 	}
 	
 	
 	@Override
-	public void receiveCollaboration() {
-	}
-	
-	
-	@Override
-	public void decideStatePunishment() {
+	public void decideStatePunishment(NotCollaborateAction action) {
+		
+		int entrepreneurId = (int) action
+				.getParam(NotCollaborateAction.Param.ENTREPRENEUR_ID);
+		
+		if(this.assistQueue.contains(entrepreneurId)) {
+			this.assistQueue.remove(entrepreneurId);
+		}
+		
+		StatePunishmentAction punishment = new StatePunishmentAction(
+				entrepreneurId, this.conf.getNoCollaborationPunishment());
+		
+		Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+				punishment);
+		this.sendMsg(msg);
 	}
 	
 	
@@ -386,11 +433,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				int entrepreneurId = (int) action
 						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 				
-				AssistEntrepreneurAction assistance = new AssistEntrepreneurAction(
+				StateCompensationAction compensation = new StateCompensationAction(
 						entrepreneurId, punishment);
 				
 				Message msg = new Message(this.simulator.now(), this.id,
-						entrepreneurId, assistance);
+						entrepreneurId, compensation);
 				this.sendMsg(msg);
 				
 				// Entrepreneur goes back to the queue

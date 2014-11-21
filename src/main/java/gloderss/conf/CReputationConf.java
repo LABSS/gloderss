@@ -5,16 +5,16 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class CReputationConf {
 	
-	private Double	entrepreneurPayer;
+	private double	entrepreneurPayer;
 	
 	
-	public Double getEntrepreneurPayer() {
+	public double getEntrepreneurPayer() {
 		return this.entrepreneurPayer;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_PAYER)
-	public void setEntrepreneurPayer(Double entrepreneurPayer) {
+	public void setEntrepreneurPayer(double entrepreneurPayer) {
 		this.entrepreneurPayer = entrepreneurPayer;
 	}
 }

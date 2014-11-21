@@ -4,7 +4,7 @@ import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
 import java.util.HashMap;
 
-public class NotPayExtortionAction extends ActionAbstract {
+public class CollectAction extends ActionAbstract {
 	
 	public enum Param {
 		EXTORTION_ID,
@@ -15,7 +15,7 @@ public class NotPayExtortionAction extends ActionAbstract {
 	
 	
 	/**
-	 * Not paying constructor
+	 * CollectAction constructor
 	 * 
 	 * @param extortionId
 	 *          Extortion identification
@@ -27,9 +27,9 @@ public class NotPayExtortionAction extends ActionAbstract {
 	 *          Extortion amount
 	 * @return none
 	 */
-	public NotPayExtortionAction(int extortionId, int mafiosoId, int victimId,
+	public CollectAction(int extortionId, int mafiosoId, int victimId,
 			double extortion) {
-		super(Actions.NOT_PAY_EXTORTION.ordinal(), Actions.NOT_PAY_EXTORTION.name());
+		super(Actions.EXTORTION.ordinal(), Actions.EXTORTION.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.EXTORTION_ID, extortionId);

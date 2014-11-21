@@ -5,7 +5,8 @@ import emilia.entity.sanction.SanctionContentInterface;
 public class SanctionContent implements SanctionContentInterface {
 	
 	public enum Sanction {
-		PUNISHMENT, SANCTION;
+		PUNISHMENT,
+		SANCTION;
 	}
 	
 	// Sanction action

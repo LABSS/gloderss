@@ -52,6 +52,8 @@ public final class Constants {
 	
 	public static final String	TAG_CONSUMER_BUY_PDF													= "buyPDF";
 	
+	public static final String	TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH			= "numberEntrepreneursSearch";
+	
 	public static final String	TAG_CONSUMER_REPUTATION												= "reputation";
 	
 	public static final String	TAG_CONSUMER_REPUTATION_ENTREPRENEUR_PAYER		= "entrepreneurPayer";
@@ -74,6 +76,12 @@ public final class Constants {
 	public static final String	TAG_ENTREPRENEUR_MAXIMUM_WAGE									= "maximumWage";
 	
 	public static final String	TAG_ENTREPRENEUR_VARIATION_WAGE								= "variationWage";
+	
+	public static final String	TAG_ENTREPRENEUR_MINIMUM_PRICE								= "minimumPrice";
+	
+	public static final String	TAG_ENTREPRENEUR_MAXIMUM_PRICE								= "maximumPrice";
+	
+	public static final String	TAG_ENTREPRENEUR_VARIATION_PRICE							= "variationPrice";
 	
 	public static final String	TAG_ENTREPRENEUR_DENOUNCE_ALPHA								= "denounceAlpha";
 	
@@ -131,6 +139,8 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_TIME_TO_COMPENSATION_PDF						= "timeToCompensationPDF";
 	
+	public static final String	TAG_STATE_NO_COLLABORATION_PUNISHMENT					= "noCollaborationPunishment";
+	
 	public static final String	TAG_STATE_RESOURCE_FONDO											= "resourceFondo";
 	
 	public static final String	TAG_STATE_PERIODICITY_FONDO_PDF								= "periodicityFondoPDF";
@@ -154,6 +164,8 @@ public final class Constants {
 	
 	public static final String	TAG_MAFIA_PUNISHMENT_SEVERITY									= "punishmentSeverity";
 	
+	public static final String	TAG_MAFIA_COLLECTION_PDF											= "collectionPDF";
+	
 	public static final String	TAG_MAFIA_PUNISHMENT_PROBABILITY							= "punishmentProbability";
 	
 	public static final String	TAG_MAFIA_MINIMUM_BENEFIT											= "minimumBenefit";
@@ -171,14 +183,41 @@ public final class Constants {
 	 * Actions
 	 */
 	public static enum Actions {
-		EXTORTION, PAY_EXTORTION, NOT_PAY_EXTORTION, DENOUNCE_EXTORTION, NOT_DENOUNCE_EXTORTION, SPECIFIC_INVESTIGATION, MAFIA_PUNISHMENT, MAFIA_BENEFIT, DENOUNCE_PUNISHMENT, CUSTODY, RELEASE_CUSTODY, IMPRISONMENT, PENTITI, CAPTURE_MAFIOSO, ASSISTANCE;
+		EXTORTION,
+		PAY_EXTORTION,
+		NOT_PAY_EXTORTION,
+		DENOUNCE_EXTORTION,
+		NOT_DENOUNCE_EXTORTION,
+		SPECIFIC_INVESTIGATION,
+		MAFIA_PUNISHMENT,
+		MAFIA_BENEFIT,
+		DENOUNCE_PUNISHMENT,
+		CUSTODY,
+		RELEASE_CUSTODY,
+		IMPRISONMENT,
+		PENTITI,
+		CAPTURE_MAFIOSO,
+		COLLABORATION_REQUEST,
+		COLLABORATE,
+		NOT_COLLABORATE,
+		STATE_PUNISHMENT,
+		STATE_COMPENSATION,
+		BUY_PRODUCT,
+		DELIVER_PRODUCT,
+		BUY_PAY_EXTORTION,
+		BUY_NOT_PAY_EXTORTION;
 	}
 	
 	/**
 	 * Norms
 	 */
 	public static enum Norms {
-		PAY, NOT_PAY, DENOUNCE, NOT_DENOUNCE, BUY_PAY;
+		PAY,
+		NOT_PAY,
+		DENOUNCE,
+		NOT_DENOUNCE,
+		BUY_NOT_PAY,
+		BUY_PAY;
 	}
 	
 	/**
@@ -193,6 +232,8 @@ public final class Constants {
 	public static final String	REQUEST_DURATION						= "duration";
 	
 	public static final String	REQUEST_ENTREPRENEUR_ID			= "entrepreneurId";
+	
+	public static final String	REQUEST_PRODUCT_PRICE				= "requestProductPrice";
 	
 	public static final String	REQUEST_TARGET_ID						= "targetId";
 	
@@ -214,6 +255,10 @@ public final class Constants {
 	 */
 	public static final String	EVENT_ASSIST_ENTREPRENEUR		= "assistEntrepreneur";
 	
+	public static final String	EVENT_BUY_PRODUCT						= "buyProduct";
+	
+	public static final String	EVENT_COLLECT_EXTORTION			= "collectExtortion";
+	
 	public static final String	EVENT_EXTORTION_DEMAND			= "decideExtortion";
 	
 	public static final String	EVENT_GENERAL_INVESTIGATION	= "generalInvestigation";
@@ -227,4 +272,6 @@ public final class Constants {
 	public static final String	EVENT_RELEASE_CUSTODY				= "releaseCustody";
 	
 	public static final String	EVENT_RESOURCE_FONDO				= "resourceFondo";
+	
+	public static final String	EVENT_WRITE_DATA						= "writeData";
 }

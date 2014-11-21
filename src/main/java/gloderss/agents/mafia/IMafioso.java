@@ -13,6 +13,9 @@ public interface IMafioso {
 	public void decideExtortion();
 	
 	
+	public void collectExtortion();
+	
+	
 	public void receivePayment(PayExtortionAction action);
 	
 	

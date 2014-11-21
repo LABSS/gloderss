@@ -1,5 +1,7 @@
 package gloderss.agents.consumer;
 
+import gloderss.actions.DeliverProductAction;
+
 public interface IConsumer {
 	
 	public void initializeSim();
@@ -20,5 +22,8 @@ public interface IConsumer {
 	public void receiveConsumerSpreadInformation();
 	
 	
-	public void decideBuy();
+	public void buyProduct();
+	
+	
+	public void receiveProduct(DeliverProductAction action);
 }

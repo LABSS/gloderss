@@ -51,6 +51,7 @@
 
 										<!-- Economic -->
 										<element name="buyPDF" type="string" />
+										<element name="numberEntrepreneursSearch" type="nonNegativeInteger" />
 
 										<!-- Reputation -->
 										<element name="reputation">
@@ -153,6 +154,22 @@
 												</restriction>
 											</simpleType>
 										</element>
+										<element name="minimumPrice">
+											<simpleType>
+												<restriction base="decimal">
+													<minInclusive value="0.0" />
+												</restriction>
+											</simpleType>
+										</element>
+										<element name="maximumPrice">
+											<simpleType>
+												<restriction base="decimal">
+													<minInclusive value="0.0" />
+												</restriction>
+											</simpleType>
+										</element>
+
+										<!-- Balance between risk and opportunity -->
 										<element name="denounceAlpha">
 											<simpleType>
 												<restriction base="decimal">
@@ -289,6 +306,13 @@
 								</simpleType>
 							</element>
 							<element name="imprisonmentDurationPDF" type="string" />
+							<element name="noCollaborationPunishment">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
 
 							<!-- Fondo Solidarieta -->
 							<element name="timeToCompensationPDF" type="string" />
@@ -347,6 +371,7 @@
 									</restriction>
 								</simpleType>
 							</element>
+							<element name="collectionPDF" type="string" />
 							<element name="punishmentProbability">
 								<simpleType>
 									<restriction base="decimal">

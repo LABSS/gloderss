@@ -26,6 +26,7 @@
 
 			<!-- Economic -->
 			<buyPDF>NORMAL(60,5)</buyPDF>
+			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
 
 			<!-- Reputation -->
 			<reputation>
@@ -55,6 +56,8 @@
 			<minimumWage>500.00</minimumWage>
 			<maximumWage>1000.00</maximumWage>
 			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
 
 			<!-- Balance between risk and opportunity -->
 			<denounceAlpha>0.5</denounceAlpha>
@@ -99,7 +102,8 @@
 		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
 		<imprisonmentProbability>0.8</imprisonmentProbability>
 		<imprisonmentDurationPDF>NORMAL(1000,100)</imprisonmentDurationPDF>
-		
+		<noCollaborationPunishment>200.0</noCollaborationPunishment>
+
 		<!-- Fondo di Solidarieta -->
 		<timeToCompensationPDF>CONSTANT(120)</timeToCompensationPDF>
 		<resourceFondo>4000</resourceFondo>
@@ -115,6 +119,7 @@
 		<demandAffiliatedProbability>0.01</demandAffiliatedProbability>
 		<extortionLevel>0.1</extortionLevel>
 		<punishmentSeverity>0.6</punishmentSeverity>
+		<collectionPDF>CONSTANT(10)</collectionPDF>
 		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
 		<maximumBenefit>1.5</maximumBenefit>

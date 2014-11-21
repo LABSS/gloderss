@@ -15,6 +15,9 @@ public class ConsumerConf {
 	// Buying PDF
 	private String								buyPDF;
 	
+	// Number of Entrepreneurs to search
+	private int										numberEntrepreneursSearch;
+	
 	// Initial reputation values
 	private CReputationConf				reputationConf;
 	
@@ -53,6 +56,17 @@ public class ConsumerConf {
 	@XmlElement(name = Constants.TAG_CONSUMER_BUY_PDF)
 	public void setBuyPDF(String buyPDF) {
 		this.buyPDF = buyPDF;
+	}
+	
+	
+	public int getNumberEntrepreneursSearch() {
+		return this.numberEntrepreneursSearch;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH)
+	public void setNumberEntrepreneursSearch(int numberEntrepreneursSearch) {
+		this.numberEntrepreneursSearch = numberEntrepreneursSearch;
 	}
 	
 	

@@ -57,6 +57,9 @@ public class GLODERSSimulator extends EventSimulator {
 		Vector<Integer> seeds = new Vector<Integer>();
 		seeds.addAll(this.scenarioConf.getGeneralConf().getSeedsConf());
 		
+		OutputController outputController = new OutputController(this,
+				this.scenarioConf.getGeneralConf().getOutputConf());
+		
 		int nextSeed = 0;
 		for(int replica = 0; replica < numReplications; replica++) {
 			this.events = new ListQueue();
@@ -64,9 +67,8 @@ public class GLODERSSimulator extends EventSimulator {
 			/**
 			 * Output controller
 			 */
-			OutputController.getInstance(this.scenarioConf.getGeneralConf()
-					.getOutputConf(), replica);
-			OutputController.init(EntityType.EXTORTION, this.scenarioConf
+			outputController.newInstance(replica);
+			outputController.init(EntityType.EXTORTION, this.scenarioConf
 					.getGeneralConf().getOutputConf().getFilename());
 			
 			/**
@@ -137,6 +139,12 @@ public class GLODERSSimulator extends EventSimulator {
 				}
 			}
 			
+			// Provide the set of Entrepreneurs to the Consumers
+			for(Integer consumerId : this.consumers.keySet()) {
+				consumer = this.consumers.get(consumerId);
+				consumer.setEntrepreneurs(this.entrepreneurs);
+			}
+			
 			// Create the State agent
 			this.state = new StateOrg(id, this, this.scenarioConf.getStateConf(),
 					this.entrepreneurs);
@@ -189,6 +197,7 @@ public class GLODERSSimulator extends EventSimulator {
 			this.state.initializeSim();
 			this.mafia.initializeSim();
 			this.intermediaryOrg.initializeSim();
+			outputController.initializeSim();
 			
 			this.doAllEvents(numCycles);
 		}

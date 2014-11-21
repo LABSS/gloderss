@@ -3,20 +3,25 @@ package gloderss.output;
 public class ExtortionOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		EXTORTION_ID("id", DataType.INTEGER), CYCLE("cycle", DataType.INTEGER), ENTREPRENEUR_ID(
-				"entrepreneurId", DataType.INTEGER), MAFIOSO_ID("mafiosoId",
-				DataType.INTEGER), MAFIA_EXTORTION("mafiaExtortion", DataType.DOUBLE), MAFIA_PUNISHMENT(
-				"mafiaPunishment", DataType.DOUBLE), MAFIA_BENEFIT("mafiaBenefit",
-				DataType.DOUBLE), PAID("paid", DataType.BOOLEAN), DENOUNCED_EXTORTION(
-				"denouncedExtortion", DataType.BOOLEAN), MAFIA_PUNISHED(
-				"mafiaPunished", DataType.BOOLEAN), MAFIA_BENEFITED("mafiaBenefited",
-				DataType.BOOLEAN), DENOUNCED_PUNISHMENT("denouncedPunishment",
-				DataType.BOOLEAN), COLLABORATION_REQUESTED("collaborationRequested",
-				DataType.BOOLEAN), COLLABORATED("collaborated", DataType.BOOLEAN), STATE_PUNISHED(
-				"statePunished", DataType.BOOLEAN), STATE_PUNISHMENT("statePunishment",
-				DataType.BOOLEAN), COMPENSATED("compensated", DataType.BOOLEAN), STATE_COMPENSATION(
-				"stateCompensation", DataType.DOUBLE), IMPRISONED("imprisoned",
-				DataType.BOOLEAN);
+		EXTORTION_ID("id", DataType.INTEGER),
+		CYCLE("cycle", DataType.INTEGER),
+		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
+		MAFIOSO_ID("mafiosoId", DataType.INTEGER),
+		MAFIA_EXTORTION("mafiaExtortion", DataType.DOUBLE),
+		MAFIA_PUNISHMENT("mafiaPunishment", DataType.DOUBLE),
+		MAFIA_BENEFIT("mafiaBenefit", DataType.DOUBLE),
+		PAID("paid", DataType.BOOLEAN),
+		DENOUNCED_EXTORTION("denouncedExtortion", DataType.BOOLEAN),
+		MAFIA_PUNISHED("mafiaPunished", DataType.BOOLEAN),
+		MAFIA_BENEFITED("mafiaBenefited", DataType.BOOLEAN),
+		DENOUNCED_PUNISHMENT("denouncedPunishment", DataType.BOOLEAN),
+		COLLABORATION_REQUESTED("collaborationRequested", DataType.BOOLEAN),
+		COLLABORATED("collaborated", DataType.BOOLEAN),
+		STATE_PUNISHED("statePunished", DataType.BOOLEAN),
+		STATE_PUNISHMENT("statePunishment", DataType.BOOLEAN),
+		COMPENSATED("compensated", DataType.BOOLEAN),
+		STATE_COMPENSATION("stateCompensation", DataType.DOUBLE),
+		IMPRISONED("imprisoned", DataType.BOOLEAN);
 		
 		private String		name;
 		

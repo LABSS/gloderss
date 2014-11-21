@@ -3,7 +3,8 @@ package gloderss.communication;
 public abstract class InfoAbstract {
 	
 	public enum Type {
-		REQUEST, SET
+		REQUEST,
+		SET
 	};
 	
 	protected Type	type;

@@ -7,7 +7,9 @@ public abstract class AbstractEntity {
 	}
 	
 	protected enum DataType {
-		BOOLEAN, DOUBLE, INTEGER;
+		BOOLEAN,
+		DOUBLE,
+		INTEGER;
 	}
 	
 	private int			entityId;

@@ -27,6 +27,15 @@ public class EntrepreneurConf {
 	// Variation on the wage at each round
 	private double								variationWage;
 	
+	// Minimum wage
+	private double								minimumPrice;
+	
+	// Maximum wage
+	private double								maximumPrice;
+	
+	// Variation on the wage at each round
+	private double								variationPrice;
+	
 	// Balance between risk and opportunity
 	private double								denounceAlpha;
 	
@@ -119,7 +128,41 @@ public class EntrepreneurConf {
 	public void setVariationWage(double variationWage) {
 		this.variationWage = variationWage;
 	}
-
+	
+	
+	public double getMinimumPrice() {
+		return this.minimumPrice;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_MINIMUM_PRICE)
+	public void setMinimumPrice(double minimumPrice) {
+		this.minimumPrice = minimumPrice;
+	}
+	
+	
+	public double getMaximumPrice() {
+		return this.maximumPrice;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_MAXIMUM_PRICE)
+	public void setMaximumPrice(double maximumPrice) {
+		this.maximumPrice = maximumPrice;
+	}
+	
+	
+	public double getVariationPrice() {
+		return this.variationPrice;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_VARIATION_PRICE)
+	public void setVariationPrice(double variationPrice) {
+		this.variationPrice = variationPrice;
+	}
+	
+	
 	public double getDenounceAlpha() {
 		return this.denounceAlpha;
 	}

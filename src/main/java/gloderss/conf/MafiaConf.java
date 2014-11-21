@@ -19,6 +19,8 @@ public class MafiaConf {
 	
 	private double	punishmentSeverity;
 	
+	private String	collectionPDF;
+	
 	private double	punishmentProbability;
 	
 	private double	minimumBenefit;
@@ -91,6 +93,17 @@ public class MafiaConf {
 	@XmlElement(name = Constants.TAG_MAFIA_PUNISHMENT_SEVERITY)
 	public void setPunishmentSeverity(double punishmentSeverity) {
 		this.punishmentSeverity = punishmentSeverity;
+	}
+	
+	
+	public String getCollectionPDF() {
+		return this.collectionPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_MAFIA_COLLECTION_PDF)
+	public void setCollectionPDF(String collectionPDF) {
+		this.collectionPDF = collectionPDF;
 	}
 	
 	

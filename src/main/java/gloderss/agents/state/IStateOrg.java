@@ -1,8 +1,10 @@
 package gloderss.agents.state;
 
 import gloderss.actions.CaptureMafiosoAction;
+import gloderss.actions.CollaborateAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.PentitiAction;
 import gloderss.actions.ReleaseInvestigationAction;
 
@@ -29,13 +31,10 @@ public interface IStateOrg {
 	public void receivePentiti(PentitiAction action);
 	
 	
-	public void decideCollaborationRequest();
+	public void receiveCollaboration(CollaborateAction action);
 	
 	
-	public void receiveCollaboration();
-	
-	
-	public void decideStatePunishment();
+	public void decideStatePunishment(NotCollaborateAction action);
 	
 	
 	public void decideStateCompensation();

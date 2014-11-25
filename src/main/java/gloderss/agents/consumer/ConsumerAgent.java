@@ -327,7 +327,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
-				DenounceExtortionAction action = (DenounceExtortionAction) content;
+				DenouncePunishmentAction action = (DenouncePunishmentAction) content;
 				this.normative.input(action);
 				
 				// Mafia pay benefit

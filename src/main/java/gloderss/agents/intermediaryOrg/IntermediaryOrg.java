@@ -62,6 +62,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			Map<Integer, EntrepreneurAgent> entrepreneurs) {
 		super(id, simulator);
 		
+		this.conf = conf;
+		
 		this.consumers = consumers;
 		this.entrepreneurs = entrepreneurs;
 		
@@ -150,13 +152,13 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			if(!entrepreneurIds.contains(entrepreneurId)) {
 				entrepreneurIds.add(entrepreneurId);
 				
-				Message msgNP = new Message(this.simulator.now(), this.id,
+				Message msg = new Message(this.simulator.now(), this.id,
 						entrepreneurId, notPayExtortion);
-				this.sendMsg(msgNP);
+				this.sendMsg(msg);
 				
-				Message msgD = new Message(this.simulator.now(), this.id,
-						entrepreneurId, denounceExtortion);
-				this.sendMsg(msgD);
+				msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+						denounceExtortion);
+				this.sendMsg(msg);
 			}
 		}
 		

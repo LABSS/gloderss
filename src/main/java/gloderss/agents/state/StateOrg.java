@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import gloderss.Constants;
+import gloderss.Constants.Norms;
 import gloderss.actions.CollaborateAction;
+import gloderss.actions.NormativeInfoSpreadAction;
 import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.CaptureMafiosoAction;
@@ -22,6 +24,7 @@ import gloderss.actions.ReleaseInvestigationAction;
 import gloderss.actions.SpecificInvestigationAction;
 import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.AbstractAgent;
+import gloderss.agents.consumer.ConsumerAgent;
 import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
@@ -45,9 +48,13 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private PDFAbstract												periodicityFondoPDF;
 	
+	private PDFAbstract												spreadInformationPDF;
+	
 	private double														fondoSolidarieta;
 	
 	private Map<Integer, PoliceOfficerAgent>	policeOfficers;
+	
+	private Map<Integer, ConsumerAgent>				consumers;
 	
 	private Map<Integer, EntrepreneurAgent>		entrepreneurs;
 	
@@ -69,11 +76,14 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 *          State identification
 	 * @param conf
 	 *          State configuration
+	 * @param consumers
+	 *          List of all consumers
 	 * @param entrepreneurs
 	 *          List of all entrepreneurs
 	 * @return none
 	 */
 	public StateOrg(Integer id, EventSimulator simulator, StateConf conf,
+			Map<Integer, ConsumerAgent> consumers,
 			Map<Integer, EntrepreneurAgent> entrepreneurs) {
 		super(id, simulator);
 		
@@ -89,7 +99,12 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.periodicityFondoPDF = PDFAbstract.getInstance(conf
 				.getPeriodicityFondoPDF());
 		
+		this.spreadInformationPDF = PDFAbstract.getInstance(conf
+				.getInformationSpreadPDF());
+		
 		this.fondoSolidarieta = 0.0;
+		
+		this.consumers = consumers;
 		
 		// Make Entrepreneur recognize the State identification
 		this.entrepreneurs = entrepreneurs;
@@ -197,6 +212,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		Event event = new Event(this.simulator.now() + 1, this,
 				Constants.EVENT_RESOURCE_FONDO);
+		this.simulator.insert(event);
+		
+		event = new Event(this.simulator.now()
+				+ this.spreadInformationPDF.nextValue(), this,
+				Constants.EVENT_SPREAD_INFORMATION);
 		this.simulator.insert(event);
 	}
 	
@@ -403,19 +423,22 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void decideStatePunishment(NotCollaborateAction action) {
 		
-		int entrepreneurId = (int) action
-				.getParam(NotCollaborateAction.Param.ENTREPRENEUR_ID);
-		
-		if(this.assistQueue.contains(entrepreneurId)) {
-			this.assistQueue.remove(entrepreneurId);
+		if(RandomUtil.nextDouble() < this.conf
+				.getNoCollaborationPunishmentProbability()) {
+			int entrepreneurId = (int) action
+					.getParam(NotCollaborateAction.Param.ENTREPRENEUR_ID);
+			
+			if(this.assistQueue.contains(entrepreneurId)) {
+				this.assistQueue.remove(entrepreneurId);
+			}
+			
+			StatePunishmentAction punishment = new StatePunishmentAction(
+					entrepreneurId, this.conf.getNoCollaborationPunishment());
+			
+			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+					punishment);
+			this.sendMsg(msg);
 		}
-		
-		StatePunishmentAction punishment = new StatePunishmentAction(
-				entrepreneurId, this.conf.getNoCollaborationPunishment());
-		
-		Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-				punishment);
-		this.sendMsg(msg);
 	}
 	
 	
@@ -456,22 +479,61 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	
 	@Override
-	public void stateSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveEntrepreurSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveIOSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveConsumerSpreadInformation() {
+	public void spreadInformation() {
+		
+		// Spread information to Consumers
+		NormativeInfoSpreadAction notBuyPayExtortion = new NormativeInfoSpreadAction(
+				this.id, Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+		
+		int numConsumers = (int) (this.consumers.size() * this.conf
+				.getProportionCustomers());
+		List<Integer> consumerIds = new ArrayList<Integer>();
+		while(consumerIds.size() < numConsumers) {
+			
+			int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
+					.nextIntFromTo(0, (this.consumers.size() - 1))];
+			
+			if(!consumerIds.contains(consumerId)) {
+				consumerIds.add(consumerId);
+				
+				Message msg = new Message(this.simulator.now(), this.id, consumerId,
+						notBuyPayExtortion);
+				this.sendMsg(msg);
+			}
+		}
+		
+		NormativeInfoSpreadAction notPayExtortion = new NormativeInfoSpreadAction(
+				this.id, Norms.NOT_PAY_EXTORTION.name());
+		
+		NormativeInfoSpreadAction denounceExtortion = new NormativeInfoSpreadAction(
+				this.id, Norms.DENOUNCE_EXTORTION.name());
+		
+		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
+				.getProportionEntrepreneurs());
+		List<Integer> entrepreneurIds = new ArrayList<Integer>();
+		int qtyEntrepreneurs = this.entrepreneurs.size();
+		while(entrepreneurIds.size() < numEntrepreneurs) {
+			
+			int entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
+					.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
+			
+			if(!entrepreneurIds.contains(entrepreneurId)) {
+				entrepreneurIds.add(entrepreneurId);
+				
+				Message msgNP = new Message(this.simulator.now(), this.id,
+						entrepreneurId, notPayExtortion);
+				this.sendMsg(msgNP);
+				
+				Message msgD = new Message(this.simulator.now(), this.id,
+						entrepreneurId, denounceExtortion);
+				this.sendMsg(msgD);
+			}
+		}
+		
+		Event event = new Event(this.simulator.now()
+				+ this.spreadInformationPDF.nextValue(), this,
+				Constants.EVENT_SPREAD_INFORMATION);
+		this.simulator.insert(event);
 	}
 	
 	
@@ -532,9 +594,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	}
 	
 	
-	// TODO
 	@Override
 	public void handleObservation(Message msg) {
+		// NOTHING
 	}
 	
 	
@@ -544,7 +606,6 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * 
 	 *******************************/
 	
-	// TODO
 	@Override
 	public void handleEvent(Event event) {
 		
@@ -558,6 +619,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			case Constants.EVENT_ASSIST_ENTREPRENEUR:
 				this.decideStateCompensation();
 				break;
+			case Constants.EVENT_SPREAD_INFORMATION:
+				this.spreadInformation();
 		}
 	}
 }

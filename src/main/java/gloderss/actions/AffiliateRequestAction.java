@@ -4,28 +4,24 @@ import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
 import java.util.HashMap;
 
-public class BuyProductAction extends ActionAbstract {
+public class AffiliateRequestAction extends ActionAbstract {
 	
 	public enum Param {
-		CONSUMER_ID,
-		ENTREPRENEUR_ID;
+		ENTREPRENEUR_ID
 	}
 	
 	
 	/**
-	 * BuyAction constructor
+	 * AffiliateRequestAction constructor
 	 * 
-	 * @param consumerId
-	 *          Consumer identification
 	 * @param entrepreneurId
 	 *          Entrepreneur identification
 	 * @return none
 	 */
-	public BuyProductAction(int consumerId, int entrepreneurId) {
-		super(Actions.BUY_PRODUCT.ordinal(), Actions.BUY_PRODUCT.name());
+	public AffiliateRequestAction(int entrepreneurId) {
+		super(Actions.AFFILIATE.ordinal(), Actions.AFFILIATE.name());
 		
 		this.params = new HashMap<Object, Object>();
-		this.params.put(Param.CONSUMER_ID, consumerId);
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
 	}
 }

@@ -12,6 +12,8 @@ public class GeneralConf {
 	
 	private OutputConf		outputConf;
 	
+	private FilenameConf	filenameConf;
+	
 	private int						numReplications;
 	
 	private List<Integer>	seedsConf	= new ArrayList<Integer>();
@@ -27,6 +29,17 @@ public class GeneralConf {
 	@XmlElement(name = Constants.TAG_OUTPUT)
 	public void setOutputConf(OutputConf outputConf) {
 		this.outputConf = outputConf;
+	}
+	
+	
+	public FilenameConf getFilenameConf() {
+		return this.filenameConf;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_FILENAME)
+	public void setFilenameConf(FilenameConf filenameConf) {
+		this.filenameConf = filenameConf;
 	}
 	
 	

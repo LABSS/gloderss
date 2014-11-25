@@ -1,21 +1,14 @@
 package gloderss.agents.intermediaryOrg;
 
+import gloderss.actions.AffiliateRequestAction;
+
 public interface IIntermediaryOrg {
 	
 	public void initializeSim();
 	
 	
-	public void receiveStateSpreadInformation();
+	public void receiveAffiliation(AffiliateRequestAction action);
 	
 	
-	public void receiveEntrepreurSpreadInformation();
-	
-	
-	public void ioSpreadInformation();
-	
-	
-	public void receiveConsumerSpreadInformation();
-	
-	
-	public void receiveAffiliation();
+	public void spreadInformation();
 }

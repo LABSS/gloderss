@@ -7,13 +7,11 @@ public class OutputConf {
 	
 	private String	directory;
 	
-	private String	filename;
-	
 	private boolean	append;
 	
 	private String	separator;
 	
-	private int			writeFrequency;
+	private int			timeToWrite;
 	
 	
 	public String getDirectory() {
@@ -24,17 +22,6 @@ public class OutputConf {
 	@XmlElement(name = Constants.TAG_OUTPUT_DIRECTORY)
 	public void setDirectory(String directory) {
 		this.directory = directory;
-	}
-	
-	
-	public String getFilename() {
-		return this.filename;
-	}
-	
-	
-	@XmlElement(name = Constants.TAG_OUTPUT_FILENAME)
-	public void setFilename(String filename) {
-		this.filename = filename;
 	}
 	
 	
@@ -60,13 +47,13 @@ public class OutputConf {
 	}
 	
 	
-	public int getWriteFrequency() {
-		return this.writeFrequency;
+	public int getTimeToWrite() {
+		return this.timeToWrite;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_OUTPUT_WRITE_FREQUENCY)
-	public void setWriteFrequency(int writeFrequency) {
-		this.writeFrequency = writeFrequency;
+	@XmlElement(name = Constants.TAG_OUTPUT_TIME_TO_WRITE)
+	public void setTimeToWrite(int timeToWrite) {
+		this.timeToWrite = timeToWrite;
 	}
 }

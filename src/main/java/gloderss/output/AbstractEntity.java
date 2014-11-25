@@ -3,7 +3,13 @@ package gloderss.output;
 public abstract class AbstractEntity {
 	
 	public enum EntityType {
-		EXTORTION;
+		EXTORTION,
+		PURCHASE,
+		INTERMEDIARY_ORGANIZATION,
+		MAFIA_ORG,
+		MAFIOSO,
+		STATE_ORG,
+		POLICE_OFFICER;
 	}
 	
 	protected enum DataType {
@@ -33,7 +39,7 @@ public abstract class AbstractEntity {
 	}
 	
 	
-	public void activate() {
+	public void setActive() {
 		this.active = true;
 	}
 	

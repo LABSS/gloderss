@@ -1,6 +1,10 @@
 package gloderss.agents.state;
 
 import gloderss.Constants;
+import gloderss.actions.CaptureMafiosoAction;
+import gloderss.actions.CollectAction;
+import gloderss.actions.ExtortionAction;
+import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.ReleaseInvestigationAction;
 import gloderss.actions.SpecificInvestigationAction;
 import gloderss.agents.AbstractAgent;
@@ -12,10 +16,13 @@ import gloderss.conf.StateConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
 import gloderss.util.distribution.PDFAbstract;
+import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer {
+	
+	private StateConf			conf;
 	
 	private int						stateId;
 	
@@ -46,6 +53,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	public PoliceOfficerAgent(Integer id, EventSimulator simulator,
 			StateConf conf, int stateId) {
 		super(id, simulator);
+		
+		this.conf = conf;
 		
 		this.stateId = stateId;
 		
@@ -181,6 +190,26 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	}
 	
 	
+	/**
+	 * Decides to capture observed Mafioso
+	 * 
+	 * @param mafiosoId
+	 *          Mafioso identification
+	 * @return none
+	 */
+	private void captureMafioso(int mafiosoId) {
+		
+		if(RandomUtil.nextDouble() < this.conf.getCaptureProbability()) {
+			
+			CaptureMafiosoAction action = new CaptureMafiosoAction(this.id, mafiosoId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					action);
+			this.sendMsg(msg);
+		}
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -235,9 +264,34 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	}
 	
 	
-	// TODO
 	@Override
 	public void handleObservation(Message msg) {
+		
+		Object content = msg.getContent();
+		
+		if((msg.getSender() != this.id) && (!msg.getReceiver().contains(this.id))) {
+			
+			// Collect
+			if(content instanceof CollectAction) {
+				CollectAction action = (CollectAction) content;
+				int mafiosoId = (int) action.getParam(CollectAction.Param.MAFIOSO_ID);
+				this.captureMafioso(mafiosoId);
+				
+				// Exortion
+			} else if(content instanceof ExtortionAction) {
+				ExtortionAction action = (ExtortionAction) content;
+				int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
+				this.captureMafioso(mafiosoId);
+				
+				// Mafia Punishment
+			} else if(content instanceof MafiaPunishmentAction) {
+				MafiaPunishmentAction action = (MafiaPunishmentAction) content;
+				int mafiosoId = (int) action
+						.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID);
+				this.captureMafioso(mafiosoId);
+				
+			}
+		}
 	}
 	
 	

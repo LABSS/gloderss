@@ -29,10 +29,22 @@
 								<complexType>
 									<sequence>
 										<element name="directory" type="string" />
-										<element name="filename" type="string" />
 										<element name="append" type="boolean" />
 										<element name="separator" type="string" />
-										<element name="writeFrequency" type="nonNegativeInteger" />
+										<element name="timeToWrite" type="nonNegativeInteger" />
+									</sequence>
+								</complexType>
+							</element>
+							<element maxOccurs="1" name="filename">
+								<complexType>
+									<sequence>
+										<element name="extortion" type="string" />
+										<element name="purchase" type="string" />
+										<element name="intermediaryOrganization" type="string" />
+										<element name="mafiaOrg" type="string" />
+										<element name="mafioso" type="string" />
+										<element name="stateOrg" type="string" />
+										<element name="policeOfficer" type="string" />
 									</sequence>
 								</complexType>
 							</element>
@@ -306,6 +318,14 @@
 								</simpleType>
 							</element>
 							<element name="imprisonmentDurationPDF" type="string" />
+							<element name="noCollaborationPunishmentProbability">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
 							<element name="noCollaborationPunishment">
 								<simpleType>
 									<restriction base="decimal">
@@ -325,6 +345,25 @@
 							</element>
 							<element name="periodicityFondoPDF" type="string" />
 							<element name="proportionTransferFondo">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+
+							<!-- Information Spreading -->
+							<element name="informationSpreadPDF" type="string" />
+							<element name="proportionCustomers">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="proportionEntrepreneurs">
 								<simpleType>
 									<restriction base="decimal">
 										<minInclusive value="0.0" />
@@ -407,7 +446,33 @@
 				</element>
 
 				<!-- Intermediary Organization Configuration Information -->
-				<element maxOccurs="1" name="intermediaryOrg" />
+				<element maxOccurs="1" name="intermediaryOrg">
+					<complexType>
+						<sequence>
+							<!-- Affiliation -->
+							<element name="timeToAffiliatePDF" type="string" />
+
+							<!-- Information Spreading -->
+							<element name="informationSpreadPDF" type="string" />
+							<element name="proportionCustomers">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="proportionEntrepreneurs">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
 
 			</sequence>
 		</complexType>

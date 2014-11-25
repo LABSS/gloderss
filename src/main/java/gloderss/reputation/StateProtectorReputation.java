@@ -1,6 +1,6 @@
 package gloderss.reputation;
 
-public class StateProtectorReputation implements IReputation {
+public class StateProtectorReputation extends ReputationAbstract {
 	
 	private double	value;
 	
@@ -13,6 +13,12 @@ public class StateProtectorReputation implements IReputation {
 	@Override
 	public double getReputation(int... target) {
 		return this.value;
+	}
+	
+	
+	@Override
+	public void setReputation(int target, double value) {
+		this.value = value;
 	}
 	
 	

@@ -136,22 +136,7 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	
 	@Override
-	public void receiveStateSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveEntrepreurSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveIOSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveConsumerSpreadInformation() {
+	public void spreadInformation() {
 	}
 	
 	
@@ -160,6 +145,11 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	 * Handle communication requests
 	 * 
 	 *******************************/
+	
+	@Override
+	public synchronized void handleMessage(Message msg) {
+	}
+	
 	
 	@Override
 	public Object handleInfo(InfoAbstract info) {
@@ -185,9 +175,9 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	}
 	
 	
-	// TODO
 	@Override
 	public void handleObservation(Message msg) {
+		// NOTHING
 	}
 	
 	
@@ -197,7 +187,6 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	 * 
 	 *******************************/
 	
-	// TODO
 	@Override
 	public void handleEvent(Event event) {
 	}

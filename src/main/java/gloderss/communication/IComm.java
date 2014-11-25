@@ -29,11 +29,5 @@ public interface IComm {
 	 *          Message
 	 * @return none
 	 */
-	// Issue
-	// -----
-	// Needs to remove conflicting messages from the database because the same
-	// agent may see the message as sent and receive if it is connected to the
-	// sender and the receiver
-	//
 	public void handleObservation(Message msg);
 }

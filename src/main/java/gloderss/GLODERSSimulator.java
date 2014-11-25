@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gloderss.agents.consumer.ConsumerAgent;
 import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.agents.intermediaryOrg.IntermediaryOrg;
@@ -22,6 +24,9 @@ import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.queue.ListQueue;
 
 public class GLODERSSimulator extends EventSimulator {
+	
+	private static Logger										logger	= LoggerFactory
+																											.getLogger(GLODERSSimulator.class);
 	
 	private ScenarioConf										scenarioConf;
 	
@@ -69,7 +74,20 @@ public class GLODERSSimulator extends EventSimulator {
 			 */
 			outputController.newInstance(replica);
 			outputController.init(EntityType.EXTORTION, this.scenarioConf
-					.getGeneralConf().getOutputConf().getFilename());
+					.getGeneralConf().getFilenameConf().getExtortion());
+			outputController.init(EntityType.PURCHASE, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getPurchase());
+			outputController.init(EntityType.INTERMEDIARY_ORGANIZATION,
+					this.scenarioConf.getGeneralConf().getFilenameConf()
+							.getIntermediaryOrganization());
+			outputController.init(EntityType.MAFIA_ORG, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getMafiaOrg());
+			outputController.init(EntityType.MAFIOSO, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getMafioso());
+			outputController.init(EntityType.STATE_ORG, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getStateOrg());
+			outputController.init(EntityType.POLICE_OFFICER, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getPoliceOfficer());
 			
 			/**
 			 * Set random seed
@@ -147,7 +165,7 @@ public class GLODERSSimulator extends EventSimulator {
 			
 			// Create the State agent
 			this.state = new StateOrg(id, this, this.scenarioConf.getStateConf(),
-					this.entrepreneurs);
+					this.consumers, this.entrepreneurs);
 			id += this.scenarioConf.getStateConf().getNumberPoliceOfficers() + 1;
 			
 			// Create the Mafia agent
@@ -156,7 +174,8 @@ public class GLODERSSimulator extends EventSimulator {
 			id += this.scenarioConf.getMafiaConf().getNumberMafiosi() + 1;
 			
 			// Create the Intermediary Organization agent
-			this.intermediaryOrg = new IntermediaryOrg(id++, this, this.consumers,
+			this.intermediaryOrg = new IntermediaryOrg(id++, this,
+					this.scenarioConf.getIntermediaryOrgConf(), this.consumers,
 					this.entrepreneurs);
 			
 			/**
@@ -211,7 +230,14 @@ public class GLODERSSimulator extends EventSimulator {
 			System.exit(1);
 		}
 		
+		long startTime = System.currentTimeMillis();
+		logger.debug("[START_TIME] " + startTime);
 		GLODERSSimulator gloderss = new GLODERSSimulator(args[0], args[1]);
 		gloderss.run();
+		
+		long endTime = System.currentTimeMillis();
+		logger.debug("[END_TIME] " + endTime);
+		
+		logger.debug("[ELAPSED] " + (endTime - startTime));
 	}
 }

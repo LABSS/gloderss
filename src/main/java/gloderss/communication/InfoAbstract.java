@@ -7,6 +7,7 @@ public abstract class InfoAbstract {
 		SET
 	};
 	
+	// Type of the infomation communication
 	protected Type	type;
 	
 	// Sender identification

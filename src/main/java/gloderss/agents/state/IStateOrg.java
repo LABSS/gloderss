@@ -40,14 +40,5 @@ public interface IStateOrg {
 	public void decideStateCompensation();
 	
 	
-	public void stateSpreadInformation();
-	
-	
-	public void receiveEntrepreurSpreadInformation();
-	
-	
-	public void receiveIOSpreadInformation();
-	
-	
-	public void receiveConsumerSpreadInformation();
+	public void spreadInformation();
 }

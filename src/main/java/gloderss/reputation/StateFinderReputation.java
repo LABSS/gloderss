@@ -1,8 +1,8 @@
 package gloderss.reputation;
 
-public class StateFinderReputation implements IReputation {
+public class StateFinderReputation extends ReputationAbstract {
 	
-	private Double	value;
+	private double	value;
 	
 	
 	public StateFinderReputation(double initValue) {
@@ -13,6 +13,12 @@ public class StateFinderReputation implements IReputation {
 	@Override
 	public double getReputation(int... target) {
 		return this.value;
+	}
+	
+	
+	@Override
+	public void setReputation(int target, double value) {
+		this.value = value;
 	}
 	
 	

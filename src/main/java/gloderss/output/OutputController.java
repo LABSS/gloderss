@@ -7,9 +7,13 @@ import gloderss.engine.event.Event;
 import gloderss.engine.event.EventHandler;
 import gloderss.output.AbstractEntity.EntityType;
 import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,11 +30,11 @@ public class OutputController implements EventHandler {
 	
 	private String																				directory;
 	
-	private boolean																				append;
+	private OpenOption[]																	options;
 	
 	private String																				separator;
 	
-	private int																						writeFrequency;
+	private int																						timeToWrite;
 	
 	private Map<EntityType, BufferedWriter>								file;
 	
@@ -45,9 +49,22 @@ public class OutputController implements EventHandler {
 		this.simulator = simulator;
 		
 		this.directory = conf.getDirectory();
-		this.append = conf.getAppend();
+		
+		this.options = new OpenOption[4];
+		if(conf.getAppend()) {
+			this.options[0] = StandardOpenOption.CREATE;
+			this.options[1] = StandardOpenOption.WRITE;
+			this.options[2] = StandardOpenOption.SYNC;
+			this.options[3] = StandardOpenOption.APPEND;
+		} else {
+			this.options[0] = StandardOpenOption.CREATE;
+			this.options[1] = StandardOpenOption.WRITE;
+			this.options[2] = StandardOpenOption.SYNC;
+			this.options[3] = StandardOpenOption.TRUNCATE_EXISTING;
+		}
+		
 		this.separator = conf.getSeparator();
-		this.writeFrequency = conf.getWriteFrequency();
+		this.timeToWrite = conf.getTimeToWrite();
 		
 		this.replication = -1;
 		
@@ -56,7 +73,7 @@ public class OutputController implements EventHandler {
 	
 	
 	public void initializeSim() {
-		Event event = new Event(this.simulator.now() + this.writeFrequency, this,
+		Event event = new Event(this.simulator.now() + this.timeToWrite, this,
 				Constants.EVENT_WRITE_DATA);
 		this.simulator.insert(event);
 	}
@@ -82,13 +99,20 @@ public class OutputController implements EventHandler {
 	public void init(EntityType type, String filename) {
 		
 		if(!this.file.containsKey(type)) {
-			File dir = new File(this.directory + File.separator + this.replication);
-			dir.mkdirs();
+			
 			try {
-				BufferedWriter pFile = new BufferedWriter(new FileWriter(new File(
-						this.directory + File.separator + this.replication + File.separator
-								+ filename), this.append));
-				this.file.put(type, pFile);
+				Path dirPath = FileSystems.getDefault().getPath(
+						this.directory + FileSystems.getDefault().getSeparator()
+								+ this.replication);
+				Files.createDirectories(dirPath);
+				
+				Path pFile = FileSystems.getDefault().getPath(dirPath.toString(),
+						filename);
+				
+				BufferedWriter file = Files.newBufferedWriter(pFile,
+						Charset.forName(Constants.ENCONDING), this.options);
+				
+				this.file.put(type, file);
 				
 				Map<Integer, AbstractEntity> typeEntities = new HashMap<Integer, AbstractEntity>();
 				this.entities.put(type, typeEntities);
@@ -120,6 +144,24 @@ public class OutputController implements EventHandler {
 			switch(type) {
 				case EXTORTION:
 					entity = new ExtortionOutputEntity(id, this.separator);
+					break;
+				case PURCHASE:
+					entity = new PurchaseOutputEntity(id, this.separator);
+					break;
+				case INTERMEDIARY_ORGANIZATION:
+					entity = new IntermediaryOrganizationOutputEntity(id, this.separator);
+					break;
+				case MAFIA_ORG:
+					entity = new MafiaOutputEntity(id, this.separator);
+					break;
+				case MAFIOSO:
+					entity = new MafiosoOutputEntity(id, this.separator);
+					break;
+				case STATE_ORG:
+					entity = new StateOutputEntity(id, this.separator);
+					break;
+				case POLICE_OFFICER:
+					entity = new PoliceOfficerOutputEntity(id, this.separator);
 					break;
 			}
 			
@@ -179,32 +221,25 @@ public class OutputController implements EventHandler {
 			
 			if((typeEntities != null) && (!typeEntities.isEmpty())) {
 				
+				BufferedWriter bFile = this.file.get(type);
+				
 				for(Integer id : typeEntities.keySet()) {
 					if(this.firstWrite.get(type)) {
-						this.file.get(type).write(typeEntities.get(id).getHeader());
-						this.file.get(type).newLine();
+						bFile.write(typeEntities.get(id).getHeader());
+						bFile.newLine();
 						this.firstWrite.put(type, false);
 					}
 					
 					if(typeEntities.get(id).isActive()) {
 						AbstractEntity entity = typeEntities.remove(id);
-						this.file.get(type).write(entity.getLine());
-						this.file.get(type).newLine();
+						bFile.write(entity.getLine());
+						bFile.newLine();
 					}
 				}
 				
 				this.entities.put(type, typeEntities);
-				this.file.get(type).flush();
+				bFile.flush();
 			}
-		}
-	}
-	
-	
-	public void close() throws IOException {
-		this.write();
-		
-		for(EntityType type : EntityType.values()) {
-			this.file.get(type).close();
 		}
 	}
 	

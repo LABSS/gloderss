@@ -5,24 +5,32 @@
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>1</numberReplications>
-		<numberCycles>10000</numberCycles>
+		<numberCycles>1000</numberCycles>
 		<seeds>
 			<seed>1</seed>
 			<seed>2</seed>
 		</seeds>
 		<output>
 			<directory>./output</directory>
-			<filename>database.csv</filename>
 			<append>false</append>
 			<separator>;</separator>
-			<writeFrequency>1000</writeFrequency>
+			<timeToWrite>1000</timeToWrite>
 		</output>
+		<filename>
+			<extortion>extortion.csv</extortion>
+			<purchase>purchase.csv</purchase>
+			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
+			<mafiaOrg>mafiaOrg.csv</mafiaOrg>
+			<mafioso>mafioso.csv</mafioso>
+			<stateOrg>stateOrg.csv</stateOrg>
+			<policeOfficer>policeOfficer.csv</policeOfficer>
+		</filename>
 	</general>
 
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>10</numberConsumers>
+			<numberConsumers>100</numberConsumers>
 
 			<!-- Economic -->
 			<buyPDF>NORMAL(60,5)</buyPDF>
@@ -48,7 +56,7 @@
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>10</numberEntrepreneurs>
+			<numberEntrepreneurs>100</numberEntrepreneurs>
 
 			<!-- Economic -->
 			<wealth>1000.00</wealth>
@@ -102,6 +110,7 @@
 		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
 		<imprisonmentProbability>0.8</imprisonmentProbability>
 		<imprisonmentDurationPDF>NORMAL(1000,100)</imprisonmentDurationPDF>
+		<noCollaborationPunishmentProbability>0.8</noCollaborationPunishmentProbability>
 		<noCollaborationPunishment>200.0</noCollaborationPunishment>
 
 		<!-- Fondo di Solidarieta -->
@@ -109,6 +118,11 @@
 		<resourceFondo>4000</resourceFondo>
 		<periodicityFondoPDF>NORMAL(500,2)</periodicityFondoPDF>
 		<proportionTransferFondo>0.5</proportionTransferFondo>
+
+		<!-- Information Spreading -->
+		<informationSpreadPDF>CONSTANT(100)</informationSpreadPDF>
+		<proportionCustomers>0.10</proportionCustomers>
+		<proportionEntrepreneurs>0.10</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
@@ -128,6 +142,13 @@
 
 	<!-- Intermediary Organization Configuration Information -->
 	<intermediaryOrg>
+		<!-- Affiliation -->
+		<timeToAffiliatePDF>NORMAL(90,5)</timeToAffiliatePDF>
+
+		<!-- Information Spreading -->
+		<informationSpreadPDF>CONSTANT(10)</informationSpreadPDF>
+		<proportionCustomers>0.10</proportionCustomers>
+		<proportionEntrepreneurs>0.10</proportionEntrepreneurs>
 	</intermediaryOrg>
 
 </scenario>

@@ -21,9 +21,6 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 	protected CommunicationController	comm;
 	
 	
-	// Inbox messages
-	// protected Queue<Message> inbox;
-	
 	/**
 	 * Constructor
 	 * 
@@ -39,8 +36,6 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 		
 		this.comm = CommunicationController.getInstance();
 		this.comm.subscribe(id, this);
-		
-		// this.inbox = new LinkedList<Message>();
 	}
 	
 	
@@ -86,98 +81,6 @@ public abstract class AbstractAgent implements IComm, EventHandler {
 		return result;
 	}
 	
-	
-	/**
-	 * Handle received messages
-	 * 
-	 * @param msg
-	 *          Message
-	 * @return none
-	 */
-	@Override
-	public synchronized void handleMessage(Message msg) {
-		// this.inbox.add(msg);
-	}
-	
-	
-	/**
-	 * Check whether there is a message in the Inbox
-	 * 
-	 * @param none
-	 * @return True There is message, False otherwise
-	 * 
-	 *         public boolean hasMsg() {
-	 *         if(!this.inbox.isEmpty()) {
-	 *         return true;
-	 *         }
-	 * 
-	 *         return false;
-	 *         }
-	 */
-	
-	/**
-	 * Check whether there is a message of a specific type in the Inbox
-	 * 
-	 * @param clazz
-	 *          Class type to search in the Inbox
-	 * @return True if found the content of this class type, False otherwise
-	 * 
-	 *         public boolean hasMsg(Class<?> clazz) {
-	 *         boolean found = false;
-	 *         Iterator<Message> it = this.inbox.iterator();
-	 *         Message msg;
-	 *         while((it.hasNext()) && (!found)) {
-	 *         msg = it.next();
-	 *         if((msg.getContent() != null) &&
-	 *         (clazz.isInstance(msg.getContent()))) {
-	 *         found = true;
-	 *         }
-	 *         }
-	 * 
-	 *         return found;
-	 *         }
-	 */
-	
-	/**
-	 * Get the next oldest message
-	 * 
-	 * @param none
-	 * @return Oldest message in the Inbox
-	 * 
-	 *         public Message nextMsg() {
-	 *         Message msg = null;
-	 * 
-	 *         if(!this.inbox.isEmpty()) {
-	 *         msg = this.inbox.poll();
-	 *         }
-	 * 
-	 *         return msg;
-	 *         }
-	 */
-	
-	/**
-	 * Get all the messages of a specific class type
-	 * 
-	 * @param clazz
-	 *          Class type to search in the Inbox
-	 * @return List of messages of the specified type
-	 * 
-	 *         public List<Message> retriveMsgs(Class<?> clazz) {
-	 *         List<Message> msgs = new ArrayList<Message>();
-	 * 
-	 *         Iterator<Message> it = this.inbox.iterator();
-	 *         Message msg;
-	 *         while(it.hasNext()) {
-	 *         msg = it.next();
-	 *         if(clazz.isInstance(msg.getContent())) {
-	 *         msgs.add(msg);
-	 *         }
-	 *         }
-	 *         this.inbox.removeAll(msgs);
-	 * 
-	 *         return msgs;
-	 *         }
-	 */
 	
 	/**
 	 * Get the list of observations

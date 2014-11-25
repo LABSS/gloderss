@@ -44,21 +44,6 @@ public interface IEntrepreneur {
 	public void receiveStateCompensation(StateCompensationAction action);
 	
 	
-	public void receiveStateSpreadInformation();
-	
-	
-	public void entrepreneurSpreadInformation();
-	
-	
-	public void receiveEntrepreurSpreadInformation();
-	
-	
-	public void receiveIOSpreadInformation();
-	
-	
-	public void receiveConsumerSpreadInformation();
-	
-	
 	public void receiveBuy(BuyProductAction action);
 	
 	

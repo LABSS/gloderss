@@ -1,6 +1,6 @@
 package gloderss.reputation;
 
-public class MafiaPunisherReputation implements IReputation {
+public class MafiaPunisherReputation extends ReputationAbstract {
 	
 	private double	value;
 	
@@ -13,6 +13,12 @@ public class MafiaPunisherReputation implements IReputation {
 	@Override
 	public double getReputation(int... target) {
 		return this.value;
+	}
+	
+	
+	@Override
+	public void setReputation(int target, double value) {
+		this.value = value;
 	}
 	
 	

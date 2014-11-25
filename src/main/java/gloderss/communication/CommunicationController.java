@@ -87,19 +87,21 @@ public class CommunicationController {
 		
 		int sender = msg.getSender();
 		if(this.agents.containsKey(sender)) {
+			
+			List<Integer> observers = new ArrayList<Integer>();
+			
 			// Receivers specified
 			if(msg.getReceiver() != null) {
-				for(int receiver : msg.getReceiver()) {
+				for(Integer receiver : msg.getReceiver()) {
 					if(this.agents.containsKey(receiver)) {
 						IComm callback = this.agents.get(receiver);
 						callback.handleMessage(msg);
 						
-						// Send received message to registered observer
+						// Add agents as observers
 						if(this.observe.containsKey(receiver)) {
-							for(int observer : this.observe.get(receiver)) {
-								if(observer != sender) {
-									callback = this.agents.get(observer);
-									callback.handleObservation(msg);
+							for(Integer observer : this.observe.get(receiver)) {
+								if((observer != sender) && (!observers.contains(observer))) {
+									observers.add(observer);
 								}
 							}
 						}
@@ -108,13 +110,24 @@ public class CommunicationController {
 				
 				// Send sent message to registered observer
 				if(this.observe.containsKey(sender)) {
+					
 					List<Integer> receivers = msg.getReceiver();
+					if(receivers == null) {
+						receivers = new ArrayList<Integer>();
+					}
+					
+					// Add agents as observers
 					for(Integer observer : this.observe.get(sender)) {
-						if(!receivers.contains(observer)) {
-							IComm callback = this.agents.get(observer);
-							callback.handleObservation(msg);
+						if((!receivers.contains(observer))
+								&& (!observers.contains(observer))) {
+							observers.add(observer);
 						}
 					}
+				}
+				
+				for(Integer observer : observers) {
+					IComm callback = this.agents.get(observer);
+					callback.handleObservation(msg);
 				}
 				
 				// Broadcast message

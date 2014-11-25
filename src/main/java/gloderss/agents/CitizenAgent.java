@@ -37,10 +37,10 @@ public abstract class CitizenAgent extends AbstractAgent {
 	public void setNeighbors(List<Integer> neighbors) {
 		
 		// Remove the current neighbors as observed
-		this.removeObservation(this.getId(), this.neighbors);
+		this.removeObservation(this.id, this.neighbors);
 		
 		// Add the new neighbors as observed
 		this.neighbors = neighbors;
-		this.addObservation(this.getId(), this.neighbors);
+		this.addObservation(this.id, this.neighbors);
 	}
 }

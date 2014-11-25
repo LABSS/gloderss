@@ -3,7 +3,7 @@ package gloderss.reputation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntrepreneursReputation implements IReputation {
+public class EntrepreneursReputation extends ReputationAbstract {
 	
 	private Map<Integer, Double>	value;
 	
@@ -20,11 +20,17 @@ public class EntrepreneursReputation implements IReputation {
 	public double getReputation(int... target) {
 		double rep = this.unknownValue;
 		
-		if((target.length > 0) && (this.value.containsKey(target[0]))) {
-			rep = this.value.get(target[0]);
+		if(this.value.containsKey(target)) {
+			rep = this.value.get(target);
 		}
 		
 		return rep;
+	}
+	
+	
+	@Override
+	public void setReputation(int target, double value) {
+		this.value.put(target, value);
 	}
 	
 	

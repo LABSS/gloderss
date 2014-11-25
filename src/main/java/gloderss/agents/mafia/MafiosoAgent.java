@@ -417,26 +417,6 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	}
 	
 	
-	@Override
-	public void receiveStateSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveEntrepreurSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveIOSpreadInformation() {
-	}
-	
-	
-	@Override
-	public void receiveConsumerSpreadInformation() {
-	}
-	
-	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -464,6 +444,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 				
 			} else if(content instanceof ImprisonmentAction) {
 				this.imprisonment((ImprisonmentAction) content);
+				
 			}
 		}
 	}
@@ -501,6 +482,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
 	@Override
 	public void handleObservation(Message msg) {
+		// NOTHING
 	}
 	
 	

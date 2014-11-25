@@ -23,6 +23,8 @@ public class StateConf {
 	
 	private String	imprisonmentDurationPDF;
 	
+	private double	noCollaborationPunishmentProbability;
+	
 	private double	noCollaborationPunishment;
 	
 	private String	timeToCompensationPDF;
@@ -32,6 +34,12 @@ public class StateConf {
 	private String	periodicityFondoPDF;
 	
 	private double	proportionTransferFondo;
+	
+	private String	informationSpreadPDF;
+	
+	private double	proportionCustomers;
+	
+	private double	proportionEntrepreneurs;
 	
 	
 	public int getNumberPoliceOfficers() {
@@ -124,6 +132,18 @@ public class StateConf {
 	}
 	
 	
+	public double getNoCollaborationPunishmentProbability() {
+		return this.noCollaborationPunishmentProbability;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT_PROBABILITY)
+	public void setNoCollaborationPunishmentProbability(
+			double noCollaborationPunishmentProbability) {
+		this.noCollaborationPunishmentProbability = noCollaborationPunishmentProbability;
+	}
+	
+	
 	public double getNoCollaborationPunishment() {
 		return this.noCollaborationPunishment;
 	}
@@ -176,5 +196,38 @@ public class StateConf {
 	@XmlElement(name = Constants.TAG_STATE_PROPORTION_TRANSFER_FONDO)
 	public void setProportionTransferFondo(double proportionTransferFondo) {
 		this.proportionTransferFondo = proportionTransferFondo;
+	}
+	
+	
+	public String getInformationSpreadPDF() {
+		return this.informationSpreadPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_INFORMATION_SPREAD_PDF)
+	public void setInformationSpreadPDF(String informationSpreadPDF) {
+		this.informationSpreadPDF = informationSpreadPDF;
+	}
+	
+	
+	public double getProportionCustomers() {
+		return this.proportionCustomers;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_PROPORTION_CUSTOMERS)
+	public void setProportionCustomers(double proportionCustomers) {
+		this.proportionCustomers = proportionCustomers;
+	}
+	
+	
+	public double getProportionEntrepreneurs() {
+		return this.proportionEntrepreneurs;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_PROPORTION_ENTREPRENEURS)
+	public void setProportionEntrepreneurs(double proportionEntrepreneurs) {
+		this.proportionEntrepreneurs = proportionEntrepreneurs;
 	}
 }

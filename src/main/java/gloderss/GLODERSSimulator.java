@@ -13,6 +13,7 @@ import gloderss.agents.intermediaryOrg.IntermediaryOrg;
 import gloderss.agents.mafia.MafiaOrg;
 import gloderss.agents.mafia.MafiosoAgent;
 import gloderss.agents.state.StateOrg;
+import gloderss.communication.CommunicationController;
 import gloderss.conf.ConsumerConf;
 import gloderss.conf.EntrepreneurConf;
 import gloderss.conf.ScenarioConf;
@@ -61,6 +62,9 @@ public class GLODERSSimulator extends EventSimulator {
 		
 		Vector<Integer> seeds = new Vector<Integer>();
 		seeds.addAll(this.scenarioConf.getGeneralConf().getSeedsConf());
+		
+		CommunicationController.getInstance(this.scenarioConf
+				.getCommunicationConf());
 		
 		OutputController outputController = new OutputController(this,
 				this.scenarioConf.getGeneralConf().getOutputConf());

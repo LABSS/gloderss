@@ -1,14 +1,31 @@
 package gloderss.communication;
 
+import gloderss.conf.ActionConf;
+import gloderss.conf.CommunicationConf;
+import gloderss.conf.TypeConf;
+import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CommunicationController {
 	
+	private static Logger	logger	= LoggerFactory
+																		.getLogger(CommunicationController.class);
+	
+	public enum Visibility {
+		NONE,
+		COMPLETE,
+		PARTIAL
+	};
+	
 	private static CommunicationController	instance;
+	
+	private Map<String, Double>							actionVisibility;
 	
 	private Map<Integer, IComm>							agents;
 	
@@ -21,9 +38,46 @@ public class CommunicationController {
 	 * @param none
 	 * @return none
 	 */
-	private CommunicationController() {
+	private CommunicationController(CommunicationConf conf) {
+		this.actionVisibility = new HashMap<String, Double>();
+		
+		Map<String, Double> types = new HashMap<String, Double>();
+		for(TypeConf type : conf.getTypesConf()) {
+			types.put(type.getName(), type.getProbability());
+		}
+		
+		double probability;
+		for(ActionConf action : conf.getActionsConf()) {
+			
+			if(types.containsKey(action.getType())) {
+				probability = types.get(action.getType());
+			} else {
+				probability = 0.0;
+			}
+			
+			this.actionVisibility.put(action.getName(), probability);
+		}
+		
 		this.agents = new HashMap<Integer, IComm>();
 		this.observe = new Hashtable<Integer, List<Integer>>();
+		
+		instance = this;
+	}
+	
+	
+	/**
+	 * Get the Communication Controller active instance
+	 * 
+	 * @param conf
+	 *          Communication configuration
+	 * @return Communication Controller instance
+	 */
+	public static CommunicationController getInstance(CommunicationConf conf) {
+		if(instance == null) {
+			instance = new CommunicationController(conf);
+		}
+		
+		return instance;
 	}
 	
 	
@@ -34,10 +88,6 @@ public class CommunicationController {
 	 * @return Communication Controller instance
 	 */
 	public static CommunicationController getInstance() {
-		if(instance == null) {
-			instance = new CommunicationController();
-		}
-		
 		return instance;
 	}
 	
@@ -97,6 +147,8 @@ public class CommunicationController {
 						IComm callback = this.agents.get(receiver);
 						callback.handleMessage(msg);
 						
+						logger.debug("[SENDMSG] [" + msg.toString() + "]");
+						
 						// Add agents as observers
 						if(this.observe.containsKey(receiver)) {
 							for(Integer observer : this.observe.get(receiver)) {
@@ -125,16 +177,40 @@ public class CommunicationController {
 					}
 				}
 				
-				for(Integer observer : observers) {
-					IComm callback = this.agents.get(observer);
-					callback.handleObservation(msg);
+				String action = msg.getContent().getClass().getName();
+				if(this.actionVisibility.containsKey(action)) {
+					
+					double probability = this.actionVisibility.get(action);
+					
+					for(Integer observer : observers) {
+						if(RandomUtil.nextDouble() < probability) {
+							IComm callback = this.agents.get(observer);
+							callback.handleObservation(msg);
+							
+							logger.debug("[OBSERVED] [" + observer + "] [" + msg.toString()
+									+ "]");
+						} else {
+							logger.debug("[NOT_OBSERVATION] [" + observer + "] ["
+									+ msg.toString() + "]");
+						}
+					}
 				}
 				
 				// Broadcast message
 			} else {
-				for(Integer receiver : this.agents.keySet()) {
-					IComm callback = this.agents.get(receiver);
-					callback.handleMessage(msg);
+				String action = msg.getContent().getClass().getName();
+				if(this.actionVisibility.containsKey(action)) {
+					
+					double probability = this.actionVisibility.get(action);
+					
+					for(Integer receiver : this.agents.keySet()) {
+						if(RandomUtil.nextDouble() < probability) {
+							IComm callback = this.agents.get(receiver);
+							callback.handleMessage(msg);
+							
+							logger.debug("[BROADCAST] [" + msg.toString() + "]");
+						}
+					}
 				}
 			}
 		}

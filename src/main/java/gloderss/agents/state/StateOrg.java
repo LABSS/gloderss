@@ -18,7 +18,7 @@ import gloderss.actions.CustodyAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.ImprisonmentAction;
-import gloderss.actions.PentitiAction;
+import gloderss.actions.PentitoAction;
 import gloderss.actions.ReleaseCustodyAction;
 import gloderss.actions.ReleaseInvestigationAction;
 import gloderss.actions.SpecificInvestigationAction;
@@ -381,11 +381,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	
 	@Override
-	public void receivePentiti(PentitiAction action) {
+	public void receivePentiti(PentitoAction action) {
 		
 		@SuppressWarnings("unchecked")
 		List<Integer> mafiosoList = (List<Integer>) action
-				.getParam(PentitiAction.Param.MAFIOSI_LIST);
+				.getParam(PentitoAction.Param.MAFIOSI_LIST);
 		
 		if(mafiosoList != null) {
 			for(Integer mafiosoId : mafiosoList) {
@@ -395,11 +395,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
-		int mafiosoId = (int) action.getParam(PentitiAction.Param.MAFIOSO_ID);
+		int mafiosoId = (int) action.getParam(PentitoAction.Param.MAFIOSO_ID);
 		
 		@SuppressWarnings("unchecked")
 		List<Integer> entrepreneurList = (List<Integer>) action
-				.getParam(PentitiAction.Param.ENTREPRENEUR_LIST);
+				.getParam(PentitoAction.Param.ENTREPRENEUR_LIST);
 		
 		if(entrepreneurList != null) {
 			for(Integer entrepreneurId : entrepreneurList) {
@@ -556,8 +556,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			} else if(content instanceof DenouncePunishmentAction) {
 				this.decideInvestigatePunishment((DenouncePunishmentAction) content);
 				
-			} else if(content instanceof PentitiAction) {
-				this.receivePentiti((PentitiAction) content);
+			} else if(content instanceof PentitoAction) {
+				this.receivePentiti((PentitoAction) content);
 				
 			} else if(content instanceof ReleaseInvestigationAction) {
 				this.releaseInvestigation((ReleaseInvestigationAction) content);

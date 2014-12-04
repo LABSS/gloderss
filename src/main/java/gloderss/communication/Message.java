@@ -146,7 +146,7 @@ public class Message {
 		String str = new String();
 		
 		str += this.time + " " + this.sender + " " + this.receiver + " "
-				+ this.content;
+				+ this.content.toString();
 		
 		return str;
 	}

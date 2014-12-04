@@ -5,7 +5,7 @@ import gloderss.Constants.Actions;
 import java.util.HashMap;
 import java.util.List;
 
-public class PentitiAction extends ActionAbstract {
+public class PentitoAction extends ActionAbstract {
 	
 	public enum Param {
 		MAFIOSO_ID,
@@ -25,7 +25,7 @@ public class PentitiAction extends ActionAbstract {
 	 *          List of all Entrepreneurs that have paid extortion
 	 * @return none
 	 */
-	public PentitiAction(int mafiosoId, List<Integer> mafiosiList,
+	public PentitoAction(int mafiosoId, List<Integer> mafiosiList,
 			List<Integer> entrepreneursList) {
 		super(Actions.PENTITI.ordinal(), Actions.PENTITI.name());
 		

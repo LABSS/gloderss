@@ -9,7 +9,7 @@ import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.NormativeInfoSpreadAction;
-import gloderss.actions.PentitiAction;
+import gloderss.actions.PentitoAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.AbstractAgent;
@@ -200,7 +200,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			} else if(content instanceof ImprisonmentAction) {
 				// TODO
 				
-			} else if(content instanceof PentitiAction) {
+			} else if(content instanceof PentitoAction) {
 				// TODO
 				
 			} else if(content instanceof StateCompensationAction) {

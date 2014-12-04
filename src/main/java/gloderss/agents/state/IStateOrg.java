@@ -5,7 +5,7 @@ import gloderss.actions.CollaborateAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.NotCollaborateAction;
-import gloderss.actions.PentitiAction;
+import gloderss.actions.PentitoAction;
 import gloderss.actions.ReleaseInvestigationAction;
 
 public interface IStateOrg {
@@ -28,7 +28,7 @@ public interface IStateOrg {
 	public void decideImprisonment(CaptureMafiosoAction action);
 	
 	
-	public void receivePentiti(PentitiAction action);
+	public void receivePentiti(PentitoAction action);
 	
 	
 	public void receiveCollaboration(CollaborateAction action);

@@ -19,7 +19,8 @@ public class AffiliationAcceptedAction extends ActionAbstract {
 	 * @return none
 	 */
 	public AffiliationAcceptedAction(int entrepreneurId) {
-		super(Actions.AFFILIATION_ACCEPTED.ordinal(), Actions.AFFILIATION_ACCEPTED.name());
+		super(Actions.AFFILIATION_ACCEPTED.ordinal(), Actions.AFFILIATION_ACCEPTED
+				.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);

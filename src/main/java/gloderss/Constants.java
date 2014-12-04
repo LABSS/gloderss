@@ -71,6 +71,23 @@ public final class Constants {
 	public static final String	TAG_FILENAME_POLICE_OFFICER												= "policeOfficer";
 	
 	/**
+	 * Visibility tags
+	 */
+	public static final String	TAG_COMMUNICATION																	= "communication";
+	
+	public static final String	TAG_COMMUNICATION_TYPES														= "types";
+	
+	public static final String	TAG_COMMUNICATION_TYPE														= "type";
+	
+	public static final String	TAG_COMMUNICATION_TYPE_NAME												= "name";
+	
+	public static final String	TAG_COMMUNICATION_ACTIONS													= "actions";
+	
+	public static final String	TAG_COMMUNICATION_ACTION													= "action";
+	
+	public static final String	TAG_COMMUNICATION_ACTION_NAME											= "name";
+	
+	/**
 	 * Consumers tags
 	 */
 	public static final String	TAG_CONSUMERS																			= "consumers";

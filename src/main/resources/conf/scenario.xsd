@@ -52,6 +52,44 @@
 					</complexType>
 				</element>
 
+				<!-- Environment Configuration Information -->
+				<element maxOccurs="1" name="communication">
+					<complexType>
+						<sequence>
+							<element maxOccurs="1" name="types">
+								<complexType>
+									<sequence>
+										<element maxOccurs="unbounded" name="type">
+											<complexType>
+												<simpleContent>
+													<extension base="decimal">
+														<attribute name="name" type="string" />
+													</extension>
+												</simpleContent>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+							<element maxOccurs="1" name="actions">
+								<complexType>
+									<sequence>
+										<element maxOccurs="unbounded" name="action">
+											<complexType>
+												<simpleContent>
+													<extension base="string">
+														<attribute name="name" type="string" />
+													</extension>
+												</simpleContent>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+
 				<!-- Consumers Configuration Information -->
 				<element maxOccurs="1" name="consumers">
 					<complexType>

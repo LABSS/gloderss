@@ -22,6 +22,8 @@ public class ScenarioConf {
 	
 	private GeneralConf							generalConf					= new GeneralConf();
 	
+	private CommunicationConf				communicationConf		= new CommunicationConf();
+	
 	private List<ConsumerConf>			consumersConf				= new ArrayList<ConsumerConf>();
 	
 	private List<EntrepreneurConf>	entrepreneursConf		= new ArrayList<EntrepreneurConf>();
@@ -109,6 +111,17 @@ public class ScenarioConf {
 	@XmlElement(name = Constants.TAG_GENERAL)
 	public void setGeneralConf(GeneralConf generalConf) {
 		this.generalConf = generalConf;
+	}
+	
+	
+	public CommunicationConf getCommunicationConf() {
+		return this.communicationConf;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_COMMUNICATION)
+	public void setCommunicationConf(CommunicationConf communicationConf) {
+		this.communicationConf = communicationConf;
 	}
 	
 	

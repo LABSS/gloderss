@@ -10,7 +10,7 @@ import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
-import gloderss.actions.PentitiAction;
+import gloderss.actions.PentitoAction;
 import gloderss.actions.ReleaseCustodyAction;
 import gloderss.agents.AbstractAgent;
 import gloderss.communication.InfoAbstract;
@@ -406,7 +406,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		if(RandomUtil.nextDouble() < this.conf.getPentitiProbability()) {
 			
 			this.pentito = true;
-			PentitiAction pentiti = new PentitiAction(this.id, this.neighbors,
+			PentitoAction pentiti = new PentitoAction(this.id, this.neighbors,
 					this.payingEntrepreneurs);
 			
 			this.payingEntrepreneurs.clear();

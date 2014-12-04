@@ -51,6 +51,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PROBLEM
@@ -60,6 +62,9 @@ import java.util.Map;
  */
 public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
+	
+	private final static Logger				logger	= LoggerFactory
+																								.getLogger(EntrepreneurAgent.class);
 	
 	private EntrepreneurConf					conf;
 	
@@ -324,6 +329,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	@Override
 	public void decidePayment(ExtortionAction action) {
 		
+		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
+		
 		double extortion = (double) action
 				.getParam(ExtortionAction.Param.EXTORTION);
 		
@@ -334,52 +341,42 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			double benefit = (double) action.getParam(ExtortionAction.Param.BENEFIT);
 			
-			double TpayNG = this.normative.getNormSalience(Norms.PAY_EXTORTION
-					.ordinal());
-			
 			double TpayIG = (benefit - extortion)
 					- (this.punishmentState * this.stateFinderRep.getReputation() * (1 - this.conf
 							.getCollaborationProbability()));
 			
-			double TnotPayNG = this.normative.getNormSalience(Norms.NOT_PAY_EXTORTION
+			double TpayNG = this.normative.getNormSalience(Norms.PAY_EXTORTION
 					.ordinal());
 			
 			double TnotPayIG = (extortion - benefit)
 					- (punishment * this.mafiaPunisherRep.getReputation());
 			
-			// System.out.println(this.conf.getIndividualWeight() + " " + TpayIG + " "
-			// + TpayNG + " " + this.conf.getNormativeWeight() + " " + TnotPayIG
-			// + " " + TnotPayNG);
+			double TnotPayNG = this.normative.getNormSalience(Norms.NOT_PAY_EXTORTION
+					.ordinal());
 			
-			// TODO
-			// Need to be adjusted with ARC TAN
+			logger.debug("[DECIDE-TO-PAY] " + this.id + " " + mafiosoId + " "
+					+ TpayIG + " " + TpayNG + " " + TnotPayIG + " " + TnotPayNG);
+			
+			TpayIG = (Math.toDegrees((Math.atan(TpayIG))) + 360) % 360;
+			TnotPayIG = (Math.toDegrees((Math.atan(TnotPayIG))) + 360) % 360;
+			
+			double IG = (double) TpayIG / (double) (TpayIG + TnotPayIG);
+			
+			logger.debug("[ADJUSTED-IG] " + TpayIG + " " + TnotPayIG + " " + IG);
+			
 			double probPay = 0.0;
 			if(TpayNG > TnotPayNG) {
-				
-				double IG = (Math.abs(TpayIG) / (Math.abs(TpayIG) + Math.abs(TnotPayIG)));
-				if((TpayIG < 0) || (TnotPayIG < 0)) {
-					IG = 1 - IG;
-				}
 				
 				probPay = (this.conf.getIndividualWeight() * IG)
 						+ (this.conf.getNormativeWeight() * TpayNG);
 				
-				// System.out.println(this.conf.getIndividualWeight() + " " + IG + " "
-				// + this.conf.getNormativeWeight() + " " + TnotPayNG);
-				
 			} else {
 				
-				double id = (Math.abs(TnotPayIG) / (Math.abs(TpayIG) + Math
-						.abs(TnotPayIG)));
-				if((TpayIG < 0) || (TnotPayIG < 0)) {
-					id = 1 - id;
-				}
+				IG = 1 - IG;
 				
-				probPay = (this.conf.getIndividualWeight() * id)
+				probPay = (this.conf.getIndividualWeight() * IG)
 						+ (this.conf.getNormativeWeight() * TnotPayNG);
 				
-				// System.out.println(this.conf.getIndividualWeight() + " " + id + " "
-				// + this.conf.getNormativeWeight() + " " + TnotPayNG);
 			}
 			
 			// Decide paying extortion
@@ -816,7 +813,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	 * 
 	 *******************************/
 	
-	// TODO
 	@Override
 	public void receive(NormativeEventEntityAbstract entity,
 			NormEntityAbstract norm, SanctionEntityAbstract sanction) {

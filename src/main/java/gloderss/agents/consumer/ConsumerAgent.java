@@ -96,6 +96,54 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		NormEntityAbstract norm;
 		Map<NormEntityAbstract, List<SanctionEntityAbstract>> normsSanctions = new HashMap<NormEntityAbstract, List<SanctionEntityAbstract>>();
 		
+		// PAY Norm
+		normContent = new NormContent(Actions.PAY_EXTORTION,
+				Actions.NOT_PAY_EXTORTION);
+		
+		norm = new NormEntity(Norms.PAY_EXTORTION.ordinal(), NormType.SOCIAL,
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, this.conf
+						.getSaliences().get(Norms.PAY_EXTORTION.ordinal()));
+		
+		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		normsSanctions.put(norm, sanctions);
+		
+		// NOT_PAY Norm
+		normContent = new NormContent(Actions.NOT_PAY_EXTORTION,
+				Actions.PAY_EXTORTION);
+		
+		norm = new NormEntity(Norms.NOT_PAY_EXTORTION.ordinal(), NormType.SOCIAL,
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, conf
+						.getSaliences().get(Norms.NOT_PAY_EXTORTION.ordinal()));
+		
+		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		normsSanctions.put(norm, sanctions);
+		
+		// DENOUNCE Norm
+		normContent = new NormContent(Actions.DENOUNCE_EXTORTION,
+				Actions.NOT_DENOUNCE_EXTORTION);
+		
+		norm = new NormEntity(Norms.DENOUNCE_EXTORTION.ordinal(), NormType.SOCIAL,
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, conf
+						.getSaliences().get(Norms.DENOUNCE_EXTORTION.ordinal()));
+		
+		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		normsSanctions.put(norm, sanctions);
+		
+		// NOT_DENOUNCE Norm
+		normContent = new NormContent(Actions.NOT_DENOUNCE_EXTORTION,
+				Actions.DENOUNCE_EXTORTION);
+		
+		norm = new NormEntity(Norms.NOT_DENOUNCE_EXTORTION.ordinal(),
+				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent,
+				conf.getSaliences().get(Norms.NOT_DENOUNCE_EXTORTION.ordinal()));
+		
+		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		normsSanctions.put(norm, sanctions);
+		
 		// BUY_NOT_PAY Norm
 		normContent = new NormContent(Actions.BUY_NOT_PAY_EXTORTION,
 				Actions.BUY_PAY_EXTORTION);

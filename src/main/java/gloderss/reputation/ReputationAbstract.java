@@ -6,6 +6,21 @@ public abstract class ReputationAbstract {
 	
 	public final static double	MAX	= 1.0;
 	
+	protected double						unknownValue;
+	
+	
+	public ReputationAbstract(double unknownValue) {
+		this.unknownValue = unknownValue;
+	}
+	
+	
+	public double getUnknownValue() {
+		return this.unknownValue;
+	}
+	
+	
+	public abstract boolean isUnknown(int target);
+	
 	
 	public abstract double getReputation(int... target);
 	

@@ -6,7 +6,7 @@ import java.util.List;
 
 public abstract class CitizenAgent extends AbstractAgent {
 	
-	private List<Integer>	neighbors;
+	protected List<Integer>	neighbors;
 	
 	
 	/**

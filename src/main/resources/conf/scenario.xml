@@ -75,7 +75,8 @@
 
 			<!-- Reputation -->
 			<reputation>
-				<entrepreneurPayer>0.5</entrepreneurPayer>
+				<entrepreneurPayer>0.7</entrepreneurPayer>
+				<entrepreneurPayerThreshold>0.5</entrepreneurPayerThreshold>
 			</reputation>
 
 			<!-- Normative -->

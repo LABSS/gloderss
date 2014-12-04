@@ -97,11 +97,6 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	 * 
 	 *******************************/
 	
-	public MafiaConf getConf() {
-		return this.conf;
-	}
-	
-	
 	public Map<Integer, MafiosoAgent> getMafiosi() {
 		return this.mafiosi;
 	}

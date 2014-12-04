@@ -405,12 +405,13 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public void decidePentito() {
 		if(RandomUtil.nextDouble() < this.conf.getPentitiProbability()) {
 			
-			this.pentito = true;
-			PentitoAction pentiti = new PentitoAction(this.id, this.neighbors,
-					this.payingEntrepreneurs);
-			
+			List<Integer> payerEntrepreneurs = new ArrayList<Integer>();
+			payerEntrepreneurs.addAll(this.payingEntrepreneurs);
 			this.payingEntrepreneurs.clear();
 			
+			this.pentito = true;
+			PentitoAction pentiti = new PentitoAction(this.id, this.neighbors,
+					payerEntrepreneurs);
 			Message msg = new Message(this.simulator.now(), this.id, stateId, pentiti);
 			this.sendMsg(msg);
 		}

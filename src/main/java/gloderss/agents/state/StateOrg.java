@@ -112,6 +112,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			InfoSet infoSet = new InfoSet(id, entrepreneurId,
 					Constants.PARAMETER_STATE_ID, id);
 			this.sendInfo(infoSet);
+			
+			infoSet = new InfoSet(id, entrepreneurId,
+					Constants.PARAMETER_STATE_PUNISHMENT,
+					conf.getNoCollaborationPunishment());
+			this.sendInfo(infoSet);
 		}
 		
 		PoliceOfficerAgent police;
@@ -135,11 +140,6 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * Getters and Setters
 	 * 
 	 *******************************/
-	
-	public StateConf getConf() {
-		return this.conf;
-	}
-	
 	
 	public Map<Integer, PoliceOfficerAgent> getPoliceOfficers() {
 		return this.policeOfficers;
@@ -506,7 +506,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				this.id, Norms.NOT_PAY_EXTORTION.name());
 		
 		NormativeInfoSpreadAction denounceExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.DENOUNCE_EXTORTION.name());
+				this.id, Norms.DENOUNCE.name());
 		
 		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
 				.getProportionEntrepreneurs());

@@ -138,7 +138,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 				this.id, Norms.NOT_PAY_EXTORTION.name());
 		
 		NormativeInfoSpreadAction denounceExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.DENOUNCE_EXTORTION.name());
+				this.id, Norms.DENOUNCE.name());
 		
 		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
 				.getProportionEntrepreneurs());

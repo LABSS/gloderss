@@ -17,6 +17,8 @@ import gloderss.Constants.Actions;
 import gloderss.Constants.Norms;
 import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.AffiliationDeniedAction;
+import gloderss.actions.BuyNotPayExtortionAction;
+import gloderss.actions.BuyPayExtortionAction;
 import gloderss.actions.BuyProductAction;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.DeliverProductAction;
@@ -37,8 +39,9 @@ import gloderss.conf.ConsumerConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
 import gloderss.normative.entity.norm.NormContent;
+import gloderss.normative.entity.norm.NormContentSet;
 import gloderss.normative.entity.norm.NormEntity;
-import gloderss.reputation.EntrepreneursReputation;
+import gloderss.reputation.EntrepreneurPayerReputation;
 import gloderss.reputation.ReputationAbstract;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
@@ -50,7 +53,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
-	private EntrepreneursReputation					entrepreneurRep;
+	private EntrepreneurPayerReputation			entrepreneurPayerRep;
 	
 	private EmiliaController								normative;
 	
@@ -76,8 +79,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		super(id, simulator);
 		this.conf = conf;
 		this.entrepreneurs = new HashMap<Integer, EntrepreneurAgent>();
-		this.entrepreneurRep = new EntrepreneursReputation(conf.getReputationConf()
-				.getEntrepreneurPayer());
+		this.entrepreneurPayerRep = new EntrepreneurPayerReputation(conf
+				.getReputationConf().getEntrepreneurPayer());
 		this.buyPDF = PDFAbstract.getInstance(conf.getBuyPDF());
 		this.numberProducts = new HashMap<Integer, Integer>();
 		this.paidPrice = new HashMap<Integer, Double>();
@@ -121,24 +124,38 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		normsSanctions.put(norm, sanctions);
 		
 		// DENOUNCE Norm
-		normContent = new NormContent(Actions.DENOUNCE_EXTORTION,
-				Actions.NOT_DENOUNCE_EXTORTION);
+		List<Actions> actions = new ArrayList<Actions>();
+		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_PUNISHMENT);
 		
-		norm = new NormEntity(Norms.DENOUNCE_EXTORTION.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, conf
-						.getSaliences().get(Norms.DENOUNCE_EXTORTION.ordinal()));
+		List<Actions> noActions = new ArrayList<Actions>();
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		
+		NormContentSet normContentSet = new NormContentSet(actions, noActions);
+		
+		norm = new NormEntity(Norms.DENOUNCE.ordinal(), NormType.SOCIAL,
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
+						.getSaliences().get(Norms.DENOUNCE.ordinal()));
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
 		normsSanctions.put(norm, sanctions);
 		
 		// NOT_DENOUNCE Norm
-		normContent = new NormContent(Actions.NOT_DENOUNCE_EXTORTION,
-				Actions.DENOUNCE_EXTORTION);
+		actions = new ArrayList<Actions>();
+		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_PUNISHMENT);
 		
-		norm = new NormEntity(Norms.NOT_DENOUNCE_EXTORTION.ordinal(),
-				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent,
-				conf.getSaliences().get(Norms.NOT_DENOUNCE_EXTORTION.ordinal()));
+		noActions = new ArrayList<Actions>();
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		
+		normContentSet = new NormContentSet(noActions, actions);
+		
+		norm = new NormEntity(Norms.NOT_DENOUNCE.ordinal(), NormType.SOCIAL,
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
+						.getSaliences().get(Norms.NOT_DENOUNCE.ordinal()));
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -231,19 +248,57 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			}
 		}
 		
+		this.normative.update();
+		
+		double buyPayExtortion = this.normative
+				.getNormSalience(Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal());
+		
+		double buyNotPayExtortion = this.normative
+				.getNormSalience(Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal());
+		
+		// Calculate neighbors' average reputation
+		int numRep = 0;
+		double avgRep = 0.0;
+		for(Integer neighborId : this.neighbors) {
+			if(this.entrepreneurs.containsKey(neighborId)) {
+				if(!this.entrepreneurPayerRep.isUnknown(neighborId)) {
+					avgRep += this.entrepreneurPayerRep.getReputation(neighborId);
+					numRep++;
+				}
+			}
+		}
+		
+		if(numRep > 0) {
+			avgRep /= (double) numRep;
+		} else {
+			avgRep = this.entrepreneurPayerRep.getUnknownValue();
+		}
+		
 		// Score each Entrepreneur
 		double maxScore = 0.0;
 		int selectedEntrepreneurId = -1;
 		for(Integer entrepreneurId : buyList.keySet()) {
 			double price = buyList.get(entrepreneurId);
 			
-			double buyNotPayExtortion = this.normative
-					.getNormSalience(Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal());
+			double reputation;
+			if(!this.entrepreneurPayerRep.isUnknown(entrepreneurId)) {
+				reputation = this.entrepreneurPayerRep.getReputation(entrepreneurId);
+			} else {
+				reputation = avgRep;
+			}
 			
-			double score = ((1 - (price / maxPrice)) * this.conf
-					.getIndividualWeight())
-					+ ((buyNotPayExtortion * this.conf.getNormativeWeight()) * this.entrepreneurRep
-							.getReputation(entrepreneurId));
+			double score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
+			if(buyNotPayExtortion > buyPayExtortion) {
+				
+				score += (buyNotPayExtortion * this.conf.getNormativeWeight())
+						* reputation;
+				
+			} else {
+				
+				score += (buyPayExtortion * this.conf.getNormativeWeight())
+						* (1 - reputation);
+				
+			}
 			
 			if(score > maxScore) {
 				maxScore = score;
@@ -343,7 +398,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				AffiliationAcceptedAction action = (AffiliationAcceptedAction) content;
 				int entrepreneurId = (int) action
 						.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
-				this.entrepreneurRep.setReputation(entrepreneurId,
+				this.entrepreneurPayerRep.setReputation(entrepreneurId,
 						ReputationAbstract.MAX);
 				
 				// Affiliation Denied
@@ -352,12 +407,41 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				AffiliationDeniedAction action = (AffiliationDeniedAction) content;
 				int entrepreneurId = (int) action
 						.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
-				this.entrepreneurRep.setReputation(entrepreneurId,
+				this.entrepreneurPayerRep.setReputation(entrepreneurId,
 						ReputationAbstract.MIN);
 				
 				// Buy product
 			} else if(content instanceof BuyProductAction) {
-				// TODO
+				
+				BuyProductAction action = (BuyProductAction) content;
+				
+				int consumerId = (int) action
+						.getParam(BuyProductAction.Param.CONSUMER_ID);
+				
+				int entrepreneurId = (int) action
+						.getParam(BuyProductAction.Param.ENTREPRENEUR_ID);
+				
+				Message newMsg;
+				if(this.entrepreneurPayerRep.getReputation(entrepreneurId) > this.conf
+						.getReputationConf().getEntrepreneurPayerThreshold()) {
+					
+					BuyPayExtortionAction newAction = new BuyPayExtortionAction(
+							consumerId, entrepreneurId);
+					
+					newMsg = new Message(msg.getTime(), msg.getSender(),
+							msg.getReceiver(), newAction);
+					
+				} else {
+					
+					BuyNotPayExtortionAction newAction = new BuyNotPayExtortionAction(
+							consumerId, entrepreneurId);
+					
+					newMsg = new Message(msg.getTime(), msg.getSender(),
+							msg.getReceiver(), newAction);
+					
+				}
+				
+				this.normative.input(newMsg);
 				
 				// Collaborate
 			} else if(content instanceof CollaborateAction) {
@@ -365,18 +449,22 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				CollaborateAction action = (CollaborateAction) content;
 				int entrepreneurId = (int) action
 						.getParam(CollaborateAction.Param.ENTREPRENEUR_ID);
-				this.entrepreneurRep.setReputation(entrepreneurId,
+				this.entrepreneurPayerRep.setReputation(entrepreneurId,
 						ReputationAbstract.MIN);
 				
 				// Denounce extortion
 			} else if(content instanceof DenounceExtortionAction) {
-				DenounceExtortionAction action = (DenounceExtortionAction) content;
-				this.normative.input(action);
+				this.normative.input(msg);
+				this.normative.update();
+				
+				// TODO
+				// Increase Entrepreneur reputation
 				
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
-				DenouncePunishmentAction action = (DenouncePunishmentAction) content;
-				this.normative.input(action);
+				this.normative.input(msg);
+				// TODO
+				// Increase Entrepreneur reputation
 				
 				// Mafia pay benefit
 			} else if(content instanceof MafiaBenefitAction) {
@@ -390,11 +478,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				
 				// Pay extortion
 			} else if(content instanceof PayExtortionAction) {
+				this.normative.input(msg);
 				// TODO
 				// Reduce Entrepreneur reputation
 				
 				// Do not pay extortion
 			} else if(content instanceof NotPayExtortionAction) {
+				this.normative.input(msg);
 				// TODO
 				// Increase Entrepreneur reputation
 				
@@ -409,7 +499,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				StatePunishmentAction action = (StatePunishmentAction) content;
 				int entrepreneurId = (int) action
 						.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID);
-				this.entrepreneurRep.setReputation(entrepreneurId,
+				this.entrepreneurPayerRep.setReputation(entrepreneurId,
 						ReputationAbstract.MIN);
 				
 			}
@@ -427,6 +517,9 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	@Override
 	public void receive(NormativeEventEntityAbstract entity,
 			NormEntityAbstract norm, SanctionEntityAbstract sanction) {
+		
+		// Spread bad reputation about the Entrepreneur
+		
 	}
 	
 	

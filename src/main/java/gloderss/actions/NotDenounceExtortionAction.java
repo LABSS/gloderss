@@ -4,18 +4,17 @@ import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
 import java.util.HashMap;
 
-public class DenouncePunishmentAction extends ActionAbstract {
+public class NotDenounceExtortionAction extends ActionAbstract {
 	
 	public enum Param {
 		ENTREPRENEUR_ID,
 		STATE_ID,
-		MAFIOSO_ID,
-		PUNISHMENT;
+		MAFIOSO_ID;
 	}
 	
 	
 	/**
-	 * DenouncePunishmentAction constructor
+	 * DenounceExtortionAction constructor
 	 * 
 	 * @param entrepreneurId
 	 *          Entrepreneur identification
@@ -23,19 +22,16 @@ public class DenouncePunishmentAction extends ActionAbstract {
 	 *          State identification
 	 * @param mafiosoId
 	 *          Mafioso identification
-	 * @param punishment
-	 *          Punishment amount
 	 * @return none
 	 */
-	public DenouncePunishmentAction(int entrepreneurId, int stateId,
-			int mafiosoId, double punishment) {
-		super(Actions.DENOUNCE_PUNISHMENT.ordinal(), Actions.DENOUNCE_PUNISHMENT
-				.name());
+	public NotDenounceExtortionAction(int entrepreneurId, int stateId,
+			int mafiosoId) {
+		super(Actions.NOT_DENOUNCE_EXTORTION.ordinal(),
+				Actions.NOT_DENOUNCE_EXTORTION.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
 		this.params.put(Param.STATE_ID, stateId);
 		this.params.put(Param.MAFIOSO_ID, mafiosoId);
-		this.params.put(Param.PUNISHMENT, punishment);
 	}
 }

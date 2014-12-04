@@ -115,6 +115,14 @@
 															</restriction>
 														</simpleType>
 													</element>
+													<element name="entrepreneurPayerThreshold">
+														<simpleType>
+															<restriction base="decimal">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
 												</sequence>
 											</complexType>
 										</element>

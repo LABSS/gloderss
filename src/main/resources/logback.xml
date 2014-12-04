@@ -20,12 +20,27 @@
 		</rollingPolicy>
 
 		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35}
-				- %msg%n</pattern>
+			<pattern>%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
 		</encoder>
 	</appender>
 
-	<root level="debug">
+	<logger name="gloderss.GLODERSSimulator" level="DEBUG" />
+	<logger name="gloderss.communication" level="ERROR" />
+	<logger name="gloderss.agents.consumer" level="ERROR" />
+	<logger name="gloderss.agents.entrepreneur" level="ERROR" />
+	<logger name="gloderss.agents.intermediaryOrg" level="ERROR" />
+	<logger name="gloderss.agents.mafia" level="ERROR" />
+	<logger name="gloderss.agents.state" level="ERROR" />
+	<logger name="gloderss.conf" level="ERROR" />
+	<logger name="gloderss.engine" level="ERROR" />
+	<logger name="gloderss.normative" level="ERROR" />
+	<logger name="gloderss.reputation" level="DEBUG" />
+	<logger name="gloderss.util.distribution" level="ERROR" />
+	<logger name="gloderss.util.network" level="ERROR" />
+	<logger name="gloderss.util.profiler" level="ERROR" />
+	<logger name="gloderss.util.random" level="ERROR" />
+
+	<root level="ERROR">
 		<!-- <appender-ref ref="STDOUT" /> -->
 		<appender-ref ref="FILE" />
 	</root>

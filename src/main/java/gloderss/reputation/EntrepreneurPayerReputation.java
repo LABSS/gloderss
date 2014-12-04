@@ -3,28 +3,37 @@ package gloderss.reputation;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EntrepreneursReputation extends ReputationAbstract {
+public class EntrepreneurPayerReputation extends ReputationAbstract {
 	
 	private Map<Integer, Double>	value;
 	
-	private double								unknownValue;
 	
-	
-	public EntrepreneursReputation(double unknownValue) {
+	public EntrepreneurPayerReputation(double unknownValue) {
+		super(unknownValue);
+		
 		this.value = new HashMap<Integer, Double>();
-		this.unknownValue = unknownValue;
+	}
+	
+	
+	@Override
+	public boolean isUnknown(int target) {
+		
+		if(this.value.containsKey(target)) {
+			return false;
+		}
+		
+		return false;
 	}
 	
 	
 	@Override
 	public double getReputation(int... target) {
-		double rep = this.unknownValue;
 		
 		if(this.value.containsKey(target)) {
-			rep = this.value.get(target);
+			return this.value.get(target);
 		}
 		
-		return rep;
+		return this.unknownValue;
 	}
 	
 	

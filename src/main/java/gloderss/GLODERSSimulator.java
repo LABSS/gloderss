@@ -26,7 +26,7 @@ import gloderss.engine.queue.ListQueue;
 
 public class GLODERSSimulator extends EventSimulator {
 	
-	private static Logger										logger	= LoggerFactory
+	private final static Logger							logger	= LoggerFactory
 																											.getLogger(GLODERSSimulator.class);
 	
 	private ScenarioConf										scenarioConf;

@@ -39,18 +39,24 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 		NormContent normContent;
 		ActionEvent actionEvent;
 		for(NormEntityAbstract norm : normSanctions.keySet()) {
+			
 			if(norm.getContent() instanceof NormContent) {
 				normContent = (NormContent) norm.getContent();
 				
 				if(event instanceof ActionEvent) {
+					
 					actionEvent = (ActionEvent) event;
 					
 					if(actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getAction().name())) {
+						
 						deviations.put(norm, new ComplianceDeviation());
+						
 					} else if(actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getNotAction().name())) {
+						
 						deviations.put(norm, new ViolationDeviation());
+						
 					}
 				}
 			}

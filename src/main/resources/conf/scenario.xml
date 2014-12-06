@@ -85,12 +85,30 @@
 			<individualWeight>0.5</individualWeight>
 			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
-				<normSalience id="0" salience="0.3" />
-				<normSalience id="1" salience="0.9" />
-				<normSalience id="2" salience="0.9" />
-				<normSalience id="3" salience="0.9" />
-				<normSalience id="4" salience="0.3" />
-				<normSalience id="5" salience="0.9" />
+				<!-- Pay Extortion -->
+				<normSalience id="0" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Denounce -->
+				<normSalience id="2" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Not Denounce -->
+				<normSalience id="3" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Buy from Not Paying Entrepreneurs -->
+				<normSalience id="4" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Buy from Paying Entrepreneurs -->
+				<normSalience id="5" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>
 		</consumer>
 	</consumers>
@@ -116,6 +134,7 @@
 			<collaborationProbability>0.9</collaborationProbability>
 
 			<!-- Intermediary Organization -->
+			<affiliateThreshold>0.98</affiliateThreshold>
 			<affiliated>false</affiliated>
 
 			<!-- Reputation -->
@@ -131,10 +150,22 @@
 			<individualWeight>0.5</individualWeight>
 			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
-				<normSalience id="0" salience="0.3" />
-				<normSalience id="1" salience="0.9" />
-				<normSalience id="2" salience="0.9" />
-				<normSalience id="3" salience="0.9" />
+				<!-- Pay Extortion -->
+				<normSalience id="0" compliance="2" violation="1"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Denounce -->
+				<normSalience id="2" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
+				<!-- Not Denounce -->
+				<normSalience id="3" compliance="1" violation="0"
+					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
+					invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>
 		</entrepreneur>
 	</entrepreneurs>

@@ -3,6 +3,7 @@ package gloderss.agents.intermediaryOrg;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.AffiliateRequestAction;
+import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.CaptureMafiosoAction;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.DenounceExtortionAction;
@@ -106,6 +107,13 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		
 		if(!this.affiliated.contains(entrepreneurId)) {
 			this.affiliated.add(entrepreneurId);
+			
+			AffiliationAcceptedAction affiliation = new AffiliationAcceptedAction(
+					this.id, entrepreneurId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+					affiliation);
+			this.sendMsg(msg);
 		}
 	}
 	

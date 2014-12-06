@@ -8,6 +8,7 @@ import emilia.entity.norm.NormEntityAbstract.NormStatus;
 import emilia.entity.norm.NormEntityAbstract.NormType;
 import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.modules.enforcement.NormEnforcementListener;
+import emilia.modules.salience.DataType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,8 +105,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				Actions.NOT_PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.PAY_EXTORTION.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, this.conf
-						.getSaliences().get(Norms.PAY_EXTORTION.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -116,8 +116,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				Actions.PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.NOT_PAY_EXTORTION.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, conf
-						.getSaliences().get(Norms.NOT_PAY_EXTORTION.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -135,8 +134,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		NormContentSet normContentSet = new NormContentSet(actions, noActions);
 		
 		norm = new NormEntity(Norms.DENOUNCE.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
-						.getSaliences().get(Norms.DENOUNCE.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -154,8 +152,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		normContentSet = new NormContentSet(noActions, actions);
 		
 		norm = new NormEntity(Norms.NOT_DENOUNCE.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
-						.getSaliences().get(Norms.NOT_DENOUNCE.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -166,9 +163,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				Actions.BUY_PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal(),
-				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent,
-				conf.getSaliences().get(
-						Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal()));
+				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -179,15 +174,38 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				Actions.BUY_NOT_PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal(),
-				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent,
-				this.conf.getSaliences().get(
-						Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal()));
+				NormType.SOCIAL, NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
 		normsSanctions.put(norm, sanctions);
 		
 		this.normative.addNormsSanctions(normsSanctions);
+		
+		// Initialize norm salience
+		Map<DataType, Integer> values;
+		for(Integer normId : conf.getSalienceConf().keySet()) {
+			
+			values = new HashMap<DataType, Integer>();
+			values.put(DataType.COMPLIANCE, conf.getSalienceConf().get(normId)
+					.getCompliance());
+			values.put(DataType.VIOLATION, conf.getSalienceConf().get(normId)
+					.getViolation());
+			values.put(DataType.COMPLIANCE_OBSERVED,
+					conf.getSalienceConf().get(normId).getObsCompliance());
+			values.put(DataType.VIOLATION_OBSERVED, conf.getSalienceConf()
+					.get(normId).getObsViolation());
+			values.put(DataType.PUNISHMENT, conf.getSalienceConf().get(normId)
+					.getPunishment());
+			values.put(DataType.SANCTION, conf.getSalienceConf().get(normId)
+					.getSanction());
+			values.put(DataType.COMPLIANCE_INVOKED, conf.getSalienceConf()
+					.get(normId).getInvocationCompliance());
+			values.put(DataType.VIOLATION_INVOKED, conf.getSalienceConf().get(normId)
+					.getInvocationViolation());
+			
+			this.normative.setInitialValues(normId, values);
+		}
 	}
 	
 	
@@ -250,10 +268,10 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		
 		this.normative.update();
 		
-		double buyPayExtortion = this.normative
+		double buyPayExtortionSalience = this.normative
 				.getNormSalience(Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal());
 		
-		double buyNotPayExtortion = this.normative
+		double buyNotPayExtortionSalience = this.normative
 				.getNormSalience(Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal());
 		
 		// Calculate neighbors' average reputation
@@ -288,14 +306,14 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			}
 			
 			double score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
-			if(buyNotPayExtortion > buyPayExtortion) {
+			if(buyNotPayExtortionSalience > buyPayExtortionSalience) {
 				
-				score += (buyNotPayExtortion * this.conf.getNormativeWeight())
+				score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
 						* reputation;
 				
 			} else {
 				
-				score += (buyPayExtortion * this.conf.getNormativeWeight())
+				score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
 						* (1 - reputation);
 				
 			}

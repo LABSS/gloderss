@@ -135,6 +135,8 @@ public final class Constants {
 	
 	public static final String	TAG_ENTREPRENEUR_COLLABORATION_PROBABILITY						= "collaborationProbability";
 	
+	public static final String	TAG_ENTREPRENEUR_AFFILIATE_THRESHOLD									= "affiliateThreshold";
+	
 	public static final String	TAG_ENTREPRENEUR_AFFILIATED														= "affiliated";
 	
 	public static final String	TAG_ENTREPRENEUR_REPUTATION														= "reputation";
@@ -162,7 +164,21 @@ public final class Constants {
 	
 	public static final String	TAG_NORMATIVE_NORM_ID																	= "id";
 	
-	public static final String	TAG_NORMATIVE_NORM_INITIAL_SALIENCE										= "salience";
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_COMPLIANCE									= "compliance";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_VIOLATION									= "violation";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_OBS_COMPLIANCE							= "obsCompliance";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_OBS_VIOLATION							= "obsViolation";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_PUNISHMENT									= "punishment";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_SANCTION										= "sanction";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_INVOCATION_COMPLIANCE			= "invocationCompliance";
+	
+	public static final String	TAG_NORMATIVE_NORM_INITIAL_INVOCATION_VIOLATION				= "invocationViolation";
 	
 	/**
 	 * State tags

@@ -10,31 +10,31 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class ConsumerConf {
 	
 	// Number of consumers
-	private int										numberConsumers;
+	private int															numberConsumers;
 	
 	// Buying PDF
-	private String								buyPDF;
+	private String													buyPDF;
 	
 	// Number of Entrepreneurs to search
-	private int										numberEntrepreneursSearch;
+	private int															numberEntrepreneursSearch;
 	
 	// Initial reputation values
-	private CReputationConf				reputationConf;
+	private CReputationConf									reputationConf;
 	
 	// EMIL-A Normative XML filename
-	private String								normativeXML;
+	private String													normativeXML;
 	
 	// EMIL-A Normative XSD filename
-	private String								normativeXSD;
+	private String													normativeXSD;
 	
 	// Individual weight
-	private double								individualWeight;
+	private double													individualWeight;
 	
 	// Normative weight
-	private double								normativeWeight;
+	private double													normativeWeight;
 	
 	// Initial norm salience
-	private Map<Integer, Double>	saliences;
+	private Map<Integer, NormSalienceConf>	salienceConf;
 	
 	
 	public int getNumberConsumers() {
@@ -137,14 +137,14 @@ public class ConsumerConf {
 	}
 	
 	
-	public Map<Integer, Double> getSaliences() {
-		return this.saliences;
+	public Map<Integer, NormSalienceConf> getSalienceConf() {
+		return this.salienceConf;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_NORMATIVE_NORMS_SALIENCE)
 	@XmlJavaTypeAdapter(NormSalienceAdapter.class)
-	public void setSaliences(Map<Integer, Double> saliences) {
-		this.saliences = saliences;
+	public void setSaliences(Map<Integer, NormSalienceConf> salienceConf) {
+		this.salienceConf = salienceConf;
 	}
 }

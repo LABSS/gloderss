@@ -8,9 +8,11 @@ import emilia.entity.norm.NormEntityAbstract.NormStatus;
 import emilia.entity.norm.NormEntityAbstract.NormType;
 import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.modules.enforcement.NormEnforcementListener;
+import emilia.modules.salience.DataType;
 import gloderss.Constants;
 import gloderss.Constants.Actions;
 import gloderss.Constants.Norms;
+import gloderss.actions.AffiliateRequestAction;
 import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.AffiliationDeniedAction;
 import gloderss.actions.BuyProductAction;
@@ -24,6 +26,8 @@ import gloderss.actions.ExtortionAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NotCollaborateAction;
+import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.StateCompensationAction;
@@ -72,6 +76,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	private PDFAbstract								periodicityWagePDF;
 	
 	private int												stateId;
+	
+	private int												ioId;
 	
 	private double										wealth;
 	
@@ -169,8 +175,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Actions.NOT_PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.PAY_EXTORTION.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, this.conf
-						.getSaliences().get(Norms.PAY_EXTORTION.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -181,8 +186,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Actions.PAY_EXTORTION);
 		
 		norm = new NormEntity(Norms.NOT_PAY_EXTORTION.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent, conf
-						.getSaliences().get(Norms.NOT_PAY_EXTORTION.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -200,8 +204,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormContentSet normContentSet = new NormContentSet(actions, noActions);
 		
 		norm = new NormEntity(Norms.DENOUNCE.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
-						.getSaliences().get(Norms.DENOUNCE.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
@@ -219,14 +222,38 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		normContentSet = new NormContentSet(noActions, actions);
 		
 		norm = new NormEntity(Norms.NOT_DENOUNCE.ordinal(), NormType.SOCIAL,
-				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet, conf
-						.getSaliences().get(Norms.NOT_DENOUNCE.ordinal()));
+				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
 		normsSanctions.put(norm, sanctions);
 		
 		this.normative.addNormsSanctions(normsSanctions);
+		
+		// Initialize norm salience
+		Map<DataType, Integer> values;
+		for(Integer normId : conf.getSalienceConf().keySet()) {
+			
+			values = new HashMap<DataType, Integer>();
+			values.put(DataType.COMPLIANCE, conf.getSalienceConf().get(normId)
+					.getCompliance());
+			values.put(DataType.VIOLATION, conf.getSalienceConf().get(normId)
+					.getViolation());
+			values.put(DataType.COMPLIANCE_OBSERVED,
+					conf.getSalienceConf().get(normId).getObsCompliance());
+			values.put(DataType.VIOLATION_OBSERVED, conf.getSalienceConf()
+					.get(normId).getObsViolation());
+			values.put(DataType.PUNISHMENT, conf.getSalienceConf().get(normId)
+					.getPunishment());
+			values.put(DataType.SANCTION, conf.getSalienceConf().get(normId)
+					.getSanction());
+			values.put(DataType.COMPLIANCE_INVOKED, conf.getSalienceConf()
+					.get(normId).getInvocationCompliance());
+			values.put(DataType.VIOLATION_INVOKED, conf.getSalienceConf().get(normId)
+					.getInvocationViolation());
+			
+			this.normative.setInitialValues(normId, values);
+		}
 		
 		this.pay = false;
 	}
@@ -347,6 +374,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	@Override
 	public void decidePayment(ExtortionAction action) {
 		
+		// Decide to affiliate to Intermediary Organization
+		this.decideAffiliation();
+		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
 		double extortion = (double) action
@@ -390,10 +420,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 			} else {
 				
-				IG = 1 - IG;
-				
-				probPay = (this.conf.getIndividualWeight() * IG)
-						+ (this.conf.getNormativeWeight() * TnotPayNG);
+				probPay = 1 - ((this.conf.getIndividualWeight() * IG) + (this.conf
+						.getNormativeWeight() * TnotPayNG));
 				
 			}
 			
@@ -448,10 +476,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
+		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
+		
 		if(RandomUtil.nextDouble() < probDenounce) {
 			DenounceExtortionAction denounceAction = new DenounceExtortionAction(
-					this.id, this.stateId,
-					(int) action.getParam(ExtortionAction.Param.MAFIOSO_ID));
+					this.id, this.stateId, mafiosoId);
 			
 			Message replyMsg = new Message(this.simulator.now(), this.id,
 					this.stateId, denounceAction);
@@ -459,6 +488,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), true);
 		} else {
+			NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
+					this.id, this.stateId, mafiosoId);
+			
+			Message replyMsg = new Message(this.simulator.now(), this.id,
+					this.stateId, notDenounceExtortionAction);
+			this.sendMsg(replyMsg);
+			
 			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), false);
 		}
 	}
@@ -582,15 +618,16 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
+		int mafiosoId = (int) action
+				.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID);
+		
+		double punishment = (double) action
+				.getParam(MafiaPunishmentAction.Param.PUNISHMENT);
+		
 		if(RandomUtil.nextDouble() < probDenounce) {
 			
-			int mafioso_id = (int) outputEntity.getValue(Field.MAFIOSO_ID.name());
-			
-			double punishment = (double) outputEntity.getValue(Field.MAFIA_PUNISHMENT
-					.name());
-			
 			DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
-					this.id, this.stateId, mafioso_id, punishment);
+					this.id, this.stateId, mafiosoId, punishment);
 			
 			Message replyMsg = new Message(this.simulator.now(), this.id,
 					this.stateId, denounceAction);
@@ -598,6 +635,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			outputEntity.setValue(Field.DENOUNCED_PUNISHMENT.name(), true);
 		} else {
+			NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
+					this.id, this.stateId, mafiosoId, punishment);
+			
+			Message replyMsg = new Message(this.simulator.now(), this.id,
+					this.stateId, notDenouncePunishmentAction);
+			this.sendMsg(replyMsg);
+			
 			outputEntity.setValue(Field.DENOUNCED_PUNISHMENT.name(), false);
 		}
 	}
@@ -670,9 +714,21 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	}
 	
 	
-	// TODO
 	@Override
 	public void decideAffiliation() {
+		
+		double denounceNG = this.normative
+				.getNormSalience(Norms.DENOUNCE.ordinal());
+		
+		if(denounceNG > this.conf.getAffiliateThreshold()) {
+			
+			AffiliateRequestAction affiliation = new AffiliateRequestAction(this.id,
+					this.ioId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, this.ioId,
+					affiliation);
+			this.sendMsg(msg);
+		}
 	}
 	
 	
@@ -804,11 +860,27 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		if((msg.getSender() != this.id) && (!msg.getReceiver().contains(this.id))) {
 			
+			// Affiliation accepted
 			if(content instanceof AffiliationAcceptedAction) {
-				// TODO
+				AffiliationAcceptedAction action = (AffiliationAcceptedAction) content;
 				
+				int entrepreneurId = (int) action
+						.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
+				
+				if(entrepreneurId == this.id) {
+					this.affiliated = true;
+				}
+				
+				// Affiliation denied
 			} else if(content instanceof AffiliationDeniedAction) {
-				// TODO
+				AffiliationDeniedAction action = (AffiliationDeniedAction) content;
+				
+				int entrepreneurId = (int) action
+						.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
+				
+				if(entrepreneurId == this.id) {
+					this.affiliated = false;
+				}
 				
 			} else if(content instanceof BuyProductAction) {
 				// TODO

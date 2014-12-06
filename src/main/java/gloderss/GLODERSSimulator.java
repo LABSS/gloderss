@@ -44,6 +44,9 @@ public class GLODERSSimulator extends EventSimulator {
 	
 	public GLODERSSimulator(String xmlFilename, String xsdFilename) {
 		this.scenarioConf = ScenarioConf.getScenarioConf(xmlFilename, xsdFilename);
+		
+		logger.debug("[XML VALID] "
+				+ ScenarioConf.isValid(xmlFilename, xsdFilename));
 	}
 	
 	

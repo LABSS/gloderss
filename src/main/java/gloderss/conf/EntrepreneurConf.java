@@ -10,58 +10,60 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class EntrepreneurConf {
 	
 	// Number of entrepreneurs
-	private int										number;
+	private int															number;
 	
 	// Initial wealth
-	private double								wealth;
+	private double													wealth;
 	
 	// Periodicity of receiving wage
-	private String								periodicityWagePDF;
+	private String													periodicityWagePDF;
 	
 	// Minimum wage
-	private double								minimumWage;
+	private double													minimumWage;
 	
 	// Maximum wage
-	private double								maximumWage;
+	private double													maximumWage;
 	
 	// Variation on the wage at each round
-	private double								variationWage;
+	private double													variationWage;
 	
 	// Minimum wage
-	private double								minimumPrice;
+	private double													minimumPrice;
 	
 	// Maximum wage
-	private double								maximumPrice;
+	private double													maximumPrice;
 	
 	// Variation on the wage at each round
-	private double								variationPrice;
+	private double													variationPrice;
 	
 	// Balance between risk and opportunity
-	private double								denounceAlpha;
+	private double													denounceAlpha;
 	
 	// Probability of collaborating to the Police if requested
-	private double								collaborationProbability;
+	private double													collaborationProbability;
+	
+	private double													affiliateThreshold;
 	
 	// Affiliated to IO
-	private boolean								affiliated;
+	private boolean													affiliated;
 	
 	// Initial reputation values
-	private EReputationConf				reputationConf;
+	private EReputationConf									reputationConf;
 	
 	// EMIL-A Normative XML filename
-	private String								normativeXML;
+	private String													normativeXML;
 	
 	// EMIL-A Normative XSD filename
-	private String								normativeXSD;
+	private String													normativeXSD;
 	
 	// Individual weight
-	private double								individualWeight;
+	private double													individualWeight;
 	
 	// Normative weight
-	private double								normativeWeight;
+	private double													normativeWeight;
 	
 	// Initial norm salience
-	private Map<Integer, Double>	saliences;
+	private Map<Integer, NormSalienceConf>	salienceConf;
 	
 	
 	public int getNumber() {
@@ -185,6 +187,17 @@ public class EntrepreneurConf {
 	}
 	
 	
+	public double getAffiliateThreshold() {
+		return this.affiliateThreshold;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_AFFILIATE_THRESHOLD)
+	public void setAffiliateThreshold(double affiliateThreshold) {
+		this.affiliateThreshold = affiliateThreshold;
+	}
+	
+	
 	public boolean getAffiliated() {
 		return this.affiliated;
 	}
@@ -251,14 +264,14 @@ public class EntrepreneurConf {
 	}
 	
 	
-	public Map<Integer, Double> getSaliences() {
-		return this.saliences;
+	public Map<Integer, NormSalienceConf> getSalienceConf() {
+		return this.salienceConf;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_NORMATIVE_NORMS_SALIENCE)
 	@XmlJavaTypeAdapter(NormSalienceAdapter.class)
-	public void setSaliences(Map<Integer, Double> saliences) {
-		this.saliences = saliences;
+	public void setSaliences(Map<Integer, NormSalienceConf> salienceConf) {
+		this.salienceConf = salienceConf;
 	}
 }

@@ -6,12 +6,12 @@ import emilia.entity.norm.NormEntityAbstract;
 public class NormEntity extends NormEntityAbstract {
 	
 	public NormEntity(Integer id, NormType type, NormSource source,
-			NormStatus status, NormContentInterface content, Double salience) {
+			NormStatus status, NormContentInterface content) {
 		this.setId(id);
 		this.setType(type);
 		this.setSource(source);
 		this.setStatus(status);
 		this.setContent(content);
-		this.setSalience(salience);
+		this.setSalience(0.0);
 	}
 }

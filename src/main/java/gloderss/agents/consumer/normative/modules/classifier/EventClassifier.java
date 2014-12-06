@@ -7,6 +7,8 @@ import gloderss.actions.BuyNotPayExtortionAction;
 import gloderss.actions.BuyPayExtortionAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.communication.Message;
@@ -28,7 +30,7 @@ public class EventClassifier extends EventClassifierAbstract {
 			
 			Object content = msg.getContent();
 			
-			// Buy extortion payer
+			// Buy from extortion payer
 			if(content instanceof BuyPayExtortionAction) {
 				
 				BuyPayExtortionAction action = (BuyPayExtortionAction) content;
@@ -38,7 +40,7 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(BuyPayExtortionAction.Param.ENTREPRENEUR_ID),
 						this.agentId, action);
 				
-				// Buy non extortion payer
+				// Buy from non extortion payer
 			} else if(content instanceof BuyNotPayExtortionAction) {
 				
 				BuyNotPayExtortionAction action = (BuyNotPayExtortionAction) content;
@@ -60,6 +62,17 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(DenounceExtortionAction.Param.STATE_ID),
 						this.agentId, action);
 				
+				// Not denounce Extortion
+			} else if(content instanceof NotDenounceExtortionAction) {
+				
+				NotDenounceExtortionAction action = (NotDenounceExtortionAction) content;
+				
+				entity = new ActionEvent(msg.getTime(),
+						(int) action
+								.getParam(NotDenounceExtortionAction.Param.ENTREPRENEUR_ID),
+						(int) action.getParam(NotDenounceExtortionAction.Param.STATE_ID),
+						this.agentId, action);
+				
 				// Denounce Punishment
 			} else if(content instanceof DenouncePunishmentAction) {
 				
@@ -69,6 +82,17 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action
 								.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID),
 						(int) action.getParam(DenouncePunishmentAction.Param.STATE_ID),
+						this.agentId, action);
+				
+				// Not Denounce Punishment
+			} else if(content instanceof NotDenouncePunishmentAction) {
+				
+				NotDenouncePunishmentAction action = (NotDenouncePunishmentAction) content;
+				
+				entity = new ActionEvent(msg.getTime(),
+						(int) action
+								.getParam(NotDenouncePunishmentAction.Param.ENTREPRENEUR_ID),
+						(int) action.getParam(NotDenouncePunishmentAction.Param.STATE_ID),
 						this.agentId, action);
 				
 				// Pay Extortion

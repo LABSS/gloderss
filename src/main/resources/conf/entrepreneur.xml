@@ -6,7 +6,7 @@
 	<normRecognitionClass>emilia.defaultImpl.modules.recognition.NormRecognitionController</normRecognitionClass>
 	<normAdoptionClass>emilia.defaultImpl.modules.adoption.NormAdoptionController</normAdoptionClass>
 	<normSalienceClass>emilia.defaultImpl.modules.salience.NormSalienceController</normSalienceClass>
-	<normEnforcementClass>gloderss.agents.entrepreneur.normative.modules.enforcement.NormEnforcementController</normEnforcementClass>
+	<normEnforcementClass>emilia.defaultImpl.modules.enforcement.NormEnforcementController</normEnforcementClass>
 	<normComplianceClass>emilia.defaultImpl.modules.compliance.NormComplianceController</normComplianceClass>
 	<normativeBoardClass>emilia.defaultImpl.board.NormativeBoard</normativeBoardClass>
 </emilia>

@@ -152,14 +152,14 @@
 													<element maxOccurs="unbounded" name="normSalience">
 														<complexType>
 															<attribute name="id" type="nonNegativeInteger" />
-															<attribute name="salience">
-																<simpleType>
-																	<restriction base="decimal">
-																		<minInclusive value="0.0" />
-																		<maxInclusive value="1.0" />
-																	</restriction>
-																</simpleType>
-															</attribute>
+															<attribute name="compliance" type="nonNegativeInteger" />
+															<attribute name="violation" type="nonNegativeInteger" />
+															<attribute name="obsCompliance" type="nonNegativeInteger" />
+															<attribute name="obsViolation" type="nonNegativeInteger" />
+															<attribute name="punishment" type="nonNegativeInteger" />
+															<attribute name="sanction" type="nonNegativeInteger" />
+															<attribute name="invocationCompliance" type="nonNegativeInteger" />
+															<attribute name="invocationViolation" type="nonNegativeInteger" />
 														</complexType>
 													</element>
 												</sequence>
@@ -248,6 +248,14 @@
 										</element>
 
 										<!-- Intermediary Organization -->
+										<element name="affiliateThreshold">
+											<simpleType>
+												<restriction base="decimal">
+													<minInclusive value="0.0" />
+													<maxInclusive value="1.0" />
+												</restriction>
+											</simpleType>
+										</element>
 										<element name="affiliated" type="boolean" />
 
 										<!-- Reputation -->
@@ -307,14 +315,14 @@
 													<element maxOccurs="unbounded" name="normSalience">
 														<complexType>
 															<attribute name="id" type="nonNegativeInteger" />
-															<attribute name="salience">
-																<simpleType>
-																	<restriction base="decimal">
-																		<minInclusive value="0.0" />
-																		<maxInclusive value="1.0" />
-																	</restriction>
-																</simpleType>
-															</attribute>
+															<attribute name="compliance" type="nonNegativeInteger" />
+															<attribute name="violation" type="nonNegativeInteger" />
+															<attribute name="obsCompliance" type="nonNegativeInteger" />
+															<attribute name="obsViolation" type="nonNegativeInteger" />
+															<attribute name="punishment" type="nonNegativeInteger" />
+															<attribute name="sanction" type="nonNegativeInteger" />
+															<attribute name="invocationCompliance" type="nonNegativeInteger" />
+															<attribute name="invocationViolation" type="nonNegativeInteger" />
 														</complexType>
 													</element>
 												</sequence>

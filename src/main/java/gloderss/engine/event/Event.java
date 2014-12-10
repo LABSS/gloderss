@@ -100,4 +100,14 @@ public class Event extends AbstractEvent {
 		
 		return false;
 	}
+	
+	
+	@Override
+	public String toString() {
+		String str = new String();
+		
+		str = "Time = [" + time + "] Command = [" + command.toString() + "]";
+		
+		return str;
+	}
 }

@@ -1,5 +1,6 @@
 package gloderss;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,12 +18,12 @@ import gloderss.communication.CommunicationController;
 import gloderss.conf.ConsumerConf;
 import gloderss.conf.EntrepreneurConf;
 import gloderss.conf.ScenarioConf;
+import gloderss.engine.devs.EventSimulator;
+import gloderss.engine.queue.ListQueue;
 import gloderss.output.AbstractEntity.EntityType;
 import gloderss.output.OutputController;
 import gloderss.util.network.Network;
 import gloderss.util.random.RandomUtil;
-import gloderss.engine.devs.EventSimulator;
-import gloderss.engine.queue.ListQueue;
 
 public class GLODERSSimulator extends EventSimulator {
 	
@@ -82,6 +83,8 @@ public class GLODERSSimulator extends EventSimulator {
 			outputController.newInstance(replica);
 			outputController.init(EntityType.EXTORTION, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getExtortion());
+			outputController.init(EntityType.PUNISHMENT, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getPunishment());
 			outputController.init(EntityType.PURCHASE, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getPurchase());
 			outputController.init(EntityType.INTERMEDIARY_ORGANIZATION,
@@ -185,6 +188,11 @@ public class GLODERSSimulator extends EventSimulator {
 					this.scenarioConf.getIntermediaryOrgConf(), this.consumers,
 					this.entrepreneurs);
 			
+			this.state.setIOId(this.intermediaryOrg.getId());
+			for(EntrepreneurAgent e : this.entrepreneurs.values()) {
+				e.setIOId(this.intermediaryOrg.getId());
+			}
+			
 			/**
 			 * Networks
 			 */
@@ -226,6 +234,12 @@ public class GLODERSSimulator extends EventSimulator {
 			outputController.initializeSim();
 			
 			this.doAllEvents(numCycles);
+			
+			try {
+				outputController.write();
+			} catch(IOException e) {
+				logger.debug(e.getMessage());
+			}
 		}
 	}
 	

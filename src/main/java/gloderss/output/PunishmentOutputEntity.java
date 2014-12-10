@@ -1,9 +1,15 @@
 package gloderss.output;
 
-public class StateOutputEntity extends AbstractEntity {
+public class PunishmentOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		TIME("time", DataType.DOUBLE);
+		TIME("time", DataType.DOUBLE),
+		EXTORTION_ID("extortionId", DataType.INTEGER),
+		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
+		MAFIOSO_ID("mafiosoId", DataType.INTEGER),
+		DENOUNCED_PUNISHMENT("denouncedPunishment", DataType.BOOLEAN),
+		STATE_COMPENSATED("stateCompensate", DataType.BOOLEAN),
+		STATE_COMPENSATION("stateCompensation", DataType.DOUBLE);
 		
 		private String		name;
 		
@@ -31,12 +37,18 @@ public class StateOutputEntity extends AbstractEntity {
 	private Object[]	entity;
 	
 	
-	public StateOutputEntity(int id, String separator) {
+	public PunishmentOutputEntity(int id, String separator) {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
 		
 		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.EXTORTION_ID.ordinal()] = id;
+		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
+		this.entity[Field.MAFIOSO_ID.ordinal()] = -1;
+		this.entity[Field.DENOUNCED_PUNISHMENT.ordinal()] = false;
+		this.entity[Field.STATE_COMPENSATED.ordinal()] = false;
+		this.entity[Field.STATE_COMPENSATION.ordinal()] = 0.0;
 	}
 	
 	

@@ -1,12 +1,17 @@
 package gloderss.agents.consumer.normative.modules.classifier;
 
 import emilia.entity.event.NormativeEventEntityAbstract;
+import emilia.entity.event.NormativeEventType;
 import emilia.entity.event.type.ActionEvent;
+import emilia.entity.event.type.NormativeEvent;
 import emilia.modules.classifier.EventClassifierAbstract;
+import gloderss.Constants;
+import gloderss.Constants.Norms;
 import gloderss.actions.BuyNotPayExtortionAction;
 import gloderss.actions.BuyPayExtortionAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
@@ -101,7 +106,7 @@ public class EventClassifier extends EventClassifierAbstract {
 				PayExtortionAction action = (PayExtortionAction) content;
 				
 				entity = new ActionEvent(msg.getTime(),
-						(int) action.getParam(PayExtortionAction.Param.VICTIM_ID),
+						(int) action.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID),
 						(int) action.getParam(PayExtortionAction.Param.MAFIOSO_ID),
 						this.agentId, action);
 				
@@ -111,10 +116,39 @@ public class EventClassifier extends EventClassifierAbstract {
 				NotPayExtortionAction action = (NotPayExtortionAction) content;
 				
 				entity = new ActionEvent(msg.getTime(),
-						(int) action.getParam(NotPayExtortionAction.Param.VICTIM_ID),
+						(int) action.getParam(NotPayExtortionAction.Param.ENTREPRENEUR_ID),
 						(int) action.getParam(NotPayExtortionAction.Param.MAFIOSO_ID),
 						this.agentId, action);
 				
+				// Normative Information
+			} else if(content instanceof NormativeInfoAction) {
+				
+				NormativeInfoAction action = (NormativeInfoAction) content;
+				
+				String normInfo = (String) action
+						.getParam(NormativeInfoAction.Param.NORMATIVE_INFO);
+				
+				if(normInfo
+						.equalsIgnoreCase(Constants.Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS
+								.name())) {
+					
+					entity = new NormativeEvent(msg.getTime(),
+							(int) action.getParam(NormativeInfoAction.Param.AGENT_ID),
+							this.agentId, this.agentId,
+							NormativeEventType.COMPLIANCE_INVOCATION_INFORMED,
+							Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal());
+					
+				} else if(normInfo
+						.equalsIgnoreCase(Constants.Norms.BUY_FROM_PAYING_ENTREPRENEURS
+								.name())) {
+					
+					entity = new NormativeEvent(msg.getTime(),
+							(int) action.getParam(NormativeInfoAction.Param.AGENT_ID),
+							this.agentId, this.agentId,
+							NormativeEventType.COMPLIANCE_INVOCATION_INFORMED,
+							Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal());
+					
+				}
 			}
 		}
 		

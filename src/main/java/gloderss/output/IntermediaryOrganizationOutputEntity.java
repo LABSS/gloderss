@@ -3,7 +3,7 @@ package gloderss.output;
 public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		CYCLE("cycle", DataType.INTEGER);
+		TIME("time", DataType.DOUBLE);
 		
 		private String		name;
 		
@@ -35,6 +35,8 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
+		
+		this.entity[Field.TIME.ordinal()] = 0.0;
 	}
 	
 	
@@ -51,6 +53,10 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 			
 		} else if(field.getType().equals(DataType.INTEGER)) {
 			this.entity[field.ordinal()] = (Integer) value;
+			
+		} else if(field.getType().equals(DataType.STRING)) {
+			this.entity[field.ordinal()] = (String) value;
+			
 		}
 	}
 	
@@ -70,6 +76,8 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 			value = this.entity[field.ordinal()];
 			if(value == null) {
 				value = (String) "";
+			} else if(field.getType().equals(DataType.DOUBLE)) {
+				value = String.format("%.2f", value);
 			}
 			line += value + this.separator;
 		}

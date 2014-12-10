@@ -1,7 +1,7 @@
 gloderss (GLODERS Simulator)
 ============================
 
-Missing components
+Missing
 
 * Reputation update
   (1) Entrepreneur
@@ -10,5 +10,5 @@ Missing components
   (1) Normative Enforcement Module
   (2) Handle Sanctioning
 * Spread of Information
-* Output Information
+* Output Information (Define what to record) 
 * Performance evaluation

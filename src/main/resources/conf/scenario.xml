@@ -14,10 +14,11 @@
 			<directory>./output</directory>
 			<append>false</append>
 			<separator>;</separator>
-			<timeToWrite>1000</timeToWrite>
+			<timeToWrite>100</timeToWrite>
 		</output>
 		<filename>
 			<extortion>extortion.csv</extortion>
+			<punishment>punishment.csv</punishment>
 			<purchase>purchase.csv</purchase>
 			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
 			<mafiaOrg>mafiaOrg.csv</mafiaOrg>
@@ -205,7 +206,7 @@
 		<demandPDF>NORMAL(30,2)</demandPDF>
 		<demandAffiliatedProbability>0.01</demandAffiliatedProbability>
 		<extortionLevel>0.1</extortionLevel>
-		<punishmentSeverity>0.6</punishmentSeverity>
+		<punishmentSeverity>0.2</punishmentSeverity>
 		<collectionPDF>CONSTANT(10)</collectionPDF>
 		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>

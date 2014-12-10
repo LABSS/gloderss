@@ -9,8 +9,9 @@ import java.util.Queue;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.CollaborateAction;
-import gloderss.actions.NormativeInfoSpreadAction;
+import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotCollaborateAction;
+import gloderss.actions.ReleaseImprisonmentAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.CaptureMafiosoAction;
 import gloderss.actions.CollaborationRequestAction;
@@ -40,6 +41,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private StateConf													conf;
 	
+	private int																ioId;
+	
 	private PDFAbstract												imprisonmentDurationPDF;
 	
 	private PDFAbstract												custodyPDF;
@@ -65,6 +68,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	private List<Integer>											allocatedPoliceOfficers;
 	
 	private Queue<CaptureMafiosoAction>				custodyQueue;
+	
+	private Queue<ImprisonmentAction>					prisonQueue;
 	
 	private Queue<DenouncePunishmentAction>		assistQueue;
 	
@@ -131,6 +136,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.investigateEntrepreneurs = new ArrayList<Integer>();
 		this.allocatedPoliceOfficers = new ArrayList<Integer>();
 		this.custodyQueue = new LinkedList<CaptureMafiosoAction>();
+		this.prisonQueue = new LinkedList<ImprisonmentAction>();
 		this.assistQueue = new LinkedList<DenouncePunishmentAction>();
 	}
 	
@@ -140,6 +146,16 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * Getters and Setters
 	 * 
 	 *******************************/
+	
+	public int getIOId() {
+		return this.ioId;
+	}
+	
+	
+	public void setIOId(int ioId) {
+		this.ioId = ioId;
+	}
+	
 	
 	public Map<Integer, PoliceOfficerAgent> getPoliceOfficers() {
 		return this.policeOfficers;
@@ -158,7 +174,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * @param none
 	 * @return Entrepreneur for investigation
 	 */
-	public int decideEntrepreneur() {
+	private int decideEntrepreneur() {
 		
 		int entrepreneurId;
 		do {
@@ -178,7 +194,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * @param none
 	 * @return none
 	 */
-	public void increaseFondo() {
+	private void increaseFondo() {
 		
 		this.fondoSolidarieta += this.conf.getResourceFondo();
 		
@@ -195,11 +211,35 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * @param none
 	 * @return none
 	 */
-	public void judgeMafioso() {
+	private void judgeMafioso() {
 		
 		if(!this.custodyQueue.isEmpty()) {
 			CaptureMafiosoAction action = this.custodyQueue.poll();
 			this.decideImprisonment(action);
+		}
+	}
+	
+	
+	/**
+	 * Release a imprisoned Mafioso
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void releaseMafioso() {
+		
+		if(!this.prisonQueue.isEmpty()) {
+			ImprisonmentAction prison = this.prisonQueue.poll();
+			
+			int mafiosoId = (int) prison
+					.getParam(ImprisonmentAction.Param.MAFIOSO_ID);
+			
+			ReleaseImprisonmentAction action = new ReleaseImprisonmentAction(
+					mafiosoId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
+					action);
+			this.sendMsg(msg);
 		}
 	}
 	
@@ -301,6 +341,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		// Add Entrepreneur in a queue to receive compensation for the punishment
 		this.assistQueue.add(action);
 		
+		// Spread action
+		Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
+				action);
+		this.spreadActionInformation(msg);
+		
 		Event event = new Event(this.simulator.now()
 				+ this.timeToCompensationPDF.nextValue(), this,
 				Constants.EVENT_ASSIST_ENTREPRENEUR);
@@ -331,6 +376,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		Message msg = new Message(this.simulator.now(), this.id, mafiosoId, custody);
 		this.sendMsg(msg);
+		
+		// Spread action
+		this.spreadActionInformation(msg);
 		
 		Event event = new Event(this.simulator.now() + this.custodyPDF.nextValue(),
 				this, Constants.EVENT_JUDGE_MAFIOSO);
@@ -368,20 +416,32 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 					imprisonment);
 			this.sendMsg(msg);
 			
+			this.prisonQueue.add(imprisonment);
+			
+			Event releasePrison = new Event(this.simulator.now() + duration, this,
+					Constants.EVENT_RELEASE_PRISON);
+			this.simulator.insert(releasePrison);
+			
+			// Spread action
+			this.spreadActionInformation(msg);
+			
 			// Release the Mafioso of custody
 		} else {
 			
-			ReleaseCustodyAction releaseCustody = new ReleaseCustodyAction();
+			ReleaseCustodyAction releaseCustody = new ReleaseCustodyAction(mafiosoId);
 			
 			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
 					releaseCustody);
 			this.sendMsg(msg);
+			
+			// Spread action
+			this.spreadActionInformation(msg);
 		}
 	}
 	
 	
 	@Override
-	public void receivePentiti(PentitoAction action) {
+	public void receivePentito(PentitoAction action) {
 		
 		@SuppressWarnings("unchecked")
 		List<Integer> mafiosoList = (List<Integer>) action
@@ -411,6 +471,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				this.sendMsg(msg);
 			}
 		}
+		
+		// Spread action
+		Message msg = new Message(this.simulator.now(), mafiosoId, this.id, action);
+		this.spreadActionInformation(msg);
 	}
 	
 	
@@ -438,6 +502,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
 					punishment);
 			this.sendMsg(msg);
+			
+			// Spread action
+			this.spreadActionInformation(msg);
 		}
 	}
 	
@@ -448,6 +515,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		if(!this.assistQueue.isEmpty()) {
 			DenouncePunishmentAction action = this.assistQueue.poll();
 			
+			int extortionId = (int) action
+					.getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
+			
 			double punishment = (double) action
 					.getParam(DenouncePunishmentAction.Param.PUNISHMENT);
 			
@@ -457,11 +527,14 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 				
 				StateCompensationAction compensation = new StateCompensationAction(
-						entrepreneurId, punishment);
+						extortionId, entrepreneurId, punishment);
 				
 				Message msg = new Message(this.simulator.now(), this.id,
 						entrepreneurId, compensation);
 				this.sendMsg(msg);
+				
+				// Spread action
+				this.spreadActionInformation(msg);
 				
 				// Entrepreneur goes back to the queue
 			} else {
@@ -479,11 +552,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	
 	@Override
-	public void spreadInformation() {
+	public void spreadNormativeInformation() {
 		
 		// Spread information to Consumers
-		NormativeInfoSpreadAction notBuyPayExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+		NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
+				Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 		
 		int numConsumers = (int) (this.consumers.size() * this.conf
 				.getProportionCustomers());
@@ -502,11 +575,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
-		NormativeInfoSpreadAction notPayExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.NOT_PAY_EXTORTION.name());
+		NormativeInfoAction notPayExtortion = new NormativeInfoAction(this.id,
+				Norms.NOT_PAY_EXTORTION.name());
 		
-		NormativeInfoSpreadAction denounceExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.DENOUNCE.name());
+		NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
+				Norms.DENOUNCE.name());
 		
 		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
 				.getProportionEntrepreneurs());
@@ -537,6 +610,53 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	}
 	
 	
+	/**
+	 * Spread action information
+	 * 
+	 * @param msg
+	 *          Spread action message to a proportion of consumers and
+	 *          entrepreneurs
+	 * @return none
+	 */
+	private void spreadActionInformation(Message msg) {
+		
+		int numConsumers = (int) (this.consumers.size() * this.conf
+				.getProportionCustomers());
+		List<Integer> consumerIds = new ArrayList<Integer>();
+		while(consumerIds.size() < numConsumers) {
+			
+			int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
+					.nextIntFromTo(0, (this.consumers.size() - 1))];
+			
+			if(!consumerIds.contains(consumerId)) {
+				consumerIds.add(consumerId);
+				
+				Message newMsg = new Message(this.simulator.now(), this.id, consumerId,
+						msg);
+				this.sendMsg(newMsg);
+			}
+		}
+		
+		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
+				.getProportionEntrepreneurs());
+		List<Integer> entrepreneurIds = new ArrayList<Integer>();
+		int qtyEntrepreneurs = this.entrepreneurs.size();
+		while(entrepreneurIds.size() < numEntrepreneurs) {
+			
+			int entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
+					.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
+			
+			if(!entrepreneurIds.contains(entrepreneurId)) {
+				entrepreneurIds.add(entrepreneurId);
+				
+				Message newMsg = new Message(this.simulator.now(), this.id,
+						entrepreneurId, msg);
+				this.sendMsg(newMsg);
+			}
+		}
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -550,18 +670,23 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
 			
+			// Denounce extortion
 			if(content instanceof DenounceExtortionAction) {
 				this.decideInvestigateExtortion((DenounceExtortionAction) content);
 				
+				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
 				this.decideInvestigatePunishment((DenouncePunishmentAction) content);
 				
+				// Pentito
 			} else if(content instanceof PentitoAction) {
-				this.receivePentiti((PentitoAction) content);
+				this.receivePentito((PentitoAction) content);
 				
+				// Release investigation
 			} else if(content instanceof ReleaseInvestigationAction) {
 				this.releaseInvestigation((ReleaseInvestigationAction) content);
 				
+				// Capture Mafioso
 			} else if(content instanceof CaptureMafiosoAction) {
 				this.decideImprisonment((CaptureMafiosoAction) content);
 				
@@ -616,11 +741,14 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			case Constants.EVENT_RELEASE_CUSTODY:
 				this.judgeMafioso();
 				break;
+			case Constants.EVENT_RELEASE_PRISON:
+				this.releaseMafioso();
+				break;
 			case Constants.EVENT_ASSIST_ENTREPRENEUR:
 				this.decideStateCompensation();
 				break;
 			case Constants.EVENT_SPREAD_INFORMATION:
-				this.spreadInformation();
+				this.spreadNormativeInformation();
 		}
 	}
 }

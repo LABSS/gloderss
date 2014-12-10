@@ -3,9 +3,11 @@ package gloderss.output;
 public class PurchaseOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		CYCLE("cycle", DataType.INTEGER),
+		TIME("time", DataType.DOUBLE),
 		CONSUMER_ID("consumerId", DataType.INTEGER),
-		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER);
+		RESEARCHED("researched", DataType.STRING),
+		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
+		PAID_PRICE("paid_price", DataType.DOUBLE);
 		
 		private String		name;
 		
@@ -37,6 +39,12 @@ public class PurchaseOutputEntity extends AbstractEntity {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
+		
+		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.CONSUMER_ID.ordinal()] = -1;
+		this.entity[Field.RESEARCHED.ordinal()] = "";
+		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
+		this.entity[Field.PAID_PRICE.ordinal()] = 0.0;
 	}
 	
 	
@@ -53,6 +61,10 @@ public class PurchaseOutputEntity extends AbstractEntity {
 			
 		} else if(field.getType().equals(DataType.INTEGER)) {
 			this.entity[field.ordinal()] = (Integer) value;
+			
+		} else if(field.getType().equals(DataType.STRING)) {
+			this.entity[field.ordinal()] = (String) value;
+			
 		}
 	}
 	
@@ -72,6 +84,8 @@ public class PurchaseOutputEntity extends AbstractEntity {
 			value = this.entity[field.ordinal()];
 			if(value == null) {
 				value = (String) "";
+			} else if(field.getType().equals(DataType.DOUBLE)) {
+				value = String.format("%.2f", value);
 			}
 			line += value + this.separator;
 		}

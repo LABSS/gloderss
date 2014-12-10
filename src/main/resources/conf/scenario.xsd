@@ -39,6 +39,7 @@
 								<complexType>
 									<sequence>
 										<element name="extortion" type="string" />
+										<element name="punishment" type="string" />
 										<element name="purchase" type="string" />
 										<element name="intermediaryOrganization" type="string" />
 										<element name="mafiaOrg" type="string" />

@@ -141,9 +141,35 @@ public class OutputController implements EventHandler {
 		if(this.entityId.containsKey(type)) {
 			
 			int id = this.entityId.get(type);
+			
+			entity = this.getEntity(type, id);
+			
+			if(entity != null) {
+				this.entityId.put(type, id + 1);
+			}
+		}
+		
+		return entity;
+	}
+	
+	
+	public synchronized AbstractEntity getEntity(EntityType type, int id) {
+		AbstractEntity entity = null;
+		
+		Map<Integer, AbstractEntity> typeEntities;
+		if(this.entities.containsKey(type)) {
+			typeEntities = this.entities.get(type);
+		} else {
+			typeEntities = new HashMap<Integer, AbstractEntity>();
+		}
+		
+		if(!typeEntities.containsKey(id)) {
 			switch(type) {
 				case EXTORTION:
 					entity = new ExtortionOutputEntity(id, this.separator);
+					break;
+				case PUNISHMENT:
+					entity = new PunishmentOutputEntity(id, this.separator);
 					break;
 				case PURCHASE:
 					entity = new PurchaseOutputEntity(id, this.separator);
@@ -166,37 +192,29 @@ public class OutputController implements EventHandler {
 			}
 			
 			if(entity != null) {
-				
-				Map<Integer, AbstractEntity> typeEntities;
-				if(this.entities.containsKey(type)) {
-					typeEntities = this.entities.get(type);
-				} else {
-					typeEntities = new HashMap<Integer, AbstractEntity>();
-				}
-				
 				typeEntities.put(id, entity);
 				this.entities.put(type, typeEntities);
-				this.entityId.put(type, id + 1);
 			}
+		} else {
+			entity = typeEntities.get(id);
 		}
 		
 		return entity;
 	}
 	
 	
-	public AbstractEntity getEntity(EntityType type, int id) {
-		AbstractEntity record = null;
-		
-		if(this.entities.containsKey(type)) {
-			Map<Integer, AbstractEntity> typeEntities = this.entities.get(type);
-			if(typeEntities.containsKey(id)) {
-				record = typeEntities.get(id);
-			}
-		}
-		
-		return record;
-	}
+	// public synchronized AbstractEntity getEntity(EntityType type, int id) {
+	// AbstractEntity entity = null;
 	
+	// if(this.entities.containsKey(type)) {
+	// Map<Integer, AbstractEntity> typeEntities = this.entities.get(type);
+	// if(typeEntities.containsKey(id)) {
+	// entity = typeEntities.get(id);
+	// }
+	// }
+	
+	// return entity;
+	// }
 	
 	public void setEntity(EntityType type, AbstractEntity entity) {
 		int id = entity.getEntityId();
@@ -217,7 +235,20 @@ public class OutputController implements EventHandler {
 		
 		for(EntityType type : EntityType.values()) {
 			
-			Map<Integer, AbstractEntity> typeEntities = this.entities.remove(type);
+			Map<Integer, AbstractEntity> typeEntities = new HashMap<Integer, AbstractEntity>();
+			typeEntities.putAll(this.entities.get(type));
+			for(Integer id : this.entities.get(type).keySet()) {
+				if(typeEntities.containsKey(id)) {
+					AbstractEntity entity = typeEntities.get(id);
+					if(!entity.isActive()) {
+						typeEntities.remove(id);
+					}
+				}
+			}
+			
+			for(Integer id : typeEntities.keySet()) {
+				this.entities.remove(id);
+			}
 			
 			if((typeEntities != null) && (!typeEntities.isEmpty())) {
 				
@@ -231,11 +262,13 @@ public class OutputController implements EventHandler {
 					}
 					
 					if(typeEntities.get(id).isActive()) {
-						AbstractEntity entity = typeEntities.remove(id);
+						AbstractEntity entity = typeEntities.get(id);
 						bFile.write(entity.getLine());
 						bFile.newLine();
 					}
 				}
+				
+				typeEntities.clear();
 				
 				this.entities.put(type, typeEntities);
 				bFile.flush();

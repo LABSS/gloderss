@@ -4,6 +4,7 @@ public abstract class AbstractEntity {
 	
 	public enum EntityType {
 		EXTORTION,
+		PUNISHMENT,
 		PURCHASE,
 		INTERMEDIARY_ORGANIZATION,
 		MAFIA_ORG,
@@ -15,7 +16,8 @@ public abstract class AbstractEntity {
 	protected enum DataType {
 		BOOLEAN,
 		DOUBLE,
-		INTEGER;
+		INTEGER,
+		STRING;
 	}
 	
 	private int			entityId;

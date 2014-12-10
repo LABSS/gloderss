@@ -28,7 +28,7 @@ public interface IStateOrg {
 	public void decideImprisonment(CaptureMafiosoAction action);
 	
 	
-	public void receivePentiti(PentitoAction action);
+	public void receivePentito(PentitoAction action);
 	
 	
 	public void receiveCollaboration(CollaborateAction action);
@@ -40,5 +40,5 @@ public interface IStateOrg {
 	public void decideStateCompensation();
 	
 	
-	public void spreadInformation();
+	public void spreadNormativeInformation();
 }

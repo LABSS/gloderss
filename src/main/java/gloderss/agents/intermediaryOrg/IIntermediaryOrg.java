@@ -7,8 +7,8 @@ public interface IIntermediaryOrg {
 	public void initializeSim();
 	
 	
-	public void receiveAffiliation(AffiliateRequestAction action);
+	public void receiveAffiliationRequest(AffiliateRequestAction action);
 	
 	
-	public void spreadInformation();
+	public void spreadNormativeInformation();
 }

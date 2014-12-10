@@ -7,25 +7,30 @@ import java.util.HashMap;
 public class StateCompensationAction extends ActionAbstract {
 	
 	public enum Param {
+		EXTORTION_ID,
 		ENTREPRENEUR_ID,
 		COMPENSATION;
 	}
 	
 	
 	/**
-	 * AssistanceEntrepreneurAction constructor
+	 * StateCompensationAction constructor
 	 * 
+	 * @param extortionId
+	 *          Extortion identification
 	 * @param entrepreneurId
 	 *          Entrepreneur identification
 	 * @param compensation
 	 *          Compensation amount
 	 * @return none
 	 */
-	public StateCompensationAction(int entrepreneurId, double assistance) {
+	public StateCompensationAction(int extortionId, int entrepreneurId,
+			double assistance) {
 		super(Actions.STATE_COMPENSATION.ordinal(), Actions.STATE_COMPENSATION
 				.name());
 		
 		this.params = new HashMap<Object, Object>();
+		this.params.put(Param.EXTORTION_ID, extortionId);
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
 		this.params.put(Param.COMPENSATION, assistance);
 	}

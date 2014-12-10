@@ -7,6 +7,8 @@ public class FilenameConf {
 	
 	private String	extortion;
 	
+	private String	punishment;
+	
 	private String	purchase;
 	
 	private String	intermediaryOrganization;
@@ -28,6 +30,17 @@ public class FilenameConf {
 	@XmlElement(name = Constants.TAG_FILENAME_EXTORTION)
 	public void setExtortion(String extortion) {
 		this.extortion = extortion;
+	}
+	
+	
+	public String getPunishment() {
+		return this.punishment;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_FILENAME_PUNISHMENT)
+	public void setPunishment(String punishment) {
+		this.punishment = punishment;
 	}
 	
 	

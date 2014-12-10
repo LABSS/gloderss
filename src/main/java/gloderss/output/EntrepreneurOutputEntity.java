@@ -3,7 +3,7 @@ package gloderss.output;
 public class EntrepreneurOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		CYCLE("cycle", DataType.INTEGER),
+		TIME("time", DataType.DOUBLE),
 		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER);
 		
 		private String		name;
@@ -36,6 +36,9 @@ public class EntrepreneurOutputEntity extends AbstractEntity {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
+		
+		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
 	}
 	
 	
@@ -52,6 +55,10 @@ public class EntrepreneurOutputEntity extends AbstractEntity {
 			
 		} else if(field.getType().equals(DataType.INTEGER)) {
 			this.entity[field.ordinal()] = (Integer) value;
+			
+		} else if(field.getType().equals(DataType.STRING)) {
+			this.entity[field.ordinal()] = (String) value;
+			
 		}
 	}
 	
@@ -71,6 +78,8 @@ public class EntrepreneurOutputEntity extends AbstractEntity {
 			value = this.entity[field.ordinal()];
 			if(value == null) {
 				value = (String) "";
+			} else if(field.getType().equals(DataType.DOUBLE)) {
+				value = String.format("%.2f", value);
 			}
 			line += value + this.separator;
 		}

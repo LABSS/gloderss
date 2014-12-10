@@ -58,6 +58,8 @@ public final class Constants {
 	
 	public static final String	TAG_FILENAME_EXTORTION																= "extortion";
 	
+	public static final String	TAG_FILENAME_PUNISHMENT																= "punishment";
+	
 	public static final String	TAG_FILENAME_PURCHASE																	= "purchase";
 	
 	public static final String	TAG_FILENAME_INTERMEDIARY_ORGANIZATION								= "intermediaryOrganization";
@@ -276,6 +278,7 @@ public final class Constants {
 		CUSTODY,
 		RELEASE_CUSTODY,
 		IMPRISONMENT,
+		RELEASE_IMPRISONMENT,
 		PENTITI,
 		CAPTURE_MAFIOSO,
 		COLLABORATION_REQUEST,
@@ -290,7 +293,8 @@ public final class Constants {
 		AFFILIATE,
 		AFFILIATION_ACCEPTED,
 		AFFILIATION_DENIED,
-		NORMATIVE_INFO_SPREAD;
+		NORMATIVE_INFO,
+		REPUTATION_INFO;
 	}
 	
 	/**
@@ -318,7 +322,7 @@ public final class Constants {
 	
 	public static final String	REQUEST_ENTREPRENEUR_ID			= "entrepreneurId";
 	
-	public static final String	REQUEST_PRODUCT_PRICE				= "requestProductPrice";
+	public static final String	REQUEST_PRODUCT_PRICE				= "productPrice";
 	
 	public static final String	REQUEST_TARGET_ID						= "targetId";
 	

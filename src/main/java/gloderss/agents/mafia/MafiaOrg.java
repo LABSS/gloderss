@@ -132,6 +132,7 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	@Override
 	public void spreadInformation() {
+		// NOTHING
 	}
 	
 	
@@ -143,6 +144,7 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	@Override
 	public synchronized void handleMessage(Message msg) {
+		// NOTHING
 	}
 	
 	
@@ -184,5 +186,6 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	@Override
 	public void handleEvent(Event event) {
+		// NOTHING
 	}
 }

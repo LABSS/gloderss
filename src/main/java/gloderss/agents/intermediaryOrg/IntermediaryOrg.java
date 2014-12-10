@@ -6,11 +6,19 @@ import gloderss.actions.AffiliateRequestAction;
 import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.CaptureMafiosoAction;
 import gloderss.actions.CollaborateAction;
+import gloderss.actions.CustodyAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.ExtortionAction;
 import gloderss.actions.ImprisonmentAction;
-import gloderss.actions.NormativeInfoSpreadAction;
+import gloderss.actions.MafiaBenefitAction;
+import gloderss.actions.MafiaPunishmentAction;
+import gloderss.actions.NormativeInfoAction;
+import gloderss.actions.NotPayExtortionAction;
+import gloderss.actions.PayExtortionAction;
 import gloderss.actions.PentitoAction;
+import gloderss.actions.ReleaseCustodyAction;
+import gloderss.actions.ReleaseImprisonmentAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.AbstractAgent;
@@ -100,7 +108,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	
 	@Override
-	public void receiveAffiliation(AffiliateRequestAction action) {
+	public void receiveAffiliationRequest(AffiliateRequestAction action) {
 		
 		int entrepreneurId = (int) action
 				.getParam(AffiliateRequestAction.Param.ENTREPRENEUR_ID);
@@ -119,11 +127,11 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	
 	@Override
-	public void spreadInformation() {
+	public void spreadNormativeInformation() {
 		
 		// Spread information to Consumers
-		NormativeInfoSpreadAction notBuyPayExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+		NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
+				Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 		
 		int numConsumers = (int) (this.consumers.size() * this.conf
 				.getProportionCustomers());
@@ -142,11 +150,11 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			}
 		}
 		
-		NormativeInfoSpreadAction notPayExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.NOT_PAY_EXTORTION.name());
+		NormativeInfoAction notPayExtortion = new NormativeInfoAction(this.id,
+				Norms.NOT_PAY_EXTORTION.name());
 		
-		NormativeInfoSpreadAction denounceExtortion = new NormativeInfoSpreadAction(
-				this.id, Norms.DENOUNCE.name());
+		NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
+				Norms.DENOUNCE.name());
 		
 		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
 				.getProportionEntrepreneurs());
@@ -191,32 +199,68 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
 			
 			if(content instanceof AffiliateRequestAction) {
-				this.receiveAffiliation((AffiliateRequestAction) content);
+				this.receiveAffiliationRequest((AffiliateRequestAction) content);
 				
-			} else if(content instanceof CaptureMafiosoAction) {
-				// TODO
+			} else if(content instanceof Message) {
 				
-			} else if(content instanceof CollaborateAction) {
-				// TODO
+				Message actionMsg = (Message) content;
+				content = actionMsg.getContent();
 				
-			} else if(content instanceof DenounceExtortionAction) {
-				// TODO
-				
-			} else if(content instanceof DenouncePunishmentAction) {
-				// TODO
-				
-			} else if(content instanceof ImprisonmentAction) {
-				// TODO
-				
-			} else if(content instanceof PentitoAction) {
-				// TODO
-				
-			} else if(content instanceof StateCompensationAction) {
-				// TODO
-				
-			} else if(content instanceof StatePunishmentAction) {
-				// TODO
-				
+				if(content instanceof ExtortionAction) {
+					// TODO
+					
+				} else if(content instanceof PayExtortionAction) {
+					// TODO
+					
+				} else if(content instanceof NotPayExtortionAction) {
+					// TODO
+					
+				} else if(content instanceof DenounceExtortionAction) {
+					// TODO
+					
+				} else if(content instanceof DenouncePunishmentAction) {
+					// TODO
+					
+				} else if(content instanceof CaptureMafiosoAction) {
+					// TODO
+					
+				} else if(content instanceof CollaborateAction) {
+					// TODO
+					
+				} else if(content instanceof DenounceExtortionAction) {
+					// TODO
+					
+				} else if(content instanceof DenouncePunishmentAction) {
+					// TODO
+					
+				} else if(content instanceof ImprisonmentAction) {
+					// TODO
+					
+				} else if(content instanceof PentitoAction) {
+					// TODO
+					
+				} else if(content instanceof StateCompensationAction) {
+					// TODO
+					
+				} else if(content instanceof StatePunishmentAction) {
+					// TODO
+					
+				} else if(content instanceof CustodyAction) {
+					// TODO
+					
+				} else if(content instanceof ReleaseCustodyAction) {
+					// TODO
+					
+				} else if(content instanceof ReleaseImprisonmentAction) {
+					// TODO
+					
+				} else if(content instanceof MafiaPunishmentAction) {
+					// TODO
+					
+				} else if(content instanceof MafiaBenefitAction) {
+					// TODO
+					
+				}
 			}
 		}
 	}
@@ -260,7 +304,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_SPREAD_INFORMATION:
-				this.spreadInformation();
+				this.spreadNormativeInformation();
 				break;
 		}
 	}

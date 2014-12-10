@@ -3,8 +3,8 @@ package gloderss.output;
 public class ExtortionOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		EXTORTION_ID("id", DataType.INTEGER),
-		CYCLE("cycle", DataType.INTEGER),
+		TIME("time", DataType.DOUBLE),
+		EXTORTION_ID("extortionId", DataType.INTEGER),
 		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
 		MAFIOSO_ID("mafiosoId", DataType.INTEGER),
 		MAFIA_EXTORTION("mafiaExtortion", DataType.DOUBLE),
@@ -13,15 +13,7 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		PAID("paid", DataType.BOOLEAN),
 		DENOUNCED_EXTORTION("denouncedExtortion", DataType.BOOLEAN),
 		MAFIA_PUNISHED("mafiaPunished", DataType.BOOLEAN),
-		MAFIA_BENEFITED("mafiaBenefited", DataType.BOOLEAN),
-		DENOUNCED_PUNISHMENT("denouncedPunishment", DataType.BOOLEAN),
-		COLLABORATION_REQUESTED("collaborationRequested", DataType.BOOLEAN),
-		COLLABORATED("collaborated", DataType.BOOLEAN),
-		STATE_PUNISHED("statePunished", DataType.BOOLEAN),
-		STATE_PUNISHMENT("statePunishment", DataType.BOOLEAN),
-		COMPENSATED("compensated", DataType.BOOLEAN),
-		STATE_COMPENSATION("stateCompensation", DataType.DOUBLE),
-		IMPRISONED("imprisoned", DataType.BOOLEAN);
+		MAFIA_BENEFITED("mafiaBenefited", DataType.BOOLEAN);
 		
 		private String		name;
 		
@@ -53,7 +45,18 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
+		
+		this.entity[Field.TIME.ordinal()] = 0.0;
 		this.entity[Field.EXTORTION_ID.ordinal()] = id;
+		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
+		this.entity[Field.MAFIOSO_ID.ordinal()] = -1;
+		this.entity[Field.MAFIA_EXTORTION.ordinal()] = 0.0;
+		this.entity[Field.MAFIA_PUNISHMENT.ordinal()] = 0.0;
+		this.entity[Field.MAFIA_BENEFIT.ordinal()] = 0.0;
+		this.entity[Field.PAID.ordinal()] = false;
+		this.entity[Field.DENOUNCED_EXTORTION.ordinal()] = false;
+		this.entity[Field.MAFIA_PUNISHED.ordinal()] = false;
+		this.entity[Field.MAFIA_BENEFITED.ordinal()] = false;
 	}
 	
 	
@@ -70,6 +73,10 @@ public class ExtortionOutputEntity extends AbstractEntity {
 			
 		} else if(field.getType().equals(DataType.INTEGER)) {
 			this.entity[field.ordinal()] = (Integer) value;
+			
+		} else if(field.getType().equals(DataType.STRING)) {
+			this.entity[field.ordinal()] = (String) value;
+			
 		}
 	}
 	
@@ -89,6 +96,8 @@ public class ExtortionOutputEntity extends AbstractEntity {
 			value = this.entity[field.ordinal()];
 			if(value == null) {
 				value = (String) "";
+			} else if(field.getType().equals(DataType.DOUBLE)) {
+				value = String.format("%.2f", value);
 			}
 			line += value + this.separator;
 		}

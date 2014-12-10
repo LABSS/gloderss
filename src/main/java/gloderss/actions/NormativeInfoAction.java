@@ -4,7 +4,7 @@ import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
 import java.util.HashMap;
 
-public class NormativeInfoSpreadAction extends ActionAbstract {
+public class NormativeInfoAction extends ActionAbstract {
 	
 	public enum Param {
 		AGENT_ID,
@@ -21,9 +21,9 @@ public class NormativeInfoSpreadAction extends ActionAbstract {
 	 *          Normative information
 	 * @return none
 	 */
-	public NormativeInfoSpreadAction(int agentId, String normativeInfo) {
-		super(Actions.NORMATIVE_INFO_SPREAD.ordinal(),
-				Actions.NORMATIVE_INFO_SPREAD.name());
+	public NormativeInfoAction(int agentId, String normativeInfo) {
+		super(Actions.NORMATIVE_INFO.ordinal(),
+				Actions.NORMATIVE_INFO.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.AGENT_ID, agentId);

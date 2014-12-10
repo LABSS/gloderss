@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class DenounceExtortionAction extends ActionAbstract {
 	
 	public enum Param {
+		EXTORTION_ID,
 		ENTREPRENEUR_ID,
 		STATE_ID,
 		MAFIOSO_ID;
@@ -16,6 +17,8 @@ public class DenounceExtortionAction extends ActionAbstract {
 	/**
 	 * DenounceExtortionAction constructor
 	 * 
+	 * @param extortionId
+	 *          Extortion identification
 	 * @param entrepreneurId
 	 *          Entrepreneur identification
 	 * @param stateId
@@ -24,11 +27,13 @@ public class DenounceExtortionAction extends ActionAbstract {
 	 *          Mafioso identification
 	 * @return none
 	 */
-	public DenounceExtortionAction(int entrepreneurId, int stateId, int mafiosoId) {
+	public DenounceExtortionAction(int extortionId, int entrepreneurId,
+			int stateId, int mafiosoId) {
 		super(Actions.DENOUNCE_EXTORTION.ordinal(), Actions.DENOUNCE_EXTORTION
 				.name());
 		
 		this.params = new HashMap<Object, Object>();
+		this.params.put(Param.EXTORTION_ID, extortionId);
 		this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
 		this.params.put(Param.STATE_ID, stateId);
 		this.params.put(Param.MAFIOSO_ID, mafiosoId);

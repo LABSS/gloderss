@@ -314,6 +314,8 @@ public final class Constants {
 	 */
 	public static final String	REQUEST_AFFILIATION					= "affiliated";
 	
+	public static final String	REQUEST_CRITICAL_CONSUMERS	= "criticalConsumers";
+	
 	public static final String	REQUEST_ID									= "id";
 	
 	public static final String	REQUEST_DEFAULT_WAGE				= "defaultWage";

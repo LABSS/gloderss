@@ -240,6 +240,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
 					action);
 			this.sendMsg(msg);
+			
+			// Spread action
+			this.spreadActionInformation(msg);
 		}
 	}
 	
@@ -341,7 +344,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		// Add Entrepreneur in a queue to receive compensation for the punishment
 		this.assistQueue.add(action);
 		
-		// Spread action
+		// Spread action Denounce Punishment
 		Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
 				action);
 		this.spreadActionInformation(msg);
@@ -496,7 +499,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				this.assistQueue.remove(entrepreneurId);
 			}
 			
-			StatePunishmentAction punishment = new StatePunishmentAction(
+			StatePunishmentAction punishment = new StatePunishmentAction(this.id,
 					entrepreneurId, this.conf.getNoCollaborationPunishment());
 			
 			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
@@ -527,7 +530,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 				
 				StateCompensationAction compensation = new StateCompensationAction(
-						extortionId, entrepreneurId, punishment);
+						extortionId, this.id, entrepreneurId, punishment);
 				
 				Message msg = new Message(this.simulator.now(), this.id,
 						entrepreneurId, compensation);
@@ -615,11 +618,12 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * 
 	 * @param msg
 	 *          Spread action message to a proportion of consumers and
-	 *          entrepreneurs
+	 *          entrepreneurs, and also to the Intermediary Organization
 	 * @return none
 	 */
 	private void spreadActionInformation(Message msg) {
 		
+		// Spread to a proportion of Consumers
 		int numConsumers = (int) (this.consumers.size() * this.conf
 				.getProportionCustomers());
 		List<Integer> consumerIds = new ArrayList<Integer>();
@@ -637,6 +641,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
+		// Spread to a proportion of Entrepreneurs
 		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
 				.getProportionEntrepreneurs());
 		List<Integer> entrepreneurIds = new ArrayList<Integer>();
@@ -654,6 +659,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				this.sendMsg(newMsg);
 			}
 		}
+		
+		// Send to the Intermediary Organization
+		Message newMsg = new Message(this.simulator.now(), this.id, this.ioId, msg);
+		this.sendMsg(newMsg);
 	}
 	
 	

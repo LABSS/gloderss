@@ -205,8 +205,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 			}
 			
 			// Obtains an Extortion Identification
-			AbstractEntity outputEntity = OutputController.getInstance()
-					.getEntity(EntityType.EXTORTION);
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.EXTORTION);
 			outputEntity.setValue(ExtortionOutputEntity.Field.TIME.name(),
 					this.simulator.now());
 			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIOSO_ID.name(),
@@ -437,18 +437,23 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		
 		if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
 			
+			// Pay extortion
 			if(content instanceof PayExtortionAction) {
 				this.receivePayment((PayExtortionAction) content);
 				
+				// Not pay extortion
 			} else if(content instanceof NotPayExtortionAction) {
 				this.decidePunishment((NotPayExtortionAction) content);
 				
+				// Custody
 			} else if(content instanceof CustodyAction) {
 				this.custody((CustodyAction) content);
 				
+				// Release custody
 			} else if(content instanceof ReleaseCustodyAction) {
 				this.releaseCustody();
 				
+				// Imprisonment
 			} else if(content instanceof ImprisonmentAction) {
 				this.imprisonment((ImprisonmentAction) content);
 				

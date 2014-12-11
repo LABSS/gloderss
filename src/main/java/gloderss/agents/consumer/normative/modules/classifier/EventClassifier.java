@@ -11,11 +11,13 @@ import gloderss.actions.BuyNotPayExtortionAction;
 import gloderss.actions.BuyPayExtortionAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
+import gloderss.actions.StatePunishmentAction;
 import gloderss.communication.Message;
 
 public class EventClassifier extends EventClassifierAbstract {
@@ -120,6 +122,28 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(NotPayExtortionAction.Param.MAFIOSO_ID),
 						this.agentId, action);
 				
+				// State punishment
+			} else if(content instanceof StatePunishmentAction) {
+				
+				StatePunishmentAction action = (StatePunishmentAction) content;
+				
+				entity = new NormativeEvent(msg.getTime(),
+						(int) action.getParam(StatePunishmentAction.Param.STATE_ID),
+						(int) action.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID),
+						this.agentId, NormativeEventType.PUNISHMENT_OBSERVED,
+						Norms.PAY_EXTORTION.ordinal());
+				
+				// Mafia punishment
+			} else if(content instanceof MafiaPunishmentAction) {
+				
+				MafiaPunishmentAction action = (MafiaPunishmentAction) content;
+				
+				entity = new NormativeEvent(msg.getTime(),
+						(int) action.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID),
+						(int) action.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID),
+						this.agentId, NormativeEventType.PUNISHMENT_OBSERVED,
+						Norms.NOT_PAY_EXTORTION.ordinal());
+				
 				// Normative Information
 			} else if(content instanceof NormativeInfoAction) {
 				
@@ -147,6 +171,48 @@ public class EventClassifier extends EventClassifierAbstract {
 							this.agentId, this.agentId,
 							NormativeEventType.COMPLIANCE_INVOCATION_INFORMED,
 							Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal());
+					
+				}
+				
+				// Message
+			} else if(content instanceof Message) {
+				
+				Message otherMsg = (Message) content;
+				Object contentMsg = otherMsg.getContent();
+				
+				if(contentMsg instanceof DenouncePunishmentAction) {
+					
+					DenouncePunishmentAction action = (DenouncePunishmentAction) contentMsg;
+					
+					entity = new ActionEvent(otherMsg.getTime(),
+							(int) action
+									.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID),
+							(int) action.getParam(DenouncePunishmentAction.Param.STATE_ID),
+							msg.getSender(), action);
+					
+					// State punishment
+				} else if(contentMsg instanceof StatePunishmentAction) {
+					
+					StatePunishmentAction action = (StatePunishmentAction) contentMsg;
+					
+					entity = new NormativeEvent(msg.getTime(),
+							(int) action.getParam(StatePunishmentAction.Param.STATE_ID),
+							(int) action
+									.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID),
+							msg.getSender(), NormativeEventType.PUNISHMENT_OBSERVED,
+							Norms.PAY_EXTORTION.ordinal());
+					
+					// Mafia punishment
+				} else if(contentMsg instanceof MafiaPunishmentAction) {
+					
+					MafiaPunishmentAction action = (MafiaPunishmentAction) contentMsg;
+					
+					entity = new NormativeEvent(msg.getTime(),
+							(int) action.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID),
+							(int) action
+									.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID),
+							msg.getSender(), NormativeEventType.PUNISHMENT_OBSERVED,
+							Norms.NOT_PAY_EXTORTION.ordinal());
 					
 				}
 			}

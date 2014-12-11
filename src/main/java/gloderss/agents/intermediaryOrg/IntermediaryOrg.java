@@ -4,6 +4,7 @@ import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.AffiliateRequestAction;
 import gloderss.actions.AffiliationAcceptedAction;
+import gloderss.actions.BuyProductAction;
 import gloderss.actions.CaptureMafiosoAction;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.CustodyAction;
@@ -50,6 +51,10 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	private List<Integer>										affiliated;
 	
+	private int															criticalConsumerPurchases;
+	
+	private int															totalPurchases;
+	
 	
 	/**
 	 * Intermediary Organization constructor
@@ -83,6 +88,10 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 				.getInformationSpreadPDF());
 		
 		this.affiliated = new ArrayList<Integer>();
+		
+		this.criticalConsumerPurchases = 0;
+		
+		this.totalPurchases = 0;
 	}
 	
 	
@@ -98,8 +107,25 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	 * 
 	 *******************************/
 	
+	private double calcCriticalConsumers() {
+		double propCC = 0.0;
+		
+		if(this.totalPurchases != 0) {
+			propCC = (double) this.criticalConsumerPurchases
+					/ (double) this.totalPurchases;
+		}
+		
+		return propCC;
+	}
+	
+	
 	@Override
 	public void initializeSim() {
+		
+		for(Integer consumerId : this.consumers.keySet()) {
+			this.comm.addObservation(this.id, consumerId);
+		}
+		
 		Event event = new Event(this.simulator.now()
 				+ this.timeToAffiliatePDF.nextValue(), this,
 				Constants.EVENT_SPREAD_INFORMATION);
@@ -277,6 +303,9 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 				case Constants.REQUEST_ID:
 					infoRequested = this.id;
 					break;
+				case Constants.REQUEST_CRITICAL_CONSUMERS:
+					infoRequested = this.calcCriticalConsumers();
+					break;
 			}
 			
 		} else if(info.getType().equals(InfoAbstract.Type.SET)) {
@@ -289,7 +318,23 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	@Override
 	public void handleObservation(Message msg) {
-		// NOTHING
+		
+		Object content = msg.getContent();
+		
+		// Buy product
+		if(content instanceof BuyProductAction) {
+			
+			BuyProductAction action = (BuyProductAction) content;
+			
+			int entrepreneurId = (int) action
+					.getParam(BuyProductAction.Param.ENTREPRENEUR_ID);
+			if(this.affiliated.contains(entrepreneurId)) {
+				this.criticalConsumerPurchases++;
+			}
+			
+			this.totalPurchases++;
+		}
+		
 	}
 	
 	

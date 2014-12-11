@@ -19,10 +19,12 @@ import gloderss.actions.BuyProductAction;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.CollaborationRequestAction;
 import gloderss.actions.CollectAction;
+import gloderss.actions.CustodyAction;
 import gloderss.actions.DeliverProductAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.ExtortionAction;
+import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NormativeInfoAction;
@@ -31,6 +33,7 @@ import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
+import gloderss.actions.PentitoAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.CitizenAgent;
@@ -61,12 +64,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * PROBLEM
- * 1. Erroneous individual drive proportionality calculation on paying and not
- * paying extortion
- * 
- */
 public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
 	
@@ -462,12 +459,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		// TODO
-		// Should we include the Critical Consumers here????
-		// How to consider Proportion of critical consumers (slide 9 - 2014-10-21)
-		// this.conf.getDenounceAlpha() - balance between risk and opportunity
-		double idDenounce = this.mafiaPunisherRep.getReputation()
-				* (1 - this.stateProtectorRep.getReputation());
+		InfoRequest info = new InfoRequest(this.id, this.ioId,
+				Constants.REQUEST_CRITICAL_CONSUMERS);
+		double criticalConsumers = (double) this.sendInfo(info);
+		
+		double idDenounce = (this.conf.getDenounceAlpha()
+				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
+				.getReputation()))
+				+ ((1 - this.conf.getDenounceAlpha()) * criticalConsumers);
 		
 		double denounceNG = this.normative
 				.getNormSalience(Norms.DENOUNCE.ordinal());
@@ -494,19 +493,27 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			DenounceExtortionAction denounceAction = new DenounceExtortionAction(
 					extortionId, this.id, this.stateId, mafiosoId);
 			
-			Message replyMsg = new Message(this.simulator.now(), this.id,
-					this.stateId, denounceAction);
-			this.sendMsg(replyMsg);
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					denounceAction);
+			this.sendMsg(msg);
 			
+			// Reputation
+			this.stateProtectorRep.updateReputation(denounceAction);
+			
+			// Spread action to IO
+			this.spreadActionInformation(msg);
+			
+			// Output
 			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), true);
 		} else {
 			NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
 					extortionId, this.id, this.stateId, mafiosoId);
 			
-			Message replyMsg = new Message(this.simulator.now(), this.id,
-					this.stateId, notDenounceExtortionAction);
-			this.sendMsg(replyMsg);
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					notDenounceExtortionAction);
+			this.sendMsg(msg);
 			
+			// Output
 			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), false);
 		}
 	}
@@ -537,10 +544,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			this.currentWage -= extortion;
 			
+			// Output
 			outputEntity.setValue(Field.PAID.name(), true);
 			
-			// Update State reputation as a Finder
-			this.stateFinderRep.updateReputation(1, 0);
+			// Reputation
+			this.stateFinderRep.updateReputation(payAction);
 			
 		} else {
 			
@@ -551,10 +559,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 					notPayAction);
 			this.sendMsg(msg);
 			
+			// Spread action to IO
+			this.spreadActionInformation(msg);
+			
+			// Output
 			outputEntity.setValue(Field.PAID.name(), false);
 			
 			// Update Mafia reputation as Punisher
-			this.mafiaPunisherRep.updateReputation(1, 0);
+			this.mafiaPunisherRep.updateReputation(notPayAction);
 			
 		}
 		
@@ -593,10 +605,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		this.wealth -= (double) outputEntity
 				.getValue(Field.MAFIA_PUNISHMENT.name());
 		
-		// Update the Mafia reputation as Punisher
-		this.mafiaPunisherRep.updateReputation(0, 1);
-		
-		// Punishment output
+		// Output
 		outputEntity = OutputController.getInstance().getEntity(
 				EntityType.PUNISHMENT, extortionId);
 		outputEntity.setValue(PunishmentOutputEntity.Field.TIME.name(),
@@ -607,8 +616,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				(int) action.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID));
 		outputEntity.setValue(PunishmentOutputEntity.Field.MAFIOSO_ID.name(),
 				(int) action.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID));
-		OutputController.getInstance().setEntity(EntityType.PUNISHMENT,
-				outputEntity);
 		
 		// Decide to denounce punishment
 		this.decideDenouncePunishment(action);
@@ -624,12 +631,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.PUNISHMENT, extortionId);
 		
-		// TODO
-		// Should we include the Critical Consumers here????
-		// How to consider Proportion of critical consumers (slide 9 - 2014-10-21)
-		// this.conf.getDenounceAlpha() - balance between risk and opportunity
-		double idDenounce = this.mafiaPunisherRep.getReputation()
-				* (1 - this.stateProtectorRep.getReputation());
+		InfoRequest info = new InfoRequest(this.id, this.ioId,
+				Constants.REQUEST_CRITICAL_CONSUMERS);
+		double criticalConsumers = (double) this.sendInfo(info);
+		
+		double idDenounce = (this.conf.getDenounceAlpha()
+				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
+				.getReputation()))
+				+ ((1 - this.conf.getDenounceAlpha()) * criticalConsumers);
 		
 		double denounceNG = this.normative
 				.getNormSalience(Norms.DENOUNCE.ordinal());
@@ -656,15 +665,23 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		double punishment = (double) action
 				.getParam(MafiaPunishmentAction.Param.PUNISHMENT);
 		
-		if(RandomUtil.nextDouble() < probDenounce) {
+		// An affiliated Entrepreneur always denounce punishment
+		if((this.affiliated) || (RandomUtil.nextDouble() < probDenounce)) {
 			
 			DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
 					extortionId, this.id, this.stateId, mafiosoId, punishment);
 			
-			Message replyMsg = new Message(this.simulator.now(), this.id,
-					this.stateId, denounceAction);
-			this.sendMsg(replyMsg);
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					denounceAction);
+			this.sendMsg(msg);
 			
+			// Reputation
+			this.stateProtectorRep.updateReputation(denounceAction);
+			
+			// Spread action to IO
+			this.spreadActionInformation(msg);
+			
+			// Output
 			outputEntity.setValue(
 					PunishmentOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
 			
@@ -672,10 +689,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
 					extortionId, this.id, this.stateId, mafiosoId, punishment);
 			
-			Message replyMsg = new Message(this.simulator.now(), this.id,
-					this.stateId, notDenouncePunishmentAction);
-			this.sendMsg(replyMsg);
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					notDenouncePunishmentAction);
+			this.sendMsg(msg);
 			
+			// Output
 			outputEntity.setValue(
 					PunishmentOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), false);
 		}
@@ -700,7 +718,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.sendMsg(msg);
 			
 			// Update State reputation as Finder
-			this.stateFinderRep.updateReputation(0, 1);
+			this.stateFinderRep.updateReputation(action);
 			
 		} else {
 			
@@ -778,6 +796,61 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	}
 	
 	
+	/**
+	 * Set up the Entrepreneur as an IO affiliate
+	 * 
+	 * @param action
+	 *          Accepted affiliation
+	 * @return none
+	 */
+	private void affiliateAccepted(AffiliationAcceptedAction action) {
+		
+		int entrepreneurId = (int) action
+				.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
+		
+		if(entrepreneurId == this.id) {
+			this.affiliated = true;
+		}
+		
+	}
+	
+	
+	/**
+	 * Set up the Entrepreneur as an non-IO affiliate
+	 * 
+	 * @param action
+	 *          Denied affiliation
+	 * @return none
+	 */
+	private void affiliateDenied(AffiliationDeniedAction action) {
+		
+		int entrepreneurId = (int) action
+				.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
+		
+		if(entrepreneurId == this.id) {
+			this.affiliated = false;
+		}
+	}
+	
+	
+	/**
+	 * Spread action information to the Intermediary Organization
+	 * 
+	 * @param msg
+	 *          Spread action message to the Intermediary Organization
+	 * @return none
+	 */
+	private void spreadActionInformation(Message msg) {
+		
+		if(this.affiliated) {
+			Message newMsg = new Message(this.simulator.now(), this.id, this.ioId,
+					msg);
+			this.sendMsg(newMsg);
+		}
+		
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -795,6 +868,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			if(content instanceof ExtortionAction) {
 				this.decidePayment((ExtortionAction) content);
 				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+				
 				// Collect extortion
 			} else if(content instanceof CollectAction) {
 				this.collectExtortion((CollectAction) content);
@@ -807,6 +883,15 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			} else if(content instanceof MafiaPunishmentAction) {
 				this.receiveMafiaPunishment((MafiaPunishmentAction) content);
 				
+				// Normative process
+				this.normative.input(msg);
+				
+				// Reputation
+				this.mafiaPunisherRep.updateReputation((MafiaPunishmentAction) content);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+				
 				// Collaboration request
 			} else if(content instanceof CollaborationRequestAction) {
 				this.decideCollaboration((CollaborationRequestAction) content);
@@ -815,9 +900,19 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			} else if(content instanceof StatePunishmentAction) {
 				this.receiveStatePunishment((StatePunishmentAction) content);
 				
+				// Normative process
+				this.normative.input(msg);
+				
 				// State compensation
 			} else if(content instanceof StateCompensationAction) {
 				this.receiveStateCompensation((StateCompensationAction) content);
+				
+				// Reputation
+				this.stateProtectorRep
+						.updateReputation((StateCompensationAction) content);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
 				
 				// Buy product
 			} else if(content instanceof BuyProductAction) {
@@ -825,29 +920,72 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Affiliation accepted
 			} else if(content instanceof AffiliationAcceptedAction) {
-				AffiliationAcceptedAction action = (AffiliationAcceptedAction) content;
-				
-				int entrepreneurId = (int) action
-						.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
-				
-				if(entrepreneurId == this.id) {
-					this.affiliated = true;
-				}
+				this.affiliateAccepted((AffiliationAcceptedAction) content);
 				
 				// Affiliation denied
 			} else if(content instanceof AffiliationDeniedAction) {
-				AffiliationDeniedAction action = (AffiliationDeniedAction) content;
-				
-				int entrepreneurId = (int) action
-						.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
-				
-				if(entrepreneurId == this.id) {
-					this.affiliated = false;
-				}
+				this.affiliateDenied((AffiliationDeniedAction) content);
 				
 				// Normative Information
 			} else if(content instanceof NormativeInfoAction) {
-				// TODO
+				this.normative.input(msg);
+				
+				// Message
+			} else if(content instanceof Message) {
+				
+				Message otherMsg = (Message) content;
+				Object contentMsg = otherMsg.getContent();
+				
+				// Custody
+				if(contentMsg instanceof CustodyAction) {
+					// TODO
+					
+					// Imprisonment
+				} else if(contentMsg instanceof ImprisonmentAction) {
+					// Reputation
+					this.stateProtectorRep
+							.updateReputation((ImprisonmentAction) contentMsg);
+					
+					// State Compensation
+				} else if(contentMsg instanceof StateCompensationAction) {
+					// Reputation
+					this.stateProtectorRep
+							.updateReputation((StateCompensationAction) contentMsg);
+					
+					// State Punishment
+				} else if(contentMsg instanceof StatePunishmentAction) {
+					// Normative
+					this.normative.input(msg);
+					
+					// Denounce Punishment
+				} else if(contentMsg instanceof DenouncePunishmentAction) {
+					// Normative
+					this.normative.input(msg);
+					
+					// Reputation
+					this.stateProtectorRep
+							.updateReputation((DenouncePunishmentAction) contentMsg);
+					
+					// Pentito
+				} else if(contentMsg instanceof PentitoAction) {
+					
+					PentitoAction action = (PentitoAction) contentMsg;
+					
+					@SuppressWarnings("unchecked")
+					List<Integer> entrepreneursId = (List<Integer>) action
+							.getParam(PentitoAction.Param.ENTREPRENEUR_LIST);
+					for(Integer entrepreneurId : entrepreneursId) {
+						
+						// Create an Pay Extortion action to each Entrepreneur denounced via
+						// Pentito to update the Norm Salience
+						PayExtortionAction pay = new PayExtortionAction(0, 0,
+								entrepreneurId, 0.0);
+						Message newMsg = new Message(msg.getTime(), msg.getSender(),
+								msg.getReceiver(), pay);
+						this.normative.input(newMsg);
+					}
+					
+				}
 				
 			}
 		}
@@ -912,25 +1050,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			// Affiliation accepted
 			if(content instanceof AffiliationAcceptedAction) {
-				AffiliationAcceptedAction action = (AffiliationAcceptedAction) content;
-				
-				int entrepreneurId = (int) action
-						.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
-				
-				if(entrepreneurId == this.id) {
-					this.affiliated = true;
-				}
+				this.affiliateAccepted((AffiliationAcceptedAction) content);
 				
 				// Affiliation denied
 			} else if(content instanceof AffiliationDeniedAction) {
-				AffiliationDeniedAction action = (AffiliationDeniedAction) content;
-				
-				int entrepreneurId = (int) action
-						.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
-				
-				if(entrepreneurId == this.id) {
-					this.affiliated = false;
-				}
+				this.affiliateDenied((AffiliationDeniedAction) content);
 				
 				// Buy product
 			} else if(content instanceof BuyProductAction) {
@@ -938,7 +1062,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Collaboration Request
 			} else if(content instanceof CollaborationRequestAction) {
-				this.stateFinderRep.updateReputation(0, 1);
+				// Reputation
+				this.stateFinderRep
+						.updateReputation((CollaborationRequestAction) content);
 				
 				// Collaborate
 			} else if(content instanceof CollaborateAction) {
@@ -946,11 +1072,21 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Denounce extortion
 			} else if(content instanceof DenounceExtortionAction) {
-				// TODO
+				// Normative
+				this.normative.input(msg);
+				
+				// Reputation
+				this.stateProtectorRep
+						.updateReputation((DenounceExtortionAction) content);
 				
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
-				// TODO
+				// Normative
+				this.normative.input(msg);
+				
+				// Reputation
+				this.stateProtectorRep
+						.updateReputation((DenouncePunishmentAction) content);
 				
 				// Mafia benefit
 			} else if(content instanceof MafiaBenefitAction) {
@@ -958,23 +1094,39 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Mafia punishment
 			} else if(content instanceof MafiaPunishmentAction) {
-				this.mafiaPunisherRep.updateReputation(0, 1);
+				// Normative
+				this.normative.input(msg);
+				
+				// Reputation
+				this.mafiaPunisherRep.updateReputation((MafiaPunishmentAction) content);
 				
 				// Extortion
 			} else if(content instanceof ExtortionAction) {
-				// TODO
+				// Normative
+				this.normative.input(msg);
 				
 				// Pay extortion
 			} else if(content instanceof PayExtortionAction) {
-				this.stateFinderRep.updateReputation(1, 0);
+				// Normative
+				this.normative.input(msg);
+				
+				// Reputation
+				this.stateFinderRep.updateReputation((PayExtortionAction) content);
 				
 				// Not pay extortion
 			} else if(content instanceof NotPayExtortionAction) {
-				this.mafiaPunisherRep.updateReputation(1, 0);
+				// Normative
+				this.normative.input(msg);
+				
+				// Reputation
+				this.mafiaPunisherRep.updateReputation((NotPayExtortionAction) content);
 				
 				// State compensation
 			} else if(content instanceof StateCompensationAction) {
-				// TODO
+				
+				// Reputation
+				this.stateProtectorRep
+						.updateReputation((StateCompensationAction) content);
 				
 				// State punishment
 			} else if(content instanceof StatePunishmentAction) {

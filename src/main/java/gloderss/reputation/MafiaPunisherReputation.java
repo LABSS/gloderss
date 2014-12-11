@@ -1,16 +1,14 @@
 package gloderss.reputation;
 
+import gloderss.actions.MafiaPunishmentAction;
+import gloderss.actions.NotPayExtortionAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MafiaPunisherReputation extends ReputationAbstract {
 	
-	private final static Logger	logger					= LoggerFactory
-																									.getLogger(MafiaPunisherReputation.class);
-	
-	private final static int		NUM_NO_PAYERS		= 0;
-	
-	private final static int		NUM_PUNISHMENTS	= 1;
+	private final static Logger	logger	= LoggerFactory
+																					.getLogger(MafiaPunisherReputation.class);
 	
 	private int									numNoPayers;
 	
@@ -33,7 +31,7 @@ public class MafiaPunisherReputation extends ReputationAbstract {
 	
 	
 	@Override
-	public boolean isUnknown(int target) {
+	public boolean isUnknown(int... target) {
 		return this.unknown;
 	}
 	
@@ -51,40 +49,26 @@ public class MafiaPunisherReputation extends ReputationAbstract {
 	}
 	
 	
-	/**
-	 * Update the Mafia as Punisher Reputation as a ratio between the number of
-	 * non-payers and the number of punishments inflicted by Mafia
-	 * 
-	 * @param numNoPayers
-	 *          Incremental number of non-payers
-	 * @param numPunishment
-	 *          Incremental number of punishments inflicted by Mafia
-	 * @return none
-	 */
 	@Override
-	public void updateReputation(Object... objects) {
-		if(objects.length >= 2) {
+	public void updateReputation(Object action) {
+		
+		boolean updated = false;
+		if(action instanceof NotPayExtortionAction) {
+			updated = true;
+			this.numNoPayers++;
+		} else if(action instanceof MafiaPunishmentAction) {
+			updated = true;
+			this.numPunishments++;
+		}
+		
+		if(updated) {
+			this.unknown = false;
 			
-			boolean updated = false;
-			if(objects[NUM_NO_PAYERS] instanceof Integer) {
-				this.numNoPayers += (int) objects[NUM_NO_PAYERS];
-				updated = true;
-			}
+			this.value = Math.min(1.0,
+					((double) this.numPunishments / (double) this.numNoPayers));
 			
-			if(objects[NUM_PUNISHMENTS] instanceof Integer) {
-				this.numPunishments += (int) objects[NUM_PUNISHMENTS];
-				updated = true;
-			}
-			
-			if(updated) {
-				this.unknown = false;
-				
-				this.value = Math.min(1.0,
-						((double) this.numPunishments / (double) this.numNoPayers));
-				
-				logger.debug("[PUNISHER_MAFIA_REPUTATION] " + this.numNoPayers + " "
-						+ this.numPunishments + " " + this.value);
-			}
+			logger.debug("[PUNISHER_MAFIA_REPUTATION] " + this.numNoPayers + " "
+					+ this.numPunishments + " " + this.value);
 		}
 	}
 }

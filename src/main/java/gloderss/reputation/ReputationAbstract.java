@@ -19,7 +19,7 @@ public abstract class ReputationAbstract {
 	}
 	
 	
-	public abstract boolean isUnknown(int target);
+	public abstract boolean isUnknown(int... target);
 	
 	
 	public abstract double getReputation(int... target);
@@ -28,5 +28,5 @@ public abstract class ReputationAbstract {
 	public abstract void setReputation(int target, double value);
 	
 	
-	public abstract void updateReputation(Object... objects);
+	public abstract void updateReputation(Object action);
 }

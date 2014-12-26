@@ -7,6 +7,7 @@ import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.BuyProductAction;
 import gloderss.actions.CaptureMafiosoAction;
 import gloderss.actions.CollaborateAction;
+import gloderss.actions.CriticalConsumerInfoAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenouncePunishmentAction;
@@ -31,11 +32,18 @@ import gloderss.communication.Message;
 import gloderss.conf.IntermediaryOrgConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
+import gloderss.output.AbstractEntity;
+import gloderss.output.IntermediaryOrganizationOutputEntity;
+import gloderss.output.NormativeOutputEntity;
+import gloderss.output.OutputController;
+import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
@@ -47,13 +55,15 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	private PDFAbstract											timeToAffiliatePDF;
 	
-	private PDFAbstract											spreadInformationPDF;
-	
 	private List<Integer>										affiliated;
 	
 	private int															criticalConsumerPurchases;
 	
 	private int															totalPurchases;
+	
+	private Queue<AffiliateRequestAction>		affiliateQueue;
+	
+	private int															numActions;
 	
 	
 	/**
@@ -84,14 +94,15 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		this.timeToAffiliatePDF = PDFAbstract.getInstance(conf
 				.getTimeToAffiliatePDF());
 		
-		this.spreadInformationPDF = PDFAbstract.getInstance(conf
-				.getInformationSpreadPDF());
-		
 		this.affiliated = new ArrayList<Integer>();
 		
 		this.criticalConsumerPurchases = 0;
 		
 		this.totalPurchases = 0;
+		
+		this.affiliateQueue = new LinkedList<AffiliateRequestAction>();
+		
+		this.numActions = 0;
 	}
 	
 	
@@ -107,6 +118,119 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	 * 
 	 *******************************/
 	
+	@Override
+	public void initializeSim() {
+		
+		for(Integer consumerId : this.consumers.keySet()) {
+			this.comm.addObservation(this.id, consumerId);
+		}
+	}
+	
+	
+	@Override
+	public void receiveAffiliationRequest(AffiliateRequestAction action) {
+		
+		this.affiliateQueue.offer(action);
+		
+		Event event = new Event(this.simulator.now()
+				+ this.timeToAffiliatePDF.nextValue(), this,
+				Constants.EVENT_AFFILIATE_PROCESSING);
+		this.simulator.insert(event);
+	}
+	
+	
+	@Override
+	public void spreadNormativeInformation() {
+		
+		if(RandomUtil.nextDouble() < this.tanh(this.numActions)) {
+			
+			// Spread information to Consumers
+			NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
+					Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+			
+			int numConsumers = (int) (this.consumers.size() * this.conf
+					.getProportionCustomers());
+			List<Integer> consumerIds = new ArrayList<Integer>();
+			while(consumerIds.size() < numConsumers) {
+				
+				int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
+						.nextIntFromTo(0, (this.consumers.size() - 1))];
+				
+				if(!consumerIds.contains(consumerId)) {
+					consumerIds.add(consumerId);
+					
+					Message msg = new Message(this.simulator.now(), this.id, consumerId,
+							notBuyPayExtortion);
+					this.sendMsg(msg);
+				}
+			}
+			
+			double criticalConsumers = this.calcCriticalConsumers();
+			
+			NormativeInfoAction notPayExtortion = new NormativeInfoAction(this.id,
+					Norms.NOT_PAY_EXTORTION.name());
+			
+			NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
+					Norms.DENOUNCE.name());
+			
+			int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
+					.getProportionEntrepreneurs());
+			List<Integer> entrepreneurIds = new ArrayList<Integer>();
+			int qtyEntrepreneurs = this.entrepreneurs.size();
+			while(entrepreneurIds.size() < numEntrepreneurs) {
+				
+				int entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
+						.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
+				
+				if(!entrepreneurIds.contains(entrepreneurId)) {
+					entrepreneurIds.add(entrepreneurId);
+					
+					Message msg = new Message(this.simulator.now(), this.id,
+							entrepreneurId, notPayExtortion);
+					this.sendMsg(msg);
+					
+					msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+							denounceExtortion);
+					this.sendMsg(msg);
+					
+					CriticalConsumerInfoAction ccInfo = new CriticalConsumerInfoAction(
+							this.id, entrepreneurId, criticalConsumers);
+					msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+							ccInfo);
+					this.sendMsg(msg);
+				}
+			}
+			
+			// Output
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.NORMATIVE);
+			outputEntity.setValue(NormativeOutputEntity.Field.TIME.name(),
+					this.simulator.now());
+			outputEntity.setValue(NormativeOutputEntity.Field.AGENT_ID.name(),
+					this.id);
+			outputEntity.setValue(
+					NormativeOutputEntity.Field.NUMBER_CONSUMERS.name(), numConsumers);
+			outputEntity.setValue(
+					NormativeOutputEntity.Field.NUMBER_ENTREPRENEURS.name(),
+					numEntrepreneurs);
+			outputEntity.setActive();
+			
+			this.numActions = 0;
+		}
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+	}
+	
+	
+	/**
+	 * Estimate the proportion of Critical Consumers
+	 * 
+	 * @param none
+	 * @return Proportion of critical consumers
+	 */
 	private double calcCriticalConsumers() {
 		double propCC = 0.0;
 		
@@ -119,95 +243,61 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	}
 	
 	
-	@Override
-	public void initializeSim() {
+	/**
+	 * Decide to accept or deny an affiliation request
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void affiliate() {
 		
-		for(Integer consumerId : this.consumers.keySet()) {
-			this.comm.addObservation(this.id, consumerId);
-		}
-		
-		Event event = new Event(this.simulator.now()
-				+ this.timeToAffiliatePDF.nextValue(), this,
-				Constants.EVENT_SPREAD_INFORMATION);
-		this.simulator.insert(event);
-	}
-	
-	
-	@Override
-	public void receiveAffiliationRequest(AffiliateRequestAction action) {
-		
-		int entrepreneurId = (int) action
-				.getParam(AffiliateRequestAction.Param.ENTREPRENEUR_ID);
-		
-		if(!this.affiliated.contains(entrepreneurId)) {
-			this.affiliated.add(entrepreneurId);
+		if(!this.affiliateQueue.isEmpty()) {
+			AffiliateRequestAction action = this.affiliateQueue.poll();
 			
-			AffiliationAcceptedAction affiliation = new AffiliationAcceptedAction(
-					this.id, entrepreneurId);
+			int entrepreneurId = (int) action
+					.getParam(AffiliateRequestAction.Param.ENTREPRENEUR_ID);
 			
-			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-					affiliation);
-			this.sendMsg(msg);
-		}
-	}
-	
-	
-	@Override
-	public void spreadNormativeInformation() {
-		
-		// Spread information to Consumers
-		NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
-				Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
-		
-		int numConsumers = (int) (this.consumers.size() * this.conf
-				.getProportionCustomers());
-		List<Integer> consumerIds = new ArrayList<Integer>();
-		while(consumerIds.size() < numConsumers) {
-			
-			int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
-					.nextIntFromTo(0, (this.consumers.size() - 1))];
-			
-			if(!consumerIds.contains(consumerId)) {
-				consumerIds.add(consumerId);
+			if(!this.affiliated.contains(entrepreneurId)) {
+				this.affiliated.add(entrepreneurId);
 				
-				Message msg = new Message(this.simulator.now(), this.id, consumerId,
-						notBuyPayExtortion);
-				this.sendMsg(msg);
-			}
-		}
-		
-		NormativeInfoAction notPayExtortion = new NormativeInfoAction(this.id,
-				Norms.NOT_PAY_EXTORTION.name());
-		
-		NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
-				Norms.DENOUNCE.name());
-		
-		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
-				.getProportionEntrepreneurs());
-		List<Integer> entrepreneurIds = new ArrayList<Integer>();
-		int qtyEntrepreneurs = this.entrepreneurs.size();
-		while(entrepreneurIds.size() < numEntrepreneurs) {
-			
-			int entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
-					.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
-			
-			if(!entrepreneurIds.contains(entrepreneurId)) {
-				entrepreneurIds.add(entrepreneurId);
+				AffiliationAcceptedAction affiliation = new AffiliationAcceptedAction(
+						this.id, entrepreneurId);
 				
 				Message msg = new Message(this.simulator.now(), this.id,
-						entrepreneurId, notPayExtortion);
+						entrepreneurId, affiliation);
 				this.sendMsg(msg);
 				
-				msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-						denounceExtortion);
-				this.sendMsg(msg);
+				// Output
+				AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+						EntityType.INTERMEDIARY_ORGANIZATION);
+				outputEntity.setValue(
+						IntermediaryOrganizationOutputEntity.Field.TIME.name(),
+						this.simulator.now());
+				outputEntity.setValue(
+						IntermediaryOrganizationOutputEntity.Field.ENTREPRENEUR_ID.name(),
+						entrepreneurId);
+				outputEntity.setValue(
+						IntermediaryOrganizationOutputEntity.Field.REQUEST_ACCEPTED.name(),
+						true);
+				outputEntity.setActive();
 			}
 		}
+	}
+	
+	
+	/**
+	 * Calculate the hyperbolic tangent
+	 * 
+	 * @param x
+	 *          Input parameter
+	 * @return Hyperbolic tangent of x
+	 */
+	private double tanh(int x) {
 		
-		Event event = new Event(this.simulator.now()
-				+ this.spreadInformationPDF.nextValue(), this,
-				Constants.EVENT_SPREAD_INFORMATION);
-		this.simulator.insert(event);
+		final double y = (Math.exp(this.conf.getSlope() * x) - 1.0)
+				/ (Math.exp(this.conf.getSlope() * x) + 1.0);
+		
+		return y;
 	}
 	
 	
@@ -233,60 +323,62 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 				content = actionMsg.getContent();
 				
 				if(content instanceof ExtortionAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof PayExtortionAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof NotPayExtortionAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof DenounceExtortionAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof DenouncePunishmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof CaptureMafiosoAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof CollaborateAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof DenounceExtortionAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof DenouncePunishmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof ImprisonmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof PentitoAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof StateCompensationAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof StatePunishmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof CustodyAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof ReleaseCustodyAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof ReleaseImprisonmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof MafiaPunishmentAction) {
-					// TODO
+					this.numActions++;
 					
 				} else if(content instanceof MafiaBenefitAction) {
-					// TODO
+					this.numActions++;
 					
 				}
+				
+				this.spreadNormativeInformation();
 			}
 		}
 	}
@@ -302,9 +394,6 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			switch(request.getInfoRequest()) {
 				case Constants.REQUEST_ID:
 					infoRequested = this.id;
-					break;
-				case Constants.REQUEST_CRITICAL_CONSUMERS:
-					infoRequested = this.calcCriticalConsumers();
 					break;
 			}
 			
@@ -348,8 +437,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	public void handleEvent(Event event) {
 		
 		switch((String) event.getCommand()) {
-			case Constants.EVENT_SPREAD_INFORMATION:
-				this.spreadNormativeInformation();
+			case Constants.EVENT_AFFILIATE_PROCESSING:
+				this.affiliate();
 				break;
 		}
 	}

@@ -11,9 +11,15 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		MAFIA_PUNISHMENT("mafiaPunishment", DataType.DOUBLE),
 		MAFIA_BENEFIT("mafiaBenefit", DataType.DOUBLE),
 		PAID("paid", DataType.BOOLEAN),
-		DENOUNCED_EXTORTION("denouncedExtortion", DataType.BOOLEAN),
 		MAFIA_PUNISHED("mafiaPunished", DataType.BOOLEAN),
-		MAFIA_BENEFITED("mafiaBenefited", DataType.BOOLEAN);
+		MAFIA_BENEFITED("mafiaBenefited", DataType.BOOLEAN),
+		MAFIA_BENEFITED_AMOUNT("mafiaBenefitedAmount", DataType.DOUBLE),
+		DENOUNCED_EXTORTION("denouncedExtortion", DataType.BOOLEAN),
+		DENOUNCED_PUNISHMENT("denouncedPunishment", DataType.BOOLEAN),
+		INVESTIGATED_EXTORTION("investigatedExtortion", DataType.BOOLEAN),
+		INVESTIGATED_PUNISHMENT("investigatedPunishment", DataType.BOOLEAN),
+		MAFIOSO_CUSTODY("mafiosoCustody", DataType.BOOLEAN),
+		MAFIOSO_CONVICTED("mafiosoConvicted", DataType.BOOLEAN);
 		
 		private String		name;
 		
@@ -54,9 +60,15 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		this.entity[Field.MAFIA_PUNISHMENT.ordinal()] = 0.0;
 		this.entity[Field.MAFIA_BENEFIT.ordinal()] = 0.0;
 		this.entity[Field.PAID.ordinal()] = false;
-		this.entity[Field.DENOUNCED_EXTORTION.ordinal()] = false;
 		this.entity[Field.MAFIA_PUNISHED.ordinal()] = false;
 		this.entity[Field.MAFIA_BENEFITED.ordinal()] = false;
+		this.entity[Field.MAFIA_BENEFITED_AMOUNT.ordinal()] = 0.0;
+		this.entity[Field.DENOUNCED_EXTORTION.ordinal()] = false;
+		this.entity[Field.DENOUNCED_PUNISHMENT.ordinal()] = false;
+		this.entity[Field.INVESTIGATED_EXTORTION.ordinal()] = false;
+		this.entity[Field.INVESTIGATED_PUNISHMENT.ordinal()] = false;
+		this.entity[Field.MAFIOSO_CUSTODY.ordinal()] = false;
+		this.entity[Field.MAFIOSO_CONVICTED.ordinal()] = false;
 	}
 	
 	

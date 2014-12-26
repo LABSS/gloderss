@@ -3,7 +3,9 @@ package gloderss.output;
 public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		TIME("time", DataType.DOUBLE);
+		TIME("time", DataType.DOUBLE),
+		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
+		REQUEST_ACCEPTED("requestAccepted", DataType.BOOLEAN);
 		
 		private String		name;
 		
@@ -37,6 +39,8 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
 		this.entity = new Object[Field.values().length];
 		
 		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
+		this.entity[Field.REQUEST_ACCEPTED.ordinal()] = false;
 	}
 	
 	

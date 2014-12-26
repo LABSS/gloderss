@@ -9,7 +9,7 @@ public class IntermediaryOrgConf {
 	
 	private String	timeToAffiliatePDF;
 	
-	private String	informationSpreadPDF;
+	private double	slope;
 	
 	private double	proportionCustomers;
 	
@@ -27,14 +27,14 @@ public class IntermediaryOrgConf {
 	}
 	
 	
-	public String getInformationSpreadPDF() {
-		return this.informationSpreadPDF;
+	public double getSlope() {
+		return this.slope;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_INFORMATION_SPREAD_PDF)
-	public void setInformationSpreadPDF(String informationSpreadPDF) {
-		this.informationSpreadPDF = informationSpreadPDF;
+	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_SLOPE)
+	public void setSlope(double slope) {
+		this.slope = slope;
 	}
 	
 	

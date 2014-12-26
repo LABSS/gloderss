@@ -22,8 +22,7 @@ public class NormativeInfoAction extends ActionAbstract {
 	 * @return none
 	 */
 	public NormativeInfoAction(int agentId, String normativeInfo) {
-		super(Actions.NORMATIVE_INFO.ordinal(),
-				Actions.NORMATIVE_INFO.name());
+		super(Actions.NORMATIVE_INFO.ordinal(), Actions.NORMATIVE_INFO.name());
 		
 		this.params = new HashMap<Object, Object>();
 		this.params.put(Param.AGENT_ID, agentId);

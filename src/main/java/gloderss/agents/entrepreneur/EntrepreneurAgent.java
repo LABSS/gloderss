@@ -19,6 +19,7 @@ import gloderss.actions.BuyProductAction;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.CollaborationRequestAction;
 import gloderss.actions.CollectAction;
+import gloderss.actions.CriticalConsumerInfoAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DeliverProductAction;
 import gloderss.actions.DenounceExtortionAction;
@@ -45,10 +46,11 @@ import gloderss.conf.EntrepreneurConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
 import gloderss.output.AbstractEntity;
+import gloderss.output.EntrepreneurOutputEntity;
+import gloderss.output.ExtortionOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.output.AbstractEntity.EntityType;
-import gloderss.output.ExtortionOutputEntity.Field;
-import gloderss.output.PunishmentOutputEntity;
+import gloderss.output.CompensationOutputEntity;
 import gloderss.reputation.MafiaPunisherReputation;
 import gloderss.reputation.StateProtectorReputation;
 import gloderss.reputation.StateFinderReputation;
@@ -90,6 +92,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	private boolean										affiliated;
 	
+	private double										criticalConsumers;
+	
 	private StateFinderReputation			stateFinderRep;
 	
 	private StateProtectorReputation	stateProtectorRep;
@@ -129,6 +133,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				+ (RandomUtil.nextDouble() * (conf.getMaximumWage() - conf
 						.getMinimumWage()));
 		
+		this.currentWage = 0.0;
+		
 		this.productPrice = conf.getMinimumPrice()
 				+ (RandomUtil.nextDouble() * (conf.getMaximumPrice() - conf
 						.getMinimumPrice()));
@@ -142,6 +148,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		 * Intermediary Organization
 		 */
 		this.affiliated = conf.getAffiliated();
+		
+		this.criticalConsumers = 0.0;
 		
 		/**
 		 * Reputation
@@ -352,9 +360,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	@Override
 	public void initializeSim() {
-		this.currentWage = 0.0;
-		
-		Event event = new Event(this.simulator.now() + 1, this,
+		Event event = new Event(this.simulator.now(), this,
 				Constants.EVENT_RECEIVE_WAGE);
 		this.simulator.insert(event);
 	}
@@ -459,14 +465,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		InfoRequest info = new InfoRequest(this.id, this.ioId,
-				Constants.REQUEST_CRITICAL_CONSUMERS);
-		double criticalConsumers = (double) this.sendInfo(info);
-		
 		double idDenounce = (this.conf.getDenounceAlpha()
 				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
 				.getReputation()))
-				+ ((1 - this.conf.getDenounceAlpha()) * criticalConsumers);
+				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
 		
 		double denounceNG = this.normative
 				.getNormSalience(Norms.DENOUNCE.ordinal());
@@ -504,7 +506,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.spreadActionInformation(msg);
 			
 			// Output
-			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), true);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.DENOUNCED_EXTORTION.name(), true);
 		} else {
 			NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
 					extortionId, this.id, this.stateId, mafiosoId);
@@ -514,7 +517,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.sendMsg(msg);
 			
 			// Output
-			outputEntity.setValue(Field.DENOUNCED_EXTORTION.name(), false);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.DENOUNCED_EXTORTION.name(), false);
 		}
 	}
 	
@@ -545,7 +549,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.currentWage -= extortion;
 			
 			// Output
-			outputEntity.setValue(Field.PAID.name(), true);
+			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(), true);
 			
 			// Reputation
 			this.stateFinderRep.updateReputation(payAction);
@@ -563,7 +567,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.spreadActionInformation(msg);
 			
 			// Output
-			outputEntity.setValue(Field.PAID.name(), false);
+			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(), false);
 			
 			// Update Mafia reputation as Punisher
 			this.mafiaPunisherRep.updateReputation(notPayAction);
@@ -577,15 +581,29 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	@Override
 	public void receiveMafiaBenefit(MafiaBenefitAction action) {
 		
+		double benefit = (double) action.getParam(MafiaBenefitAction.Param.BENEFIT);
+		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION,
 				(int) action.getParam(MafiaBenefitAction.Param.EXTORTION_ID));
 		
-		outputEntity.setValue(Field.MAFIA_PUNISHED.name(), false);
-		outputEntity.setValue(Field.MAFIA_BENEFITED.name(), true);
+		outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
+				false);
+		
+		if(benefit > 0) {
+			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
+					true);
+		} else {
+			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
+					false);
+		}
+		
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.MAFIA_BENEFITED_AMOUNT.name(), benefit);
+		
 		outputEntity.setActive();
 		
-		this.wealth += (double) outputEntity.getValue(Field.MAFIA_BENEFIT.name());
+		this.wealth += benefit;
 	}
 	
 	
@@ -598,23 +616,28 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		outputEntity.setValue(Field.MAFIA_PUNISHED.name(), true);
-		outputEntity.setValue(Field.MAFIA_BENEFITED.name(), false);
+		outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
+				true);
+		outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
+				false);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.MAFIA_BENEFITED_AMOUNT.name(), 0.0);
 		outputEntity.setActive();
 		
 		this.wealth -= (double) outputEntity
-				.getValue(Field.MAFIA_PUNISHMENT.name());
+				.getValue(ExtortionOutputEntity.Field.MAFIA_PUNISHMENT.name());
 		
 		// Output
 		outputEntity = OutputController.getInstance().getEntity(
-				EntityType.PUNISHMENT, extortionId);
-		outputEntity.setValue(PunishmentOutputEntity.Field.TIME.name(),
+				EntityType.COMPENSATION, extortionId);
+		outputEntity.setValue(CompensationOutputEntity.Field.TIME.name(),
 				this.simulator.now());
-		outputEntity.setValue(PunishmentOutputEntity.Field.EXTORTION_ID.name(),
+		outputEntity.setValue(CompensationOutputEntity.Field.EXTORTION_ID.name(),
 				extortionId);
-		outputEntity.setValue(PunishmentOutputEntity.Field.ENTREPRENEUR_ID.name(),
+		outputEntity.setValue(
+				CompensationOutputEntity.Field.ENTREPRENEUR_ID.name(),
 				(int) action.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID));
-		outputEntity.setValue(PunishmentOutputEntity.Field.MAFIOSO_ID.name(),
+		outputEntity.setValue(CompensationOutputEntity.Field.MAFIOSO_ID.name(),
 				(int) action.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID));
 		
 		// Decide to denounce punishment
@@ -628,17 +651,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int extortionId = (int) action
 				.getParam(MafiaPunishmentAction.Param.EXTORTION_ID);
 		
-		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
-				EntityType.PUNISHMENT, extortionId);
-		
-		InfoRequest info = new InfoRequest(this.id, this.ioId,
-				Constants.REQUEST_CRITICAL_CONSUMERS);
-		double criticalConsumers = (double) this.sendInfo(info);
-		
 		double idDenounce = (this.conf.getDenounceAlpha()
 				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
 				.getReputation()))
-				+ ((1 - this.conf.getDenounceAlpha()) * criticalConsumers);
+				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
 		
 		double denounceNG = this.normative
 				.getNormSalience(Norms.DENOUNCE.ordinal());
@@ -682,8 +698,21 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.spreadActionInformation(msg);
 			
 			// Output
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.EXTORTION, extortionId);
 			outputEntity.setValue(
-					PunishmentOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
+					CompensationOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
+			
+			outputEntity = OutputController.getInstance().getEntity(
+					EntityType.COMPENSATION, extortionId);
+			outputEntity.setValue(CompensationOutputEntity.Field.TIME.name(),
+					this.simulator.now());
+			outputEntity.setValue(CompensationOutputEntity.Field.EXTORTION_ID.name(),
+					extortionId);
+			outputEntity.setValue(CompensationOutputEntity.Field.MAFIOSO_ID.name(),
+					mafiosoId);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
 			
 		} else {
 			NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
@@ -694,8 +723,22 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.sendMsg(msg);
 			
 			// Output
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.EXTORTION, extortionId);
+			
 			outputEntity.setValue(
-					PunishmentOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), false);
+					ExtortionOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), false);
+			
+			outputEntity = OutputController.getInstance().getEntity(
+					EntityType.COMPENSATION, extortionId);
+			outputEntity.setValue(CompensationOutputEntity.Field.TIME.name(),
+					this.simulator.now());
+			outputEntity.setValue(CompensationOutputEntity.Field.EXTORTION_ID.name(),
+					extortionId);
+			outputEntity.setValue(CompensationOutputEntity.Field.MAFIOSO_ID.name(),
+					mafiosoId);
+			outputEntity.setValue(
+					CompensationOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), false);
 		}
 	}
 	
@@ -747,7 +790,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	public void receiveStateCompensation(StateCompensationAction action) {
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
-				EntityType.PUNISHMENT,
+				EntityType.COMPENSATION,
 				(int) action.getParam(StateCompensationAction.Param.EXTORTION_ID));
 		
 		double compensation = (double) action
@@ -756,9 +799,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		this.wealth += compensation;
 		
 		outputEntity.setValue(
-				PunishmentOutputEntity.Field.STATE_COMPENSATED.name(), true);
+				CompensationOutputEntity.Field.STATE_COMPENSATED.name(), true);
 		outputEntity.setValue(
-				PunishmentOutputEntity.Field.STATE_COMPENSATION.name(), compensation);
+				CompensationOutputEntity.Field.STATE_COMPENSATION.name(), compensation);
 		outputEntity.setActive();
 		
 	}
@@ -784,15 +827,67 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		double denounceNG = this.normative
 				.getNormSalience(Norms.DENOUNCE.ordinal());
 		
-		if(denounceNG > this.conf.getAffiliateThreshold()) {
+		if(denounceNG >= this.conf.getAffiliateThreshold()) {
 			
 			AffiliateRequestAction affiliation = new AffiliateRequestAction(this.id,
 					this.ioId);
-			
 			Message msg = new Message(this.simulator.now(), this.id, this.ioId,
 					affiliation);
 			this.sendMsg(msg);
 		}
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+		this.normative.update();
+		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.ENTREPRENEUR);
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.ENTREPRENEUR_ID.name(), this.id);
+		outputEntity.setValue(EntrepreneurOutputEntity.Field.DEFAULT_WAGE.name(),
+				this.defaultWage);
+		outputEntity.setValue(EntrepreneurOutputEntity.Field.PRODUCT_PRICE.name(),
+				this.productPrice);
+		outputEntity.setValue(EntrepreneurOutputEntity.Field.WEALTH.name(),
+				this.wealth);
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.ENTREPRENEUR_ID.name(), this.id);
+		outputEntity.setValue(EntrepreneurOutputEntity.Field.AFFILIATED.name(),
+				this.affiliated);
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.CRITICAL_COSTUMER.name(),
+				this.criticalConsumers);
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.STATE_FINDER_REP.name(),
+				this.stateFinderRep.getReputation());
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.STATE_PROTECTOR_REP.name(),
+				this.stateProtectorRep.getReputation());
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.MAFIA_PUNISHER_REP.name(),
+				this.mafiaPunisherRep.getReputation());
+		
+		outputEntity
+				.setValue(EntrepreneurOutputEntity.Field.SALIENCE_PAY_EXTORTION.name(),
+						this.normative.getNormSalience(Constants.Norms.PAY_EXTORTION
+								.ordinal()));
+		
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.SALIENCE_NOT_PAY_EXTORTION.name(),
+				this.normative.getNormSalience(Constants.Norms.NOT_PAY_EXTORTION
+						.ordinal()));
+		
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.SALIENCE_DENOUNCE.name(),
+				this.normative.getNormSalience(Constants.Norms.DENOUNCE.ordinal()));
+		
+		outputEntity.setValue(
+				EntrepreneurOutputEntity.Field.SALIENCE_NOT_DENOUNCE.name(),
+				this.normative.getNormSalience(Constants.Norms.NOT_DENOUNCE.ordinal()));
+		
+		outputEntity.setActive();
 	}
 	
 	
@@ -848,6 +943,25 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			this.sendMsg(newMsg);
 		}
 		
+	}
+	
+	
+	/**
+	 * Critical consumers information received from the Intermediary Organization
+	 * 
+	 * @param action
+	 *          CriticalConsumerInfo action
+	 * @return none
+	 */
+	private void criticalConsumers(CriticalConsumerInfoAction action) {
+		
+		int entrepreneurId = (int) action
+				.getParam(CriticalConsumerInfoAction.Param.ENTEPRENEUR_ID);
+		
+		if(this.id == entrepreneurId) {
+			this.criticalConsumers = (double) action
+					.getParam(CriticalConsumerInfoAction.Param.CRITICAL_CONSUMERS);
+		}
 	}
 	
 	
@@ -930,6 +1044,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			} else if(content instanceof NormativeInfoAction) {
 				this.normative.input(msg);
 				
+				// Critical Consumer information
+			} else if(content instanceof CriticalConsumerInfoAction) {
+				this.criticalConsumers((CriticalConsumerInfoAction) content);
+				
 				// Message
 			} else if(content instanceof Message) {
 				
@@ -938,7 +1056,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Custody
 				if(contentMsg instanceof CustodyAction) {
-					// TODO
+					// DO NOTHING
 					
 					// Imprisonment
 				} else if(contentMsg instanceof ImprisonmentAction) {
@@ -1058,7 +1176,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Buy product
 			} else if(content instanceof BuyProductAction) {
-				// TODO
+				// DO NOTHING
 				
 				// Collaboration Request
 			} else if(content instanceof CollaborationRequestAction) {
@@ -1068,7 +1186,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Collaborate
 			} else if(content instanceof CollaborateAction) {
-				// TODO
+				// DO NOTHING
 				
 				// Denounce extortion
 			} else if(content instanceof DenounceExtortionAction) {
@@ -1090,7 +1208,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// Mafia benefit
 			} else if(content instanceof MafiaBenefitAction) {
-				// TODO
+				// DO NOTHING
 				
 				// Mafia punishment
 			} else if(content instanceof MafiaPunishmentAction) {
@@ -1130,7 +1248,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				// State punishment
 			} else if(content instanceof StatePunishmentAction) {
-				// TODO
+				// DO NOTHING
 				
 			}
 		}

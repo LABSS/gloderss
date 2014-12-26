@@ -38,4 +38,7 @@ public interface IMafioso {
 	
 	
 	public void decidePentito();
+	
+	
+	public void finalizeSim();
 }

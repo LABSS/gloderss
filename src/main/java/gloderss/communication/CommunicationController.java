@@ -25,10 +25,13 @@ public class CommunicationController {
 	
 	private static CommunicationController	instance;
 	
+	// Visibility of each action in the environment
 	private Map<String, Double>							actionVisibility;
 	
+	// Registered agents
 	private Map<Integer, IComm>							agents;
 	
+	// Registered observations
 	private Map<Integer, List<Integer>>			observe;
 	
 	
@@ -311,8 +314,8 @@ public class CommunicationController {
 		for(Integer observed : observedList) {
 			if(this.observe.containsKey(observed)) {
 				List<Integer> aux = this.observe.get(observed);
-				if(!aux.contains(observer)) {
-					aux.remove(observer);
+				if(aux.contains(observer)) {
+					aux.remove(new Integer(observer));
 					this.observe.put(observed, aux);
 				}
 			}
@@ -332,8 +335,8 @@ public class CommunicationController {
 	public void removeObservation(int observer, int observed) {
 		if(this.observe.containsKey(observed)) {
 			List<Integer> aux = this.observe.get(observed);
-			if(!aux.contains(observer)) {
-				aux.remove(observer);
+			if(aux.contains(observer)) {
+				aux.remove(new Integer(observer));
 				this.observe.put(observed, aux);
 			}
 		}

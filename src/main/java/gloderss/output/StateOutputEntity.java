@@ -3,7 +3,8 @@ package gloderss.output;
 public class StateOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		TIME("time", DataType.DOUBLE);
+		TIME("time", DataType.DOUBLE),
+		FONDO("balanceFondo", DataType.DOUBLE);
 		
 		private String		name;
 		
@@ -37,6 +38,7 @@ public class StateOutputEntity extends AbstractEntity {
 		this.entity = new Object[Field.values().length];
 		
 		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.FONDO.ordinal()] = 0.0;
 	}
 	
 	

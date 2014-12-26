@@ -168,26 +168,29 @@ public class OutputController implements EventHandler {
 				case EXTORTION:
 					entity = new ExtortionOutputEntity(id, this.separator);
 					break;
-				case PUNISHMENT:
-					entity = new PunishmentOutputEntity(id, this.separator);
+				case COMPENSATION:
+					entity = new CompensationOutputEntity(id, this.separator);
 					break;
 				case PURCHASE:
 					entity = new PurchaseOutputEntity(id, this.separator);
 					break;
-				case INTERMEDIARY_ORGANIZATION:
-					entity = new IntermediaryOrganizationOutputEntity(id, this.separator);
+				case NORMATIVE:
+					entity = new NormativeOutputEntity(id, this.separator);
 					break;
-				case MAFIA_ORG:
+				case ENTREPRENEUR:
+					entity = new EntrepreneurOutputEntity(id, this.separator);
+					break;
+				case CONSUMER:
+					entity = new ConsumerOutputEntity(id, this.separator);
+					break;
+				case MAFIA:
 					entity = new MafiaOutputEntity(id, this.separator);
 					break;
-				case MAFIOSO:
-					entity = new MafiosoOutputEntity(id, this.separator);
-					break;
-				case STATE_ORG:
+				case STATE:
 					entity = new StateOutputEntity(id, this.separator);
 					break;
-				case POLICE_OFFICER:
-					entity = new PoliceOfficerOutputEntity(id, this.separator);
+				case INTERMEDIARY_ORGANIZATION:
+					entity = new IntermediaryOrganizationOutputEntity(id, this.separator);
 					break;
 			}
 			
@@ -231,7 +234,7 @@ public class OutputController implements EventHandler {
 	}
 	
 	
-	public void write() throws IOException {
+	public void write(boolean active) throws IOException {
 		
 		for(EntityType type : EntityType.values()) {
 			
@@ -240,7 +243,7 @@ public class OutputController implements EventHandler {
 			for(Integer id : this.entities.get(type).keySet()) {
 				if(typeEntities.containsKey(id)) {
 					AbstractEntity entity = typeEntities.get(id);
-					if(!entity.isActive()) {
+					if((!active) && (!entity.isActive())) {
 						typeEntities.remove(id);
 					}
 				}
@@ -283,7 +286,7 @@ public class OutputController implements EventHandler {
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_WRITE_DATA:
 				try {
-					this.write();
+					this.write(false);
 				} catch(IOException e) {
 					e.printStackTrace();
 				}

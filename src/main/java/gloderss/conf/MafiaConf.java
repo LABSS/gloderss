@@ -29,6 +29,10 @@ public class MafiaConf {
 	
 	private double	pentitiProbability;
 	
+	private double	recruitingThreshold;
+	
+	private double	recruitingProbability;
+	
 	
 	public int getNumberMafiosi() {
 		return this.numberMafiosi;
@@ -148,5 +152,27 @@ public class MafiaConf {
 	@XmlElement(name = Constants.TAG_MAFIA_PENTITI_PROBABILITY)
 	public void setPentitiProbability(double pentitiProbability) {
 		this.pentitiProbability = pentitiProbability;
+	}
+	
+	
+	public double getRecruitingThreshold() {
+		return this.recruitingThreshold;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_MAFIA_RECRUITING_THRESHOLD)
+	public void setRecruitingThreshold(double recruitingThreshold) {
+		this.recruitingThreshold = recruitingThreshold;
+	}
+	
+	
+	public double getRecruitingProbability() {
+		return this.recruitingProbability;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_MAFIA_RECRUITING_PROBABILITY)
+	public void setRecruitingProbability(double recruitingProbability) {
+		this.recruitingProbability = recruitingProbability;
 	}
 }

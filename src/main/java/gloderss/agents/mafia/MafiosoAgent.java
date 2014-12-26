@@ -60,6 +60,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
 	private List<Integer>					payingEntrepreneurs;
 	
+	private double								nextCollection;
+	
 	
 	/**
 	 * Mafioso constructor
@@ -96,6 +98,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		this.prisonStatus = false;
 		this.benefits = new HashMap<Integer, Double>();
 		this.payingEntrepreneurs = new ArrayList<Integer>();
+		this.nextCollection = 0.0;
 	}
 	
 	
@@ -155,6 +158,16 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	}
 	
 	
+	public boolean getPentitoStatus() {
+		return this.pentito;
+	}
+	
+	
+	public void setPentitoStatus(boolean pentito) {
+		this.pentito = pentito;
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Decision Processes
@@ -163,9 +176,9 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
 	@Override
 	public void initializeSim() {
-		this.event = new Event(this.simulator.now() + this.demandPDF.nextValue(),
-				this, Constants.EVENT_EXTORTION_DEMAND);
-		this.simulator.insert(this.event);
+		Event event = new Event(this.demandPDF.nextValue(), this,
+				Constants.EVENT_DEMAND_EXTORTION);
+		this.simulator.insert(event);
 	}
 	
 	
@@ -232,10 +245,12 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 			this.sendMsg(msg);
 			
 			// Schedule the collection of extortion
-			this.event = new Event(this.simulator.now()
-					+ this.collectionPDF.nextValue(), this,
+			this.nextCollection = this.simulator.now()
+					+ this.collectionPDF.nextValue();
+			
+			Event event = new Event(this.nextCollection, this,
 					Constants.EVENT_COLLECT_EXTORTION);
-			this.simulator.insert(this.event);
+			this.simulator.insert(event);
 		}
 	}
 	
@@ -243,13 +258,14 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	@Override
 	public void collectExtortion() {
 		
-		if(this.demand != null) {
+		if((this.demand != null) && (!this.prisonStatus) && (!this.custodyStatus)
+				&& (!this.pentito)) {
 			
 			int extortionId = (int) this.demand
 					.getParam(ExtortionAction.Param.EXTORTION_ID);
 			
 			int targetId = (int) this.demand
-					.getParam(ExtortionAction.Param.VICTIM_ID);
+					.getParam(ExtortionAction.Param.ENTREPRENEUR_ID);
 			
 			double extortion = (double) this.demand
 					.getParam(ExtortionAction.Param.EXTORTION);
@@ -262,9 +278,9 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 			this.sendMsg(msg);
 			
 			// Schedule the next demand extortion
-			this.event = new Event(this.simulator.now() + this.demandPDF.nextValue(),
-					this, Constants.EVENT_EXTORTION_DEMAND);
-			this.simulator.insert(this.event);
+			Event event = new Event(this.nextCollection + this.demandPDF.nextValue(),
+					this, Constants.EVENT_DEMAND_EXTORTION);
+			this.simulator.insert(event);
 		}
 	}
 	
@@ -345,6 +361,9 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		
 		double benefitAmount = (double) this.demand
 				.getParam(ExtortionAction.Param.BENEFIT);
+		if(this.wealth < benefitAmount) {
+			benefitAmount = this.wealth;
+		}
 		
 		this.wealth -= benefitAmount;
 		
@@ -357,6 +376,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		
 		outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
 				true);
+		outputEntity.setActive();
 	}
 	
 	
@@ -374,9 +394,10 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		
 		if((!this.pentito) && (!this.prisonStatus)) {
 			// Schedule the next extortion demand
-			this.event = new Event(this.simulator.now() + this.demandPDF.nextValue(),
-					this, Constants.EVENT_EXTORTION_DEMAND);
-			this.simulator.insert(this.event);
+			Event event = new Event(
+					this.simulator.now() + this.demandPDF.nextValue(), this,
+					Constants.EVENT_DEMAND_EXTORTION);
+			this.simulator.insert(event);
 		}
 	}
 	
@@ -388,8 +409,6 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		if(this.custodyStatus) {
 			this.custodyStatus = false;
 		}
-		
-		this.decidePentito();
 	}
 	
 	
@@ -401,7 +420,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 			// Schedule the next extortion demand
 			Event event = new Event(
 					this.simulator.now() + this.demandPDF.nextValue(), this,
-					Constants.EVENT_EXTORTION_DEMAND);
+					Constants.EVENT_DEMAND_EXTORTION);
 			this.simulator.insert(event);
 		}
 	}
@@ -418,9 +437,15 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 			this.pentito = true;
 			PentitoAction pentiti = new PentitoAction(this.id, this.neighbors,
 					payerEntrepreneurs);
-			Message msg = new Message(this.simulator.now(), this.id, stateId, pentiti);
+			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+					pentiti);
 			this.sendMsg(msg);
 		}
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
 	}
 	
 	
@@ -508,7 +533,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public void handleEvent(Event event) {
 		
 		switch((String) event.getCommand()) {
-			case Constants.EVENT_EXTORTION_DEMAND:
+			case Constants.EVENT_DEMAND_EXTORTION:
 				this.decideExtortion();
 				break;
 			case Constants.EVENT_COLLECT_EXTORTION:

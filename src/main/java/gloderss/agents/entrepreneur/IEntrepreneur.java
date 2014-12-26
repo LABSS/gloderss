@@ -48,4 +48,7 @@ public interface IEntrepreneur {
 	
 	
 	public void decideAffiliation();
+	
+	
+	public void finalizeSim();
 }

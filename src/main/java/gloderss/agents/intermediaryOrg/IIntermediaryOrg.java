@@ -11,4 +11,7 @@ public interface IIntermediaryOrg {
 	
 	
 	public void spreadNormativeInformation();
+	
+	
+	public void finalizeSim();
 }

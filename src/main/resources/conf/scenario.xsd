@@ -39,13 +39,14 @@
 								<complexType>
 									<sequence>
 										<element name="extortion" type="string" />
-										<element name="punishment" type="string" />
+										<element name="compensation" type="string" />
 										<element name="purchase" type="string" />
+										<element name="normative" type="string" />
+										<element name="entrepreneur" type="string" />
+										<element name="consumer" type="string" />
+										<element name="mafia" type="string" />
+										<element name="state" type="string" />
 										<element name="intermediaryOrganization" type="string" />
-										<element name="mafiaOrg" type="string" />
-										<element name="mafioso" type="string" />
-										<element name="stateOrg" type="string" />
-										<element name="policeOfficer" type="string" />
 									</sequence>
 								</complexType>
 							</element>
@@ -364,7 +365,7 @@
 
 							<!-- Justice -->
 							<element name="custodyDurationPDF" type="string" />
-							<element name="imprisonmentProbability">
+							<element name="convictionProbability">
 								<simpleType>
 									<restriction base="decimal">
 										<minInclusive value="0.0" />
@@ -385,6 +386,7 @@
 								<simpleType>
 									<restriction base="decimal">
 										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -496,6 +498,22 @@
 									</restriction>
 								</simpleType>
 							</element>
+							<element name="recruitingThreshold">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
+							<element name="recruitingProbability">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>
@@ -508,7 +526,13 @@
 							<element name="timeToAffiliatePDF" type="string" />
 
 							<!-- Information Spreading -->
-							<element name="informationSpreadPDF" type="string" />
+							<element name="slope">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+									</restriction>
+								</simpleType>
+							</element>
 							<element name="proportionCustomers">
 								<simpleType>
 									<restriction base="decimal">

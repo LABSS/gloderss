@@ -6,4 +6,7 @@ public interface IMafiaOrg {
 	
 	
 	public void spreadInformation();
+	
+	
+	public void finalizeSim();
 }

@@ -36,6 +36,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	
 	private Event					event;
 	
+	private int						extortionId;
+	
 	private boolean				specificInvestigation;
 	
 	
@@ -71,6 +73,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		this.event = null;
 		
 		this.specificInvestigation = false;
+		this.extortionId = -1;
 	}
 	
 	
@@ -133,6 +136,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	@Override
 	public void generalInvestigation() {
 		
+		// Release specific investigation
 		if(this.specificInvestigation) {
 			ReleaseInvestigationAction action = new ReleaseInvestigationAction(
 					this.id, this.observed);
@@ -142,6 +146,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 			this.sendMsg(msg);
 			
 			this.specificInvestigation = false;
+			this.extortionId = -1;
 		}
 		
 		if((this.observed != -1)) {
@@ -152,10 +157,9 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		// Get one target with the Mafia Organization
 		InfoRequest entrepreneurRequest = new InfoRequest(this.id, this.stateId,
 				Constants.REQUEST_ENTREPRENEUR_ID);
-		int entrepreneurId = (int) this.sendInfo(entrepreneurRequest);
+		this.observed = (int) this.sendInfo(entrepreneurRequest);
 		
-		this.addObservation(this.id, entrepreneurId);
-		this.observed = entrepreneurId;
+		this.addObservation(this.id, this.observed);
 		
 		this.event = new Event(this.simulator.now()
 				+ this.generalInvestigationDurationPDF.nextValue(), this,
@@ -174,6 +178,9 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		if((this.observed != -1)) {
 			this.removeObservation(this.id, this.observed);
 		}
+		
+		this.extortionId = (int) action
+				.getParam(SpecificInvestigationAction.Param.EXTORTION_ID);
 		
 		this.observed = (int) action
 				.getParam(SpecificInvestigationAction.Param.ENTREPRENEUR_ID);
@@ -201,12 +208,23 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		
 		if(RandomUtil.nextDouble() < this.conf.getCaptureProbability()) {
 			
-			CaptureMafiosoAction action = new CaptureMafiosoAction(this.id, mafiosoId);
+			CaptureMafiosoAction action;
+			if(this.specificInvestigation) {
+				action = new CaptureMafiosoAction(this.extortionId, this.id, mafiosoId,
+						true);
+			} else {
+				action = new CaptureMafiosoAction(-1, this.id, mafiosoId, false);
+			}
 			
 			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
 					action);
 			this.sendMsg(msg);
 		}
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
 	}
 	
 	

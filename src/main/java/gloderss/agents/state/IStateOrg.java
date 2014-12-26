@@ -25,7 +25,7 @@ public interface IStateOrg {
 	public void decideCustody(CaptureMafiosoAction action);
 	
 	
-	public void decideImprisonment(CaptureMafiosoAction action);
+	public void decideConviction(CaptureMafiosoAction action);
 	
 	
 	public void receivePentito(PentitoAction action);
@@ -41,4 +41,7 @@ public interface IStateOrg {
 	
 	
 	public void spreadNormativeInformation();
+	
+	
+	public void finalizeSim();
 }

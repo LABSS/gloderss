@@ -1,9 +1,12 @@
 package gloderss.output;
 
-public class MafiosoOutputEntity extends AbstractEntity {
+public class NormativeOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		TIME("time", DataType.DOUBLE);
+		TIME("time", DataType.DOUBLE),
+		AGENT_ID("agentId", DataType.INTEGER),
+		NUMBER_CONSUMERS("numberConsumers", DataType.INTEGER),
+		NUMBER_ENTREPRENEURS("numberEntrepreneurs", DataType.INTEGER);
 		
 		private String		name;
 		
@@ -31,12 +34,15 @@ public class MafiosoOutputEntity extends AbstractEntity {
 	private Object[]	entity;
 	
 	
-	public MafiosoOutputEntity(int id, String separator) {
+	public NormativeOutputEntity(int id, String separator) {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
 		
 		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.AGENT_ID.ordinal()] = -1;
+		this.entity[Field.NUMBER_CONSUMERS.ordinal()] = 0.0;
+		this.entity[Field.NUMBER_ENTREPRENEURS.ordinal()] = 0.0;
 	}
 	
 	

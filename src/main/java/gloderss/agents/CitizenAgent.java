@@ -40,7 +40,10 @@ public abstract class CitizenAgent extends AbstractAgent {
 		this.removeObservation(this.id, this.neighbors);
 		
 		// Add the new neighbors as observed
-		this.neighbors = neighbors;
+		this.neighbors.clear();
+		for(Integer neighborId : neighbors) {
+			this.neighbors.add(neighborId);
+		}
 		this.addObservation(this.id, this.neighbors);
 	}
 }

@@ -1,9 +1,22 @@
 package gloderss.output;
 
-public class PoliceOfficerOutputEntity extends AbstractEntity {
+public class ConsumerOutputEntity extends AbstractEntity {
 	
 	public enum Field {
-		TIME("time", DataType.DOUBLE);
+		CONSUMER_ID("consumerId", DataType.INTEGER),
+		ENTREPRENEUR_REP("entrepreneurRep", DataType.STRING),
+		NUMBER_PRODUCTS("numberProducts", DataType.INTEGER),
+		TOTAL_PRICE("totalPrice", DataType.DOUBLE),
+		SALIENCE_BUY_FROM_PAYING_ENTREPRENEURS(
+				"salienceBuyPayingEntrepreneurs",
+				DataType.DOUBLE),
+		SALIENCE_BUY_FROM_NOT_PAYING_ENTREPRENEURS(
+				"salienceBuyNotPayingEntrepreneurs",
+				DataType.DOUBLE),
+		SALIENCE_PAY_EXTORTION("saliencePayExtortion", DataType.DOUBLE),
+		SALIENCE_NOT_PAY_EXTORTION("salienceNotPayExtortion", DataType.DOUBLE),
+		SALIENCE_DENOUNCE("salienceDenounce", DataType.DOUBLE),
+		SALIENCE_NOT_DENOUNCE("salienceNotDenounce", DataType.DOUBLE);
 		
 		private String		name;
 		
@@ -31,12 +44,21 @@ public class PoliceOfficerOutputEntity extends AbstractEntity {
 	private Object[]	entity;
 	
 	
-	public PoliceOfficerOutputEntity(int id, String separator) {
+	public ConsumerOutputEntity(int id, String separator) {
 		super(id);
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
 		
-		this.entity[Field.TIME.ordinal()] = 0.0;
+		this.entity[Field.CONSUMER_ID.ordinal()] = -1;
+		this.entity[Field.ENTREPRENEUR_REP.ordinal()] = "";
+		this.entity[Field.NUMBER_PRODUCTS.ordinal()] = 0;
+		this.entity[Field.TOTAL_PRICE.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_BUY_FROM_PAYING_ENTREPRENEURS.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_NOT_PAY_EXTORTION.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_PAY_EXTORTION.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_NOT_DENOUNCE.ordinal()] = 0.0;
+		this.entity[Field.SALIENCE_DENOUNCE.ordinal()] = 0.0;
 	}
 	
 	

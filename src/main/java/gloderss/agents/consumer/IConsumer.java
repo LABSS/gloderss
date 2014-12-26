@@ -11,4 +11,7 @@ public interface IConsumer {
 	
 	
 	public void receiveProduct(DeliverProductAction action);
+	
+	
+	public void finalizeSim();
 }

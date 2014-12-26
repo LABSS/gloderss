@@ -34,6 +34,13 @@ import gloderss.communication.Message;
 import gloderss.conf.StateConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
+import gloderss.output.AbstractEntity;
+import gloderss.output.ExtortionOutputEntity;
+import gloderss.output.CompensationOutputEntity;
+import gloderss.output.NormativeOutputEntity;
+import gloderss.output.OutputController;
+import gloderss.output.AbstractEntity.EntityType;
+import gloderss.output.StateOutputEntity;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
 
@@ -168,92 +175,20 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 * 
 	 *******************************/
 	
-	/**
-	 * Selects an Entrepreneur for investigation
-	 * 
-	 * @param none
-	 * @return Entrepreneur for investigation
-	 */
-	private int decideEntrepreneur() {
-		
-		int entrepreneurId;
-		do {
-			
-			entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
-					.nextIntFromTo(0, (this.entrepreneurs.size() - 1))];
-			
-		} while(this.investigateEntrepreneurs.contains(entrepreneurId));
-		
-		return entrepreneurId;
-	}
-	
-	
-	/**
-	 * Increase the Fondo di Solidarieta by a constant amount
-	 * 
-	 * @param none
-	 * @return none
-	 */
-	private void increaseFondo() {
-		
-		this.fondoSolidarieta += this.conf.getResourceFondo();
-		
-		Event event = new Event(this.simulator.now()
-				+ this.periodicityFondoPDF.nextValue(), this,
-				Constants.EVENT_RESOURCE_FONDO);
-		this.simulator.insert(event);
-	}
-	
-	
-	/**
-	 * Judge whether a captured Mafioso should be imprisoned
-	 * 
-	 * @param none
-	 * @return none
-	 */
-	private void judgeMafioso() {
-		
-		if(!this.custodyQueue.isEmpty()) {
-			CaptureMafiosoAction action = this.custodyQueue.poll();
-			this.decideImprisonment(action);
-		}
-	}
-	
-	
-	/**
-	 * Release a imprisoned Mafioso
-	 * 
-	 * @param none
-	 * @return none
-	 */
-	private void releaseMafioso() {
-		
-		if(!this.prisonQueue.isEmpty()) {
-			ImprisonmentAction prison = this.prisonQueue.poll();
-			
-			int mafiosoId = (int) prison
-					.getParam(ImprisonmentAction.Param.MAFIOSO_ID);
-			
-			ReleaseImprisonmentAction action = new ReleaseImprisonmentAction(
-					mafiosoId);
-			
-			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
-					action);
-			this.sendMsg(msg);
-			
-			// Spread action
-			this.spreadActionInformation(msg);
-		}
-	}
-	
-	
 	@Override
 	public void initializeSim() {
 		for(PoliceOfficerAgent police : this.policeOfficers.values()) {
 			police.initializeSim();
 		}
 		
-		Event event = new Event(this.simulator.now() + 1, this,
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				AbstractEntity.EntityType.STATE);
+		outputEntity.setValue(StateOutputEntity.Field.TIME.name(),
+				this.simulator.now());
+		outputEntity.setValue(StateOutputEntity.Field.FONDO.name(), 0.0);
+		outputEntity.setActive();
+		
+		Event event = new Event(this.simulator.now(), this,
 				Constants.EVENT_RESOURCE_FONDO);
 		this.simulator.insert(event);
 		
@@ -267,8 +202,14 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void decideInvestigateExtortion(DenounceExtortionAction action) {
 		
+		int extortionId = (int) action
+				.getParam(DenounceExtortionAction.Param.EXTORTION_ID);
+		
 		int entrepreneurId = (int) action
 				.getParam(DenounceExtortionAction.Param.ENTREPRENEUR_ID);
+		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
 		
 		if((!this.investigateEntrepreneurs.contains(entrepreneurId))
 				&& (RandomUtil.nextDouble() < this.conf.getInvestigateProbability())) {
@@ -295,11 +236,21 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			} while(this.allocatedPoliceOfficers.contains(policeOfficerId));
 			
 			SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-					policeOfficerId, entrepreneurId);
+					extortionId, policeOfficerId, entrepreneurId);
 			
 			Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
 					investigation);
 			this.sendMsg(msg);
+			
+			// Output
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true);
+			
+		} else {
+			
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false);
+			outputEntity.setActive();
 		}
 	}
 	
@@ -307,13 +258,16 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void decideInvestigatePunishment(DenouncePunishmentAction action) {
 		
+		int extortionId = (int) action
+				.getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
+		
 		int entrepreneurId = (int) action
 				.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 		
+		int mafiosoId = (int) action
+				.getParam(DenouncePunishmentAction.Param.MAFIOSO_ID);
+		
 		if(!this.investigateEntrepreneurs.contains(entrepreneurId)) {
-			
-			int mafiosoId = (int) action
-					.getParam(DenouncePunishmentAction.Param.MAFIOSO_ID);
 			
 			if(!this.mafiosiBlackList.contains(mafiosoId)) {
 				this.mafiosiBlackList.add(mafiosoId);
@@ -334,7 +288,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			} while(this.allocatedPoliceOfficers.contains(policeOfficerId));
 			
 			SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-					policeOfficerId, entrepreneurId);
+					extortionId, policeOfficerId, entrepreneurId);
 			
 			Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
 					investigation);
@@ -348,6 +302,12 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
 				action);
 		this.spreadActionInformation(msg);
+		
+		// Output
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true);
 		
 		Event event = new Event(this.simulator.now()
 				+ this.timeToCompensationPDF.nextValue(), this,
@@ -371,10 +331,13 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void decideCustody(CaptureMafiosoAction action) {
 		
+		int extortionId = (int) action
+				.getParam(CaptureMafiosoAction.Param.EXTORTION_ID);
+		
 		int mafiosoId = (int) action
 				.getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
 		
-		CustodyAction custody = new CustodyAction(mafiosoId,
+		CustodyAction custody = new CustodyAction(extortionId, this.id, mafiosoId,
 				this.custodyPDF.nextValue());
 		
 		Message msg = new Message(this.simulator.now(), this.id, mafiosoId, custody);
@@ -383,22 +346,39 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		// Spread action
 		this.spreadActionInformation(msg);
 		
+		// Output
+		if(extortionId >= 0) {
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.EXTORTION, extortionId);
+			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIOSO_CUSTODY.name(),
+					true);
+		}
+		
 		Event event = new Event(this.simulator.now() + this.custodyPDF.nextValue(),
-				this, Constants.EVENT_JUDGE_MAFIOSO);
+				this, Constants.EVENT_RELEASE_CUSTODY);
 		this.simulator.insert(event);
 		
-		this.custodyQueue.add(action);
+		this.custodyQueue.offer(action);
 	}
 	
 	
 	@Override
-	public void decideImprisonment(CaptureMafiosoAction action) {
+	public void decideConviction(CaptureMafiosoAction action) {
 		
 		int mafiosoId = (int) action
 				.getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
 		
+		int extortionId = (int) action
+				.getParam(CaptureMafiosoAction.Param.EXTORTION_ID);
+		
+		AbstractEntity outputEntity = null;
+		if(extortionId >= 0) {
+			outputEntity = OutputController.getInstance().getEntity(
+					EntityType.EXTORTION, extortionId);
+		}
+		
 		// Decide whether the Mafioso is going to be imprisoned
-		if(RandomUtil.nextDouble() < this.conf.getImprisonmentProbability()) {
+		if(RandomUtil.nextDouble() < this.conf.getConvictionProbability()) {
 			
 			InfoRequest wealthRequest = new InfoRequest(this.id, mafiosoId,
 					Constants.REQUEST_WEALTH);
@@ -428,6 +408,13 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			// Spread action
 			this.spreadActionInformation(msg);
 			
+			// Output
+			if(extortionId >= 0) {
+				outputEntity.setValue(
+						ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), true);
+				outputEntity.setActive();
+			}
+			
 			// Release the Mafioso of custody
 		} else {
 			
@@ -439,6 +426,13 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			
 			// Spread action
 			this.spreadActionInformation(msg);
+			
+			// Output
+			if(extortionId >= 0) {
+				outputEntity.setValue(
+						ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), false);
+				outputEntity.setActive();
+			}
 		}
 	}
 	
@@ -526,6 +520,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			
 			// State has enough money to compensate the Entrepreneur
 			if(this.fondoSolidarieta >= punishment) {
+				
+				this.fondoSolidarieta -= punishment;
+				
 				int entrepreneurId = (int) action
 						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 				
@@ -538,6 +535,18 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				
 				// Spread action
 				this.spreadActionInformation(msg);
+				
+				// Output
+				AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+						EntityType.COMPENSATION, extortionId);
+				outputEntity.setValue(
+						CompensationOutputEntity.Field.STATE_COMPENSATED.name(), true);
+				outputEntity.setValue(
+						CompensationOutputEntity.Field.STATE_TIME_COMPENSATION.name(),
+						this.simulator.now());
+				outputEntity.setValue(
+						CompensationOutputEntity.Field.STATE_COMPENSATION.name(),
+						punishment);
 				
 				// Entrepreneur goes back to the queue
 			} else {
@@ -606,10 +615,110 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
+		// Output
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.NORMATIVE);
+		outputEntity.setValue(NormativeOutputEntity.Field.TIME.name(),
+				this.simulator.now());
+		outputEntity.setValue(NormativeOutputEntity.Field.AGENT_ID.name(), this.id);
+		outputEntity.setValue(NormativeOutputEntity.Field.NUMBER_CONSUMERS.name(),
+				numConsumers);
+		outputEntity.setValue(
+				NormativeOutputEntity.Field.NUMBER_ENTREPRENEURS.name(),
+				numEntrepreneurs);
+		outputEntity.setActive();
+		
 		Event event = new Event(this.simulator.now()
 				+ this.spreadInformationPDF.nextValue(), this,
 				Constants.EVENT_SPREAD_INFORMATION);
 		this.simulator.insert(event);
+	}
+	
+	
+	/**
+	 * Selects an Entrepreneur for investigation
+	 * 
+	 * @param none
+	 * @return Entrepreneur for investigation
+	 */
+	private int decideEntrepreneur() {
+		
+		int entrepreneurId;
+		do {
+			
+			entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
+					.nextIntFromTo(0, (this.entrepreneurs.size() - 1))];
+			
+		} while(this.investigateEntrepreneurs.contains(entrepreneurId));
+		
+		return entrepreneurId;
+	}
+	
+	
+	/**
+	 * Increase the Fondo di Solidarieta by a constant amount
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void increaseFondo() {
+		
+		this.fondoSolidarieta += this.conf.getResourceFondo();
+		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				AbstractEntity.EntityType.STATE);
+		outputEntity.setValue(StateOutputEntity.Field.TIME.name(),
+				this.simulator.now());
+		outputEntity.setValue(StateOutputEntity.Field.FONDO.name(),
+				this.fondoSolidarieta);
+		outputEntity.setActive();
+		
+		Event event = new Event(this.simulator.now()
+				+ this.periodicityFondoPDF.nextValue(), this,
+				Constants.EVENT_RESOURCE_FONDO);
+		this.simulator.insert(event);
+	}
+	
+	
+	/**
+	 * Judge whether a captured Mafioso should be imprisoned
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void judgeMafioso() {
+		
+		if(!this.custodyQueue.isEmpty()) {
+			CaptureMafiosoAction action = this.custodyQueue.poll();
+			this.decideConviction(action);
+		}
+	}
+	
+	
+	/**
+	 * Release a imprisoned Mafioso
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void releaseMafioso() {
+		
+		if(!this.prisonQueue.isEmpty()) {
+			ImprisonmentAction prison = this.prisonQueue.poll();
+			
+			int mafiosoId = (int) prison
+					.getParam(ImprisonmentAction.Param.MAFIOSO_ID);
+			
+			ReleaseImprisonmentAction action = new ReleaseImprisonmentAction(
+					mafiosoId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
+					action);
+			this.sendMsg(msg);
+			
+			// Spread action
+			this.spreadActionInformation(msg);
+		}
 	}
 	
 	
@@ -666,6 +775,11 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	}
 	
 	
+	@Override
+	public void finalizeSim() {
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -697,7 +811,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				
 				// Capture Mafioso
 			} else if(content instanceof CaptureMafiosoAction) {
-				this.decideImprisonment((CaptureMafiosoAction) content);
+				this.decideCustody((CaptureMafiosoAction) content);
 				
 			}
 		}

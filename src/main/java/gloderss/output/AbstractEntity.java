@@ -4,13 +4,14 @@ public abstract class AbstractEntity {
 	
 	public enum EntityType {
 		EXTORTION,
-		PUNISHMENT,
+		COMPENSATION,
 		PURCHASE,
-		INTERMEDIARY_ORGANIZATION,
-		MAFIA_ORG,
-		MAFIOSO,
-		STATE_ORG,
-		POLICE_OFFICER;
+		NORMATIVE,
+		ENTREPRENEUR,
+		CONSUMER,
+		MAFIA,
+		STATE,
+		INTERMEDIARY_ORGANIZATION;
 	}
 	
 	protected enum DataType {

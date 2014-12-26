@@ -12,6 +12,7 @@ import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenouncePunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
+import gloderss.actions.ReputationInfoAction;
 import gloderss.actions.StateCompensationAction;
 import gloderss.actions.StatePunishmentAction;
 import java.util.HashMap;
@@ -60,10 +61,8 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 	@Override
 	public void updateReputation(Object action) {
 		
-		boolean updated = false;
 		// Denounce punishment
 		if(action instanceof DenouncePunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((DenouncePunishmentAction) action)
 					.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
@@ -72,7 +71,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// State compensation
 		} else if(action instanceof StateCompensationAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((StateCompensationAction) action)
 					.getParam(StateCompensationAction.Param.ENTREPRENEUR_ID);
@@ -81,7 +79,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// State punishment
 		} else if(action instanceof StatePunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((StatePunishmentAction) action)
 					.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID);
@@ -90,7 +87,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Affiliation accepted
 		} else if(action instanceof AffiliationAcceptedAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((AffiliationAcceptedAction) action)
 					.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
@@ -99,7 +95,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Affiliation denied
 		} else if(action instanceof AffiliationDeniedAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((AffiliationDeniedAction) action)
 					.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
@@ -108,7 +103,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Collaboration request
 		} else if(action instanceof CollaborationRequestAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((CollaborationRequestAction) action)
 					.getParam(CollaborationRequestAction.Param.ENTREPRENEUR_ID);
@@ -117,7 +111,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Collaborate
 		} else if(action instanceof CollaborateAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((CollaborateAction) action)
 					.getParam(CollaborateAction.Param.ENTREPRENEUR_ID);
@@ -126,7 +119,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Denounce extortion
 		} else if(action instanceof DenounceExtortionAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((DenounceExtortionAction) action)
 					.getParam(DenounceExtortionAction.Param.ENTREPRENEUR_ID);
@@ -135,7 +127,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Not denounce extortion
 		} else if(action instanceof NotDenounceExtortionAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((NotDenounceExtortionAction) action)
 					.getParam(NotDenounceExtortionAction.Param.ENTREPRENEUR_ID);
@@ -144,7 +135,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Denounce punishment
 		} else if(action instanceof DenouncePunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((DenouncePunishmentAction) action)
 					.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
@@ -153,7 +143,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Not denounce punishment
 		} else if(action instanceof NotDenouncePunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((NotDenouncePunishmentAction) action)
 					.getParam(NotDenouncePunishmentAction.Param.ENTREPRENEUR_ID);
@@ -162,7 +151,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Mafia benefit
 		} else if(action instanceof MafiaBenefitAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((MafiaBenefitAction) action)
 					.getParam(MafiaBenefitAction.Param.ENTREPRENEUR_ID);
@@ -171,7 +159,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Mafia punishment
 		} else if(action instanceof MafiaPunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((MafiaPunishmentAction) action)
 					.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID);
@@ -180,7 +167,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Pay extortion
 		} else if(action instanceof PayExtortionAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((PayExtortionAction) action)
 					.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID);
@@ -189,7 +175,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// Not Pay extortion
 		} else if(action instanceof NotPayExtortionAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((NotPayExtortionAction) action)
 					.getParam(NotPayExtortionAction.Param.ENTREPRENEUR_ID);
@@ -198,7 +183,6 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// State compensation
 		} else if(action instanceof StateCompensationAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((StateCompensationAction) action)
 					.getParam(StateCompensationAction.Param.ENTREPRENEUR_ID);
@@ -207,18 +191,25 @@ public class EntrepreneurPayerReputation extends ReputationAbstract {
 			
 			// State punishment
 		} else if(action instanceof StatePunishmentAction) {
-			updated = true;
 			
 			int entrepreneurId = (int) ((StatePunishmentAction) action)
 					.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID);
 			
 			this.setReputation(entrepreneurId, ReputationAbstract.MIN);
 			
+			// Reputation information
+		} else if(action instanceof ReputationInfoAction) {
+			
+			int entrepreneurId = (int) ((ReputationInfoAction) action)
+					.getParam(ReputationInfoAction.Param.ENTREPRENEUR_ID);
+			
+			double reputation = (double) ((ReputationInfoAction) action)
+					.getParam(ReputationInfoAction.Param.REPUTATION);
+			
+			if(!this.isUnknown(entrepreneurId)) {
+				reputation = (this.getReputation(entrepreneurId) + reputation) / 2;
+			}
+			this.setReputation(entrepreneurId, reputation);
 		}
-		
-		if(updated) {
-			// NOTHING
-		}
-		
 	}
 }

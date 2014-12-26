@@ -46,8 +46,13 @@ public class GLODERSSimulator extends EventSimulator {
 	public GLODERSSimulator(String xmlFilename, String xsdFilename) {
 		this.scenarioConf = ScenarioConf.getScenarioConf(xmlFilename, xsdFilename);
 		
-		logger.debug("[XML VALID] "
-				+ ScenarioConf.isValid(xmlFilename, xsdFilename));
+		boolean valid = ScenarioConf.isValid(xmlFilename, xsdFilename);
+		logger.debug("[XML VALID] " + valid);
+		
+		if(!valid) {
+			System.out.println("INVALID XML FILE");
+			System.exit(1);
+		}
 	}
 	
 	
@@ -83,21 +88,23 @@ public class GLODERSSimulator extends EventSimulator {
 			outputController.newInstance(replica);
 			outputController.init(EntityType.EXTORTION, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getExtortion());
-			outputController.init(EntityType.PUNISHMENT, this.scenarioConf
-					.getGeneralConf().getFilenameConf().getPunishment());
+			outputController.init(EntityType.COMPENSATION, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getCompensation());
 			outputController.init(EntityType.PURCHASE, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getPurchase());
+			outputController.init(EntityType.NORMATIVE, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getNormative());
+			outputController.init(EntityType.ENTREPRENEUR, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getEntrepreneur());
+			outputController.init(EntityType.CONSUMER, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getConsumer());
+			outputController.init(EntityType.MAFIA, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getMafia());
+			outputController.init(EntityType.STATE, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getState());
 			outputController.init(EntityType.INTERMEDIARY_ORGANIZATION,
 					this.scenarioConf.getGeneralConf().getFilenameConf()
 							.getIntermediaryOrganization());
-			outputController.init(EntityType.MAFIA_ORG, this.scenarioConf
-					.getGeneralConf().getFilenameConf().getMafiaOrg());
-			outputController.init(EntityType.MAFIOSO, this.scenarioConf
-					.getGeneralConf().getFilenameConf().getMafioso());
-			outputController.init(EntityType.STATE_ORG, this.scenarioConf
-					.getGeneralConf().getFilenameConf().getStateOrg());
-			outputController.init(EntityType.POLICE_OFFICER, this.scenarioConf
-					.getGeneralConf().getFilenameConf().getPoliceOfficer());
 			
 			/**
 			 * Set random seed
@@ -235,8 +242,19 @@ public class GLODERSSimulator extends EventSimulator {
 			
 			this.doAllEvents(numCycles);
 			
+			this.state.finalizeSim();
+			this.mafia.finalizeSim();
+			this.intermediaryOrg.finalizeSim();
+			for(ConsumerAgent c : this.consumers.values()) {
+				c.finalizeSim();
+			}
+			
+			for(EntrepreneurAgent e : this.entrepreneurs.values()) {
+				e.finalizeSim();
+			}
+			
 			try {
-				outputController.write();
+				outputController.write(true);
 			} catch(IOException e) {
 				logger.debug(e.getMessage());
 			}

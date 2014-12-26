@@ -70,8 +70,10 @@ public class Message {
 	
 	
 	/**
+	 * Get time of submission
 	 * 
-	 * @return
+	 * @param none
+	 * @return Time of submission
 	 */
 	public double getTime() {
 		return this.time;
@@ -79,8 +81,11 @@ public class Message {
 	
 	
 	/**
+	 * Set time of submission
 	 * 
 	 * @param time
+	 *          Time of submission
+	 * @return none
 	 */
 	public void setTime(double time) {
 		this.time = time;
@@ -88,8 +93,10 @@ public class Message {
 	
 	
 	/**
+	 * Get sender identification
 	 * 
-	 * @return
+	 * @param none
+	 * @return Sender identification
 	 */
 	public int getSender() {
 		return this.sender;
@@ -97,8 +104,11 @@ public class Message {
 	
 	
 	/**
+	 * Set sender identification
 	 * 
 	 * @param sender
+	 *          Sender identification
+	 * @return none
 	 */
 	public void setSender(int sender) {
 		this.sender = sender;
@@ -106,8 +116,10 @@ public class Message {
 	
 	
 	/**
+	 * Set the list of receivers' identification
 	 * 
-	 * @return
+	 * @param none
+	 * @return List of receivers' identification
 	 */
 	public List<Integer> getReceiver() {
 		return this.receiver;
@@ -115,8 +127,11 @@ public class Message {
 	
 	
 	/**
+	 * Set the list of receivers' identification
 	 * 
 	 * @param receiver
+	 *          List of receivers' identification
+	 * @return none
 	 */
 	public void setReceiver(List<Integer> receiver) {
 		this.receiver = receiver;
@@ -124,8 +139,10 @@ public class Message {
 	
 	
 	/**
+	 * Get content of the message
 	 * 
-	 * @return
+	 * @param none
+	 * @return Message content
 	 */
 	public Object getContent() {
 		return this.content;
@@ -133,14 +150,23 @@ public class Message {
 	
 	
 	/**
+	 * Set the message content
 	 * 
 	 * @param content
+	 *          Message content
+	 * @return none
 	 */
 	public void setContent(Object content) {
 		this.content = content;
 	}
 	
 	
+	/**
+	 * Convert message to String
+	 * 
+	 * @param none
+	 * @return Message converted to String
+	 */
 	@Override
 	public String toString() {
 		String str = new String();

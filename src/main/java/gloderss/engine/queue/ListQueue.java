@@ -8,7 +8,14 @@ public class ListQueue extends OrderedSet {
 	private Vector<Comparable>	events	= new Vector<Comparable>();
 	
 	
-	public void insert(Comparable event) {
+	/**
+	 * Insert a new event into the queue
+	 * 
+	 * @param event
+	 *          Event
+	 * @return none
+	 */
+	public synchronized void insert(Comparable event) {
 		int i = 0;
 		while(i < this.events.size()
 				&& ((Comparable) this.events.elementAt(i)).lessThan(event)) {
@@ -18,7 +25,13 @@ public class ListQueue extends OrderedSet {
 	}
 	
 	
-	public Comparable removeFirst() {
+	/**
+	 * Remove the first event of the queue
+	 * 
+	 * @param none
+	 * @return Event
+	 */
+	public synchronized Comparable removeFirst() {
 		
 		if(this.events.size() != 0) {
 			Comparable event = (Comparable) this.events.firstElement();
@@ -31,7 +44,14 @@ public class ListQueue extends OrderedSet {
 	}
 	
 	
-	public Comparable remove(Comparable event) {
+	/**
+	 * Remove a specific event from the queue
+	 * 
+	 * @param event
+	 *          Event to remove
+	 * @return Event removed
+	 */
+	public synchronized Comparable remove(Comparable event) {
 		
 		for(int i = 0; i < this.events.size(); i++) {
 			
@@ -47,6 +67,12 @@ public class ListQueue extends OrderedSet {
 	}
 	
 	
+	/**
+	 * Get the number of events in the queue
+	 * 
+	 * @param none
+	 * @return Number of events in the queue
+	 */
 	public int size() {
 		return this.events.size();
 	}

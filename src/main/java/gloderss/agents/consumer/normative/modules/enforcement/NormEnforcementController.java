@@ -1,5 +1,6 @@
 package gloderss.agents.consumer.normative.modules.enforcement;
 
+import emilia.board.NormativeBoardInterface;
 import emilia.entity.event.NormativeEventEntityAbstract;
 import emilia.entity.event.type.ActionEvent;
 import emilia.entity.norm.NormEntityAbstract;
@@ -8,8 +9,9 @@ import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.modules.enforcement.DeviationAbstract;
 import emilia.modules.enforcement.DeviationAbstract.Type;
 import emilia.modules.enforcement.NormEnforcementAbstract;
+import gloderss.Constants.Norms;
+import gloderss.actions.PayExtortionAction;
 import gloderss.normative.entity.norm.NormContent;
-import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,15 +19,23 @@ import java.util.Map;
 
 public class NormEnforcementController extends NormEnforcementAbstract {
 	
+	private NormativeBoardInterface	normativeBoard;
+	
+	
 	/**
 	 * Create Norm Enforcement controller
 	 * 
 	 * @param agentId
 	 *          Agent identification
+	 * @param normativeBoard
+	 *          Normative board
 	 * @return none
 	 */
-	public NormEnforcementController(Integer agentId) {
+	public NormEnforcementController(Integer agentId,
+			NormativeBoardInterface normativeBoard) {
 		super(agentId);
+		
+		this.normativeBoard = normativeBoard;
 	}
 	
 	
@@ -80,18 +90,31 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 			polarity = Polarity.POSITIVE;
 		}
 		
-		List<SanctionEntityAbstract> newSanctions = new ArrayList<SanctionEntityAbstract>();
 		for(SanctionEntityAbstract sanction : sanctions) {
+			
 			if(sanction.getCategory().getPolarity().equals(polarity)) {
-				newSanctions.add(sanction);
+				
+				if(event instanceof ActionEvent) {
+					ActionEvent actionEvent = (ActionEvent) event;
+					
+					if(actionEvent.getAction() instanceof PayExtortionAction) {
+						// Check whether the Salience PAY EXTORTION smaller than NOT PAY
+						// EXTORTION
+						if(this.normativeBoard.getSalience(Norms.PAY_EXTORTION.ordinal()) <= this.normativeBoard
+								.getSalience(Norms.NOT_PAY_EXTORTION.ordinal())) {
+							
+							PayExtortionAction action = (PayExtortionAction) actionEvent
+									.getAction();
+							
+							sanction.getContent().execute(
+									(int) action
+											.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID));
+							
+							enforceSanctions.add(sanction);
+						}
+					}
+				}
 			}
-		}
-		
-		SanctionEntityAbstract sanction;
-		if(newSanctions.size() > 0) {
-			sanction = newSanctions.get((int) ((newSanctions.size() - 1) * RandomUtil
-					.nextDouble()));
-			enforceSanctions.add(sanction);
 		}
 		
 		return enforceSanctions;

@@ -19,7 +19,7 @@ public class StateConf {
 	
 	private String	custodyDurationPDF;
 	
-	private double	imprisonmentProbability;
+	private double	convictionProbability;
 	
 	private String	imprisonmentDurationPDF;
 	
@@ -110,14 +110,14 @@ public class StateConf {
 	}
 	
 	
-	public double getImprisonmentProbability() {
-		return this.imprisonmentProbability;
+	public double getConvictionProbability() {
+		return this.convictionProbability;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_IMPRISONMENT_PROBABILITY)
-	public void setImprisonmentProbability(double imprisonmentProbability) {
-		this.imprisonmentProbability = imprisonmentProbability;
+	@XmlElement(name = Constants.TAG_STATE_CONVICTION_PROBABILITY)
+	public void setConvictionProbability(double convictionProbability) {
+		this.convictionProbability = convictionProbability;
 	}
 	
 	

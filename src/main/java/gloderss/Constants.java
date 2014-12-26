@@ -58,19 +58,21 @@ public final class Constants {
 	
 	public static final String	TAG_FILENAME_EXTORTION																= "extortion";
 	
-	public static final String	TAG_FILENAME_PUNISHMENT																= "punishment";
+	public static final String	TAG_FILENAME_COMPENSATION															= "compensation";
 	
 	public static final String	TAG_FILENAME_PURCHASE																	= "purchase";
 	
+	public static final String	TAG_FILENAME_NORMATIVE																= "normative";
+	
+	public static final String	TAG_FILENAME_ENTREPRENEUR															= "entrepreneur";
+	
+	public static final String	TAG_FILENAME_CONSUMER																	= "consumer";
+	
+	public static final String	TAG_FILENAME_MAFIA																		= "mafia";
+	
+	public static final String	TAG_FILENAME_STATE																		= "state";
+	
 	public static final String	TAG_FILENAME_INTERMEDIARY_ORGANIZATION								= "intermediaryOrganization";
-	
-	public static final String	TAG_FILENAME_MAFIA_ORG																= "mafiaOrg";
-	
-	public static final String	TAG_FILENAME_MAFIOSO																	= "mafioso";
-	
-	public static final String	TAG_FILENAME_STATE_ORG																= "stateOrg";
-	
-	public static final String	TAG_FILENAME_POLICE_OFFICER														= "policeOfficer";
 	
 	/**
 	 * Visibility tags
@@ -199,7 +201,7 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_CUSTODY_DURATION_PDF												= "custodyDurationPDF";
 	
-	public static final String	TAG_STATE_IMPRISONMENT_PROBABILITY										= "imprisonmentProbability";
+	public static final String	TAG_STATE_CONVICTION_PROBABILITY											= "convictionProbability";
 	
 	public static final String	TAG_STATE_IMPRISONMENT_DURATION_PDF										= "imprisonmentDurationPDF";
 	
@@ -248,6 +250,10 @@ public final class Constants {
 	
 	public static final String	TAG_MAFIA_PENTITI_PROBABILITY													= "pentitiProbability";
 	
+	public static final String	TAG_MAFIA_RECRUITING_THRESHOLD												= "recruitingThreshold";
+	
+	public static final String	TAG_MAFIA_RECRUITING_PROBABILITY											= "recruitingProbability";
+	
 	/**
 	 * Intermediary organization tags
 	 */
@@ -255,7 +261,7 @@ public final class Constants {
 	
 	public static final String	TAG_INTERMEDIARY_ORG_TIME_TO_AFFILIATE_PDF						= "timeToAffiliatePDF";
 	
-	public static final String	TAG_INTERMEDIARY_ORG_INFORMATION_SPREAD_PDF						= "informationSpreadPDF";
+	public static final String	TAG_INTERMEDIARY_ORG_SLOPE														= "slope";
 	
 	public static final String	TAG_INTERMEDIARY_ORG_PROPORTION_CUSTOMERS							= "proportionCustomers";
 	
@@ -294,7 +300,8 @@ public final class Constants {
 		AFFILIATION_ACCEPTED,
 		AFFILIATION_DENIED,
 		NORMATIVE_INFO,
-		REPUTATION_INFO;
+		REPUTATION_INFO,
+		CRITICAL_CONSUMER_INFO;
 	}
 	
 	/**
@@ -307,6 +314,13 @@ public final class Constants {
 		NOT_DENOUNCE,
 		BUY_FROM_NOT_PAYING_ENTREPRENEURS,
 		BUY_FROM_PAYING_ENTREPRENEURS;
+	}
+	
+	/**
+	 * Sanctions
+	 */
+	public static enum Sanctions {
+		REPUTATION_ENTREPRENEUR;
 	}
 	
 	/**
@@ -346,17 +360,17 @@ public final class Constants {
 	/**
 	 * Events
 	 */
+	public static final String	EVENT_AFFILIATE_PROCESSING	= "affiliateProcessing";
+	
 	public static final String	EVENT_ASSIST_ENTREPRENEUR		= "assistEntrepreneur";
 	
 	public static final String	EVENT_BUY_PRODUCT						= "buyProduct";
 	
 	public static final String	EVENT_COLLECT_EXTORTION			= "collectExtortion";
 	
-	public static final String	EVENT_EXTORTION_DEMAND			= "decideExtortion";
+	public static final String	EVENT_DEMAND_EXTORTION			= "decideExtortion";
 	
 	public static final String	EVENT_GENERAL_INVESTIGATION	= "generalInvestigation";
-	
-	public static final String	EVENT_JUDGE_MAFIOSO					= "judgeMafioso";
 	
 	public static final String	EVENT_RECEIVE_WAGE					= "receiveWage";
 	

@@ -9,6 +9,10 @@ import gloderss.communication.Message;
 import gloderss.conf.MafiaConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
+import gloderss.output.AbstractEntity;
+import gloderss.output.MafiaOutputEntity;
+import gloderss.output.OutputController;
+import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.random.RandomUtil;
 import java.util.Collections;
 import java.util.HashMap;
@@ -133,6 +137,32 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	@Override
 	public void spreadInformation() {
 		// NOTHING
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+		for(MafiosoAgent mafioso : this.mafiosi.values()) {
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.MAFIA);
+			outputEntity.setValue(MafiaOutputEntity.Field.MAFIOSO_ID.name(),
+					mafioso.getId());
+			outputEntity.setValue(MafiaOutputEntity.Field.EXTORTION_LEVEL.name(),
+					this.conf.getExtortionLevel());
+			outputEntity.setValue(MafiaOutputEntity.Field.PUNISHMENT_SEVERITY.name(),
+					this.conf.getPunishmentSeverity());
+			outputEntity.setValue(MafiaOutputEntity.Field.NEIGHBORS.name(), mafioso
+					.getNeighbors().size());
+			outputEntity.setValue(MafiaOutputEntity.Field.WEALTH.name(),
+					mafioso.getWeath());
+			outputEntity.setValue(MafiaOutputEntity.Field.CUSTODY.name(),
+					mafioso.getCustodyStatus());
+			outputEntity.setValue(MafiaOutputEntity.Field.IMPRISONED.name(),
+					mafioso.getPrisonStatus());
+			outputEntity.setValue(MafiaOutputEntity.Field.PENTITO.name(),
+					mafioso.getPentitoStatus());
+			outputEntity.setActive();
+		}
 	}
 	
 	

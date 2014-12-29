@@ -1,7 +1,7 @@
 gloderss (GLODERS Simulator)
 ============================
 
-(Linux) Instructions to download the GLODERS Simulator and test it
+(Linux) Instructions to download the GLODERS Simulator, compile and execute it
 
 1. Software Pre-Requisites
 --------------------------

@@ -2,7 +2,7 @@
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-filename <- "state-strong"
+filename <- "state-weak"
 replica <- "/0"
 
 ##
@@ -113,4 +113,4 @@ prop <- cbind(nExtortion, lastExtortion,
 ## Write
 ##
 write.table(prop, file=paste(base,filename,replica,"/analisys.csv", sep=""),
-            append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)
+            quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)

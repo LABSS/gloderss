@@ -9,7 +9,7 @@ Git
 
 Maven
 
-Java SE 7+
+Oracle Java SE 8
 
 
 2. Download projects from Git
@@ -53,3 +53,8 @@ Edit the file at gloderss/src/main/resources/conf/scenario.xml and change parame
 $ mvn exec:exec -Pexec -Dexec.args="src/main/resources/conf/scenario.xml src/main/resources/conf/scenario.xsd"
 
 The 'log' and 'output' directories is created under gloderss directory (if not changed the default values in the configuration scenario.xml file).
+
+
+6. Analysis
+-----------
+There is a script located at the 'script' directory that you can execute using R Statistics software to summarize the results in the files created in the 'output' directory.

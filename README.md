@@ -3,11 +3,13 @@ gloderss (GLODERS Simulator)
 
 (Linux) Instructions to download the GLODERS Simulator and test it
 
-1. Software Requisites
-----------------------
-* Java SE 7+
-* Git
-* Maven
+1. Software Pre-Requisites
+--------------------------
+Git
+
+Maven
+
+Java SE 7+
 
 
 2. Download projects from Git

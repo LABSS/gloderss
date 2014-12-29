@@ -5,9 +5,10 @@ gloderss (GLODERS Simulator)
 
 1. Software Requisites
 ----------------------
-- Git
-- Maven
-- Java SE 7+
+* Java SE 7+
+* Git
+* Maven
+
 
 2. Download projects from Git
 -----------------------------
@@ -43,6 +44,7 @@ $ mvn install
 4. Configure
 ------------
 Edit the file at gloderss/src/main/resources/conf/scenario.xml and change parameters' value
+
 
 5. Execute
 ----------

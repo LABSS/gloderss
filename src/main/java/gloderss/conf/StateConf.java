@@ -17,9 +17,13 @@ public class StateConf {
 	
 	private double	captureProbability;
 	
+	private double	evidenceProbability;
+	
 	private String	custodyDurationPDF;
 	
 	private double	convictionProbability;
+	
+	private String	collaborationConvictionFunction;
 	
 	private String	imprisonmentDurationPDF;
 	
@@ -43,7 +47,7 @@ public class StateConf {
 	
 	
 	public int getNumberPoliceOfficers() {
-		return numberPoliceOfficers;
+		return this.numberPoliceOfficers;
 	}
 	
 	
@@ -89,13 +93,24 @@ public class StateConf {
 	
 	
 	public double getCaptureProbability() {
-		return captureProbability;
+		return this.captureProbability;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_STATE_CAPTURE_PROBABILITY)
 	public void setCaptureProbability(double captureProbability) {
 		this.captureProbability = captureProbability;
+	}
+	
+	
+	public double getEvidenceProbability() {
+		return this.evidenceProbability;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_EVIDENCE_PROBABILITY)
+	public void setEvidenceProbability(double evidenceProbability) {
+		this.evidenceProbability = evidenceProbability;
 	}
 	
 	
@@ -118,6 +133,18 @@ public class StateConf {
 	@XmlElement(name = Constants.TAG_STATE_CONVICTION_PROBABILITY)
 	public void setConvictionProbability(double convictionProbability) {
 		this.convictionProbability = convictionProbability;
+	}
+	
+	
+	public String getCollaborationConvictionFunction() {
+		return this.collaborationConvictionFunction;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_COLLABORATION_CONVICTION_FUNCTION)
+	public void setCollaborationConvictionFunction(
+			String collaborationConvictionFunction) {
+		this.collaborationConvictionFunction = collaborationConvictionFunction;
 	}
 	
 	

@@ -9,9 +9,9 @@ public class EntrepreneurOutputEntity extends AbstractEntity {
 		WEALTH("wealth", DataType.DOUBLE),
 		AFFILIATED("affiliated", DataType.BOOLEAN),
 		CRITICAL_COSTUMER("criticalConsumers", DataType.DOUBLE),
-		STATE_FINDER_REP("stateFinderRep", DataType.DOUBLE),
-		STATE_PROTECTOR_REP("stateProtectorRep", DataType.DOUBLE),
-		MAFIA_PUNISHER_REP("mafiaPunisherRep", DataType.DOUBLE),
+		REPUTATION_STATE_FINDER("reputationStateFinder", DataType.DOUBLE),
+		REPUTATION_STATE_PROTECTOR("reputationStateProtector", DataType.DOUBLE),
+		REPUTATION_MAFIA_PUNISHER("reputationMafiaPunisher", DataType.DOUBLE),
 		SALIENCE_PAY_EXTORTION("saliencePayExtortion", DataType.DOUBLE),
 		SALIENCE_NOT_PAY_EXTORTION("salienceNotPayExtortion", DataType.DOUBLE),
 		SALIENCE_DENOUNCE("salienceDenounce", DataType.DOUBLE),
@@ -54,9 +54,9 @@ public class EntrepreneurOutputEntity extends AbstractEntity {
 		this.entity[Field.WEALTH.ordinal()] = 0.0;
 		this.entity[Field.AFFILIATED.ordinal()] = false;
 		this.entity[Field.CRITICAL_COSTUMER.ordinal()] = 0.0;
-		this.entity[Field.STATE_FINDER_REP.ordinal()] = 0.0;
-		this.entity[Field.STATE_PROTECTOR_REP.ordinal()] = 0.0;
-		this.entity[Field.MAFIA_PUNISHER_REP.ordinal()] = 0.0;
+		this.entity[Field.REPUTATION_STATE_FINDER.ordinal()] = 0.0;
+		this.entity[Field.REPUTATION_STATE_PROTECTOR.ordinal()] = 0.0;
+		this.entity[Field.REPUTATION_MAFIA_PUNISHER.ordinal()] = 0.0;
 		this.entity[Field.SALIENCE_NOT_PAY_EXTORTION.ordinal()] = 0.0;
 		this.entity[Field.SALIENCE_PAY_EXTORTION.ordinal()] = 0.0;
 		this.entity[Field.SALIENCE_NOT_DENOUNCE.ordinal()] = 0.0;

@@ -8,23 +8,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class NormSalienceConf {
 	
 	// Norm identification
-	private int	id;
+	private int			id;
 	
-	private int	compliance;
+	private boolean	active;
 	
-	private int	violation;
+	private int			compliance;
 	
-	private int	obsCompliance;
+	private int			violation;
 	
-	private int	obsViolation;
+	private int			obsCompliance;
 	
-	private int	punishment;
+	private int			obsViolation;
 	
-	private int	sanction;
+	private int			punishment;
 	
-	private int	invocationCompliance;
+	private int			sanction;
 	
-	private int	invocationViolation;
+	private int			invocationCompliance;
+	
+	private int			invocationViolation;
 	
 	
 	public int getId() {
@@ -35,6 +37,17 @@ public class NormSalienceConf {
 	@XmlAttribute(name = Constants.TAG_NORMATIVE_NORM_ID)
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	
+	public boolean getActive() {
+		return this.active;
+	}
+	
+	
+	@XmlAttribute(name = Constants.TAG_NORMATIVE_NORM_ACTIVE)
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	

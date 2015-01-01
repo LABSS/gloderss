@@ -154,6 +154,7 @@
 													<element maxOccurs="unbounded" name="normSalience">
 														<complexType>
 															<attribute name="id" type="nonNegativeInteger" />
+															<attribute name="active" type="boolean" />
 															<attribute name="compliance" type="nonNegativeInteger" />
 															<attribute name="violation" type="nonNegativeInteger" />
 															<attribute name="obsCompliance" type="nonNegativeInteger" />
@@ -317,6 +318,7 @@
 													<element maxOccurs="unbounded" name="normSalience">
 														<complexType>
 															<attribute name="id" type="nonNegativeInteger" />
+															<attribute name="active" type="boolean" />
 															<attribute name="compliance" type="nonNegativeInteger" />
 															<attribute name="violation" type="nonNegativeInteger" />
 															<attribute name="obsCompliance" type="nonNegativeInteger" />
@@ -362,6 +364,14 @@
 									</restriction>
 								</simpleType>
 							</element>
+							<element name="evidenceProbability">
+								<simpleType>
+									<restriction base="decimal">
+										<minInclusive value="0.0" />
+										<maxInclusive value="1.0" />
+									</restriction>
+								</simpleType>
+							</element>
 
 							<!-- Justice -->
 							<element name="custodyDurationPDF" type="string" />
@@ -373,6 +383,8 @@
 									</restriction>
 								</simpleType>
 							</element>
+							<!-- #{COLLABORATION} variable -->
+							<element name="collaborationConvictionFunction" type="string" />
 							<element name="imprisonmentDurationPDF" type="string" />
 							<element name="noCollaborationPunishmentProbability">
 								<simpleType>

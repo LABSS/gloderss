@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import net.sourceforge.jeval.EvaluationException;
+import net.sourceforge.jeval.Evaluator;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.CollaborateAction;
@@ -46,6 +50,11 @@ import gloderss.util.random.RandomUtil;
 
 public class StateOrg extends AbstractAgent implements IStateOrg {
 	
+	private final static Logger								logger				= LoggerFactory
+																															.getLogger(StateOrg.class);
+	
+	private static final String								COLLABORATION	= "COLLABORATION";
+	
 	private StateConf													conf;
 	
 	private int																ioId;
@@ -79,6 +88,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	private Queue<ImprisonmentAction>					prisonQueue;
 	
 	private Queue<DenouncePunishmentAction>		assistQueue;
+	
+	private Map<Integer, Integer>							collaborations;
 	
 	
 	/**
@@ -145,6 +156,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.custodyQueue = new LinkedList<CaptureMafiosoAction>();
 		this.prisonQueue = new LinkedList<ImprisonmentAction>();
 		this.assistQueue = new LinkedList<DenouncePunishmentAction>();
+		this.collaborations = new HashMap<Integer, Integer>();
 	}
 	
 	
@@ -346,10 +358,35 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		// Spread action
 		this.spreadActionInformation(msg);
 		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		
+		// Collaboration evidence collection
+		if(RandomUtil.nextDouble() < this.conf.getEvidenceProbability()) {
+			
+			InfoRequest info = new InfoRequest(this.id, mafiosoId,
+					Constants.REQUEST_COLLECT_PAYERS);
+			
+			@SuppressWarnings("unchecked")
+			List<Integer> evidences = (List<Integer>) this.sendInfo(info);
+			if(!evidences.isEmpty()) {
+				for(Integer entrepreneurId : evidences) {
+					CollaborationRequestAction collaboration = new CollaborationRequestAction(
+							mafiosoId, entrepreneurId);
+					
+					msg = new Message(this.simulator.now(), this.id, entrepreneurId,
+							collaboration);
+					this.sendMsg(msg);
+				}
+			}
+			
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.EVIDENCE_COLLECTED.name(),
+					evidences.size());
+		}
+		
 		// Output
 		if(extortionId >= 0) {
-			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
-					EntityType.EXTORTION, extortionId);
 			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIOSO_CUSTODY.name(),
 					true);
 		}
@@ -377,8 +414,25 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 					EntityType.EXTORTION, extortionId);
 		}
 		
+		// Calculate conviction probability
+		double convictionProb = this.conf.getConvictionProbability();
+		if(this.collaborations.containsKey(mafiosoId)) {
+			int numCollaborations = this.collaborations.get(mafiosoId);
+			
+			Evaluator eval = new Evaluator();
+			eval.putVariable(COLLABORATION,
+					(new Integer(numCollaborations)).toString());
+			
+			try {
+				convictionProb += eval.getNumberResult(this.conf
+						.getCollaborationConvictionFunction());
+			} catch(EvaluationException e) {
+				logger.debug(e.getMessage());
+			}
+		}
+		
 		// Decide whether the Mafioso is going to be imprisoned
-		if(RandomUtil.nextDouble() < this.conf.getConvictionProbability()) {
+		if(RandomUtil.nextDouble() < Math.max(0, Math.min(1, convictionProb))) {
 			
 			InfoRequest wealthRequest = new InfoRequest(this.id, mafiosoId,
 					Constants.REQUEST_WEALTH);
@@ -477,7 +531,14 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	@Override
 	public void receiveCollaboration(CollaborateAction action) {
-		// Purposefully left blank
+		int mafiosoId = (int) action.getParam(CollaborateAction.Param.MAFIOSO_ID);
+		
+		int numCollaborations = 0;
+		if(this.collaborations.containsKey(mafiosoId)) {
+			numCollaborations = this.collaborations.get(mafiosoId);
+		}
+		numCollaborations++;
+		this.collaborations.put(mafiosoId, numCollaborations);
 	}
 	
 	
@@ -812,6 +873,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				// Capture Mafioso
 			} else if(content instanceof CaptureMafiosoAction) {
 				this.decideCustody((CaptureMafiosoAction) content);
+				
+				// Collaboration
+			} else if(content instanceof CollaborateAction) {
+				this.receiveCollaboration((CollaborateAction) content);
 				
 			}
 		}

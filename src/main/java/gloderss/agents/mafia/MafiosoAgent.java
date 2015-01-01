@@ -449,6 +449,22 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	}
 	
 	
+	/**
+	 * Get a list of all the paying Entrepreneurs
+	 * 
+	 * @param none
+	 * @return List of paying Entrepreneurs
+	 */
+	private List<Integer> getPayingEntrepreneurs() {
+		List<Integer> payers = new ArrayList<Integer>();
+		
+		payers.addAll(this.payingEntrepreneurs);
+		this.payingEntrepreneurs.clear();
+		
+		return payers;
+	}
+	
+	
 	/*******************************
 	 * 
 	 * Handle communication requests
@@ -501,6 +517,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 				case Constants.REQUEST_WEALTH:
 					infoRequested = this.wealth;
 					break;
+				case Constants.REQUEST_COLLECT_PAYERS:
+					infoRequested = this.getPayingEntrepreneurs();
 			}
 			
 		} else if(info.getType().equals(InfoAbstract.Type.SET)) {

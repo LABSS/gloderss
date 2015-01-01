@@ -168,6 +168,8 @@ public final class Constants {
 	
 	public static final String	TAG_NORMATIVE_NORM_ID																	= "id";
 	
+	public static final String	TAG_NORMATIVE_NORM_ACTIVE															= "active";
+	
 	public static final String	TAG_NORMATIVE_NORM_INITIAL_COMPLIANCE									= "compliance";
 	
 	public static final String	TAG_NORMATIVE_NORM_INITIAL_VIOLATION									= "violation";
@@ -199,9 +201,13 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_CAPTURE_PROBABILITY													= "captureProbability";
 	
+	public static final String	TAG_STATE_EVIDENCE_PROBABILITY												= "evidenceProbability";
+	
 	public static final String	TAG_STATE_CUSTODY_DURATION_PDF												= "custodyDurationPDF";
 	
 	public static final String	TAG_STATE_CONVICTION_PROBABILITY											= "convictionProbability";
+	
+	public static final String	TAG_STATE_COLLABORATION_CONVICTION_FUNCTION						= "collaborationConvictionFunction";
 	
 	public static final String	TAG_STATE_IMPRISONMENT_DURATION_PDF										= "imprisonmentDurationPDF";
 	
@@ -327,6 +333,8 @@ public final class Constants {
 	 * Information request
 	 */
 	public static final String	REQUEST_AFFILIATION					= "affiliated";
+	
+	public static final String	REQUEST_COLLECT_PAYERS			= "requestCollectPayers";
 	
 	public static final String	REQUEST_CRITICAL_CONSUMERS	= "criticalConsumers";
 	

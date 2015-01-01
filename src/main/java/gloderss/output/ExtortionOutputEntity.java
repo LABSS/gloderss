@@ -18,6 +18,7 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		DENOUNCED_PUNISHMENT("denouncedPunishment", DataType.BOOLEAN),
 		INVESTIGATED_EXTORTION("investigatedExtortion", DataType.BOOLEAN),
 		INVESTIGATED_PUNISHMENT("investigatedPunishment", DataType.BOOLEAN),
+		EVIDENCE_COLLECTED("evidenceCollected", DataType.INTEGER),
 		MAFIOSO_CUSTODY("mafiosoCustody", DataType.BOOLEAN),
 		MAFIOSO_CONVICTED("mafiosoConvicted", DataType.BOOLEAN);
 		
@@ -67,6 +68,7 @@ public class ExtortionOutputEntity extends AbstractEntity {
 		this.entity[Field.DENOUNCED_PUNISHMENT.ordinal()] = false;
 		this.entity[Field.INVESTIGATED_EXTORTION.ordinal()] = false;
 		this.entity[Field.INVESTIGATED_PUNISHMENT.ordinal()] = false;
+		this.entity[Field.EVIDENCE_COLLECTED.ordinal()] = 0;
 		this.entity[Field.MAFIOSO_CUSTODY.ordinal()] = false;
 		this.entity[Field.MAFIOSO_CONVICTED.ordinal()] = false;
 	}

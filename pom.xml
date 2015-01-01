@@ -16,6 +16,7 @@
 		<slf4j.version>1.7.7</slf4j.version>
 		<logback.version>1.1.2</logback.version>
 		<colt.version>1.2.0</colt.version>
+		<jeval.version>0.9.4</jeval.version>
 		<javaassist.version>3.12.1.GA</javaassist.version>
 	</properties>
 
@@ -91,6 +92,13 @@
 			<groupId>colt</groupId>
 			<artifactId>colt</artifactId>
 			<version>${colt.version}</version>
+		</dependency>
+
+		<!-- JEval -->
+		<dependency>
+			<groupId>net.sourceforge.jeval</groupId>
+			<artifactId>jeval</artifactId>
+			<version>${jeval.version}</version>
 		</dependency>
 
 		<!-- Javaassist -->

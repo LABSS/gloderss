@@ -5,16 +5,16 @@
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>1</numberReplications>
-		<numberCycles>10000</numberCycles>
+		<numberCycles>1000</numberCycles>
 		<seeds>
-			<seed>98981</seed>
-			<seed>2</seed>
+			<seed>4543</seed>
+			<seed>3794</seed>
 		</seeds>
 		<output>
 			<directory>./output</directory>
 			<append>false</append>
 			<separator>;</separator>
-			<timeToWrite>100</timeToWrite>
+			<timeToWrite>500</timeToWrite>
 		</output>
 		<filename>
 			<extortion>extortion.csv</extortion>
@@ -88,29 +88,29 @@
 			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" compliance="0" violation="0"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="0" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="1" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Denounce -->
-				<normSalience id="2" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="2" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Denounce -->
-				<normSalience id="3" compliance="0" violation="0"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="3" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Buy from Not Paying Entrepreneurs -->
-				<normSalience id="4" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="4" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Buy from Paying Entrepreneurs -->
-				<normSalience id="5" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="5" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>
 		</consumer>
 	</consumers>
@@ -153,21 +153,21 @@
 			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" compliance="0" violation="0"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="0" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="1" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Denounce -->
-				<normSalience id="2" compliance="1" violation="1"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="2" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Denounce -->
-				<normSalience id="3" compliance="0" violation="0"
-					obsCompliance="0" obsViolation="0" punishment="0" sanction="0"
-					invocationCompliance="0" invocationViolation="0" />
+				<normSalience id="3" active="false" compliance="1"
+					violation="1" obsCompliance="0" obsViolation="0" punishment="0"
+					sanction="0" invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>
 		</entrepreneur>
 	</entrepreneurs>
@@ -180,10 +180,12 @@
 		<specificInvestigationDurationPDF>CONSTANT(100)</specificInvestigationDurationPDF>
 		<investigateProbability>0.2</investigateProbability>
 		<captureProbability>0.2</captureProbability>
+		<evidenceProbability>1.0</evidenceProbability>
 
 		<!-- Justice -->
 		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
 		<convictionProbability>0.1</convictionProbability>
+		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
 		<imprisonmentDurationPDF>NORMAL(1000,100)</imprisonmentDurationPDF>
 		<noCollaborationPunishmentProbability>0.8</noCollaborationPunishmentProbability>
 		<noCollaborationPunishment>0.5</noCollaborationPunishment>

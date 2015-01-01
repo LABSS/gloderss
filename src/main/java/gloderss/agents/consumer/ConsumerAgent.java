@@ -242,6 +242,12 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					.getInvocationViolation());
 			
 			this.normative.setInitialValues(normId, values);
+			
+			if(conf.getSalienceConf().get(normId).getActive()) {
+				this.normative.getNorm(normId).setStatus(NormStatus.GOAL);
+			} else {
+				this.normative.getNorm(normId).setStatus(NormStatus.INACTIVE);
+			}
 		}
 	}
 	
@@ -280,6 +286,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	@Override
 	public void buyProduct() {
 		
+		this.normative.update();
+		
 		// Obtains a Purchase output
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.PURCHASE);
@@ -311,7 +319,20 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			}
 		}
 		
-		this.normative.update();
+		// BUY PAYING ENTREPRENEURS norm active
+		boolean buyPayExtortionStatus = false;
+		if(this.normative.getNorm(Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal())
+				.getStatus().equals(NormStatus.GOAL)) {
+			buyPayExtortionStatus = true;
+		}
+		
+		// NOT BUY PAYING ENTREPRENEURS norm active
+		boolean notBuyPayExtortionStatus = false;
+		if(this.normative
+				.getNorm(Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal()).getStatus()
+				.equals(NormStatus.GOAL)) {
+			notBuyPayExtortionStatus = true;
+		}
 		
 		double buyPayExtortionSalience = this.normative
 				.getNormSalience(Norms.BUY_FROM_PAYING_ENTREPRENEURS.ordinal());
@@ -353,16 +374,42 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				reputation = avgRep;
 			}
 			
-			double score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
-			if(buyNotPayExtortionSalience > buyPayExtortionSalience) {
+			double score = 0.0;
+			// BUY PAYING ENTREPRENEURS and NOT BUY PAYING ENTREPRENEURS norms active
+			if((buyPayExtortionStatus) && (notBuyPayExtortionStatus)) {
+				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
+				if(buyNotPayExtortionSalience > buyPayExtortionSalience) {
+					
+					score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
+							* reputation;
+					
+				} else {
+					
+					score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
+							* (1 - reputation);
+					
+				}
+				
+				// BUY PAYING ENTREPRENEURS norm active
+			} else if(buyPayExtortionStatus) {
+				
+				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
+				
+				score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
+						* (1 - reputation);
+				
+				// NOT BUY PAYING ENTREPRENEURS norm active
+			} else if(notBuyPayExtortionStatus) {
+				
+				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
 				
 				score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
 						* reputation;
 				
+				// NONE norm active
 			} else {
 				
-				score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
-						* (1 - reputation);
+				score = (1 - (price / maxPrice));
 				
 			}
 			
@@ -425,6 +472,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	
 	@Override
 	public void finalizeSim() {
+		
+		this.normative.update();
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.CONSUMER);

@@ -1,29 +1,26 @@
-package gloderss.agents.consumer.normative.modules.enforcement;
+package gloderss.agents.entrepreneur.normative.modules.enforcement;
 
-import emilia.board.NormativeBoardInterface;
 import emilia.entity.event.NormativeEventEntityAbstract;
 import emilia.entity.event.type.ActionEvent;
 import emilia.entity.norm.NormEntityAbstract;
-import emilia.entity.sanction.SanctionCategory.Polarity;
 import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.modules.enforcement.DeviationAbstract;
-import emilia.modules.enforcement.DeviationAbstract.Type;
 import emilia.modules.enforcement.NormEnforcementAbstract;
 import gloderss.Constants.Actions;
-import gloderss.Constants.Norms;
-import gloderss.actions.PayExtortionAction;
-import gloderss.agents.entrepreneur.normative.modules.enforcement.ComplianceDeviation;
-import gloderss.agents.entrepreneur.normative.modules.enforcement.ViolationDeviation;
 import gloderss.normative.entity.norm.NormContent;
 import gloderss.normative.entity.norm.NormContentSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NormEnforcementController extends NormEnforcementAbstract {
 	
-	private NormativeBoardInterface	normativeBoard;
+	@SuppressWarnings("unused")
+	private static final Logger	logger	= LoggerFactory
+																					.getLogger(NormEnforcementController.class);
 	
 	
 	/**
@@ -31,15 +28,10 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 	 * 
 	 * @param agentId
 	 *          Agent identification
-	 * @param normativeBoard
-	 *          Normative board
 	 * @return none
 	 */
-	public NormEnforcementController(Integer agentId,
-			NormativeBoardInterface normativeBoard) {
+	public NormEnforcementController(Integer agentId) {
 		super(agentId);
-		
-		this.normativeBoard = normativeBoard;
 	}
 	
 	
@@ -52,29 +44,32 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 		
 		for(NormEntityAbstract norm : normSanctions.keySet()) {
 			
-			if(norm.getContent() instanceof NormContent) {
+			// NormContent
+			if (norm.getContent() instanceof NormContent) {
 				NormContent normContent = (NormContent) norm.getContent();
 				
-				if(event instanceof ActionEvent) {
+				if (event instanceof ActionEvent) {
 					ActionEvent actionEvent = (ActionEvent) event;
 					
-					if(actionEvent.getAction().getDescription()
+					if (actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getAction().name())) {
 						deviations.put(norm, new ComplianceDeviation());
-					} else if(actionEvent.getAction().getDescription()
+					} else if (actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getNotAction().name())) {
 						deviations.put(norm, new ViolationDeviation());
 					}
 				}
-			} else if(norm.getContent() instanceof NormContentSet) {
+				
+				// NormContentSet
+			} else if (norm.getContent() instanceof NormContentSet) {
 				NormContentSet normContent = (NormContentSet) norm.getContent();
 				
-				if(event instanceof ActionEvent) {
+				if (event instanceof ActionEvent) {
 					ActionEvent actionEvent = (ActionEvent) event;
 					
 					List<Actions> actions = normContent.getActions();
 					for(Actions action : actions) {
-						if(actionEvent.getAction().getDescription()
+						if (actionEvent.getAction().getDescription()
 								.equalsIgnoreCase(action.name())) {
 							deviations.put(norm, new ComplianceDeviation());
 						}
@@ -82,7 +77,7 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 					
 					List<Actions> notActions = normContent.getNotActions();
 					for(Actions notAction : notActions) {
-						if(actionEvent.getAction().getDescription()
+						if (actionEvent.getAction().getDescription()
 								.equalsIgnoreCase(notAction.name())) {
 							deviations.put(norm, new ViolationDeviation());
 						}
@@ -101,40 +96,6 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 			List<SanctionEntityAbstract> sanctions, DeviationAbstract evaluation) {
 		
 		List<SanctionEntityAbstract> enforceSanctions = new ArrayList<SanctionEntityAbstract>();
-		
-		Polarity polarity;
-		if(evaluation.getType().equals(Type.VIOLATION)) {
-			polarity = Polarity.NEGATIVE;
-		} else {
-			polarity = Polarity.POSITIVE;
-		}
-		
-		for(SanctionEntityAbstract sanction : sanctions) {
-			
-			if(sanction.getCategory().getPolarity().equals(polarity)) {
-				
-				if(event instanceof ActionEvent) {
-					ActionEvent actionEvent = (ActionEvent) event;
-					
-					if(actionEvent.getAction() instanceof PayExtortionAction) {
-						// Check whether the Salience PAY EXTORTION smaller than NOT PAY
-						// EXTORTION
-						if(this.normativeBoard.getSalience(Norms.PAY_EXTORTION.ordinal()) <= this.normativeBoard
-								.getSalience(Norms.NOT_PAY_EXTORTION.ordinal())) {
-							
-							PayExtortionAction action = (PayExtortionAction) actionEvent
-									.getAction();
-							
-							sanction.getContent().execute(
-									(int) action
-											.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID));
-							
-							enforceSanctions.add(sanction);
-						}
-					}
-				}
-			}
-		}
 		
 		return enforceSanctions;
 	}

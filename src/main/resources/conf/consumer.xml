@@ -4,7 +4,7 @@
 
 	<eventClassifierClass>gloderss.agents.consumer.normative.modules.classifier.EventClassifier</eventClassifierClass>
 	<normRecognitionClass>emilia.defaultImpl.modules.recognition.NormRecognitionController</normRecognitionClass>
-	<normAdoptionClass>emilia.defaultImpl.modules.adoption.NormAdoptionController</normAdoptionClass>
+	<normAdoptionClass>gloderss.normative.modules.adoption.NormAdoptionController</normAdoptionClass>
 	<normSalienceClass>emilia.defaultImpl.modules.salience.NormSalienceController</normSalienceClass>
 	<normEnforcementClass>gloderss.agents.consumer.normative.modules.enforcement.NormEnforcementController</normEnforcementClass>
 	<normComplianceClass>emilia.defaultImpl.modules.compliance.NormComplianceController</normComplianceClass>

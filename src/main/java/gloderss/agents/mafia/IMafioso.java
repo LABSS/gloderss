@@ -4,6 +4,7 @@ import gloderss.actions.CustodyAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
+import gloderss.actions.ReleaseImprisonmentAction;
 
 public interface IMafioso {
 	
@@ -34,7 +35,7 @@ public interface IMafioso {
 	public void imprisonment(ImprisonmentAction action);
 	
 	
-	public void releasePrison();
+	public void releaseImprisonment(ReleaseImprisonmentAction action);
 	
 	
 	public void decidePentito();

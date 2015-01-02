@@ -179,12 +179,12 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		
 		// NOT_DENOUNCE Norm
 		actions = new ArrayList<Actions>();
-		actions.add(Actions.DENOUNCE_EXTORTION);
-		actions.add(Actions.DENOUNCE_PUNISHMENT);
-		
-		noActions = new ArrayList<Actions>();
 		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		
+		noActions = new ArrayList<Actions>();
+		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_PUNISHMENT);
 		
 		normContentSet = new NormContentSet(noActions, actions);
 		

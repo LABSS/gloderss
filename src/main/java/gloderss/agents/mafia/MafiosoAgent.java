@@ -11,6 +11,7 @@ import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.PentitoAction;
 import gloderss.actions.ReleaseCustodyAction;
+import gloderss.actions.ReleaseImprisonmentAction;
 import gloderss.agents.AbstractAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
@@ -413,15 +414,21 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
 	
 	@Override
-	public void releasePrison() {
-		this.prisonStatus = false;
+	public void releaseImprisonment(ReleaseImprisonmentAction action) {
 		
-		if(!this.pentito) {
-			// Schedule the next extortion demand
-			Event event = new Event(
-					this.simulator.now() + this.demandPDF.nextValue(), this,
-					Constants.EVENT_DEMAND_EXTORTION);
-			this.simulator.insert(event);
+		int mafiosoId = (int) action
+				.getParam(ReleaseImprisonmentAction.Param.MAFIOSO_ID);
+		
+		if(this.id == mafiosoId) {
+			this.prisonStatus = false;
+			
+			if(!this.pentito) {
+				// Schedule the next extortion demand
+				Event event = new Event(this.simulator.now()
+						+ this.demandPDF.nextValue(), this,
+						Constants.EVENT_DEMAND_EXTORTION);
+				this.simulator.insert(event);
+			}
 		}
 	}
 	
@@ -497,6 +504,10 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 				// Imprisonment
 			} else if(content instanceof ImprisonmentAction) {
 				this.imprisonment((ImprisonmentAction) content);
+				
+				// Release Imprisonment
+			} else if(content instanceof ReleaseImprisonmentAction) {
+				this.releaseImprisonment((ReleaseImprisonmentAction) content);
 				
 			}
 		}

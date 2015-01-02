@@ -2,7 +2,7 @@
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-filename <- "state-weak"
+filename <- "state-weak_norm-enabled_IO-disabled_0.8-0.2"
 replica <- "/0"
 
 ##
@@ -112,5 +112,5 @@ prop <- cbind(nExtortion, lastExtortion,
 ##
 ## Write
 ##
-write.table(prop, file=paste(base,filename,replica,"/analisys.csv", sep=""),
+write.table(prop, file=paste(base,filename,"/",filename,".csv", sep=""),
             quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)

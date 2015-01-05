@@ -18,8 +18,6 @@ public class EmiliaControllerConsumer extends EmiliaController {
 	public EmiliaControllerConsumer(int agentId, String xmlFilename,
 			String xsdFilename) {
 		super(agentId, xmlFilename, xsdFilename);
-		
-		this.init();
 	}
 	
 	

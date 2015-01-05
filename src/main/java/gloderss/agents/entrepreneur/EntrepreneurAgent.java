@@ -261,7 +261,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			this.normative.setInitialValues(normId, values);
 			
-			if (conf.getSalienceConf().get(normId).getActive()) {
+			if(conf.getSalienceConf().get(normId).getActive()) {
 				this.normative.getNorm(normId).setStatus(NormStatus.GOAL);
 			} else {
 				this.normative.getNorm(normId).setStatus(NormStatus.INACTIVE);
@@ -289,6 +289,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	
 	public double getStatePunishment() {
+		System.out.println("STATE PUNISHMENT");
 		return this.statePunishment;
 	}
 	
@@ -377,7 +378,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		this.wealth += this.currentWage;
 		
 		// Define the current Wage
-		if (RandomUtil.nextDouble() < 0.5) {
+		if(RandomUtil.nextDouble() < 0.5) {
 			this.currentWage = this.defaultWage
 					* (1 + (this.conf.getVariationWage() * RandomUtil.nextDouble()));
 		} else {
@@ -405,7 +406,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		double extortion = (double) action
 				.getParam(ExtortionAction.Param.EXTORTION);
 		
-		if ((this.currentWage > extortion) && (!this.affiliated)) {
+		if((this.currentWage > extortion) && (!this.affiliated)) {
 			
 			double punishment = (double) action
 					.getParam(ExtortionAction.Param.PUNISHMENT);
@@ -443,10 +444,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			double probPay = 0.0;
 			// NOT PAY EXTORTION and PAY EXTORTION norms active
-			if ((normPay.getStatus().equals(NormStatus.GOAL))
+			if((normPay.getStatus().equals(NormStatus.GOAL))
 					&& (normNotPay.getStatus().equals(NormStatus.GOAL))) {
 				
-				if (TpayNG > TnotPayNG) {
+				System.out.println(this.conf.getIndividualWeight() + " "
+						+ this.conf.getNormativeWeight() + " " + TpayIG + " " + TpayNG
+						+ " " + TnotPayIG + " " + TnotPayNG + " " + IG);
+				
+				if(TpayNG > TnotPayNG) {
 					
 					probPay = (this.conf.getIndividualWeight() * IG)
 							+ (this.conf.getNormativeWeight() * TpayNG);
@@ -459,13 +464,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				}
 				
 				// PAY EXTORTION norm active
-			} else if (normPay.getStatus().equals(NormStatus.GOAL)) {
+			} else if(normPay.getStatus().equals(NormStatus.GOAL)) {
 				
 				probPay = (this.conf.getIndividualWeight() * IG)
 						+ (this.conf.getNormativeWeight() * TpayNG);
 				
 				// NOT PAY EXTORTION norm active
-			} else if (normNotPay.getStatus().equals(NormStatus.GOAL)) {
+			} else if(normNotPay.getStatus().equals(NormStatus.GOAL)) {
 				
 				probPay = 1 - ((this.conf.getIndividualWeight() * IG) + (this.conf
 						.getNormativeWeight() * TnotPayNG));
@@ -478,7 +483,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 			
 			// Decide paying extortion
-			if (RandomUtil.nextDouble() < probPay) {
+			if(RandomUtil.nextDouble() < probPay) {
 				this.pay = true;
 				
 				// Decide not paying extortion
@@ -488,7 +493,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		}
 		
 		// If the Entrepreneur decided not to pay
-		if (!this.pay) {
+		if(!this.pay) {
 			this.decideDenounceExtortion(action);
 		}
 	}
@@ -523,10 +528,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		double probDenounce;
 		// NOT DENOUNCE and DENOUNCE EXTORTION norms active
-		if ((normDenounce.getStatus().equals(NormStatus.GOAL))
+		if((normDenounce.getStatus().equals(NormStatus.GOAL))
 				&& (normNotDenounce.getStatus().equals(NormStatus.GOAL))) {
 			
-			if (denounceNG > notDenounceNG) {
+			if(denounceNG > notDenounceNG) {
 				
 				probDenounce = (this.conf.getIndividualWeight() * idDenounce)
 						+ (this.conf.getNormativeWeight() * denounceNG);
@@ -539,13 +544,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 			
 			// DENOUNCE EXTORTION norm active
-		} else if (normDenounce.getStatus().equals(NormStatus.GOAL)) {
+		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
 			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
 					+ (this.conf.getNormativeWeight() * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
-		} else if (normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
+		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
 			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
 					.getNormativeWeight() * notDenounceNG));
@@ -559,7 +564,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
-		if (RandomUtil.nextDouble() < probDenounce) {
+		if(RandomUtil.nextDouble() < probDenounce) {
 			DenounceExtortionAction denounceAction = new DenounceExtortionAction(
 					extortionId, this.id, this.stateId, mafiosoId);
 			
@@ -606,7 +611,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		double extortion = (double) action.getParam(CollectAction.Param.EXTORTION);
 		
-		if (this.pay) {
+		if(this.pay) {
 			
 			PayExtortionAction payAction = new PayExtortionAction(extortionId,
 					mafiosoId, victimId, extortion);
@@ -659,7 +664,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
 				false);
 		
-		if (benefit > 0) {
+		if(benefit > 0) {
 			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
 					true);
 		} else {
@@ -741,16 +746,16 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		double probDenounce;
 		// AFFILIATED
-		if (this.affiliated) {
+		if(this.affiliated) {
 			
 			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
 					+ (this.conf.getNormativeWeight() * denounceNG);
 			
 			// NOT DENOUNCE and DENOUNCE EXTORTION norms active
-		} else if ((normDenounce.getStatus().equals(NormStatus.GOAL))
+		} else if((normDenounce.getStatus().equals(NormStatus.GOAL))
 				&& (normNotDenounce.getStatus().equals(NormStatus.GOAL))) {
 			
-			if (denounceNG > notDenounceNG) {
+			if(denounceNG > notDenounceNG) {
 				
 				probDenounce = (this.conf.getIndividualWeight() * idDenounce)
 						+ (this.conf.getNormativeWeight() * denounceNG);
@@ -763,13 +768,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 			
 			// DENOUNCE EXTORTION norm active
-		} else if (normDenounce.getStatus().equals(NormStatus.GOAL)) {
+		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
 			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
 					+ (this.conf.getNormativeWeight() * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
-		} else if (normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
+		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
 			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
 					.getNormativeWeight() * notDenounceNG));
@@ -788,7 +793,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				.getParam(MafiaPunishmentAction.Param.PUNISHMENT);
 		
 		// An affiliated Entrepreneur always denounce punishment
-		if ((this.affiliated) || (RandomUtil.nextDouble() < probDenounce)) {
+		if((this.affiliated) || (RandomUtil.nextDouble() < probDenounce)) {
 			
 			DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
 					extortionId, this.id, this.stateId, mafiosoId, punishment);
@@ -858,7 +863,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int mafiosoId = (int) action
 				.getParam(CollaborationRequestAction.Param.MAFIOSO_ID);
 		
-		if (RandomUtil.nextDouble() < this.conf.getCollaborationProbability()) {
+		if(RandomUtil.nextDouble() < this.conf.getCollaborationProbability()) {
 			
 			CollaborateAction collaborate = new CollaborateAction(mafiosoId,
 					entrepreneurId);
@@ -931,7 +936,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	public void decideAffiliation() {
 		
 		double probAffiliate;
-		if (this.normative.getNorm(Norms.DENOUNCE.ordinal()).getStatus()
+		if(this.normative.getNorm(Norms.DENOUNCE.ordinal()).getStatus()
 				.equals(NormStatus.GOAL)) {
 			
 			this.normative.update();
@@ -943,7 +948,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
-		if (probAffiliate >= this.conf.getAffiliateThreshold()) {
+		if(probAffiliate >= this.conf.getAffiliateThreshold()) {
 			
 			AffiliateRequestAction affiliation = new AffiliateRequestAction(this.id,
 					this.ioId);
@@ -1030,7 +1035,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int entrepreneurId = (int) action
 				.getParam(AffiliationAcceptedAction.Param.ENTREPRENEUR_ID);
 		
-		if (entrepreneurId == this.id) {
+		if(entrepreneurId == this.id) {
 			this.affiliated = true;
 		}
 		
@@ -1049,7 +1054,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int entrepreneurId = (int) action
 				.getParam(AffiliationDeniedAction.Param.ENTREPRENEUR_ID);
 		
-		if (entrepreneurId == this.id) {
+		if(entrepreneurId == this.id) {
 			this.affiliated = false;
 		}
 	}
@@ -1064,7 +1069,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	 */
 	private void spreadActionInformation(Message msg) {
 		
-		if (this.affiliated) {
+		if(this.affiliated) {
 			Message newMsg = new Message(this.simulator.now(), this.id, this.ioId,
 					msg);
 			this.sendMsg(newMsg);
@@ -1085,7 +1090,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int entrepreneurId = (int) action
 				.getParam(CriticalConsumerInfoAction.Param.ENTEPRENEUR_ID);
 		
-		if (this.id == entrepreneurId) {
+		if(this.id == entrepreneurId) {
 			this.criticalConsumers = (double) action
 					.getParam(CriticalConsumerInfoAction.Param.CRITICAL_CONSUMERS);
 		}
@@ -1103,25 +1108,25 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		Object content = msg.getContent();
 		
-		if ((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
+		if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
 			
 			// Extortion demand
-			if (content instanceof ExtortionAction) {
+			if(content instanceof ExtortionAction) {
 				this.decidePayment((ExtortionAction) content);
 				
 				// Spread action to IO
 				this.spreadActionInformation(msg);
 				
 				// Collect extortion
-			} else if (content instanceof CollectAction) {
+			} else if(content instanceof CollectAction) {
 				this.collectExtortion((CollectAction) content);
 				
 				// Mafia benefit
-			} else if (content instanceof MafiaBenefitAction) {
+			} else if(content instanceof MafiaBenefitAction) {
 				this.receiveMafiaBenefit((MafiaBenefitAction) content);
 				
 				// Mafia punishment
-			} else if (content instanceof MafiaPunishmentAction) {
+			} else if(content instanceof MafiaPunishmentAction) {
 				this.receiveMafiaPunishment((MafiaPunishmentAction) content);
 				
 				// Normative process
@@ -1134,18 +1139,18 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.spreadActionInformation(msg);
 				
 				// Collaboration request
-			} else if (content instanceof CollaborationRequestAction) {
+			} else if(content instanceof CollaborationRequestAction) {
 				this.decideCollaboration((CollaborationRequestAction) content);
 				
 				// State punishment
-			} else if (content instanceof StatePunishmentAction) {
+			} else if(content instanceof StatePunishmentAction) {
 				this.receiveStatePunishment((StatePunishmentAction) content);
 				
 				// Normative process
 				this.normative.input(msg);
 				
 				// State compensation
-			} else if (content instanceof StateCompensationAction) {
+			} else if(content instanceof StateCompensationAction) {
 				this.receiveStateCompensation((StateCompensationAction) content);
 				
 				// Reputation
@@ -1156,54 +1161,54 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.spreadActionInformation(msg);
 				
 				// Buy product
-			} else if (content instanceof BuyProductAction) {
+			} else if(content instanceof BuyProductAction) {
 				this.receiveBuy((BuyProductAction) content);
 				
 				// Affiliation accepted
-			} else if (content instanceof AffiliationAcceptedAction) {
+			} else if(content instanceof AffiliationAcceptedAction) {
 				this.affiliateAccepted((AffiliationAcceptedAction) content);
 				
 				// Affiliation denied
-			} else if (content instanceof AffiliationDeniedAction) {
+			} else if(content instanceof AffiliationDeniedAction) {
 				this.affiliateDenied((AffiliationDeniedAction) content);
 				
 				// Normative Information
-			} else if (content instanceof NormativeInfoAction) {
+			} else if(content instanceof NormativeInfoAction) {
 				this.normative.input(msg);
 				
 				// Critical Consumer information
-			} else if (content instanceof CriticalConsumerInfoAction) {
+			} else if(content instanceof CriticalConsumerInfoAction) {
 				this.criticalConsumers((CriticalConsumerInfoAction) content);
 				
 				// Message
-			} else if (content instanceof Message) {
+			} else if(content instanceof Message) {
 				
 				Message otherMsg = (Message) content;
 				Object contentMsg = otherMsg.getContent();
 				
 				// Custody
-				if (contentMsg instanceof CustodyAction) {
+				if(contentMsg instanceof CustodyAction) {
 					// DO NOTHING
 					
 					// Imprisonment
-				} else if (contentMsg instanceof ImprisonmentAction) {
+				} else if(contentMsg instanceof ImprisonmentAction) {
 					// Reputation
 					this.stateProtectorRep
 							.updateReputation((ImprisonmentAction) contentMsg);
 					
 					// State Compensation
-				} else if (contentMsg instanceof StateCompensationAction) {
+				} else if(contentMsg instanceof StateCompensationAction) {
 					// Reputation
 					this.stateProtectorRep
 							.updateReputation((StateCompensationAction) contentMsg);
 					
 					// State Punishment
-				} else if (contentMsg instanceof StatePunishmentAction) {
+				} else if(contentMsg instanceof StatePunishmentAction) {
 					// Normative
 					this.normative.input(msg);
 					
 					// Denounce Punishment
-				} else if (contentMsg instanceof DenouncePunishmentAction) {
+				} else if(contentMsg instanceof DenouncePunishmentAction) {
 					// Normative
 					this.normative.input(msg);
 					
@@ -1212,7 +1217,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 							.updateReputation((DenouncePunishmentAction) contentMsg);
 					
 					// Pentito
-				} else if (contentMsg instanceof PentitoAction) {
+				} else if(contentMsg instanceof PentitoAction) {
 					
 					PentitoAction action = (PentitoAction) contentMsg;
 					
@@ -1239,7 +1244,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	@Override
 	public Object handleInfo(InfoAbstract info) {
-		if (info.getType().equals(InfoAbstract.Type.REQUEST)) {
+		if(info.getType().equals(InfoAbstract.Type.REQUEST)) {
 			Object infoRequested = null;
 			
 			InfoRequest request = (InfoRequest) info;
@@ -1260,20 +1265,20 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			return infoRequested;
 			
-		} else if (info.getType().equals(InfoAbstract.Type.SET)) {
+		} else if(info.getType().equals(InfoAbstract.Type.SET)) {
 			Object infoResult = new Boolean(false);
 			
 			InfoSet set = (InfoSet) info;
 			switch(set.getParameter()) {
 				case Constants.PARAMETER_STATE_ID:
-					if (set.getValue() instanceof Integer) {
+					if(set.getValue() instanceof Integer) {
 						this.stateId = (Integer) set.getValue();
 						infoResult = new Boolean(true);
 					}
 					break;
 				case Constants.PARAMETER_STATE_PUNISHMENT:
-					if (set.getValue() instanceof Double) {
-						this.statePunishment = (Double) set.getValue();
+					if(set.getValue() instanceof Double) {
+						this.statePunishment = ((Double) set.getValue() * this.defaultWage);
 						infoResult = new Boolean(true);
 					}
 					break;
@@ -1291,32 +1296,32 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		Object content = msg.getContent();
 		
-		if ((msg.getSender() != this.id) && (!msg.getReceiver().contains(this.id))) {
+		if((msg.getSender() != this.id) && (!msg.getReceiver().contains(this.id))) {
 			
 			// Affiliation accepted
-			if (content instanceof AffiliationAcceptedAction) {
+			if(content instanceof AffiliationAcceptedAction) {
 				this.affiliateAccepted((AffiliationAcceptedAction) content);
 				
 				// Affiliation denied
-			} else if (content instanceof AffiliationDeniedAction) {
+			} else if(content instanceof AffiliationDeniedAction) {
 				this.affiliateDenied((AffiliationDeniedAction) content);
 				
 				// Buy product
-			} else if (content instanceof BuyProductAction) {
+			} else if(content instanceof BuyProductAction) {
 				// DO NOTHING
 				
 				// Collaboration Request
-			} else if (content instanceof CollaborationRequestAction) {
+			} else if(content instanceof CollaborationRequestAction) {
 				// Reputation
 				this.stateFinderRep
 						.updateReputation((CollaborationRequestAction) content);
 				
 				// Collaborate
-			} else if (content instanceof CollaborateAction) {
+			} else if(content instanceof CollaborateAction) {
 				// DO NOTHING
 				
 				// Denounce extortion
-			} else if (content instanceof DenounceExtortionAction) {
+			} else if(content instanceof DenounceExtortionAction) {
 				// Normative
 				this.normative.input(msg);
 				
@@ -1325,7 +1330,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						.updateReputation((DenounceExtortionAction) content);
 				
 				// Denounce punishment
-			} else if (content instanceof DenouncePunishmentAction) {
+			} else if(content instanceof DenouncePunishmentAction) {
 				// Normative
 				this.normative.input(msg);
 				
@@ -1334,11 +1339,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						.updateReputation((DenouncePunishmentAction) content);
 				
 				// Mafia benefit
-			} else if (content instanceof MafiaBenefitAction) {
+			} else if(content instanceof MafiaBenefitAction) {
 				// DO NOTHING
 				
 				// Mafia punishment
-			} else if (content instanceof MafiaPunishmentAction) {
+			} else if(content instanceof MafiaPunishmentAction) {
 				// Normative
 				this.normative.input(msg);
 				
@@ -1346,12 +1351,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.mafiaPunisherRep.updateReputation((MafiaPunishmentAction) content);
 				
 				// Extortion
-			} else if (content instanceof ExtortionAction) {
+			} else if(content instanceof ExtortionAction) {
 				// Normative
 				this.normative.input(msg);
 				
 				// Pay extortion
-			} else if (content instanceof PayExtortionAction) {
+			} else if(content instanceof PayExtortionAction) {
 				// Normative
 				this.normative.input(msg);
 				
@@ -1359,7 +1364,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.stateFinderRep.updateReputation((PayExtortionAction) content);
 				
 				// Not pay extortion
-			} else if (content instanceof NotPayExtortionAction) {
+			} else if(content instanceof NotPayExtortionAction) {
 				// Normative
 				this.normative.input(msg);
 				
@@ -1367,14 +1372,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.mafiaPunisherRep.updateReputation((NotPayExtortionAction) content);
 				
 				// State compensation
-			} else if (content instanceof StateCompensationAction) {
+			} else if(content instanceof StateCompensationAction) {
 				
 				// Reputation
 				this.stateProtectorRep
 						.updateReputation((StateCompensationAction) content);
 				
 				// State punishment
-			} else if (content instanceof StatePunishmentAction) {
+			} else if(content instanceof StatePunishmentAction) {
 				// DO NOTHING
 				
 			}

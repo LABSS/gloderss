@@ -69,8 +69,10 @@ import org.slf4j.LoggerFactory;
 public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
 	
-	private final static Logger				logger	= LoggerFactory
-																								.getLogger(EntrepreneurAgent.class);
+	private final static Logger				logger			= LoggerFactory
+																										.getLogger(EntrepreneurAgent.class);
+	
+	private final static double				ATAN_FACTOR	= 0.01;
 	
 	private EntrepreneurConf					conf;
 	
@@ -428,10 +430,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			logger.debug("[DECIDE-TO-PAY] " + this.id + " " + mafiosoId + " "
 					+ TpayIG + " " + TpayNG + " " + TnotPayIG + " " + TnotPayNG);
 			
-			TpayIG = (Math.toDegrees(Math.atan(TpayIG)) + 360) % 360;
-			TnotPayIG = (Math.toDegrees(Math.atan(TnotPayIG)) + 360) % 360;
+			double atanTpayIG = (0.5 * Math.atan2(ATAN_FACTOR * TpayIG, 1) / ((double) Math.PI / (double) 2.0)) + 0.5;
+			double atanTnotPayIG = (0.5 * (Math.atan2(ATAN_FACTOR * TnotPayIG, 1) / ((double) Math.PI / (double) 2.0))) + 0.5;
 			
-			double IG = (double) TpayIG / (double) (TpayIG + TnotPayIG);
+			double IG = (double) atanTpayIG / (double) (atanTpayIG + atanTnotPayIG);
 			
 			logger.debug("[ADJUSTED-IG] " + TpayIG + " " + TnotPayIG + " " + IG);
 			
@@ -564,8 +566,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			probDenounce = denounceIG;
 			
 		}
-		
-		// System.out.println(probDenounce);
 		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		

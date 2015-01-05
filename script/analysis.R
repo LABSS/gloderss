@@ -2,7 +2,7 @@
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-filename <- "state-weak_norm-enabled_IO-disabled_0.2-0.8"
+filename <- "state-strong_norm-disabled_IO-disabled"
 replica <- "/0"
 
 ##

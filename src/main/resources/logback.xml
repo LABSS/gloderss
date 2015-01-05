@@ -34,7 +34,7 @@
 	<logger name="gloderss.conf" level="ERROR" />
 	<logger name="gloderss.engine" level="ERROR" />
 	<logger name="gloderss.normative" level="ERROR" />
-	<logger name="gloderss.reputation" level="DEBUG" />
+	<logger name="gloderss.reputation" level="ERROR" />
 	<logger name="gloderss.util.distribution" level="ERROR" />
 	<logger name="gloderss.util.network" level="ERROR" />
 	<logger name="gloderss.util.profiler" level="ERROR" />

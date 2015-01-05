@@ -149,8 +149,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -178,13 +178,13 @@
 		<numberPoliceOfficers>5</numberPoliceOfficers>
 		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
 		<specificInvestigationDurationPDF>NORMAL(200,20)</specificInvestigationDurationPDF>
-		<investigateProbability>0.2</investigateProbability>
-		<captureProbability>0.2</captureProbability>
+		<investigateProbability>0.8</investigateProbability>
+		<captureProbability>0.8</captureProbability>
 		<evidenceProbability>0.2</evidenceProbability>
 
 		<!-- Justice -->
 		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
-		<convictionProbability>0.2</convictionProbability>
+		<convictionProbability>0.8</convictionProbability>
 		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
 		<imprisonmentDurationPDF>NORMAL(500,100)</imprisonmentDurationPDF>
 		<noCollaborationPunishmentProbability>0.8</noCollaborationPunishmentProbability>
@@ -198,8 +198,8 @@
 
 		<!-- Information Spreading -->
 		<informationSpreadPDF>CONSTANT(100)</informationSpreadPDF>
-		<proportionCustomers>0.0</proportionCustomers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionCustomers>0.1</proportionCustomers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
@@ -228,8 +228,8 @@
 
 		<!-- Information Spreading -->
 		<slope>0.1</slope>
-		<proportionCustomers>0.0</proportionCustomers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionCustomers>0.1</proportionCustomers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</intermediaryOrg>
 
 </scenario>

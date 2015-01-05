@@ -149,8 +149,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.8</individualWeight>
-			<normativeWeight>0.2</normativeWeight>
+			<individualWeight>0.2</individualWeight>
+			<normativeWeight>0.8</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"

@@ -289,7 +289,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	
 	public double getStatePunishment() {
-		System.out.println("STATE PUNISHMENT");
 		return this.statePunishment;
 	}
 	
@@ -429,8 +428,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			logger.debug("[DECIDE-TO-PAY] " + this.id + " " + mafiosoId + " "
 					+ TpayIG + " " + TpayNG + " " + TnotPayIG + " " + TnotPayNG);
 			
-			TpayIG = (Math.toDegrees((Math.atan(TpayIG))) + 360) % 360;
-			TnotPayIG = (Math.toDegrees((Math.atan(TnotPayIG))) + 360) % 360;
+			TpayIG = (Math.toDegrees(Math.atan(TpayIG)) + 360) % 360;
+			TnotPayIG = (Math.toDegrees(Math.atan(TnotPayIG)) + 360) % 360;
 			
 			double IG = (double) TpayIG / (double) (TpayIG + TnotPayIG);
 			
@@ -447,9 +446,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			if((normPay.getStatus().equals(NormStatus.GOAL))
 					&& (normNotPay.getStatus().equals(NormStatus.GOAL))) {
 				
-				System.out.println(this.conf.getIndividualWeight() + " "
-						+ this.conf.getNormativeWeight() + " " + TpayIG + " " + TpayNG
-						+ " " + TnotPayIG + " " + TnotPayNG + " " + IG);
+				// System.out.println("[PAY/NOT-PAY] " + this.conf.getIndividualWeight()
+				// + " " + this.conf.getNormativeWeight() + " " + TpayIG + " "
+				// + TpayNG + " " + TnotPayIG + " " + TnotPayNG + " " + IG);
 				
 				if(TpayNG > TnotPayNG) {
 					
@@ -458,8 +457,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 					
 				} else {
 					
-					probPay = 1 - ((this.conf.getIndividualWeight() * IG) + (this.conf
-							.getNormativeWeight() * TnotPayNG));
+					probPay = (this.conf.getIndividualWeight() * IG)
+							+ (this.conf.getNormativeWeight() * (1 - TnotPayNG));
 					
 				}
 				
@@ -472,8 +471,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				// NOT PAY EXTORTION norm active
 			} else if(normNotPay.getStatus().equals(NormStatus.GOAL)) {
 				
-				probPay = 1 - ((this.conf.getIndividualWeight() * IG) + (this.conf
-						.getNormativeWeight() * TnotPayNG));
+				probPay = (this.conf.getIndividualWeight() * IG)
+						+ (this.conf.getNormativeWeight() * (1 - TnotPayNG));
 				
 				// NONE norm active
 			} else {
@@ -509,9 +508,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		double idDenounce = (this.conf.getDenounceAlpha()
-				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
-				.getReputation()))
+		double denounceIG = (this.conf.getDenounceAlpha()
+				* (1 - this.mafiaPunisherRep.getReputation()) * this.stateProtectorRep
+					.getReputation())
 				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
 		
 		double denounceNG = this.normative
@@ -533,34 +532,40 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			if(denounceNG > notDenounceNG) {
 				
-				probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
 						+ (this.conf.getNormativeWeight() * denounceNG);
 				
 			} else {
 				
-				probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
-						.getNormativeWeight() * notDenounceNG));
+				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
+						+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
 				
+				// System.out.println("[D/NOT-D] " + this.conf.getIndividualWeight() +
+				// " "
+				// + denounceIG + " " + this.conf.getNormativeWeight() + " "
+				// + notDenounceNG + " " + denounceNG);
 			}
 			
 			// DENOUNCE EXTORTION norm active
 		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
 					+ (this.conf.getNormativeWeight() * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
 		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
-					.getNormativeWeight() * notDenounceNG));
+			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
+					+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
 			
 			// NONE norm active
 		} else {
 			
-			probDenounce = idDenounce;
+			probDenounce = denounceIG;
 			
 		}
+		
+		// System.out.println(probDenounce);
 		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
@@ -935,11 +940,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	@Override
 	public void decideAffiliation() {
 		
+		this.normative.update();
+		
 		double probAffiliate;
 		if(this.normative.getNorm(Norms.DENOUNCE.ordinal()).getStatus()
 				.equals(NormStatus.GOAL)) {
 			
-			this.normative.update();
 			probAffiliate = this.normative.getNormSalience(Norms.DENOUNCE.ordinal());
 			
 		} else {

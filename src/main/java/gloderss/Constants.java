@@ -70,6 +70,8 @@ public final class Constants {
 	
 	public static final String	TAG_FILENAME_MAFIA																		= "mafia";
 	
+	public static final String	TAG_FILENAME_MAFIOSI																	= "mafiosi";
+	
 	public static final String	TAG_FILENAME_STATE																		= "state";
 	
 	public static final String	TAG_FILENAME_INTERMEDIARY_ORGANIZATION								= "intermediaryOrganization";

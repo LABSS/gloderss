@@ -100,6 +100,8 @@ public class GLODERSSimulator extends EventSimulator {
 					.getGeneralConf().getFilenameConf().getConsumer());
 			outputController.init(EntityType.MAFIA, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getMafia());
+			outputController.init(EntityType.MAFIOSI, this.scenarioConf
+					.getGeneralConf().getFilenameConf().getMafiosi());
 			outputController.init(EntityType.STATE, this.scenarioConf
 					.getGeneralConf().getFilenameConf().getState());
 			outputController.init(EntityType.INTERMEDIARY_ORGANIZATION,

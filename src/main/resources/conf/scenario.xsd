@@ -45,6 +45,7 @@
 										<element name="entrepreneur" type="string" />
 										<element name="consumer" type="string" />
 										<element name="mafia" type="string" />
+										<element name="mafiosi" type="string" />
 										<element name="state" type="string" />
 										<element name="intermediaryOrganization" type="string" />
 									</sequence>

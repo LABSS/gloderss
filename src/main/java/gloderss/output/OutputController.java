@@ -186,6 +186,9 @@ public class OutputController implements EventHandler {
 				case MAFIA:
 					entity = new MafiaOutputEntity(id, this.separator);
 					break;
+				case MAFIOSI:
+					entity = new MafiosiOutputEntity(id, this.separator);
+					break;
 				case STATE:
 					entity = new StateOutputEntity(id, this.separator);
 					break;

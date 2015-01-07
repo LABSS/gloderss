@@ -10,6 +10,7 @@ public abstract class AbstractEntity {
 		ENTREPRENEUR,
 		CONSUMER,
 		MAFIA,
+		MAFIOSI,
 		STATE,
 		INTERMEDIARY_ORGANIZATION;
 	}

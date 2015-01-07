@@ -24,6 +24,7 @@
 			<entrepreneur>entrepreneur.csv</entrepreneur>
 			<consumer>consumer.csv</consumer>
 			<mafia>mafia.csv</mafia>
+			<mafiosi>mafiosi.csv</mafiosi>
 			<state>state.csv</state>
 			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
 		</filename>
@@ -149,8 +150,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.2</individualWeight>
+			<normativeWeight>0.8</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"

@@ -22,6 +22,7 @@ import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
 import gloderss.output.AbstractEntity;
 import gloderss.output.ExtortionOutputEntity;
+import gloderss.output.MafiosiOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.distribution.PDFAbstract;
@@ -62,6 +63,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	private List<Integer>					payingEntrepreneurs;
 	
 	private double								nextCollection;
+	
+	private int										outputId;
 	
 	
 	/**
@@ -385,6 +388,13 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public void custody(CustodyAction action) {
 		this.custodyStatus = true;
 		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.MAFIOSI);
+		this.outputId = outputEntity.getEntityId();
+		outputEntity.setValue(MafiosiOutputEntity.Field.MAFIOSO_ID.name(), this.id);
+		outputEntity.setValue(MafiosiOutputEntity.Field.CUSTODY_TIME.name(),
+				this.simulator.now());
+		
 		this.simulator.cancel(this.event);
 	}
 	
@@ -393,7 +403,15 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public void releaseCustody() {
 		this.custodyStatus = false;
 		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.MAFIOSI, this.outputId);
+		
 		if((!this.pentito) && (!this.prisonStatus)) {
+			outputEntity.setValue(
+					MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
+					this.simulator.now());
+			outputEntity.setActive();
+			
 			// Schedule the next extortion demand
 			Event event = new Event(
 					this.simulator.now() + this.demandPDF.nextValue(), this,
@@ -407,7 +425,16 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public void imprisonment(ImprisonmentAction action) {
 		this.prisonStatus = true;
 		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.MAFIOSI, this.outputId);
+		outputEntity.setValue(MafiosiOutputEntity.Field.IMPRISONED_TIME.name(),
+				this.simulator.now());
+		
 		if(this.custodyStatus) {
+			outputEntity.setValue(
+					MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
+					this.simulator.now());
+			
 			this.custodyStatus = false;
 		}
 	}
@@ -421,6 +448,14 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		
 		if(this.id == mafiosoId) {
 			this.prisonStatus = false;
+			this.custodyStatus = false;
+			
+			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+					EntityType.MAFIOSI, this.outputId);
+			outputEntity.setValue(
+					MafiosiOutputEntity.Field.RELEASE_IMPRISONMENT_TIME.name(),
+					this.simulator.now());
+			outputEntity.setActive();
 			
 			if(!this.pentito) {
 				// Schedule the next extortion demand

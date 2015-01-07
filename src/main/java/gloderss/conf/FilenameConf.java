@@ -19,6 +19,8 @@ public class FilenameConf {
 	
 	private String	mafia;
 	
+	private String	mafiosi;
+	
 	private String	state;
 	
 	private String	intermediaryOrganization;
@@ -98,6 +100,17 @@ public class FilenameConf {
 	@XmlElement(name = Constants.TAG_FILENAME_MAFIA)
 	public void setMafia(String mafia) {
 		this.mafia = mafia;
+	}
+	
+	
+	public String getMafiosi() {
+		return this.mafiosi;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_FILENAME_MAFIOSI)
+	public void setMafiosi(String mafiosi) {
+		this.mafiosi = mafiosi;
 	}
 	
 	

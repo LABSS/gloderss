@@ -28,6 +28,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	
 	private PDFAbstract		generalInvestigationDurationPDF;
 	
+	private PDFAbstract		burocraticActivityDurationPDF;
+	
 	private PDFAbstract		specificInvestigationDurationPDF;
 	
 	private int						observed;
@@ -62,6 +64,9 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		
 		this.generalInvestigationDurationPDF = PDFAbstract.getInstance(conf
 				.getGeneralInvestigationDurationPDF());
+		
+		this.burocraticActivityDurationPDF = PDFAbstract.getInstance(conf
+				.getBurocraticActivityDurationPDF());
 		
 		this.specificInvestigationDurationPDF = PDFAbstract.getInstance(conf
 				.getSpecificInvestigationDurationPDF());
@@ -162,8 +167,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		this.addObservation(this.id, this.observed);
 		
 		this.event = new Event(this.simulator.now()
-				+ this.generalInvestigationDurationPDF.nextValue(), this,
-				Constants.EVENT_GENERAL_INVESTIGATION);
+				+ this.burocraticActivityDurationPDF.nextValue(), this,
+				Constants.EVENT_BUROCRATIC_ACTIVITY);
 		this.simulator.insert(this.event);
 	}
 	
@@ -187,9 +192,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		
 		this.addObservation(this.id, this.observed);
 		
-		double duration = this.specificInvestigationDurationPDF.nextValue();
-		
-		this.event = new Event(this.simulator.now() + duration, this,
+		this.event = new Event(this.simulator.now()
+				+ this.specificInvestigationDurationPDF.nextValue(), this,
 				Constants.EVENT_GENERAL_INVESTIGATION);
 		this.simulator.insert(this.event);
 		
@@ -220,6 +224,21 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 					action);
 			this.sendMsg(msg);
 		}
+	}
+	
+	
+	/**
+	 * Waits a period of time before initiating a new general investigation
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void burocraticActivity() {
+		this.event = new Event(this.simulator.now()
+				+ this.generalInvestigationDurationPDF.nextValue(), this,
+				Constants.EVENT_GENERAL_INVESTIGATION);
+		this.simulator.insert(this.event);
+		
 	}
 	
 	
@@ -325,6 +344,9 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_GENERAL_INVESTIGATION:
 				this.generalInvestigation();
+				break;
+			case Constants.EVENT_BUROCRATIC_ACTIVITY:
+				this.burocraticActivity();
 				break;
 		}
 	}

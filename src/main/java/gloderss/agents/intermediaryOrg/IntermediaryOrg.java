@@ -10,7 +10,9 @@ import gloderss.actions.CollaborateAction;
 import gloderss.actions.CriticalConsumerInfoAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ExtortionAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
@@ -38,14 +40,24 @@ import gloderss.output.NormativeOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.distribution.PDFAbstract;
+import gloderss.util.function.Tanh;
 import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import net.sourceforge.jeval.EvaluationException;
+import net.sourceforge.jeval.Evaluator;
 
 public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
+	
+	private final static Logger							logger					= LoggerFactory
+																															.getLogger(IntermediaryOrg.class);
+	
+	private final static String							NUMBER_ACTIONS	= "NUMBER_ACTIONS";
 	
 	private IntermediaryOrgConf							conf;
 	
@@ -54,6 +66,12 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
 	private PDFAbstract											timeToAffiliatePDF;
+	
+	private Evaluator												spreadInfoFunction;
+	
+	private Evaluator												proportionConsumers;
+	
+	private Evaluator												proportionEntrepreneurs;
 	
 	private List<Integer>										affiliated;
 	
@@ -93,6 +111,13 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		
 		this.timeToAffiliatePDF = PDFAbstract.getInstance(conf
 				.getTimeToAffiliatePDF());
+		
+		this.spreadInfoFunction = new Evaluator();
+		this.spreadInfoFunction.putFunction(new Tanh());
+		
+		this.proportionConsumers = new Evaluator();
+		
+		this.proportionEntrepreneurs = new Evaluator();
 		
 		this.affiliated = new ArrayList<Integer>();
 		
@@ -142,14 +167,36 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	@Override
 	public void spreadNormativeInformation() {
 		
-		if(RandomUtil.nextDouble() < this.tanh(this.numActions)) {
+		this.spreadInfoFunction.clearVariables();
+		this.spreadInfoFunction.putVariable(NUMBER_ACTIONS, (new Integer(
+				this.numActions)).toString());
+		
+		double probSpreadInfo = 0.0;
+		try {
+			probSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
+					.getSpreadInfoFunction());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		if(RandomUtil.nextDouble() < probSpreadInfo) {
 			
 			// Spread information to Consumers
 			NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
 					Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 			
-			int numConsumers = (int) (this.consumers.size() * this.conf
-					.getProportionCustomers());
+			this.proportionConsumers.clearVariables();
+			
+			double propConsumers = 0.0;
+			try {
+				propConsumers = this.proportionConsumers.getNumberResult(this.conf
+						.getProportionConsumers());
+			} catch(EvaluationException e) {
+				logger.debug(e.getMessage());
+			}
+			
+			propConsumers = Math.max(0, Math.min(1.0, propConsumers));
+			int numConsumers = (int) (this.consumers.size() * propConsumers);
 			List<Integer> consumerIds = new ArrayList<Integer>();
 			while(consumerIds.size() < numConsumers) {
 				
@@ -173,8 +220,19 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
 					Norms.DENOUNCE.name());
 			
-			int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
-					.getProportionEntrepreneurs());
+			this.proportionEntrepreneurs.clearVariables();
+			
+			double propEntrepreneurs = 0.0;
+			try {
+				propEntrepreneurs = this.proportionEntrepreneurs
+						.getNumberResult(this.conf.getProportionEntrepreneurs());
+			} catch(EvaluationException e) {
+				logger.debug(e.getMessage());
+			}
+			
+			propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
+			
+			int numEntrepreneurs = (int) (this.entrepreneurs.size() * propEntrepreneurs);
 			List<Integer> entrepreneurIds = new ArrayList<Integer>();
 			int qtyEntrepreneurs = this.entrepreneurs.size();
 			while(entrepreneurIds.size() < numEntrepreneurs) {
@@ -291,19 +349,19 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	 * @param x
 	 *          Input parameter
 	 * @return Hyperbolic tangent of x
-	 */
-	private double tanh(int x) {
-		
-		final double y = (Math.exp(this.conf.getSlope() * x) - 1.0)
-				/ (Math.exp(this.conf.getSlope() * x) + 1.0);
-		
-		return y;
-	}
-	
-	
-	/*******************************
+	 *
+	 *         private double tanh(int x) {
 	 * 
-	 * Handle communication requests
+	 *         final double y = (Math.exp(this.conf.getSlope() * x) - 1.0)
+	 *         / (Math.exp(this.conf.getSlope() * x) + 1.0);
+	 * 
+	 *         return y;
+	 *         }
+	 * 
+	 * 
+	 *         /*******************************
+	 * 
+	 *         Handle communication requests
 	 * 
 	 *******************************/
 	
@@ -334,19 +392,19 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 				} else if(content instanceof DenounceExtortionAction) {
 					this.numActions++;
 					
+				} else if(content instanceof DenounceExtortionAffiliatedAction) {
+					this.numActions++;
+					
 				} else if(content instanceof DenouncePunishmentAction) {
+					this.numActions++;
+					
+				} else if(content instanceof DenouncePunishmentAffiliatedAction) {
 					this.numActions++;
 					
 				} else if(content instanceof CaptureMafiosoAction) {
 					this.numActions++;
 					
 				} else if(content instanceof CollaborateAction) {
-					this.numActions++;
-					
-				} else if(content instanceof DenounceExtortionAction) {
-					this.numActions++;
-					
-				} else if(content instanceof DenouncePunishmentAction) {
 					this.numActions++;
 					
 				} else if(content instanceof ImprisonmentAction) {

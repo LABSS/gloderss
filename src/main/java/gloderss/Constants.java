@@ -197,9 +197,11 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF					= "generalInvestigationDurationPDF";
 	
+	public static final String	TAG_STATE_BUROCRATIC_ACTIVITY_DURATION_PDF						= "burocraticActivityDurationPDF";
+	
 	public static final String	TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF					= "specificInvestigationDurationPDF";
 	
-	public static final String	TAG_STATE_INVESTIGATE_PROBABILITY											= "investigateProbability";
+	public static final String	TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY					= "specificInvestigationProbability";
 	
 	public static final String	TAG_STATE_CAPTURE_PROBABILITY													= "captureProbability";
 	
@@ -227,7 +229,7 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_INFORMATION_SPREAD_PDF											= "informationSpreadPDF";
 	
-	public static final String	TAG_STATE_PROPORTION_CUSTOMERS												= "proportionCustomers";
+	public static final String	TAG_STATE_PROPORTION_CONSUMERS												= "proportionConsumers";
 	
 	public static final String	TAG_STATE_PROPORTION_ENTREPRENEURS										= "proportionEntrepreneurs";
 	
@@ -269,9 +271,9 @@ public final class Constants {
 	
 	public static final String	TAG_INTERMEDIARY_ORG_TIME_TO_AFFILIATE_PDF						= "timeToAffiliatePDF";
 	
-	public static final String	TAG_INTERMEDIARY_ORG_SLOPE														= "slope";
+	public static final String	TAG_INTERMEDIARY_ORG_SPREAD_INFO_FUNCTION							= "spreadInfoFunction";
 	
-	public static final String	TAG_INTERMEDIARY_ORG_PROPORTION_CUSTOMERS							= "proportionCustomers";
+	public static final String	TAG_INTERMEDIARY_ORG_PROPORTION_CONSUMERS							= "proportionConsumers";
 	
 	public static final String	TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS					= "proportionEntrepreneurs";
 	
@@ -283,12 +285,16 @@ public final class Constants {
 		PAY_EXTORTION,
 		NOT_PAY_EXTORTION,
 		DENOUNCE_EXTORTION,
+		DENOUNCE_EXTORTION_AFFILIATED,
 		NOT_DENOUNCE_EXTORTION,
+		NOT_DENOUNCE_EXTORTION_AFFILIATED,
 		SPECIFIC_INVESTIGATION,
 		MAFIA_PUNISHMENT,
 		MAFIA_BENEFIT,
 		DENOUNCE_PUNISHMENT,
+		DENOUNCE_PUNISHMENT_AFFILIATED,
 		NOT_DENOUNCE_PUNISHMENT,
+		NOT_DENOUNCE_PUNISHMENT_AFFILIATED,
 		CUSTODY,
 		RELEASE_CUSTODY,
 		IMPRISONMENT,
@@ -373,6 +379,8 @@ public final class Constants {
 	public static final String	EVENT_AFFILIATE_PROCESSING	= "affiliateProcessing";
 	
 	public static final String	EVENT_ASSIST_ENTREPRENEUR		= "assistEntrepreneur";
+	
+	public static final String	EVENT_BUROCRATIC_ACTIVITY		= "burocraticActivity";
 	
 	public static final String	EVENT_BUY_PRODUCT						= "buyProduct";
 	

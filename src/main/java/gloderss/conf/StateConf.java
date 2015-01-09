@@ -11,9 +11,11 @@ public class StateConf {
 	
 	private String	generalInvestigationDurationPDF;
 	
+	private String	burocraticActivityDurationPDF;
+	
 	private String	specificInvestigationDurationPDF;
 	
-	private double	investigateProbability;
+	private double	specificInvestigationProbability;
 	
 	private double	captureProbability;
 	
@@ -41,9 +43,9 @@ public class StateConf {
 	
 	private String	informationSpreadPDF;
 	
-	private double	proportionCustomers;
+	private String	proportionConsumers;
 	
-	private double	proportionEntrepreneurs;
+	private String	proportionEntrepreneurs;
 	
 	
 	public int getNumberPoliceOfficers() {
@@ -69,6 +71,18 @@ public class StateConf {
 	}
 	
 	
+	public String getBurocraticActivityDurationPDF() {
+		return this.burocraticActivityDurationPDF;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_STATE_BUROCRATIC_ACTIVITY_DURATION_PDF)
+	public void setBurocraticActivityDurationPDF(
+			String burocraticActivityDurationPDF) {
+		this.burocraticActivityDurationPDF = burocraticActivityDurationPDF;
+	}
+	
+	
 	public String getSpecificInvestigationDurationPDF() {
 		return this.specificInvestigationDurationPDF;
 	}
@@ -81,14 +95,15 @@ public class StateConf {
 	}
 	
 	
-	public double getInvestigateProbability() {
-		return this.investigateProbability;
+	public double getSpecificInvestigationProbability() {
+		return this.specificInvestigationProbability;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_INVESTIGATE_PROBABILITY)
-	public void setInvestigateProbability(double investigateProbability) {
-		this.investigateProbability = investigateProbability;
+	@XmlElement(name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY)
+	public void setSpecificInvestigationProbability(
+			double specificInvestigationProbability) {
+		this.specificInvestigationProbability = specificInvestigationProbability;
 	}
 	
 	
@@ -237,24 +252,24 @@ public class StateConf {
 	}
 	
 	
-	public double getProportionCustomers() {
-		return this.proportionCustomers;
+	public String getProportionConsumers() {
+		return this.proportionConsumers;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_PROPORTION_CUSTOMERS)
-	public void setProportionCustomers(double proportionCustomers) {
-		this.proportionCustomers = proportionCustomers;
+	@XmlElement(name = Constants.TAG_STATE_PROPORTION_CONSUMERS)
+	public void setProportionConsumers(String proportionConsumers) {
+		this.proportionConsumers = proportionConsumers;
 	}
 	
 	
-	public double getProportionEntrepreneurs() {
+	public String getProportionEntrepreneurs() {
 		return this.proportionEntrepreneurs;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_STATE_PROPORTION_ENTREPRENEURS)
-	public void setProportionEntrepreneurs(double proportionEntrepreneurs) {
+	public void setProportionEntrepreneurs(String proportionEntrepreneurs) {
 		this.proportionEntrepreneurs = proportionEntrepreneurs;
 	}
 }

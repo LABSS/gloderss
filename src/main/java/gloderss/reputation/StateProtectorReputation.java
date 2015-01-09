@@ -1,7 +1,9 @@
 package gloderss.reputation;
 
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.StateCompensationAction;
 import org.slf4j.Logger;
@@ -71,8 +73,19 @@ public class StateProtectorReputation extends ReputationAbstract {
 			updated = true;
 			this.numDenounces++;
 			
+			// Denounce extortion affiliated
+		} else if(action instanceof DenounceExtortionAffiliatedAction) {
+			updated = true;
+			this.numDenounces++;
+			
 			// Denounce punishment
 		} else if(action instanceof DenouncePunishmentAction) {
+			updated = true;
+			this.numDenounces++;
+			this.numDenouncePunishment++;
+			
+			// Denounce punishment Affiliated
+		} else if(action instanceof DenouncePunishmentAffiliatedAction) {
 			updated = true;
 			this.numDenounces++;
 			this.numDenouncePunishment++;

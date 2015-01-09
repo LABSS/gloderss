@@ -41,26 +41,37 @@
 			<action name="gloderss.actions.AffiliateRequestAction">COMPLETE</action>
 			<action name="gloderss.actions.AffiliationAcceptedAction">COMPLETE</action>
 			<action name="gloderss.actions.AffiliationDeniedAction">COMPLETE</action>
+			<action name="gloderss.actions.BuyNotPayExtortionAction">COMPLETE</action>
+			<action name="gloderss.actions.BuyPayExtortionAction">COMPLETE</action>
 			<action name="gloderss.actions.BuyProductAction">COMPLETE</action>
 			<action name="gloderss.actions.CaptureMafiosoAction">COMPLETE</action>
 			<action name="gloderss.actions.CollaborateAction">PARTIAL</action>
 			<action name="gloderss.actions.CollaborationRequestAction">PARTIAL</action>
 			<action name="gloderss.actions.CollectAction">PARTIAL</action>
+			<action name="gloderss.actions.CriticalConsumerInfoAction">NONE</action>
 			<action name="gloderss.actions.CustodyAction">COMPLETE</action>
 			<action name="gloderss.actions.DeliverProductAction">COMPLETE</action>
 			<action name="gloderss.actions.DenounceExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.DenounceExtortionAffiliatedAction">COMPLETE</action>
 			<action name="gloderss.actions.DenouncePunishmentAction">PARTIAL</action>
+			<action name="gloderss.actions.DenouncePunishmentAffiliatedAction">COMPLETE</action>
 			<action name="gloderss.actions.ExtortionAction">PARTIAL</action>
 			<action name="gloderss.actions.ImprisonmentAction">COMPLETE</action>
 			<action name="gloderss.actions.MafiaBenefitAction">PARTIAL</action>
 			<action name="gloderss.actions.MafiaPunishmentAction">COMPLETE</action>
 			<action name="gloderss.actions.NormativeInfoSpreadAction">NONE</action>
 			<action name="gloderss.actions.NotCollaborateAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenounceExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenounceExtortionAffiliatedAction">COMPLETE</action>
+			<action name="gloderss.actions.NotDenouncePunishmentAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenouncePunishmentAffiliatedAction">COMPLETE</action>
 			<action name="gloderss.actions.NotPayExtortionAction">PARTIAL</action>
 			<action name="gloderss.actions.PayExtortionAction">PARTIAL</action>
 			<action name="gloderss.actions.PentitoAction">COMPLETE</action>
 			<action name="gloderss.actions.ReleaseCustodyAction">COMPLETE</action>
+			<action name="gloderss.actions.ReleaseImprisonmentAction">COMPLETE</action>
 			<action name="gloderss.actions.ReleaseInvestigationAction">NONE</action>
+			<action name="gloderss.actions.ReputationInfoAction">NONE</action>
 			<action name="gloderss.actions.SpecificInvestigationAction">NONE</action>
 			<action name="gloderss.actions.StateCompensationAction">COMPLETE</action>
 			<action name="gloderss.actions.StatePunishmentAction">COMPLETE</action>
@@ -70,7 +81,7 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>1000</numberConsumers>
+			<numberConsumers>500</numberConsumers>
 
 			<!-- Economic -->
 			<buyPDF>NORMAL(60,5)</buyPDF>
@@ -178,8 +189,9 @@
 		<!-- Police -->
 		<numberPoliceOfficers>5</numberPoliceOfficers>
 		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
+		<burocraticActivityDurationPDF>NORMAL(100,10)</burocraticActivityDurationPDF>
 		<specificInvestigationDurationPDF>NORMAL(200,20)</specificInvestigationDurationPDF>
-		<investigateProbability>0.8</investigateProbability>
+		<specificInvestigationProbability>0.8</specificInvestigationProbability>
 		<captureProbability>0.8</captureProbability>
 		<evidenceProbability>0.2</evidenceProbability>
 
@@ -194,20 +206,20 @@
 		<!-- Fondo di Solidarieta -->
 		<timeToCompensationPDF>CONSTANT(150)</timeToCompensationPDF>
 		<resourceFondo>4000</resourceFondo>
-		<periodicityFondoPDF>NORMAL(700,100)</periodicityFondoPDF>
+		<periodicityFondoPDF>NORMAL(300,100)</periodicityFondoPDF>
 		<proportionTransferFondo>0.5</proportionTransferFondo>
 
 		<!-- Information Spreading -->
 		<informationSpreadPDF>CONSTANT(100)</informationSpreadPDF>
-		<proportionCustomers>0.1</proportionCustomers>
-		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
 	<mafia>
 		<numberMafiosi>5</numberMafiosi>
 		<wealth>0.00</wealth>
-		<demandPDF>NORMAL(30,2)</demandPDF>
+		<demandPDF>NORMAL(10,2)</demandPDF>
 		<demandAffiliatedProbability>0.3</demandAffiliatedProbability>
 		<extortionLevel>0.3</extortionLevel>
 		<punishmentSeverity>0.4</punishmentSeverity>
@@ -228,9 +240,9 @@
 		<timeToAffiliatePDF>NORMAL(90,5)</timeToAffiliatePDF>
 
 		<!-- Information Spreading -->
-		<slope>0.1</slope>
-		<proportionCustomers>0.1</proportionCustomers>
-		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
+		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 	</intermediaryOrg>
 
 </scenario>

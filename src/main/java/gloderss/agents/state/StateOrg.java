@@ -13,6 +13,8 @@ import net.sourceforge.jeval.Evaluator;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.CollaborateAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.ReleaseImprisonmentAction;
@@ -69,6 +71,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private PDFAbstract												spreadInformationPDF;
 	
+	private Evaluator													proportionConsumers;
+	
+	private Evaluator													proportionEntrepreneurs;
+	
 	private double														fondoSolidarieta;
 	
 	private Map<Integer, PoliceOfficerAgent>	policeOfficers;
@@ -87,7 +93,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private Queue<ImprisonmentAction>					prisonQueue;
 	
-	private Queue<DenouncePunishmentAction>		assistQueue;
+	private Queue<Object>											assistQueue;
 	
 	private Map<Integer, Integer>							collaborations;
 	
@@ -125,6 +131,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.spreadInformationPDF = PDFAbstract.getInstance(conf
 				.getInformationSpreadPDF());
 		
+		this.proportionConsumers = new Evaluator();
+		
+		this.proportionEntrepreneurs = new Evaluator();
+		
 		this.fondoSolidarieta = 0.0;
 		
 		this.consumers = consumers;
@@ -155,7 +165,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.allocatedPoliceOfficers = new ArrayList<Integer>();
 		this.custodyQueue = new LinkedList<CaptureMafiosoAction>();
 		this.prisonQueue = new LinkedList<ImprisonmentAction>();
-		this.assistQueue = new LinkedList<DenouncePunishmentAction>();
+		this.assistQueue = new LinkedList<Object>();
 		this.collaborations = new HashMap<Integer, Integer>();
 	}
 	
@@ -224,10 +234,69 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				EntityType.EXTORTION, extortionId);
 		
 		if((!this.investigateEntrepreneurs.contains(entrepreneurId))
-				&& (RandomUtil.nextDouble() < this.conf.getInvestigateProbability())) {
+				&& (RandomUtil.nextDouble() < this.conf
+						.getSpecificInvestigationProbability())) {
 			
 			int mafiosoId = (int) action
 					.getParam(DenounceExtortionAction.Param.MAFIOSO_ID);
+			
+			if(!this.mafiosiBlackList.contains(mafiosoId)) {
+				this.mafiosiBlackList.add(mafiosoId);
+				
+				for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+					InfoSet set = new InfoSet(this.id, police.getId(),
+							Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
+					this.sendInfo(set);
+				}
+			}
+			
+			int policeOfficerId;
+			do {
+				
+				policeOfficerId = (int) this.policeOfficers.keySet().toArray()[RandomUtil
+						.nextIntFromTo(0, (this.policeOfficers.size() - 1))];
+				
+			} while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+			
+			SpecificInvestigationAction investigation = new SpecificInvestigationAction(
+					extortionId, policeOfficerId, entrepreneurId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
+					investigation);
+			this.sendMsg(msg);
+			
+			// Output
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true);
+			
+		} else {
+			
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false);
+			outputEntity.setActive();
+		}
+	}
+	
+	
+	@Override
+	public void decideInvestigateExtortionAffiliated(
+			DenounceExtortionAffiliatedAction action) {
+		
+		int extortionId = (int) action
+				.getParam(DenounceExtortionAffiliatedAction.Param.EXTORTION_ID);
+		
+		int entrepreneurId = (int) action
+				.getParam(DenounceExtortionAffiliatedAction.Param.ENTREPRENEUR_ID);
+		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		
+		if((!this.investigateEntrepreneurs.contains(entrepreneurId))
+				&& (RandomUtil.nextDouble() < this.conf
+						.getSpecificInvestigationProbability())) {
+			
+			int mafiosoId = (int) action
+					.getParam(DenounceExtortionAffiliatedAction.Param.MAFIOSO_ID);
 			
 			if(!this.mafiosiBlackList.contains(mafiosoId)) {
 				this.mafiosiBlackList.add(mafiosoId);
@@ -278,6 +347,68 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		int mafiosoId = (int) action
 				.getParam(DenouncePunishmentAction.Param.MAFIOSO_ID);
+		
+		if(!this.investigateEntrepreneurs.contains(entrepreneurId)) {
+			
+			if(!this.mafiosiBlackList.contains(mafiosoId)) {
+				this.mafiosiBlackList.add(mafiosoId);
+				
+				for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+					InfoSet set = new InfoSet(this.id, police.getId(),
+							Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
+					this.sendInfo(set);
+				}
+			}
+			
+			int policeOfficerId;
+			do {
+				
+				policeOfficerId = (int) this.policeOfficers.keySet().toArray()[RandomUtil
+						.nextIntFromTo(0, (this.policeOfficers.size() - 1))];
+				
+			} while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+			
+			SpecificInvestigationAction investigation = new SpecificInvestigationAction(
+					extortionId, policeOfficerId, entrepreneurId);
+			
+			Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
+					investigation);
+			this.sendMsg(msg);
+		}
+		
+		// Add Entrepreneur in a queue to receive compensation for the punishment
+		this.assistQueue.add(action);
+		
+		// Spread action Denounce Punishment
+		Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
+				action);
+		this.spreadActionInformation(msg);
+		
+		// Output
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true);
+		
+		Event event = new Event(this.simulator.now()
+				+ this.timeToCompensationPDF.nextValue(), this,
+				Constants.EVENT_ASSIST_ENTREPRENEUR);
+		this.simulator.insert(event);
+	}
+	
+	
+	@Override
+	public void decideInvestigatePunishmentAffiliated(
+			DenouncePunishmentAffiliatedAction action) {
+		
+		int extortionId = (int) action
+				.getParam(DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID);
+		
+		int entrepreneurId = (int) action
+				.getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID);
+		
+		int mafiosoId = (int) action
+				.getParam(DenouncePunishmentAffiliatedAction.Param.MAFIOSO_ID);
 		
 		if(!this.investigateEntrepreneurs.contains(entrepreneurId)) {
 			
@@ -571,21 +702,40 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	public void decideStateCompensation() {
 		
 		if(!this.assistQueue.isEmpty()) {
-			DenouncePunishmentAction action = this.assistQueue.poll();
+			Object obj = this.assistQueue.poll();
 			
-			int extortionId = (int) action
-					.getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
-			
-			double punishment = (double) action
-					.getParam(DenouncePunishmentAction.Param.PUNISHMENT);
+			int extortionId = -1;
+			int entrepreneurId = -1;
+			double punishment = -1;
+			if(obj instanceof DenouncePunishmentAction) {
+				DenouncePunishmentAction action = (DenouncePunishmentAction) obj;
+				
+				extortionId = (int) action
+						.getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
+				
+				entrepreneurId = (int) action
+						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
+				
+				punishment = (double) action
+						.getParam(DenouncePunishmentAction.Param.PUNISHMENT);
+				
+			} else if(obj instanceof DenouncePunishmentAffiliatedAction) {
+				DenouncePunishmentAffiliatedAction action = (DenouncePunishmentAffiliatedAction) obj;
+				
+				extortionId = (int) action
+						.getParam(DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID);
+				
+				entrepreneurId = (int) action
+						.getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID);
+				
+				punishment = (double) action
+						.getParam(DenouncePunishmentAffiliatedAction.Param.PUNISHMENT);
+			}
 			
 			// State has enough money to compensate the Entrepreneur
 			if(this.fondoSolidarieta >= punishment) {
 				
 				this.fondoSolidarieta -= punishment;
-				
-				int entrepreneurId = (int) action
-						.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 				
 				StateCompensationAction compensation = new StateCompensationAction(
 						extortionId, this.id, entrepreneurId, punishment);
@@ -612,7 +762,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				// Entrepreneur goes back to the queue
 			} else {
 				
-				this.assistQueue.add(action);
+				this.assistQueue.add(obj);
 				
 				Event event = new Event(this.simulator.now()
 						+ this.timeToCompensationPDF.nextValue(), this,
@@ -631,8 +781,19 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
 				Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 		
-		int numConsumers = (int) (this.consumers.size() * this.conf
-				.getProportionCustomers());
+		this.proportionConsumers.clearVariables();
+		
+		double propConsumers = 0.0;
+		try {
+			propConsumers = this.proportionConsumers.getNumberResult(this.conf
+					.getProportionConsumers());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		propConsumers = Math.max(0, Math.min(1.0, propConsumers));
+		
+		int numConsumers = (int) (this.consumers.size() * propConsumers);
 		List<Integer> consumerIds = new ArrayList<Integer>();
 		while(consumerIds.size() < numConsumers) {
 			
@@ -654,8 +815,19 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
 				Norms.DENOUNCE.name());
 		
-		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
-				.getProportionEntrepreneurs());
+		this.proportionEntrepreneurs.clearVariables();
+		
+		double propEntrepreneurs = 0.0;
+		try {
+			propEntrepreneurs = this.proportionEntrepreneurs
+					.getNumberResult(this.conf.getProportionEntrepreneurs());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
+		
+		int numEntrepreneurs = (int) (this.entrepreneurs.size() * propEntrepreneurs);
 		List<Integer> entrepreneurIds = new ArrayList<Integer>();
 		int qtyEntrepreneurs = this.entrepreneurs.size();
 		while(entrepreneurIds.size() < numEntrepreneurs) {
@@ -793,9 +965,20 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 */
 	private void spreadActionInformation(Message msg) {
 		
+		this.proportionConsumers.clearVariables();
+		
+		double propConsumers = 0.0;
+		try {
+			propConsumers = this.proportionConsumers.getNumberResult(this.conf
+					.getProportionConsumers());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		propConsumers = Math.max(0, Math.min(1.0, propConsumers));
+		
 		// Spread to a proportion of Consumers
-		int numConsumers = (int) (this.consumers.size() * this.conf
-				.getProportionCustomers());
+		int numConsumers = (int) (this.consumers.size() * propConsumers);
 		List<Integer> consumerIds = new ArrayList<Integer>();
 		while(consumerIds.size() < numConsumers) {
 			
@@ -811,9 +994,20 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
+		this.proportionEntrepreneurs.clearVariables();
+		
+		double propEntrepreneurs = 0.0;
+		try {
+			propEntrepreneurs = this.proportionEntrepreneurs
+					.getNumberResult(this.conf.getProportionEntrepreneurs());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
+		
 		// Spread to a proportion of Entrepreneurs
-		int numEntrepreneurs = (int) (this.entrepreneurs.size() * this.conf
-				.getProportionEntrepreneurs());
+		int numEntrepreneurs = (int) (this.entrepreneurs.size() * propEntrepreneurs);
 		List<Integer> entrepreneurIds = new ArrayList<Integer>();
 		int qtyEntrepreneurs = this.entrepreneurs.size();
 		while(entrepreneurIds.size() < numEntrepreneurs) {
@@ -858,9 +1052,17 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			if(content instanceof DenounceExtortionAction) {
 				this.decideInvestigateExtortion((DenounceExtortionAction) content);
 				
+				// Denounce extortion Affiliated
+			} else if(content instanceof DenounceExtortionAffiliatedAction) {
+				this.decideInvestigateExtortionAffiliated((DenounceExtortionAffiliatedAction) content);
+				
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
 				this.decideInvestigatePunishment((DenouncePunishmentAction) content);
+				
+				// Denounce punishment Affiliated
+			} else if(content instanceof DenouncePunishmentAffiliatedAction) {
+				this.decideInvestigatePunishmentAffiliated((DenouncePunishmentAffiliatedAction) content);
 				
 				// Pentito
 			} else if(content instanceof PentitoAction) {

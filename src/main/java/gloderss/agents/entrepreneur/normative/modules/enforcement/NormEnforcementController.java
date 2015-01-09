@@ -45,31 +45,31 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 		for(NormEntityAbstract norm : normSanctions.keySet()) {
 			
 			// NormContent
-			if (norm.getContent() instanceof NormContent) {
+			if(norm.getContent() instanceof NormContent) {
 				NormContent normContent = (NormContent) norm.getContent();
 				
-				if (event instanceof ActionEvent) {
+				if(event instanceof ActionEvent) {
 					ActionEvent actionEvent = (ActionEvent) event;
 					
-					if (actionEvent.getAction().getDescription()
+					if(actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getAction().name())) {
 						deviations.put(norm, new ComplianceDeviation());
-					} else if (actionEvent.getAction().getDescription()
+					} else if(actionEvent.getAction().getDescription()
 							.equalsIgnoreCase(normContent.getNotAction().name())) {
 						deviations.put(norm, new ViolationDeviation());
 					}
 				}
 				
 				// NormContentSet
-			} else if (norm.getContent() instanceof NormContentSet) {
+			} else if(norm.getContent() instanceof NormContentSet) {
 				NormContentSet normContent = (NormContentSet) norm.getContent();
 				
-				if (event instanceof ActionEvent) {
+				if(event instanceof ActionEvent) {
 					ActionEvent actionEvent = (ActionEvent) event;
 					
 					List<Actions> actions = normContent.getActions();
 					for(Actions action : actions) {
-						if (actionEvent.getAction().getDescription()
+						if(actionEvent.getAction().getDescription()
 								.equalsIgnoreCase(action.name())) {
 							deviations.put(norm, new ComplianceDeviation());
 						}
@@ -77,7 +77,7 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 					
 					List<Actions> notActions = normContent.getNotActions();
 					for(Actions notAction : notActions) {
-						if (actionEvent.getAction().getDescription()
+						if(actionEvent.getAction().getDescription()
 								.equalsIgnoreCase(notAction.name())) {
 							deviations.put(norm, new ViolationDeviation());
 						}

@@ -348,8 +348,9 @@
 							<!-- Police -->
 							<element name="numberPoliceOfficers" type="nonNegativeInteger" />
 							<element name="generalInvestigationDurationPDF" type="string" />
+							<element name="burocraticActivityDurationPDF" type="string" />
 							<element name="specificInvestigationDurationPDF" type="string" />
-							<element name="investigateProbability">
+							<element name="specificInvestigationProbability">
 								<simpleType>
 									<restriction base="decimal">
 										<minInclusive value="0.0" />
@@ -425,22 +426,8 @@
 
 							<!-- Information Spreading -->
 							<element name="informationSpreadPDF" type="string" />
-							<element name="proportionCustomers">
-								<simpleType>
-									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
-									</restriction>
-								</simpleType>
-							</element>
-							<element name="proportionEntrepreneurs">
-								<simpleType>
-									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
-									</restriction>
-								</simpleType>
-							</element>
+							<element name="proportionConsumers" type="string" />
+							<element name="proportionEntrepreneurs" type="string" />
 						</sequence>
 					</complexType>
 				</element>
@@ -539,29 +526,9 @@
 							<element name="timeToAffiliatePDF" type="string" />
 
 							<!-- Information Spreading -->
-							<element name="slope">
-								<simpleType>
-									<restriction base="decimal">
-										<minInclusive value="0.0" />
-									</restriction>
-								</simpleType>
-							</element>
-							<element name="proportionCustomers">
-								<simpleType>
-									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
-									</restriction>
-								</simpleType>
-							</element>
-							<element name="proportionEntrepreneurs">
-								<simpleType>
-									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
-									</restriction>
-								</simpleType>
-							</element>
+							<element name="spreadInfoFunction" type="string" />
+							<element name="proportionConsumers" type="string" />
+							<element name="proportionEntrepreneurs" type="string" />
 						</sequence>
 					</complexType>
 				</element>

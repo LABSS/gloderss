@@ -162,11 +162,15 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		// DENOUNCE Norm
 		List<Actions> actions = new ArrayList<Actions>();
 		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.DENOUNCE_PUNISHMENT);
+		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		List<Actions> noActions = new ArrayList<Actions>();
 		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		NormContentSet normContentSet = new NormContentSet(actions, noActions);
 		
@@ -180,11 +184,15 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		// NOT_DENOUNCE Norm
 		actions = new ArrayList<Actions>();
 		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		noActions = new ArrayList<Actions>();
 		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.DENOUNCE_PUNISHMENT);
+		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		normContentSet = new NormContentSet(noActions, actions);
 		

@@ -9,11 +9,11 @@ public class IntermediaryOrgConf {
 	
 	private String	timeToAffiliatePDF;
 	
-	private double	slope;
+	private String	spreadInfoFunction;
 	
-	private double	proportionCustomers;
+	private String	proportionConsumers;
 	
-	private double	proportionEntrepreneurs;
+	private String	proportionEntrepreneurs;
 	
 	
 	public String getTimeToAffiliatePDF() {
@@ -27,35 +27,35 @@ public class IntermediaryOrgConf {
 	}
 	
 	
-	public double getSlope() {
-		return this.slope;
+	public String getSpreadInfoFunction() {
+		return this.spreadInfoFunction;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_SLOPE)
-	public void setSlope(double slope) {
-		this.slope = slope;
+	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_SPREAD_INFO_FUNCTION)
+	public void setSlope(String spreadInfoFunction) {
+		this.spreadInfoFunction = spreadInfoFunction;
 	}
 	
 	
-	public double getProportionCustomers() {
-		return this.proportionCustomers;
+	public String getProportionConsumers() {
+		return this.proportionConsumers;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_CUSTOMERS)
-	public void setProportionCustomers(double proportionCustomers) {
-		this.proportionCustomers = proportionCustomers;
+	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_CONSUMERS)
+	public void setProportionConsumers(String proportionConsumers) {
+		this.proportionConsumers = proportionConsumers;
 	}
 	
 	
-	public double getProportionEntrepreneurs() {
+	public String getProportionEntrepreneurs() {
 		return this.proportionEntrepreneurs;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS)
-	public void setProportionEntrepreneurs(double proportionEntrepreneurs) {
+	public void setProportionEntrepreneurs(String proportionEntrepreneurs) {
 		this.proportionEntrepreneurs = proportionEntrepreneurs;
 	}
 }

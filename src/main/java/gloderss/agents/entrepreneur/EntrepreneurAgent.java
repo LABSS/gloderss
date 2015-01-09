@@ -23,7 +23,9 @@ import gloderss.actions.CriticalConsumerInfoAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DeliverProductAction;
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ExtortionAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
@@ -31,7 +33,9 @@ import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotDenounceExtortionAffiliatedAction;
 import gloderss.actions.NotDenouncePunishmentAction;
+import gloderss.actions.NotDenouncePunishmentAffiliatedAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.PentitoAction;
@@ -204,11 +208,15 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		// DENOUNCE Norm
 		List<Actions> actions = new ArrayList<Actions>();
 		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.DENOUNCE_PUNISHMENT);
+		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		List<Actions> noActions = new ArrayList<Actions>();
 		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		NormContentSet normContentSet = new NormContentSet(actions, noActions);
 		
@@ -222,11 +230,15 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		// NOT_DENOUNCE Norm
 		actions = new ArrayList<Actions>();
 		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		actions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		noActions = new ArrayList<Actions>();
 		actions.add(Actions.DENOUNCE_EXTORTION);
+		actions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
 		actions.add(Actions.DENOUNCE_PUNISHMENT);
+		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		normContentSet = new NormContentSet(noActions, actions);
 		
@@ -448,10 +460,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			if((normPay.getStatus().equals(NormStatus.GOAL))
 					&& (normNotPay.getStatus().equals(NormStatus.GOAL))) {
 				
-				// System.out.println("[PAY/NOT-PAY] " + this.conf.getIndividualWeight()
-				// + " " + this.conf.getNormativeWeight() + " " + TpayIG + " "
-				// + TpayNG + " " + TnotPayIG + " " + TnotPayNG + " " + IG);
-				
 				if(TpayNG > TnotPayNG) {
 					
 					probPay = (this.conf.getIndividualWeight() * IG)
@@ -515,17 +523,15 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 					.getReputation())
 				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
 		
-		double denounceNG = this.normative
-				.getNormSalience(Norms.DENOUNCE.ordinal());
-		
-		double notDenounceNG = this.normative.getNormSalience(Norms.NOT_DENOUNCE
-				.ordinal());
-		
 		NormEntityAbstract normDenounce = this.normative.getNorm(Norms.DENOUNCE
 				.ordinal());
 		
 		NormEntityAbstract normNotDenounce = this.normative
 				.getNorm(Norms.NOT_DENOUNCE.ordinal());
+		
+		double denounceNG = normDenounce.getSalience();
+		
+		double notDenounceNG = normNotDenounce.getSalience();
 		
 		double probDenounce;
 		// NOT DENOUNCE and DENOUNCE EXTORTION norms active
@@ -542,10 +548,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
 						+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
 				
-				// System.out.println("[D/NOT-D] " + this.conf.getIndividualWeight() +
-				// " "
-				// + denounceIG + " " + this.conf.getNormativeWeight() + " "
-				// + notDenounceNG + " " + denounceNG);
 			}
 			
 			// DENOUNCE EXTORTION norm active
@@ -567,33 +569,67 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
+		// System.out.println(this.mafiaPunisherRep.getReputation() + " "
+		// + this.stateProtectorRep.getReputation() + " "
+		// + normDenounce.getStatus() + " " + denounceNG + " "
+		// + normNotDenounce.getStatus() + " " + notDenounceNG + " "
+		// + this.criticalConsumers + " " + denounceIG + " " + probDenounce);
+		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
 		if(RandomUtil.nextDouble() < probDenounce) {
-			DenounceExtortionAction denounceAction = new DenounceExtortionAction(
-					extortionId, this.id, this.stateId, mafiosoId);
 			
-			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
-					denounceAction);
-			this.sendMsg(msg);
-			
-			// Reputation
-			this.stateProtectorRep.updateReputation(denounceAction);
-			
-			// Spread action to IO
-			this.spreadActionInformation(msg);
+			if(this.affiliated) {
+				DenounceExtortionAffiliatedAction denounceAction = new DenounceExtortionAffiliatedAction(
+						extortionId, this.id, this.stateId, mafiosoId);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						denounceAction);
+				this.sendMsg(msg);
+				
+				// Reputation
+				this.stateProtectorRep.updateReputation(denounceAction);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+				
+			} else {
+				DenounceExtortionAction denounceAction = new DenounceExtortionAction(
+						extortionId, this.id, this.stateId, mafiosoId);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						denounceAction);
+				this.sendMsg(msg);
+				
+				// Reputation
+				this.stateProtectorRep.updateReputation(denounceAction);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+			}
 			
 			// Output
 			outputEntity.setValue(
 					ExtortionOutputEntity.Field.DENOUNCED_EXTORTION.name(), true);
 			
 		} else {
-			NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
-					extortionId, this.id, this.stateId, mafiosoId);
 			
-			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
-					notDenounceExtortionAction);
-			this.sendMsg(msg);
+			if(this.affiliated) {
+				NotDenounceExtortionAffiliatedAction notDenounceExtortionAction = new NotDenounceExtortionAffiliatedAction(
+						extortionId, this.id, this.stateId, mafiosoId);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						notDenounceExtortionAction);
+				this.sendMsg(msg);
+				
+			} else {
+				NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
+						extortionId, this.id, this.stateId, mafiosoId);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						notDenounceExtortionAction);
+				this.sendMsg(msg);
+			}
 			
 			// Output
 			outputEntity.setValue(
@@ -750,14 +786,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				.getNorm(Norms.NOT_DENOUNCE.ordinal());
 		
 		double probDenounce;
-		// AFFILIATED
-		if(this.affiliated) {
-			
-			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
-					+ (this.conf.getNormativeWeight() * denounceNG);
-			
-			// NOT DENOUNCE and DENOUNCE EXTORTION norms active
-		} else if((normDenounce.getStatus().equals(NormStatus.GOAL))
+		// NOT DENOUNCE and DENOUNCE EXTORTION norms active
+		if((normDenounce.getStatus().equals(NormStatus.GOAL))
 				&& (normNotDenounce.getStatus().equals(NormStatus.GOAL))) {
 			
 			if(denounceNG > notDenounceNG) {
@@ -800,18 +830,34 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		// An affiliated Entrepreneur always denounce punishment
 		if((this.affiliated) || (RandomUtil.nextDouble() < probDenounce)) {
 			
-			DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
-					extortionId, this.id, this.stateId, mafiosoId, punishment);
-			
-			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
-					denounceAction);
-			this.sendMsg(msg);
-			
-			// Reputation
-			this.stateProtectorRep.updateReputation(denounceAction);
-			
-			// Spread action to IO
-			this.spreadActionInformation(msg);
+			if(this.affiliated) {
+				DenouncePunishmentAffiliatedAction denounceAction = new DenouncePunishmentAffiliatedAction(
+						extortionId, this.id, this.stateId, mafiosoId, punishment);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						denounceAction);
+				this.sendMsg(msg);
+				
+				// Reputation
+				this.stateProtectorRep.updateReputation(denounceAction);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+				
+			} else {
+				DenouncePunishmentAction denounceAction = new DenouncePunishmentAction(
+						extortionId, this.id, this.stateId, mafiosoId, punishment);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						denounceAction);
+				this.sendMsg(msg);
+				
+				// Reputation
+				this.stateProtectorRep.updateReputation(denounceAction);
+				
+				// Spread action to IO
+				this.spreadActionInformation(msg);
+			}
 			
 			// Output
 			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
@@ -831,12 +877,23 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 					ExtortionOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
 			
 		} else {
-			NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
-					extortionId, this.id, this.stateId, mafiosoId, punishment);
 			
-			Message msg = new Message(this.simulator.now(), this.id, this.stateId,
-					notDenouncePunishmentAction);
-			this.sendMsg(msg);
+			if(this.affiliated) {
+				NotDenouncePunishmentAffiliatedAction notDenouncePunishmentAction = new NotDenouncePunishmentAffiliatedAction(
+						extortionId, this.id, this.stateId, mafiosoId, punishment);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						notDenouncePunishmentAction);
+				this.sendMsg(msg);
+				
+			} else {
+				NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
+						extortionId, this.id, this.stateId, mafiosoId, punishment);
+				
+				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
+						notDenouncePunishmentAction);
+				this.sendMsg(msg);
+			}
 			
 			// Output
 			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
@@ -1335,14 +1392,24 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.stateProtectorRep
 						.updateReputation((DenounceExtortionAction) content);
 				
-				// Denounce punishment
-			} else if(content instanceof DenouncePunishmentAction) {
+				// Not Denounce extortion
+			} else if(content instanceof NotDenounceExtortionAction) {
 				// Normative
 				this.normative.input(msg);
 				
 				// Reputation
 				this.stateProtectorRep
-						.updateReputation((DenouncePunishmentAction) content);
+						.updateReputation((NotDenounceExtortionAction) content);
+				
+				// Denounce punishment
+			} else if(content instanceof DenouncePunishmentAction) {
+				// Normative
+				this.normative.input(msg);
+				
+				// Not Denounce punishment
+			} else if(content instanceof NotDenouncePunishmentAction) {
+				// Normative
+				this.normative.input(msg);
 				
 				// Mafia benefit
 			} else if(content instanceof MafiaBenefitAction) {

@@ -8,11 +8,15 @@ import emilia.modules.classifier.EventClassifierAbstract;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotDenounceExtortionAffiliatedAction;
 import gloderss.actions.NotDenouncePunishmentAction;
+import gloderss.actions.NotDenouncePunishmentAffiliatedAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.StatePunishmentAction;
@@ -44,6 +48,19 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(DenounceExtortionAction.Param.STATE_ID),
 						this.agentId, action);
 				
+				// Denounce Extortion Affiliated
+			} else if(content instanceof DenounceExtortionAffiliatedAction) {
+				
+				DenounceExtortionAffiliatedAction action = (DenounceExtortionAffiliatedAction) content;
+				
+				entity = new ActionEvent(
+						msg.getTime(),
+						(int) action
+								.getParam(DenounceExtortionAffiliatedAction.Param.ENTREPRENEUR_ID),
+						(int) action
+								.getParam(DenounceExtortionAffiliatedAction.Param.STATE_ID),
+						this.agentId, action);
+				
 				// Not denounce Extortion
 			} else if(content instanceof NotDenounceExtortionAction) {
 				
@@ -53,6 +70,19 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action
 								.getParam(NotDenounceExtortionAction.Param.ENTREPRENEUR_ID),
 						(int) action.getParam(NotDenounceExtortionAction.Param.STATE_ID),
+						this.agentId, action);
+				
+				// Not denounce Extortion Affiliated
+			} else if(content instanceof NotDenounceExtortionAffiliatedAction) {
+				
+				NotDenounceExtortionAffiliatedAction action = (NotDenounceExtortionAffiliatedAction) content;
+				
+				entity = new ActionEvent(
+						msg.getTime(),
+						(int) action
+								.getParam(NotDenounceExtortionAffiliatedAction.Param.ENTREPRENEUR_ID),
+						(int) action
+								.getParam(NotDenounceExtortionAffiliatedAction.Param.STATE_ID),
 						this.agentId, action);
 				
 				// Denounce Punishment
@@ -66,6 +96,19 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(DenouncePunishmentAction.Param.STATE_ID),
 						this.agentId, action);
 				
+				// Denounce Punishment Affiliated
+			} else if(content instanceof DenouncePunishmentAffiliatedAction) {
+				
+				DenouncePunishmentAffiliatedAction action = (DenouncePunishmentAffiliatedAction) content;
+				
+				entity = new ActionEvent(
+						msg.getTime(),
+						(int) action
+								.getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID),
+						(int) action
+								.getParam(DenouncePunishmentAffiliatedAction.Param.STATE_ID),
+						this.agentId, action);
+				
 				// Not Denounce Punishment
 			} else if(content instanceof NotDenouncePunishmentAction) {
 				
@@ -75,6 +118,19 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action
 								.getParam(NotDenouncePunishmentAction.Param.ENTREPRENEUR_ID),
 						(int) action.getParam(NotDenouncePunishmentAction.Param.STATE_ID),
+						this.agentId, action);
+				
+				// Not Denounce Punishment Affiliated
+			} else if(content instanceof NotDenouncePunishmentAffiliatedAction) {
+				
+				NotDenouncePunishmentAffiliatedAction action = (NotDenouncePunishmentAffiliatedAction) content;
+				
+				entity = new ActionEvent(
+						msg.getTime(),
+						(int) action
+								.getParam(NotDenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID),
+						(int) action
+								.getParam(NotDenouncePunishmentAffiliatedAction.Param.STATE_ID),
 						this.agentId, action);
 				
 				// Pay Extortion
@@ -170,6 +226,7 @@ public class EventClassifier extends EventClassifierAbstract {
 				Message otherMsg = (Message) content;
 				Object contentMsg = otherMsg.getContent();
 				
+				// Denounce Punishment
 				if(contentMsg instanceof DenouncePunishmentAction) {
 					
 					DenouncePunishmentAction action = (DenouncePunishmentAction) contentMsg;
@@ -178,6 +235,19 @@ public class EventClassifier extends EventClassifierAbstract {
 							(int) action
 									.getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID),
 							(int) action.getParam(DenouncePunishmentAction.Param.STATE_ID),
+							msg.getSender(), action);
+					
+					// Denounce Punishment Affiliated
+				} else if(contentMsg instanceof DenouncePunishmentAffiliatedAction) {
+					
+					DenouncePunishmentAffiliatedAction action = (DenouncePunishmentAffiliatedAction) contentMsg;
+					
+					entity = new ActionEvent(
+							otherMsg.getTime(),
+							(int) action
+									.getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID),
+							(int) action
+									.getParam(DenouncePunishmentAffiliatedAction.Param.STATE_ID),
 							msg.getSender(), action);
 					
 					// State punishment

@@ -7,6 +7,9 @@ public class PurchaseOutputEntity extends AbstractEntity {
 		CONSUMER_ID("consumerId", DataType.INTEGER),
 		RESEARCHED("researched", DataType.STRING),
 		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
+		BUY_PAY_EXTORTION_SALIENCE("buyPaySalience", DataType.DOUBLE),
+		BUY_NOT_PAY_EXTORTION_SALIENCE("buyNotPaySalience", DataType.DOUBLE),
+		MAX_PRICE("max_price", DataType.DOUBLE),
 		PAID_PRICE("paid_price", DataType.DOUBLE);
 		
 		private String		name;
@@ -44,6 +47,9 @@ public class PurchaseOutputEntity extends AbstractEntity {
 		this.entity[Field.CONSUMER_ID.ordinal()] = -1;
 		this.entity[Field.RESEARCHED.ordinal()] = "";
 		this.entity[Field.ENTREPRENEUR_ID.ordinal()] = -1;
+		this.entity[Field.BUY_PAY_EXTORTION_SALIENCE.ordinal()] = 0.0;
+		this.entity[Field.BUY_NOT_PAY_EXTORTION_SALIENCE.ordinal()] = 0.0;
+		this.entity[Field.MAX_PRICE.ordinal()] = 0.0;
 		this.entity[Field.PAID_PRICE.ordinal()] = 0.0;
 	}
 	

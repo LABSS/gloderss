@@ -100,27 +100,27 @@
 			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="0"
+				<normSalience id="0" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" active="true" compliance="0"
+				<normSalience id="1" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Denounce -->
-				<normSalience id="2" active="true" compliance="0"
+				<normSalience id="2" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="0"
+				<normSalience id="3" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Buy from Not Paying Entrepreneurs -->
-				<normSalience id="4" active="true" compliance="0"
+				<normSalience id="4" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Buy from Paying Entrepreneurs -->
-				<normSalience id="5" active="true" compliance="0"
+				<normSalience id="5" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>
@@ -161,23 +161,23 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="1"
+				<normSalience id="0" active="false" compliance="1"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" active="true" compliance="0"
+				<normSalience id="1" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Denounce -->
-				<normSalience id="2" active="true" compliance="0"
+				<normSalience id="2" active="false" compliance="0"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="1"
+				<normSalience id="3" active="false" compliance="1"
 					violation="0" obsCompliance="0" obsViolation="0" punishment="0"
 					sanction="0" invocationCompliance="0" invocationViolation="0" />
 			</normsSalience>

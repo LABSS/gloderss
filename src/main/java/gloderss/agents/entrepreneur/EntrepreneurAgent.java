@@ -108,7 +108,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	private EmiliaController					normative;
 	
-	private boolean										pay;
+	private Map<Integer, Boolean>			pay;
 	
 	
 	/**
@@ -282,7 +282,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 		}
 		
-		this.pay = false;
+		this.pay = new HashMap<Integer, Boolean>();
 	}
 	
 	
@@ -498,11 +498,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			// Decide paying extortion
 			if(RandomUtil.nextDouble() < probPay) {
-				this.pay = true;
+				this.pay.put(extortionId, true);
 				
 				// Decide not paying extortion
 			} else {
-				this.pay = false;
+				this.pay.put(extortionId, false);
+				this.decideDenounceExtortion(action);
 			}
 			
 			// Output
@@ -528,11 +529,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			outputEntity.setValue(
 					ExtortionOutputEntity.Field.MAFIA_PUNISHER_REPUTATION.name(),
 					this.mafiaPunisherRep.getReputation());
-		}
-		
-		// If the Entrepreneur decided not to pay
-		if(!this.pay) {
-			this.decideDenounceExtortion(action);
+			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(),
+					this.pay.get(extortionId));
 		}
 	}
 	
@@ -688,7 +686,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		double extortion = (double) action.getParam(CollectAction.Param.EXTORTION);
 		
-		if(this.pay) {
+		if((this.pay.containsKey(extortionId)) && (this.pay.get(extortionId))) {
 			
 			PayExtortionAction payAction = new PayExtortionAction(extortionId,
 					mafiosoId, victimId, extortion);
@@ -725,7 +723,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
-		this.pay = false;
+		this.pay.remove(extortionId);
 	}
 	
 	

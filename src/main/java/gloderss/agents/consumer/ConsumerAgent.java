@@ -445,6 +445,14 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					outputResearched);
 			outputEntity.setValue(PurchaseOutputEntity.Field.ENTREPRENEUR_ID.name(),
 					selectedEntrepreneurId);
+			outputEntity.setValue(
+					PurchaseOutputEntity.Field.BUY_PAY_EXTORTION_SALIENCE.name(),
+					buyPayExtortionSalience);
+			outputEntity.setValue(
+					PurchaseOutputEntity.Field.BUY_NOT_PAY_EXTORTION_SALIENCE.name(),
+					buyNotPayExtortionSalience);
+			outputEntity.setValue(PurchaseOutputEntity.Field.MAX_PRICE.name(),
+					maxPrice);
 			outputEntity.setValue(PurchaseOutputEntity.Field.PAID_PRICE.name(),
 					paidPrice);
 			outputEntity.setActive();

@@ -2,7 +2,7 @@
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-filename <- "state-weak_norm-disabled_IO-disabled"
+dir <- "state-weak_norm-enabled-0.2-0.8_IO-disabled"
 
 stateStatus <- c("state-weak","state-strong")
 normStatus <- c("norm-disabled","norm-enabled-0.2-0.8","norm-enabled-0.5-0.5","norm-enabled-0.8-0.2")
@@ -13,62 +13,94 @@ for(sStatus in stateStatus){
 for(nStatus in normStatus){
 for(iStatus in ioStatus){
       
-filename <- paste(sStatus,"_",nStatus,"_",iStatus, sep="")
+dir <- paste(sStatus,"_",nStatus,"_",iStatus, sep="")
 replica <- "/0"
 
 ##
 ## Load files
 ##
-compensation <- read.csv(paste(base,filename,replica,"/compensation.csv", sep=""), header=TRUE, sep=";")
-consumer <- read.csv(paste(base,filename,replica,"/consumer.csv", sep=""), header=TRUE, sep=";")
-entrepreneur <- read.csv(paste(base,filename,replica,"/entrepreneur.csv", sep=""), header=TRUE, sep=";")
-extortion <- read.csv(paste(base,filename,replica,"/extortion.csv", sep=""), header=TRUE, sep=";")
-io <- read.csv(paste(base,filename,replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";")
-mafia <- read.csv(paste(base,filename,replica,"/mafia.csv", sep=""), header=TRUE, sep=";")
-mafiosi <- read.csv(paste(base,filename,replica,"/mafiosi.csv", sep=""), header=TRUE, sep=";")
-normative <- read.csv(paste(base,filename,replica,"/normative.csv", sep=""), header=TRUE, sep=";")
-purchase <- read.csv(paste(base,filename,replica,"/purchase.csv", sep=""), header=TRUE, sep=";")
-state <- read.csv(paste(base,filename,replica,"/state.csv", sep=""), header=TRUE, sep=";")
+compensation <- try(read.csv(paste(base,dir,replica,"/compensation.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(compensation, 'try-error')) { compensation <- NULL }
+
+consumer <- try(read.csv(paste(base,dir,replica,"/consumer.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(consumer, 'try-error')) { consumer <- NULL }
+
+entrepreneur <- try(read.csv(paste(base,dir,replica,"/entrepreneur.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(entrepreneur, 'try-error')) { entrepreneur <- NULL }
+
+extortion <- try(read.csv(paste(base,dir,replica,"/extortion.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(extortion, 'try-error')) { extortion <- NULL }
+
+io <- try(read.csv(paste(base,dir,replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(io, 'try-error')) { io <- NULL }
+
+mafia <- try(read.csv(paste(base,dir,replica,"/mafia.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(mafia, 'try-error')) { mafia <- NULL }
+
+mafiosi <- try(read.csv(paste(base,dir,replica,"/mafiosi.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(mafiosi, 'try-error')) { mafiosi <- NULL }
+  
+normative <- try(read.csv(paste(base,dir,replica,"/normative.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(normative, 'try-error')) { normative <- NULL }
+
+purchase <- try(read.csv(paste(base,dir,replica,"/purchase.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(purchase, 'try-error')) { purchase <- NULL }
+
+state <- try(read.csv(paste(base,dir,replica,"/state.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(state, 'try-error')) { state <- NULL }
 
 ##
 ## Variables
 ##
-nExtortion <- nrow(extortion)
 
-nCustody <- nrow(subset(mafiosi, custodyTime > 0 & imprisonmentTime == 0))
+if (!is.null(mafiosi)) {
+  nCustody <- nrow(subset(mafiosi, custodyTime > 0 & imprisonmentTime == 0))
+  nImprisonment <- nrow(subset(mafiosi, imprisonmentTime > 0))
+} else {
+  nCustody <- 0
+  nImprisonment <- 0
+}
 
-nImprisonment <- nrow(subset(mafiosi, imprisonmentTime > 0))
-
-nPaid <- nrow(subset(extortion, paid == "true"))
-
-nNPaid <- nrow(subset(extortion, paid == "false"))
-
-nDen <- nrow(subset(extortion, paid == "false" &
+if (!is.null(extortion)) {
+  nExtortion <- nrow(extortion)
+  nPaid <- nrow(subset(extortion, paid == "true"))
+  nNPaid <- nrow(subset(extortion, paid == "false"))
+  nDen <- nrow(subset(extortion, paid == "false" &
                       denouncedExtortion == "true" |
                       denouncedPunishment == "true"))
-
-nNDen <- nrow(subset(extortion, paid == "false" &
+  nNDen <- nrow(subset(extortion, paid == "false" &
                        (denouncedExtortion == "false" &
                           denouncedPunishment == "false")))
-
-nInv <- nrow(subset(extortion, paid == "false" &
+  nInv <- nrow(subset(extortion, paid == "false" &
                       (investigatedExtortion == "true" ||
                          investigatedPunishment == "true")))
-
-nInvCus <- nrow(subset(extortion, paid == "false" &
+  nInvCus <- nrow(subset(extortion, paid == "false" &
                          (investigatedExtortion == "true"  ||
                             investigatedPunishment == "true") &
                          mafiosoCustody == "true"))
-
-nInvCon <- nrow(subset(extortion, paid == "false" &
+  nInvCon <- nrow(subset(extortion, paid == "false" &
                          (investigatedExtortion == "true"  ||
                             investigatedPunishment == "true") &
                          mafiosoConvicted == "true"))
+} else {
+  nExtortion <- 0
+  nPaid <- 0
+  nNPaid <- 0
+  nDen <- 0
+  nNDen <- 0
+  nInv <- 0
+  nInvCus <- 0
+  nInvCon <- 0
+}
 
-nDenPun <- nrow(subset(compensation, denouncedPunishment == "true"))
-
-nComp <- nrow(subset(compensation, denouncedPunishment == "true" &
+if (!is.null(compensation)) {
+  nDenPun <- nrow(subset(compensation, denouncedPunishment == "true"))
+  nComp <- nrow(subset(compensation, denouncedPunishment == "true" &
                        stateCompensate == "true"))
+} else {
+  nDenPun <- 0
+  nComp <- 0
+}
 
 ##
 ## Calculation

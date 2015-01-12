@@ -84,13 +84,13 @@
 			<numberConsumers>500</numberConsumers>
 
 			<!-- Economic -->
-			<buyPDF>NORMAL(60,5)</buyPDF>
+			<buyPDF>NORMAL(60,10)</buyPDF>
 			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
 
 			<!-- Reputation -->
 			<reputation>
-				<entrepreneurPayer>0.7</entrepreneurPayer>
-				<entrepreneurPayerThreshold>0.5</entrepreneurPayerThreshold>
+				<entrepreneur>0.7</entrepreneur>
+				<entrepreneurThreshold>0.5</entrepreneurThreshold>
 			</reputation>
 
 			<!-- Normative -->
@@ -210,9 +210,9 @@
 		<proportionTransferFondo>0.5</proportionTransferFondo>
 
 		<!-- Information Spreading -->
-		<informationSpreadPDF>CONSTANT(100)</informationSpreadPDF>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<spreadInfoFunction>100</spreadInfoFunction>
+		<proportionConsumers>0.1</proportionConsumers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
@@ -241,8 +241,8 @@
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionConsumers>0.1</proportionConsumers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</intermediaryOrg>
 
 </scenario>

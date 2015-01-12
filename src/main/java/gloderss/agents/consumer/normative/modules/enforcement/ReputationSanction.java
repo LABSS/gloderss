@@ -2,13 +2,13 @@ package gloderss.agents.consumer.normative.modules.enforcement;
 
 import emilia.entity.sanction.SanctionContentInterface;
 import gloderss.actions.ReputationInfoAction;
-import gloderss.reputation.EntrepreneurPayerReputation;
+import gloderss.reputation.EntrepreneurReputation;
 
 public class ReputationSanction implements SanctionContentInterface {
 	
 	private int													consumerId;
 	
-	private EntrepreneurPayerReputation	entrepreneurPayerRep;
+	private EntrepreneurReputation	entrepreneurPayerRep;
 	
 	private ReputationInfoAction				repInfoAction;
 	
@@ -20,7 +20,7 @@ public class ReputationSanction implements SanctionContentInterface {
 	 * @return none
 	 */
 	public ReputationSanction(int consumerId,
-			EntrepreneurPayerReputation entrepreneurPayerRep) {
+			EntrepreneurReputation entrepreneurPayerRep) {
 		this.entrepreneurPayerRep = entrepreneurPayerRep;
 	}
 	

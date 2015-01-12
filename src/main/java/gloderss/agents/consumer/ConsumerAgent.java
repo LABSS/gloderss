@@ -33,13 +33,17 @@ import gloderss.actions.CollaborationRequestAction;
 import gloderss.actions.CustodyAction;
 import gloderss.actions.DeliverProductAction;
 import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
+import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NormativeInfoAction;
 import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotDenounceExtortionAffiliatedAction;
 import gloderss.actions.NotDenouncePunishmentAction;
+import gloderss.actions.NotDenouncePunishmentAffiliatedAction;
 import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.PentitoAction;
@@ -65,7 +69,7 @@ import gloderss.output.ConsumerOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.output.AbstractEntity.EntityType;
 import gloderss.output.PurchaseOutputEntity;
-import gloderss.reputation.EntrepreneurPayerReputation;
+import gloderss.reputation.EntrepreneurReputation;
 import gloderss.reputation.ReputationAbstract;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
@@ -77,7 +81,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
-	private EntrepreneurPayerReputation			entrepreneurPayerRep;
+	private EntrepreneurReputation					entrepreneurRep;
 	
 	private EmiliaControllerConsumer				normative;
 	
@@ -104,8 +108,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		this.conf = conf;
 		
 		this.entrepreneurs = new HashMap<Integer, EntrepreneurAgent>();
-		this.entrepreneurPayerRep = new EntrepreneurPayerReputation(conf
-				.getReputationConf().getEntrepreneurPayer());
+		this.entrepreneurRep = new EntrepreneurReputation(conf.getReputationConf()
+				.getEntrepreneurRep());
 		this.buyPDF = PDFAbstract.getInstance(conf.getBuyPDF());
 		this.numberProducts = new HashMap<Integer, Integer>();
 		this.paidPrice = new HashMap<Integer, Double>();
@@ -145,7 +149,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
 		ReputationSanction repSanction = new ReputationSanction(this.id,
-				this.entrepreneurPayerRep);
+				this.entrepreneurRep);
 		
 		SanctionCategory category = new SanctionCategory(Issuer.INFORMAL,
 				Locus.OTHER_DIRECTED, Mode.INDIRECT, Polarity.NEGATIVE,
@@ -353,8 +357,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		double avgRep = 0.0;
 		for(Integer neighborId : this.neighbors) {
 			if(this.entrepreneurs.containsKey(neighborId)) {
-				if(!this.entrepreneurPayerRep.isUnknown(neighborId)) {
-					avgRep += this.entrepreneurPayerRep.getReputation(neighborId);
+				if(!this.entrepreneurRep.isUnknown(neighborId)) {
+					avgRep += this.entrepreneurRep.getReputation(neighborId);
 					numRep++;
 				}
 			}
@@ -363,7 +367,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		if(numRep > 0) {
 			avgRep /= (double) numRep;
 		} else {
-			avgRep = this.entrepreneurPayerRep.getUnknownValue();
+			avgRep = this.entrepreneurRep.getUnknownValue();
 		}
 		
 		String outputResearched = new String();
@@ -376,16 +380,16 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			double price = buyList.get(entrepreneurId);
 			
 			double reputation;
-			if(!this.entrepreneurPayerRep.isUnknown(entrepreneurId)) {
-				reputation = this.entrepreneurPayerRep.getReputation(entrepreneurId);
+			if(!this.entrepreneurRep.isUnknown(entrepreneurId)) {
+				reputation = this.entrepreneurRep.getReputation(entrepreneurId);
 			} else {
 				reputation = avgRep;
 			}
 			
-			double score = 0.0;
+			double score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
 			// BUY PAYING ENTREPRENEURS and NOT BUY PAYING ENTREPRENEURS norms active
 			if((buyPayExtortionStatus) && (notBuyPayExtortionStatus)) {
-				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
+				
 				if(buyNotPayExtortionSalience > buyPayExtortionSalience) {
 					
 					score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
@@ -401,15 +405,11 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// BUY PAYING ENTREPRENEURS norm active
 			} else if(buyPayExtortionStatus) {
 				
-				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
-				
 				score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
 						* (1 - reputation);
 				
 				// NOT BUY PAYING ENTREPRENEURS norm active
 			} else if(notBuyPayExtortionStatus) {
-				
-				score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
 				
 				score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
 						* reputation;
@@ -491,12 +491,12 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		String rep = new String();
 		for(Integer entrepreneurId : this.entrepreneurs.keySet()) {
 			
-			if(this.entrepreneurPayerRep.isUnknown(entrepreneurId)) {
+			if(this.entrepreneurRep.isUnknown(entrepreneurId)) {
 				rep += "[" + entrepreneurId + "|"
-						+ this.entrepreneurPayerRep.getReputation(entrepreneurId) + "] ";
+						+ this.entrepreneurRep.getReputation(entrepreneurId) + "] ";
 			} else {
 				rep += "[" + entrepreneurId + "|"
-						+ this.entrepreneurPayerRep.getUnknownValue() + "] ";
+						+ this.entrepreneurRep.getUnknownValue() + "] ";
 			}
 		}
 		if(!rep.isEmpty()) {
@@ -575,8 +575,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				
 				// Reputation Information
 			} else if(content instanceof ReputationInfoAction) {
-				this.entrepreneurPayerRep
-						.updateReputation((ReputationInfoAction) content);
+				this.entrepreneurRep.updateReputation((ReputationInfoAction) content);
 				
 				// Message
 			} else if(content instanceof Message) {
@@ -586,12 +585,21 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				
 				// Denounce Punishment
 				if(contentMsg instanceof DenouncePunishmentAction) {
+					// Reputation
+					this.entrepreneurRep
+							.updateReputation((DenouncePunishmentAction) contentMsg);
+					
 					// Normative
 					this.normative.input(msg);
 					
+					// Denounce Punishment Affiliated
+				} else if(contentMsg instanceof DenouncePunishmentAffiliatedAction) {
 					// Reputation
-					this.entrepreneurPayerRep
-							.updateReputation((DenouncePunishmentAction) contentMsg);
+					this.entrepreneurRep
+							.updateReputation((DenouncePunishmentAffiliatedAction) contentMsg);
+					
+					// Normative
+					this.normative.input(msg);
 					
 					// Pentito
 				} else if(contentMsg instanceof PentitoAction) {
@@ -602,7 +610,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					List<Integer> entrepreneursId = (List<Integer>) action
 							.getParam(PentitoAction.Param.ENTREPRENEUR_LIST);
 					for(Integer entrepreneurId : entrepreneursId) {
-						this.entrepreneurPayerRep.setReputation(entrepreneurId,
+						this.entrepreneurRep.setReputation(entrepreneurId,
 								ReputationAbstract.MIN);
 					}
 					
@@ -617,7 +625,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					// State Compensation
 				} else if(contentMsg instanceof StateCompensationAction) {
 					// Reputation
-					this.entrepreneurPayerRep
+					this.entrepreneurRep
 							.updateReputation((StateCompensationAction) contentMsg);
 					
 					// State Punishment
@@ -626,7 +634,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					this.normative.input(msg);
 					
 					// Reputation
-					this.entrepreneurPayerRep
+					this.entrepreneurRep
 							.updateReputation((StatePunishmentAction) contentMsg);
 					
 				}
@@ -666,13 +674,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			// Affiliation Accepted
 			if(content instanceof AffiliationAcceptedAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((AffiliationAcceptedAction) content);
 				
 				// Affiliation Denied
 			} else if(content instanceof AffiliationDeniedAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((AffiliationDeniedAction) content);
 				
 				// Buy product
@@ -687,8 +695,8 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 						.getParam(BuyProductAction.Param.ENTREPRENEUR_ID);
 				
 				Message newMsg;
-				if(this.entrepreneurPayerRep.getReputation(entrepreneurId) > this.conf
-						.getReputationConf().getEntrepreneurPayerThreshold()) {
+				if(this.entrepreneurRep.getReputation(entrepreneurId) < this.conf
+						.getReputationConf().getEntrepreneurRepThreshold()) {
 					
 					BuyPayExtortionAction newAction = new BuyPayExtortionAction(
 							consumerId, entrepreneurId);
@@ -712,19 +720,28 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Collaboration Request
 			} else if(content instanceof CollaborationRequestAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((CollaborationRequestAction) content);
 				
 				// Collaborate
 			} else if(content instanceof CollaborateAction) {
 				// Reputation
-				this.entrepreneurPayerRep.updateReputation((CollaborateAction) content);
+				this.entrepreneurRep.updateReputation((CollaborateAction) content);
 				
 				// Denounce extortion
 			} else if(content instanceof DenounceExtortionAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((DenounceExtortionAction) content);
+				
+				// Normative
+				this.normative.input(msg);
+				
+				// Denounce extortion Affiliated
+			} else if(content instanceof DenounceExtortionAffiliatedAction) {
+				// Reputation
+				this.entrepreneurRep
+						.updateReputation((DenounceExtortionAffiliatedAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -732,8 +749,17 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Not Denounce extortion
 			} else if(content instanceof NotDenounceExtortionAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((NotDenounceExtortionAction) content);
+				
+				// Normative
+				this.normative.input(msg);
+				
+				// Not Denounce extortion Affiliated
+			} else if(content instanceof NotDenounceExtortionAffiliatedAction) {
+				// Reputation
+				this.entrepreneurRep
+						.updateReputation((NotDenounceExtortionAffiliatedAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -741,8 +767,17 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((DenouncePunishmentAction) content);
+				
+				// Normative
+				this.normative.input(msg);
+				
+				// Denounce punishment Affiliated
+			} else if(content instanceof DenouncePunishmentAffiliatedAction) {
+				// Reputation
+				this.entrepreneurRep
+						.updateReputation((DenouncePunishmentAffiliatedAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -750,8 +785,17 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Not Denounce punishment
 			} else if(content instanceof NotDenouncePunishmentAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((NotDenouncePunishmentAction) content);
+				
+				// Normative
+				this.normative.input(msg);
+				
+				// Not Denounce punishment Affiliated
+			} else if(content instanceof NotDenouncePunishmentAffiliatedAction) {
+				// Reputation
+				this.entrepreneurRep
+						.updateReputation((NotDenouncePunishmentAffiliatedAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -759,20 +803,17 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Mafia pay benefit
 			} else if(content instanceof MafiaBenefitAction) {
 				// Reputation
-				this.entrepreneurPayerRep
-						.updateReputation((MafiaBenefitAction) content);
+				this.entrepreneurRep.updateReputation((MafiaBenefitAction) content);
 				
 				// Mafia punish
 			} else if(content instanceof MafiaPunishmentAction) {
 				// Reputation
-				this.entrepreneurPayerRep
-						.updateReputation((MafiaPunishmentAction) content);
+				this.entrepreneurRep.updateReputation((MafiaPunishmentAction) content);
 				
 				// Pay extortion
 			} else if(content instanceof PayExtortionAction) {
 				// Reputation
-				this.entrepreneurPayerRep
-						.updateReputation((PayExtortionAction) content);
+				this.entrepreneurRep.updateReputation((PayExtortionAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -780,8 +821,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// Do not pay extortion
 			} else if(content instanceof NotPayExtortionAction) {
 				// Reputation
-				this.entrepreneurPayerRep
-						.updateReputation((NotPayExtortionAction) content);
+				this.entrepreneurRep.updateReputation((NotPayExtortionAction) content);
 				
 				// Normative
 				this.normative.input(msg);
@@ -789,14 +829,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// State compensate punishment
 			} else if(content instanceof StateCompensationAction) {
 				// Reputation
-				this.entrepreneurPayerRep
+				this.entrepreneurRep
 						.updateReputation((StateCompensationAction) content);
 				
 				// State punish
 			} else if(content instanceof StatePunishmentAction) {
 				// Reputation
-				this.entrepreneurPayerRep
-						.updateReputation((StatePunishmentAction) content);
+				this.entrepreneurRep.updateReputation((StatePunishmentAction) content);
 				
 				// Normative
 				this.normative.input(msg);

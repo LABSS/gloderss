@@ -110,7 +110,7 @@
 										<element name="reputation">
 											<complexType>
 												<sequence>
-													<element name="entrepreneurPayer">
+													<element name="entrepreneur">
 														<simpleType>
 															<restriction base="decimal">
 																<minInclusive value="0.0" />
@@ -118,7 +118,7 @@
 															</restriction>
 														</simpleType>
 													</element>
-													<element name="entrepreneurPayerThreshold">
+													<element name="entrepreneurThreshold">
 														<simpleType>
 															<restriction base="decimal">
 																<minInclusive value="0.0" />
@@ -425,7 +425,7 @@
 							</element>
 
 							<!-- Information Spreading -->
-							<element name="informationSpreadPDF" type="string" />
+							<element name="spreadInfoFunction" type="string" />
 							<element name="proportionConsumers" type="string" />
 							<element name="proportionEntrepreneurs" type="string" />
 						</sequence>

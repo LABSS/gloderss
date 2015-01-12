@@ -5,29 +5,29 @@ import javax.xml.bind.annotation.XmlElement;
 
 public class CReputationConf {
 	
-	private double	entrepreneurPayer;
+	private double	entrepreneurRep;
 	
-	private double	entrepreneurPayerThreshold;
+	private double	entrepreneurRepThreshold;
 	
 	
-	public double getEntrepreneurPayer() {
-		return this.entrepreneurPayer;
+	public double getEntrepreneurRep() {
+		return this.entrepreneurRep;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_PAYER)
-	public void setEntrepreneurPayer(double entrepreneurPayer) {
-		this.entrepreneurPayer = entrepreneurPayer;
+	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR)
+	public void setEntrepreneurRep(double entrepreneurRep) {
+		this.entrepreneurRep = entrepreneurRep;
 	}
 	
 	
-	public double getEntrepreneurPayerThreshold() {
-		return this.entrepreneurPayerThreshold;
+	public double getEntrepreneurRepThreshold() {
+		return this.entrepreneurRepThreshold;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_PAYER_THRESHOLD)
-	public void setEntrepreneurPayerThreshold(double entrepreneurPayerThreshold) {
-		this.entrepreneurPayerThreshold = entrepreneurPayerThreshold;
+	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_THRESHOLD)
+	public void setEntrepreneurRepThreshold(double entrepreneurRepThreshold) {
+		this.entrepreneurRepThreshold = entrepreneurRepThreshold;
 	}
 }

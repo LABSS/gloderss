@@ -69,7 +69,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private PDFAbstract												periodicityFondoPDF;
 	
-	private PDFAbstract												spreadInformationPDF;
+	private Evaluator													spreadInfoFunction;
 	
 	private Evaluator													proportionConsumers;
 	
@@ -128,8 +128,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.periodicityFondoPDF = PDFAbstract.getInstance(conf
 				.getPeriodicityFondoPDF());
 		
-		this.spreadInformationPDF = PDFAbstract.getInstance(conf
-				.getInformationSpreadPDF());
+		this.spreadInfoFunction = new Evaluator();
 		
 		this.proportionConsumers = new Evaluator();
 		
@@ -214,8 +213,16 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				Constants.EVENT_RESOURCE_FONDO);
 		this.simulator.insert(event);
 		
-		event = new Event(this.simulator.now()
-				+ this.spreadInformationPDF.nextValue(), this,
+		this.spreadInfoFunction.clearVariables();
+		double nextSpreadInfo = 0.0;
+		try {
+			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
+					.getSpreadInfoFunction());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		event = new Event(this.simulator.now() + nextSpreadInfo, this,
 				Constants.EVENT_SPREAD_INFORMATION);
 		this.simulator.insert(event);
 	}
@@ -861,8 +868,16 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				numEntrepreneurs);
 		outputEntity.setActive();
 		
-		Event event = new Event(this.simulator.now()
-				+ this.spreadInformationPDF.nextValue(), this,
+		this.spreadInfoFunction.clearVariables();
+		double nextSpreadInfo = 0.0;
+		try {
+			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
+					.getSpreadInfoFunction());
+		} catch(EvaluationException e) {
+			logger.debug(e.getMessage());
+		}
+		
+		Event event = new Event(this.simulator.now() + nextSpreadInfo, this,
 				Constants.EVENT_SPREAD_INFORMATION);
 		this.simulator.insert(event);
 	}

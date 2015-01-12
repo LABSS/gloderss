@@ -41,7 +41,7 @@ public class StateConf {
 	
 	private double	proportionTransferFondo;
 	
-	private String	informationSpreadPDF;
+	private String	spreadInfoFunction;
 	
 	private String	proportionConsumers;
 	
@@ -241,14 +241,14 @@ public class StateConf {
 	}
 	
 	
-	public String getInformationSpreadPDF() {
-		return this.informationSpreadPDF;
+	public String getSpreadInfoFunction() {
+		return this.spreadInfoFunction;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_INFORMATION_SPREAD_PDF)
-	public void setInformationSpreadPDF(String informationSpreadPDF) {
-		this.informationSpreadPDF = informationSpreadPDF;
+	@XmlElement(name = Constants.TAG_STATE_SPREAD_INFO_FUNCTION)
+	public void setSpreadInfoFunction(String spreadInfoFunction) {
+		this.spreadInfoFunction = spreadInfoFunction;
 	}
 	
 	

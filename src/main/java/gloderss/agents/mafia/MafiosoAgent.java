@@ -230,6 +230,11 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 					this.id);
 			outputEntity.setValue(ExtortionOutputEntity.Field.ENTREPRENEUR_ID.name(),
 					targetId);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.ENTREPRENEUR_WAGE.name(), wage);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.ENTREPRENEUR_AFFILIATED.name(),
+					affiliated);
 			outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_EXTORTION.name(),
 					extortion);
 			outputEntity.setValue(

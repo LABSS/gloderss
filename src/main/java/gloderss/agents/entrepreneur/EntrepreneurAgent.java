@@ -411,6 +411,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		this.normative.update();
 		
+		int extortionId = (int) action.getParam(ExtortionAction.Param.EXTORTION_ID);
+		
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		
 		// Decide to affiliate to Intermediary Organization
 		this.decideAffiliation();
 		
@@ -499,6 +504,30 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			} else {
 				this.pay = false;
 			}
+			
+			// Output
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.STATE_PUNISHMENT.name(),
+					this.statePunishment);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.PAY_EXTORTION_INDIVIDUAL.name(), TpayIG);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.PAY_EXTORTION_SALIENCE.name(), TpayNG);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.NOT_PAY_EXTORTION_INDIVIDUAL.name(),
+					TnotPayIG);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.NOT_PAY_EXTORTION_SALIENCE.name(),
+					TnotPayNG);
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.STATE_FINDER_REPUTATION.name(),
+					this.stateFinderRep.getReputation());
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.STATE_PROTECTOR_REPUTATION.name(),
+					this.stateProtectorRep.getReputation());
+			outputEntity.setValue(
+					ExtortionOutputEntity.Field.MAFIA_PUNISHER_REPUTATION.name(),
+					this.mafiaPunisherRep.getReputation());
 		}
 		
 		// If the Entrepreneur decided not to pay
@@ -569,12 +598,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
-		// System.out.println(this.mafiaPunisherRep.getReputation() + " "
-		// + this.stateProtectorRep.getReputation() + " "
-		// + normDenounce.getStatus() + " " + denounceNG + " "
-		// + normNotDenounce.getStatus() + " " + notDenounceNG + " "
-		// + this.criticalConsumers + " " + denounceIG + " " + probDenounce);
-		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
 		if(RandomUtil.nextDouble() < probDenounce) {
@@ -635,6 +658,19 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			outputEntity.setValue(
 					ExtortionOutputEntity.Field.DENOUNCED_EXTORTION.name(), false);
 		}
+		
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.DENOUNCE_EXTORTION_INDIVIDUAL.name(),
+				denounceIG);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.DENOUNCE_EXTORTION_SALIENCE.name(),
+				denounceNG);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.NOT_DENOUNCE_EXTORTION_SALIENCE.name(),
+				notDenounceNG);
+		outputEntity.setValue(
+				ExtortionOutputEntity.Field.CRITICAL_CONSUMERS.name(),
+				this.criticalConsumers);
 	}
 	
 	

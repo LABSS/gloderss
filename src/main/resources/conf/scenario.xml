@@ -210,7 +210,7 @@
 		<proportionTransferFondo>0.5</proportionTransferFondo>
 
 		<!-- Information Spreading -->
-		<spreadInfoFunction>100</spreadInfoFunction>
+		<spreadInfoFunction>500</spreadInfoFunction>
 		<proportionConsumers>0.1</proportionConsumers>
 		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</state>
@@ -237,7 +237,7 @@
 	<!-- Intermediary Organization Configuration Information -->
 	<intermediaryOrg>
 		<!-- Affiliation -->
-		<timeToAffiliatePDF>NORMAL(90,5)</timeToAffiliatePDF>
+		<timeToAffiliatePDF>NORMAL(200,5)</timeToAffiliatePDF>
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>

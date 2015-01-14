@@ -11,6 +11,9 @@ import emilia.modules.enforcement.DeviationAbstract.Type;
 import emilia.modules.enforcement.NormEnforcementAbstract;
 import gloderss.Constants.Actions;
 import gloderss.Constants.Norms;
+import gloderss.actions.DenounceExtortionAction;
+import gloderss.actions.NotDenounceExtortionAction;
+import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.agents.entrepreneur.normative.modules.enforcement.ComplianceDeviation;
 import gloderss.agents.entrepreneur.normative.modules.enforcement.ViolationDeviation;
@@ -25,6 +28,8 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 	
 	private NormativeBoardInterface	normativeBoard;
 	
+	private double									sanctionThreshold;
+	
 	
 	/**
 	 * Create Norm Enforcement controller
@@ -33,13 +38,16 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 	 *          Agent identification
 	 * @param normativeBoard
 	 *          Normative board
+	 * @param sanctionThreshold
+	 *          Threshold to sanction the Entrepreneur
 	 * @return none
 	 */
 	public NormEnforcementController(Integer agentId,
-			NormativeBoardInterface normativeBoard) {
+			NormativeBoardInterface normativeBoard, Double sanctionThreshold) {
 		super(agentId);
 		
 		this.normativeBoard = normativeBoard;
+		this.sanctionThreshold = sanctionThreshold;
 	}
 	
 	
@@ -117,19 +125,147 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 					ActionEvent actionEvent = (ActionEvent) event;
 					
 					if(actionEvent.getAction() instanceof PayExtortionAction) {
-						// Check whether the Salience PAY EXTORTION smaller than NOT PAY
-						// EXTORTION
-						if(this.normativeBoard.getSalience(Norms.PAY_EXTORTION.ordinal()) <= this.normativeBoard
-								.getSalience(Norms.NOT_PAY_EXTORTION.ordinal())) {
+						
+						if(sanction.getContent() instanceof ReputationSanction) {
 							
-							PayExtortionAction action = (PayExtortionAction) actionEvent
-									.getAction();
+							if(this.normativeBoard.getSalience(Norms.NOT_PAY_EXTORTION
+									.ordinal()) > this.normativeBoard
+									.getSalience(Norms.PAY_EXTORTION.ordinal())) {
+								
+								PayExtortionAction action = (PayExtortionAction) actionEvent
+										.getAction();
+								
+								sanction.getContent().execute(
+										(int) action
+												.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
 							
-							sanction.getContent().execute(
-									(int) action
-											.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID));
+						} else if(sanction.getContent() instanceof SanctionSanction) {
 							
-							enforceSanctions.add(sanction);
+							if(this.normativeBoard.getSalience(Norms.NOT_PAY_EXTORTION
+									.ordinal()) >= this.sanctionThreshold) {
+								
+								PayExtortionAction action = (PayExtortionAction) actionEvent
+										.getAction();
+								
+								sanction.getContent().execute(
+										(int) action
+												.getParam(PayExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
+						}
+						
+					} else if(actionEvent.getAction() instanceof NotPayExtortionAction) {
+						
+						if(sanction.getContent() instanceof ReputationSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.PAY_EXTORTION.ordinal()) > this.normativeBoard
+									.getSalience(Norms.NOT_PAY_EXTORTION.ordinal())) {
+								
+								NotPayExtortionAction action = (NotPayExtortionAction) actionEvent
+										.getAction();
+								
+								sanction.getContent().execute(
+										(int) action
+												.getParam(NotPayExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
+						} else if(sanction.getContent() instanceof SanctionSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.PAY_EXTORTION.ordinal()) >= this.sanctionThreshold) {
+								
+								NotPayExtortionAction action = (NotPayExtortionAction) actionEvent
+										.getAction();
+								
+								sanction.getContent().execute(
+										(int) action
+												.getParam(NotPayExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
+						}
+						
+					} else if(actionEvent.getAction() instanceof DenounceExtortionAction) {
+						
+						if(sanction.getContent() instanceof ReputationSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.NOT_DENOUNCE.ordinal()) > this.normativeBoard
+									.getSalience(Norms.DENOUNCE.ordinal())) {
+								
+								DenounceExtortionAction action = (DenounceExtortionAction) actionEvent
+										.getAction();
+								
+								sanction
+										.getContent()
+										.execute(
+												(int) action
+														.getParam(DenounceExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
+							
+						} else if(sanction.getContent() instanceof SanctionSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.NOT_DENOUNCE.ordinal()) >= this.sanctionThreshold) {
+								
+								DenounceExtortionAction action = (DenounceExtortionAction) actionEvent
+										.getAction();
+								
+								sanction
+										.getContent()
+										.execute(
+												(int) action
+														.getParam(DenounceExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
+						}
+						
+					} else if(actionEvent.getAction() instanceof NotDenounceExtortionAction) {
+						
+						if(sanction.getContent() instanceof ReputationSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.DENOUNCE.ordinal()) > this.normativeBoard
+									.getSalience(Norms.NOT_DENOUNCE.ordinal())) {
+								
+								NotDenounceExtortionAction action = (NotDenounceExtortionAction) actionEvent
+										.getAction();
+								
+								sanction
+										.getContent()
+										.execute(
+												(int) action
+														.getParam(NotDenounceExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+							}
+							
+						} else if(sanction.getContent() instanceof SanctionSanction) {
+							
+							if(this.normativeBoard.getSalience(Norms.DENOUNCE.ordinal()) >= this.sanctionThreshold) {
+								
+								NotDenounceExtortionAction action = (NotDenounceExtortionAction) actionEvent
+										.getAction();
+								
+								sanction
+										.getContent()
+										.execute(
+												(int) action
+														.getParam(NotDenounceExtortionAction.Param.ENTREPRENEUR_ID));
+								
+								enforceSanctions.add(sanction);
+								
+							}
 						}
 					}
 				}

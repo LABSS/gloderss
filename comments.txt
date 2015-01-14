@@ -1,0 +1,22 @@
+Changes
+=======
+
+14/01/2015
+----------
+1. Added a new Sanction message that Consumers send to sanction non-compliant Entrepreneurs
+
+2. Added the effect of the Sanction message on Consumers and Entrepreneurs norm salience
+
+09/01/2015
+----------
+1. Added actions
+  a. DenounceExtortionAffiliated
+  b. NotDenounceExtortionAffiliated
+  c. DenouncePunishmentAffiliated
+  d. NotDenouncePunishmentAffiliated
+  
+2. Consider Denounce and Not Denounce actions in the Entrepreneurs reputation
+
+3. Burocratic time between general investigation
+
+4. Flexible State and Intermediary Organization information spreading 

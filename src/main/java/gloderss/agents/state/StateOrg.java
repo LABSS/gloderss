@@ -15,7 +15,7 @@ import gloderss.Constants.Norms;
 import gloderss.actions.CollaborateAction;
 import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAffiliatedAction;
-import gloderss.actions.NormativeInfoAction;
+import gloderss.actions.NormInvocationAction;
 import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.ReleaseImprisonmentAction;
 import gloderss.actions.StateCompensationAction;
@@ -219,7 +219,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
 					.getSpreadInfoFunction());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		event = new Event(this.simulator.now() + nextSpreadInfo, this,
@@ -565,7 +565,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				convictionProb += eval.getNumberResult(this.conf
 						.getCollaborationConvictionFunction());
 			} catch(EvaluationException e) {
-				logger.debug(e.getMessage());
+				logger.debug(e.toString());
 			}
 		}
 		
@@ -785,7 +785,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	public void spreadNormativeInformation() {
 		
 		// Spread information to Consumers
-		NormativeInfoAction notBuyPayExtortion = new NormativeInfoAction(this.id,
+		NormInvocationAction notBuyPayExtortion = new NormInvocationAction(this.id,
 				Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 		
 		this.proportionConsumers.clearVariables();
@@ -795,7 +795,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			propConsumers = this.proportionConsumers.getNumberResult(this.conf
 					.getProportionConsumers());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		propConsumers = Math.max(0, Math.min(1.0, propConsumers));
@@ -816,10 +816,10 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 		}
 		
-		NormativeInfoAction notPayExtortion = new NormativeInfoAction(this.id,
+		NormInvocationAction notPayExtortion = new NormInvocationAction(this.id,
 				Norms.NOT_PAY_EXTORTION.name());
 		
-		NormativeInfoAction denounceExtortion = new NormativeInfoAction(this.id,
+		NormInvocationAction denounceExtortion = new NormInvocationAction(this.id,
 				Norms.DENOUNCE.name());
 		
 		this.proportionEntrepreneurs.clearVariables();
@@ -829,7 +829,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			propEntrepreneurs = this.proportionEntrepreneurs
 					.getNumberResult(this.conf.getProportionEntrepreneurs());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
@@ -874,7 +874,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
 					.getSpreadInfoFunction());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		Event event = new Event(this.simulator.now() + nextSpreadInfo, this,
@@ -987,7 +987,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			propConsumers = this.proportionConsumers.getNumberResult(this.conf
 					.getProportionConsumers());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		propConsumers = Math.max(0, Math.min(1.0, propConsumers));
@@ -1016,7 +1016,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			propEntrepreneurs = this.proportionEntrepreneurs
 					.getNumberResult(this.conf.getProportionEntrepreneurs());
 		} catch(EvaluationException e) {
-			logger.debug(e.getMessage());
+			logger.debug(e.toString());
 		}
 		
 		propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));

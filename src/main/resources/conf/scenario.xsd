@@ -130,6 +130,30 @@
 											</complexType>
 										</element>
 
+										<!-- Sanction -->
+										<element name="sanction">
+											<complexType>
+												<sequence>
+													<element name="threshold">
+														<simpleType>
+															<restriction base="decimal">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+													<element name="discernability">
+														<simpleType>
+															<restriction base="decimal">
+																<minInclusive value="0.0" />
+																<maxInclusive value="1.0" />
+															</restriction>
+														</simpleType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
+
 										<!-- Normative -->
 										<element name="normativeXML" type="string" />
 										<element name="normativeXSD" type="string" />

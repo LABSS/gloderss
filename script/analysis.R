@@ -2,7 +2,7 @@
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-dir <- "state-weak_norm-enabled-0.2-0.8_IO-disabled"
+dir <- "state-strong_norm-enabled-0.2-0.8_IO-enabled"
 
 stateStatus <- c("state-weak","state-strong")
 normStatus <- c("norm-disabled","norm-enabled-0.2-0.8","norm-enabled-0.5-0.5","norm-enabled-0.8-0.2")
@@ -31,8 +31,8 @@ if (inherits(entrepreneur, 'try-error')) { entrepreneur <- NULL }
 extortion <- try(read.csv(paste(base,dir,replica,"/extortion.csv", sep=""), header=TRUE, sep=";"))
 if (inherits(extortion, 'try-error')) { extortion <- NULL }
 
-io <- try(read.csv(paste(base,dir,replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(io, 'try-error')) { io <- NULL }
+#io <- try(read.csv(paste(base,dir,replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
+#if (inherits(io, 'try-error')) { io <- NULL }
 
 mafia <- try(read.csv(paste(base,dir,replica,"/mafia.csv", sep=""), header=TRUE, sep=";"))
 if (inherits(mafia, 'try-error')) { mafia <- NULL }
@@ -65,21 +65,23 @@ if (!is.null(extortion)) {
   nExtortion <- nrow(extortion)
   nPaid <- nrow(subset(extortion, paid == "true"))
   nNPaid <- nrow(subset(extortion, paid == "false"))
-  nDen <- nrow(subset(extortion, paid == "false" &
-                      denouncedExtortion == "true" |
-                      denouncedPunishment == "true"))
-  nNDen <- nrow(subset(extortion, paid == "false" &
-                       (denouncedExtortion == "false" &
-                          denouncedPunishment == "false")))
+  nDenExt <- nrow(subset(extortion, paid == "false" &
+                           denouncedExtortion == "true"))
+  nNDenExt <- nrow(subset(extortion, paid == "false" &
+                            denouncedExtortion == "false"))
+  nDenPun <- nrow(subset(extortion, paid == "false" &
+                           denouncedPunishment == "true"))
+  nNDenPun <- nrow(subset(extortion, paid == "false" &
+                            denouncedExtortion == "false"))
   nInv <- nrow(subset(extortion, paid == "false" &
-                      (investigatedExtortion == "true" ||
+                      (investigatedExtortion == "true" |
                          investigatedPunishment == "true")))
   nInvCus <- nrow(subset(extortion, paid == "false" &
-                         (investigatedExtortion == "true"  ||
+                         (investigatedExtortion == "true"  |
                             investigatedPunishment == "true") &
                          mafiosoCustody == "true"))
   nInvCon <- nrow(subset(extortion, paid == "false" &
-                         (investigatedExtortion == "true"  ||
+                         (investigatedExtortion == "true"  |
                             investigatedPunishment == "true") &
                          mafiosoConvicted == "true"))
 } else {
@@ -106,10 +108,11 @@ if (!is.null(compensation)) {
 ## Calculation
 ##
 propPaid <- nPaid / nExtortion
-propDen <- nDen / nNPaid
-propInv <- nInv / nDen
-propCus <- nInvCus / nDen
-propCon <- nInvCon / nDen
+propDenExt <- nDenExt / nExtortion
+propDenPun <- nDenPun / nNPaid
+propInv <- nInv / (nDenExt + nDenPun)
+propCus <- nInvCus / (nDenExt + nDenPun)
+propCon <- nInvCon / (nDenExt + nDenPun)
 propComp <- nComp / nDenPun
 
 mESalPay <- mean(entrepreneur$saliencePayExtortion)
@@ -139,8 +142,8 @@ sCSalBuyNPE <- sd(consumer$salienceBuyNotPayingEntrepreneurs)
 ##
 prop <- cbind(sStatus, nStatus, iStatus,
               nExtortion, nCustody, nImprisonment,
-              propPaid, nPaid, propDen, nDen, propInv, nInv, 
-              propCus, propCon, propComp,
+              propPaid, nPaid, propDenExt, nDenExt, propDenPun, nDenPun,
+              propInv, nInv, propCus, propCon, propComp,
               mESalPay, sESalPay, mESalNPay, sESalNPay,
               mESalDen, sESalDen, mESalNDen, sESalNDen,
               mCSalPay, sCSalPay, mCSalNPay, sCSalNPay,
@@ -157,3 +160,4 @@ table <- rbind(table, prop)
 ##
 write.table(table, file=paste(base,"/summary.csv", sep=""),
             quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)
+

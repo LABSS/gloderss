@@ -112,6 +112,12 @@ public final class Constants {
 	
 	public static final String	TAG_CONSUMER_REPUTATION_ENTREPRENEUR_THRESHOLD		= "entrepreneurThreshold";
 	
+	public static final String	TAG_CONSUMER_SANCTION															= "sanction";
+	
+	public static final String	TAG_CONSUMER_SANCTION_THRESHOLD										= "threshold";
+	
+	public static final String	TAG_CONSUMER_SANCTION_DISCERNABILITY							= "discernability";
+	
 	/**
 	 * Entrepreneurs tags
 	 */
@@ -313,7 +319,8 @@ public final class Constants {
 		AFFILIATE,
 		AFFILIATION_ACCEPTED,
 		AFFILIATION_DENIED,
-		NORMATIVE_INFO,
+		NORM_INVOCATION_INFO,
+		NORM_SANCTION_INFO,
 		REPUTATION_INFO,
 		CRITICAL_CONSUMER_INFO;
 	}
@@ -334,7 +341,8 @@ public final class Constants {
 	 * Sanctions
 	 */
 	public static enum Sanctions {
-		REPUTATION_ENTREPRENEUR;
+		REPUTATION_ENTREPRENEUR,
+		NORM_SANCTION;
 	}
 	
 	/**

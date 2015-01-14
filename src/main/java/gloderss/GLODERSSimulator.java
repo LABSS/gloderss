@@ -258,7 +258,7 @@ public class GLODERSSimulator extends EventSimulator {
 			try {
 				outputController.write(true);
 			} catch(IOException e) {
-				logger.debug(e.getMessage());
+				logger.debug(e.toString());
 			}
 		}
 	}

@@ -6,22 +6,26 @@ import gloderss.reputation.EntrepreneurReputation;
 
 public class ReputationSanction implements SanctionContentInterface {
 	
-	private int													consumerId;
+	private int											consumerId;
 	
-	private EntrepreneurReputation	entrepreneurPayerRep;
+	private EntrepreneurReputation	entrepreneurRep;
 	
-	private ReputationInfoAction				repInfoAction;
+	private ReputationInfoAction		repInfoAction;
 	
 	
 	/**
 	 * Create a reputation sanction content
 	 * 
-	 * @param none
+	 * @param consumerId
+	 *          Consumer identification
+	 * @param entrepreneurRep
+	 *          Entrepreneurs reputation
 	 * @return none
 	 */
 	public ReputationSanction(int consumerId,
-			EntrepreneurReputation entrepreneurPayerRep) {
-		this.entrepreneurPayerRep = entrepreneurPayerRep;
+			EntrepreneurReputation entrepreneurRep) {
+		this.consumerId = consumerId;
+		this.entrepreneurRep = entrepreneurRep;
 	}
 	
 	
@@ -30,10 +34,10 @@ public class ReputationSanction implements SanctionContentInterface {
 		
 		int entrepreneurId = (int) input;
 		double repValue;
-		if(this.entrepreneurPayerRep.isUnknown(entrepreneurId)) {
-			repValue = this.entrepreneurPayerRep.getUnknownValue();
+		if(this.entrepreneurRep.isUnknown(entrepreneurId)) {
+			repValue = this.entrepreneurRep.getUnknownValue();
 		} else {
-			repValue = this.entrepreneurPayerRep.getReputation(entrepreneurId);
+			repValue = this.entrepreneurRep.getReputation(entrepreneurId);
 		}
 		
 		this.repInfoAction = new ReputationInfoAction(this.consumerId,

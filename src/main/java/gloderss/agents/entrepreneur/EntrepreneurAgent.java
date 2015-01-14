@@ -30,7 +30,8 @@ import gloderss.actions.ExtortionAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
-import gloderss.actions.NormativeInfoAction;
+import gloderss.actions.NormInvocationAction;
+import gloderss.actions.NormSanctionAction;
 import gloderss.actions.NotCollaborateAction;
 import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenounceExtortionAffiliatedAction;
@@ -802,22 +803,23 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int extortionId = (int) action
 				.getParam(MafiaPunishmentAction.Param.EXTORTION_ID);
 		
-		double idDenounce = (this.conf.getDenounceAlpha()
-				* this.mafiaPunisherRep.getReputation() * (1 - this.stateProtectorRep
-				.getReputation()))
+		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
+				EntityType.EXTORTION, extortionId);
+		
+		double denounceIG = (this.conf.getDenounceAlpha()
+				* (1 - this.mafiaPunisherRep.getReputation()) * this.stateProtectorRep
+					.getReputation())
 				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
-		
-		double denounceNG = this.normative
-				.getNormSalience(Norms.DENOUNCE.ordinal());
-		
-		double notDenounceNG = this.normative.getNormSalience(Norms.NOT_DENOUNCE
-				.ordinal());
 		
 		NormEntityAbstract normDenounce = this.normative.getNorm(Norms.DENOUNCE
 				.ordinal());
 		
 		NormEntityAbstract normNotDenounce = this.normative
 				.getNorm(Norms.NOT_DENOUNCE.ordinal());
+		
+		double denounceNG = normDenounce.getSalience();
+		
+		double notDenounceNG = normNotDenounce.getSalience();
 		
 		double probDenounce;
 		// NOT DENOUNCE and DENOUNCE EXTORTION norms active
@@ -826,32 +828,32 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			if(denounceNG > notDenounceNG) {
 				
-				probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
 						+ (this.conf.getNormativeWeight() * denounceNG);
 				
 			} else {
 				
-				probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
-						.getNormativeWeight() * notDenounceNG));
+				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
+						+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
 				
 			}
 			
 			// DENOUNCE EXTORTION norm active
 		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * idDenounce)
+			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
 					+ (this.conf.getNormativeWeight() * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
 		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = 1 - ((this.conf.getIndividualWeight() * idDenounce) + (this.conf
-					.getNormativeWeight() * notDenounceNG));
+			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
+					+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
 			
 			// NONE norm active
 		} else {
 			
-			probDenounce = idDenounce;
+			probDenounce = denounceIG;
 			
 		}
 		
@@ -862,7 +864,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				.getParam(MafiaPunishmentAction.Param.PUNISHMENT);
 		
 		// An affiliated Entrepreneur always denounce punishment
-		if((this.affiliated) || (RandomUtil.nextDouble() < probDenounce)) {
+		if(RandomUtil.nextDouble() < probDenounce) {
 			
 			if(this.affiliated) {
 				DenouncePunishmentAffiliatedAction denounceAction = new DenouncePunishmentAffiliatedAction(
@@ -894,8 +896,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 			
 			// Output
-			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
-					EntityType.EXTORTION, extortionId);
 			outputEntity.setValue(
 					CompensationOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), true);
 			
@@ -930,9 +930,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			}
 			
 			// Output
-			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
-					EntityType.EXTORTION, extortionId);
-			
 			outputEntity.setValue(
 					ExtortionOutputEntity.Field.DENOUNCED_PUNISHMENT.name(), false);
 			
@@ -1270,7 +1267,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.affiliateDenied((AffiliationDeniedAction) content);
 				
 				// Normative Information
-			} else if(content instanceof NormativeInfoAction) {
+			} else if(content instanceof NormInvocationAction) {
+				this.normative.input(msg);
+				
+				// Normative Sanction
+			} else if(content instanceof NormSanctionAction) {
 				this.normative.input(msg);
 				
 				// Critical Consumer information

@@ -10,14 +10,17 @@ import org.slf4j.LoggerFactory;
 
 public class EmiliaControllerConsumer extends EmiliaController {
 	
-	@SuppressWarnings("unused")
 	private static final Logger	logger	= LoggerFactory
 																					.getLogger(EmiliaControllerConsumer.class);
 	
+	private double							sanctionThreshold;
+	
 	
 	public EmiliaControllerConsumer(int agentId, String xmlFilename,
-			String xsdFilename) {
+			String xsdFilename, double sanctionThreshold) {
 		super(agentId, xmlFilename, xsdFilename);
+		
+		this.sanctionThreshold = sanctionThreshold;
 	}
 	
 	
@@ -29,21 +32,22 @@ public class EmiliaControllerConsumer extends EmiliaController {
 					.forName(normEnforcementClass);
 			
 			Constructor<NormEnforcementAbstract> neConstructor = neClass
-					.getDeclaredConstructor(Integer.class, NormativeBoardInterface.class);
+					.getDeclaredConstructor(Integer.class, NormativeBoardInterface.class,
+							Double.class);
 			
 			this.normEnforcement = neConstructor.newInstance(this.agentId,
-					this.normativeBoard);
+					this.normativeBoard, this.sanctionThreshold);
 			
 		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		} catch(NoSuchMethodException e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		} catch(InvocationTargetException e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		} catch(IllegalAccessException e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		} catch(InstantiationException e) {
-			e.printStackTrace();
+			logger.debug(e.toString());
 		}
 	}
 }

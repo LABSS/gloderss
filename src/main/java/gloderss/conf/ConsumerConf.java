@@ -21,6 +21,9 @@ public class ConsumerConf {
 	// Initial reputation values
 	private CReputationConf									reputationConf;
 	
+	// Sanction information
+	private CSanctionConf										sanctionConf;
+	
 	// EMIL-A Normative XML filename
 	private String													normativeXML;
 	
@@ -78,6 +81,17 @@ public class ConsumerConf {
 	@XmlElement(name = Constants.TAG_CONSUMER_REPUTATION)
 	public void setReputationConf(CReputationConf reputationConf) {
 		this.reputationConf = reputationConf;
+	}
+	
+	
+	public CSanctionConf getSanctionConf() {
+		return this.sanctionConf;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_CONSUMER_SANCTION)
+	public void setSanctionConf(CSanctionConf sanctionConf) {
+		this.sanctionConf = sanctionConf;
 	}
 	
 	

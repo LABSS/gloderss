@@ -39,7 +39,8 @@ import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.MafiaBenefitAction;
 import gloderss.actions.MafiaPunishmentAction;
-import gloderss.actions.NormativeInfoAction;
+import gloderss.actions.NormInvocationAction;
+import gloderss.actions.NormSanctionAction;
 import gloderss.actions.NotDenounceExtortionAction;
 import gloderss.actions.NotDenounceExtortionAffiliatedAction;
 import gloderss.actions.NotDenouncePunishmentAction;
@@ -53,6 +54,7 @@ import gloderss.actions.StatePunishmentAction;
 import gloderss.agents.CitizenAgent;
 import gloderss.agents.consumer.normative.EmiliaControllerConsumer;
 import gloderss.agents.consumer.normative.modules.enforcement.ReputationSanction;
+import gloderss.agents.consumer.normative.modules.enforcement.SanctionSanction;
 import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
@@ -118,7 +120,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		 * Normative
 		 */
 		this.normative = new EmiliaControllerConsumer(id, conf.getNormativeXML(),
-				this.conf.getNormativeXSD());
+				this.conf.getNormativeXSD(), this.conf.getSanctionConf().getThreshold());
 		this.normative.init();
 		this.normative.registerNormEnforcement(this);
 		
@@ -126,6 +128,10 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		List<SanctionEntityAbstract> sanctions;
 		NormContent normContent;
 		NormEntityAbstract norm;
+		ReputationSanction repSanction;
+		SanctionSanction sancSanction;
+		SanctionCategory category;
+		SanctionEntityAbstract sanction;
 		Map<NormEntityAbstract, List<SanctionEntityAbstract>> normsSanctions = new HashMap<NormEntityAbstract, List<SanctionEntityAbstract>>();
 		
 		// PAY Norm
@@ -136,6 +142,28 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				NormSource.DISTRIBUTED, NormStatus.GOAL, normContent);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		// REPUTATION SANCTION
+		repSanction = new ReputationSanction(this.id, this.entrepreneurRep);
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.INDIRECT, Polarity.NEGATIVE, Discernability.UNOBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.REPUTATION_ENTREPRENEUR.ordinal(),
+				category, SanctionStatus.ACTIVE, repSanction);
+		
+		sanctions.add(sanction);
+		
+		// SANCTION SANCTION
+		sancSanction = new SanctionSanction(this.id, Norms.PAY_EXTORTION.name());
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.DIRECT, Polarity.NEGATIVE, Discernability.OBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.NORM_SANCTION.ordinal(), category,
+				SanctionStatus.ACTIVE, sancSanction);
+		
+		sanctions.add(sanction);
 		
 		normsSanctions.put(norm, sanctions);
 		
@@ -148,16 +176,25 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
-		ReputationSanction repSanction = new ReputationSanction(this.id,
-				this.entrepreneurRep);
+		// REPUTATION SANCTION
+		repSanction = new ReputationSanction(this.id, this.entrepreneurRep);
 		
-		SanctionCategory category = new SanctionCategory(Issuer.INFORMAL,
-				Locus.OTHER_DIRECTED, Mode.INDIRECT, Polarity.NEGATIVE,
-				Discernability.UNOBSTRUSIVE);
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.INDIRECT, Polarity.NEGATIVE, Discernability.UNOBSTRUSIVE);
 		
-		SanctionEntityAbstract sanction = new SanctionEntity(
-				Sanctions.REPUTATION_ENTREPRENEUR.ordinal(), category,
-				SanctionStatus.ACTIVE, repSanction);
+		sanction = new SanctionEntity(Sanctions.REPUTATION_ENTREPRENEUR.ordinal(),
+				category, SanctionStatus.ACTIVE, repSanction);
+		
+		sanctions.add(sanction);
+		
+		// SANCTION SANCTION
+		sancSanction = new SanctionSanction(this.id, Norms.NOT_PAY_EXTORTION.name());
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.DIRECT, Polarity.NEGATIVE, Discernability.OBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.NORM_SANCTION.ordinal(), category,
+				SanctionStatus.ACTIVE, sancSanction);
 		
 		sanctions.add(sanction);
 		
@@ -183,6 +220,28 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
 		
+		// REPUTATION SANCTION
+		repSanction = new ReputationSanction(this.id, this.entrepreneurRep);
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.INDIRECT, Polarity.NEGATIVE, Discernability.UNOBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.REPUTATION_ENTREPRENEUR.ordinal(),
+				category, SanctionStatus.ACTIVE, repSanction);
+		
+		sanctions.add(sanction);
+		
+		// SANCTION SANCTION
+		sancSanction = new SanctionSanction(this.id, Norms.DENOUNCE.name());
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.DIRECT, Polarity.NEGATIVE, Discernability.OBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.NORM_SANCTION.ordinal(), category,
+				SanctionStatus.ACTIVE, sancSanction);
+		
+		sanctions.add(sanction);
+		
 		normsSanctions.put(norm, sanctions);
 		
 		// NOT_DENOUNCE Norm
@@ -204,6 +263,28 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);
 		
 		sanctions = new ArrayList<SanctionEntityAbstract>();
+		
+		// REPUTATION SANCTION
+		repSanction = new ReputationSanction(this.id, this.entrepreneurRep);
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.INDIRECT, Polarity.NEGATIVE, Discernability.UNOBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.REPUTATION_ENTREPRENEUR.ordinal(),
+				category, SanctionStatus.ACTIVE, repSanction);
+		
+		sanctions.add(sanction);
+		
+		// SANCTION SANCTION
+		sancSanction = new SanctionSanction(this.id, Norms.NOT_DENOUNCE.name());
+		
+		category = new SanctionCategory(Issuer.INFORMAL, Locus.OTHER_DIRECTED,
+				Mode.DIRECT, Polarity.NEGATIVE, Discernability.OBSTRUSIVE);
+		
+		sanction = new SanctionEntity(Sanctions.NORM_SANCTION.ordinal(), category,
+				SanctionStatus.ACTIVE, sancSanction);
+		
+		sanctions.add(sanction);
 		
 		normsSanctions.put(norm, sanctions);
 		
@@ -577,9 +658,14 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				this.receiveProduct((DeliverProductAction) content);
 				
 				// Normative Information
-			} else if(content instanceof NormativeInfoAction) {
-				// Normative
-				this.normative.input(content);
+			} else if(content instanceof NormInvocationAction) {
+				this.normative.input(msg);
+				
+				// Normative Sanction
+			} else if(content instanceof NormSanctionAction) {
+				this.normative.input(msg);
+				
+				this.entrepreneurRep.updateReputation((NormSanctionAction) content);
 				
 				// Reputation Information
 			} else if(content instanceof ReputationInfoAction) {
@@ -727,125 +813,96 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				
 				// Collaboration Request
 			} else if(content instanceof CollaborationRequestAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((CollaborationRequestAction) content);
 				
 				// Collaborate
 			} else if(content instanceof CollaborateAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((CollaborateAction) content);
 				
 				// Denounce extortion
 			} else if(content instanceof DenounceExtortionAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((DenounceExtortionAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Denounce extortion Affiliated
 			} else if(content instanceof DenounceExtortionAffiliatedAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((DenounceExtortionAffiliatedAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Not Denounce extortion
 			} else if(content instanceof NotDenounceExtortionAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((NotDenounceExtortionAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Not Denounce extortion Affiliated
 			} else if(content instanceof NotDenounceExtortionAffiliatedAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((NotDenounceExtortionAffiliatedAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Denounce punishment
 			} else if(content instanceof DenouncePunishmentAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((DenouncePunishmentAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Denounce punishment Affiliated
 			} else if(content instanceof DenouncePunishmentAffiliatedAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((DenouncePunishmentAffiliatedAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Not Denounce punishment
 			} else if(content instanceof NotDenouncePunishmentAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((NotDenouncePunishmentAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Not Denounce punishment Affiliated
 			} else if(content instanceof NotDenouncePunishmentAffiliatedAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((NotDenouncePunishmentAffiliatedAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Mafia pay benefit
 			} else if(content instanceof MafiaBenefitAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((MafiaBenefitAction) content);
 				
-				// Mafia punish
 			} else if(content instanceof MafiaPunishmentAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((MafiaPunishmentAction) content);
 				
-				// Pay extortion
 			} else if(content instanceof PayExtortionAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((PayExtortionAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// Do not pay extortion
 			} else if(content instanceof NotPayExtortionAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((NotPayExtortionAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 				// State compensate punishment
 			} else if(content instanceof StateCompensationAction) {
-				// Reputation
 				this.entrepreneurRep
 						.updateReputation((StateCompensationAction) content);
 				
 				// State punish
 			} else if(content instanceof StatePunishmentAction) {
-				// Reputation
 				this.entrepreneurRep.updateReputation((StatePunishmentAction) content);
 				
-				// Normative
 				this.normative.input(msg);
 				
 			}
@@ -872,6 +929,26 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 							action);
 					this.sendMsg(msg);
 				}
+			}
+		} else if(sanction.getContent() instanceof SanctionSanction) {
+			SanctionSanction sanc = (SanctionSanction) sanction.getContent();
+			NormSanctionAction action = (NormSanctionAction) sanc.getSanction();
+			int entrepreneurId = (int) action
+					.getParam(NormSanctionAction.Param.ENTREPRENEUR_ID);
+			for(Integer neighborId : this.neighbors) {
+				if(entrepreneurId != neighborId) {
+					Message msg = new Message(this.simulator.now(), this.id, neighborId,
+							action);
+					this.sendMsg(msg);
+				}
+			}
+			
+			// The sanction may be discernible to the target
+			if(RandomUtil.nextDouble() < this.conf.getSanctionConf()
+					.getDiscernability()) {
+				Message msg = new Message(this.simulator.now(), this.id,
+						entrepreneurId, action);
+				this.sendMsg(msg);
 			}
 		}
 	}

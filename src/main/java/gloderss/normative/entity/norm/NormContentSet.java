@@ -52,15 +52,30 @@ public class NormContentSet implements NormContentInterface {
 	
 	@Override
 	public boolean match(Object value) {
-		if(value instanceof String) {
+		if (value instanceof String) {
 			for(Actions action : this.actions) {
-				if(action.name().equalsIgnoreCase((String) value)) {
+				if (action.name().equalsIgnoreCase((String) value)) {
 					return true;
 				}
 			}
 			
 			for(Actions noAction : this.notActions) {
-				if(noAction.name().equalsIgnoreCase((String) value)) {
+				if (noAction.name().equalsIgnoreCase((String) value)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	
+	@Override
+	public boolean comply(Object value) {
+		
+		if (value instanceof String) {
+			for(Actions action : this.actions) {
+				if (action.name().equalsIgnoreCase((String) value)) {
 					return true;
 				}
 			}

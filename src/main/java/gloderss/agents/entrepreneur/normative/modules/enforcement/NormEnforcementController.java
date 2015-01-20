@@ -6,7 +6,6 @@ import emilia.entity.norm.NormEntityAbstract;
 import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.modules.enforcement.DeviationAbstract;
 import emilia.modules.enforcement.NormEnforcementAbstract;
-import gloderss.Constants.Actions;
 import gloderss.normative.entity.norm.NormContent;
 import gloderss.normative.entity.norm.NormContentSet;
 import java.util.ArrayList;
@@ -42,45 +41,27 @@ public class NormEnforcementController extends NormEnforcementAbstract {
 		
 		Map<NormEntityAbstract, DeviationAbstract> deviations = new HashMap<NormEntityAbstract, DeviationAbstract>();
 		
-		for(NormEntityAbstract norm : normSanctions.keySet()) {
+		if(event instanceof ActionEvent) {
+			ActionEvent actionEvent = (ActionEvent) event;
 			
-			// NormContent
-			if(norm.getContent() instanceof NormContent) {
-				NormContent normContent = (NormContent) norm.getContent();
+			for(NormEntityAbstract norm : normSanctions.keySet()) {
 				
-				if(event instanceof ActionEvent) {
-					ActionEvent actionEvent = (ActionEvent) event;
+				if(norm.getContent() instanceof NormContent) {
+					NormContent normContent = (NormContent) norm.getContent();
 					
-					if(actionEvent.getAction().getDescription()
-							.equalsIgnoreCase(normContent.getAction().name())) {
+					if(normContent.comply(actionEvent.getAction().getDescription())) {
 						deviations.put(norm, new ComplianceDeviation());
-					} else if(actionEvent.getAction().getDescription()
-							.equalsIgnoreCase(normContent.getNotAction().name())) {
+					} else {
 						deviations.put(norm, new ViolationDeviation());
 					}
-				}
-				
-				// NormContentSet
-			} else if(norm.getContent() instanceof NormContentSet) {
-				NormContentSet normContent = (NormContentSet) norm.getContent();
-				
-				if(event instanceof ActionEvent) {
-					ActionEvent actionEvent = (ActionEvent) event;
 					
-					List<Actions> actions = normContent.getActions();
-					for(Actions action : actions) {
-						if(actionEvent.getAction().getDescription()
-								.equalsIgnoreCase(action.name())) {
-							deviations.put(norm, new ComplianceDeviation());
-						}
-					}
+				} else if(norm.getContent() instanceof NormContentSet) {
+					NormContentSet normContent = (NormContentSet) norm.getContent();
 					
-					List<Actions> notActions = normContent.getNotActions();
-					for(Actions notAction : notActions) {
-						if(actionEvent.getAction().getDescription()
-								.equalsIgnoreCase(notAction.name())) {
-							deviations.put(norm, new ViolationDeviation());
-						}
+					if(normContent.comply(actionEvent.getAction().getDescription())) {
+						deviations.put(norm, new ComplianceDeviation());
+					} else {
+						deviations.put(norm, new ViolationDeviation());
 					}
 				}
 			}

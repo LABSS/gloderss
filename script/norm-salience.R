@@ -107,4 +107,3 @@ plot3d(seq(0,4,1), seq(0,4,1), x[1,])
 complier <- normSalience(10,1,10,1,0,2,10,1)
 violator <- normSalience(1,10,1,10,0,0,1,10)
 intermediary <- normSalience(10,10,10,10,0,10,10,10)
-

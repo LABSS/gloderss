@@ -74,10 +74,12 @@ import org.slf4j.LoggerFactory;
 public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
 	
-	private final static Logger				logger			= LoggerFactory
-																										.getLogger(EntrepreneurAgent.class);
+	private final static Logger				logger					= LoggerFactory
+																												.getLogger(EntrepreneurAgent.class);
 	
-	private final static double				ATAN_FACTOR	= 0.01;
+	private final static double				ATAN_FACTOR			= 0.01;
+	
+	private final static double				DENOUNCE_FACTOR	= 5;
 	
 	private EntrepreneurConf					conf;
 	
@@ -597,6 +599,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
+		probDenounce = Math.pow(probDenounce, DENOUNCE_FACTOR);
+		
 		int mafiosoId = (int) action.getParam(ExtortionAction.Param.MAFIOSO_ID);
 		
 		if(RandomUtil.nextDouble() < probDenounce) {
@@ -856,6 +860,8 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			probDenounce = denounceIG;
 			
 		}
+		
+		probDenounce = Math.pow(probDenounce, DENOUNCE_FACTOR);
 		
 		int mafiosoId = (int) action
 				.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID);

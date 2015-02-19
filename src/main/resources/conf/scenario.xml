@@ -5,10 +5,48 @@
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>1</numberReplications>
-		<numberCycles>1000</numberCycles>
+		<numberCycles>5000</numberCycles>
 		<seeds>
-			<seed>4543</seed>
-			<seed>3794</seed>
+			<seed>557704</seed>
+			<seed>467948</seed>
+			<seed>57158</seed>
+			<seed>434653</seed>
+			<seed>959301</seed>
+			<seed>973854</seed>
+			<seed>479357</seed>
+			<seed>625849</seed>
+			<seed>355990</seed>
+			<seed>157039</seed>
+			<seed>668591</seed>
+			<seed>144910</seed>
+			<seed>616748</seed>
+			<seed>294850</seed>
+			<seed>831806</seed>
+			<seed>810898</seed>
+			<seed>618666</seed>
+			<seed>571834</seed>
+			<seed>277354</seed>
+			<seed>404974</seed>
+			<seed>963562</seed>
+			<seed>835197</seed>
+			<seed>259775</seed>
+			<seed>17595</seed>
+			<seed>881675</seed>
+			<seed>787343</seed>
+			<seed>281389</seed>
+			<seed>550226</seed>
+			<seed>953865</seed>
+			<seed>79584</seed>
+			<seed>585388</seed>
+			<seed>421814</seed>
+			<seed>637289</seed>
+			<seed>642546</seed>
+			<seed>856467</seed>
+			<seed>596590</seed>
+			<seed>616400</seed>
+			<seed>335825</seed>
+			<seed>222440</seed>
+			<seed>972391</seed>
 		</seeds>
 		<output>
 			<directory>./output</directory>
@@ -82,46 +120,46 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>500</numberConsumers>
+			<numberConsumers>200</numberConsumers>
 
 			<!-- Economic -->
-			<buyPDF>NORMAL(60,10)</buyPDF>
+			<buyPDF>NORMAL(30,10)</buyPDF>
 			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
 
 			<!-- Reputation -->
 			<reputation>
-				<entrepreneur>0.7</entrepreneur>
-				<entrepreneurThreshold>0.5</entrepreneurThreshold>
+				<entrepreneur>0.0</entrepreneur>
+				<entrepreneurThreshold>0.0</entrepreneurThreshold>
 			</reputation>
 
 			<!-- Sanction -->
 			<sanction>
 				<threshold>0.90</threshold>
-				<discernability>0.50</discernability>
+				<discernability>0.75</discernability>
 			</sanction>
 
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="10"
-					violation="1" obsCompliance="10" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="10" invocationViolation="1" />
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
 				<!-- Not Pay Extortion -->
 				<normSalience id="1" active="true" compliance="1"
-					violation="10" obsCompliance="1" obsViolation="10" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="10" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
 				<!-- Denounce -->
 				<normSalience id="2" active="true" compliance="1"
-					violation="10" obsCompliance="1" obsViolation="10" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="10" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="10"
-					violation="1" obsCompliance="10" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="10" invocationViolation="1" />
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
 				<!-- Buy from Not Paying Entrepreneurs -->
 				<normSalience id="4" active="true" compliance="10"
 					violation="10" obsCompliance="10" obsViolation="10" punishment="0"
@@ -132,12 +170,64 @@
 					sanction="10" invocationCompliance="10" invocationViolation="10" />
 			</normsSalience>
 		</consumer>
+
+		<consumer>
+			<numberConsumers>800</numberConsumers>
+
+			<!-- Economic -->
+			<buyPDF>NORMAL(30,10)</buyPDF>
+			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
+
+			<!-- Reputation -->
+			<reputation>
+				<entrepreneur>0.5</entrepreneur>
+				<entrepreneurThreshold>0.5</entrepreneurThreshold>
+			</reputation>
+
+			<!-- Sanction -->
+			<sanction>
+				<threshold>0.75</threshold>
+				<discernability>0.75</discernability>
+			</sanction>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
+				<!-- Buy from Not Paying Entrepreneurs -->
+				<normSalience id="4" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+				<!-- Buy from Paying Entrepreneurs -->
+				<normSalience id="5" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+			</normsSalience>
+		</consumer>
 	</consumers>
 
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>500</numberEntrepreneurs>
+			<numberEntrepreneurs>100</numberEntrepreneurs>
 
 			<!-- Economic -->
 			<wealth>0.00</wealth>
@@ -155,38 +245,146 @@
 			<collaborationProbability>0.9</collaborationProbability>
 
 			<!-- Intermediary Organization -->
-			<affiliateThreshold>0.98</affiliateThreshold>
+			<affiliateThreshold>0.95</affiliateThreshold>
 			<affiliated>false</affiliated>
 
 			<!-- Reputation -->
 			<reputation>
-				<stateProtector>0.1</stateProtector>
-				<statePunisher>0.1</statePunisher>
-				<mafiaPunisher>0.9</mafiaPunisher>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.3</statePunisher>
+				<mafiaPunisher>0.7</mafiaPunisher>
 			</reputation>
 
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="10"
-					violation="1" obsCompliance="10" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="10" invocationViolation="1" />
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
 				<!-- Not Pay Extortion -->
 				<normSalience id="1" active="true" compliance="1"
-					violation="10" obsCompliance="1" obsViolation="10" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="10" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
 				<!-- Denounce -->
 				<normSalience id="2" active="true" compliance="1"
-					violation="10" obsCompliance="1" obsViolation="10" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="10" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="10"
-					violation="1" obsCompliance="10" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="10" invocationViolation="1" />
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+			</normsSalience>
+		</entrepreneur>
+
+		<entrepreneur>
+			<numberEntrepreneurs>395</numberEntrepreneurs>
+
+			<!-- Economic -->
+			<wealth>0.00</wealth>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
+
+			<!-- State -->
+			<collaborationProbability>0.9</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliateThreshold>0.95</affiliateThreshold>
+			<affiliated>false</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.3</statePunisher>
+				<mafiaPunisher>0.7</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
+			</normsSalience>
+		</entrepreneur>
+
+		<entrepreneur>
+			<numberEntrepreneurs>5</numberEntrepreneurs>
+
+			<!-- Economic -->
+			<wealth>0.00</wealth>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
+
+			<!-- State -->
+			<collaborationProbability>0.9</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliateThreshold>0.95</affiliateThreshold>
+			<affiliated>true</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.3</statePunisher>
+				<mafiaPunisher>0.7</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="2" invocationCompliance="3" invocationViolation="1" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="1" invocationViolation="3" />
 			</normsSalience>
 		</entrepreneur>
 	</entrepreneurs>
@@ -194,46 +392,46 @@
 	<!-- State Configuration Information -->
 	<state>
 		<!-- Police -->
-		<numberPoliceOfficers>5</numberPoliceOfficers>
+		<numberPoliceOfficers>20</numberPoliceOfficers>
 		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
-		<burocraticActivityDurationPDF>NORMAL(100,10)</burocraticActivityDurationPDF>
-		<specificInvestigationDurationPDF>NORMAL(200,20)</specificInvestigationDurationPDF>
-		<specificInvestigationProbability>0.2</specificInvestigationProbability>
-		<captureProbability>0.2</captureProbability>
+		<bureaucraticActivityDurationPDF>NORMAL(50,10)</bureaucraticActivityDurationPDF>
+		<specificInvestigationDurationPDF>NORMAL(300,10)</specificInvestigationDurationPDF>
+		<specificInvestigationProbability>0.8</specificInvestigationProbability>
+		<captureProbability>0.8</captureProbability>
 		<evidenceProbability>0.2</evidenceProbability>
 
 		<!-- Justice -->
-		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
-		<convictionProbability>0.2</convictionProbability>
+		<custodyDurationPDF>CONSTANT(150)</custodyDurationPDF>
+		<convictionProbability>0.6</convictionProbability>
 		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
 		<imprisonmentDurationPDF>NORMAL(500,100)</imprisonmentDurationPDF>
-		<noCollaborationPunishmentProbability>0.8</noCollaborationPunishmentProbability>
+		<noCollaborationPunishmentProbability>0.3</noCollaborationPunishmentProbability>
 		<noCollaborationPunishment>0.5</noCollaborationPunishment>
 
 		<!-- Fondo di Solidarieta -->
-		<timeToCompensationPDF>CONSTANT(150)</timeToCompensationPDF>
+		<timeToCompensationPDF>CONSTANT(50)</timeToCompensationPDF>
 		<resourceFondo>4000</resourceFondo>
-		<periodicityFondoPDF>NORMAL(300,100)</periodicityFondoPDF>
+		<periodicityFondoPDF>NORMAL(500,100)</periodicityFondoPDF>
 		<proportionTransferFondo>0.5</proportionTransferFondo>
 
 		<!-- Information Spreading -->
-		<spreadInfoFunction>500</spreadInfoFunction>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<spreadInfoFunction>200</spreadInfoFunction>
+		<proportionConsumers>0.05</proportionConsumers>
+		<proportionEntrepreneurs>0.05</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
 	<mafia>
-		<numberMafiosi>5</numberMafiosi>
+		<numberMafiosi>20</numberMafiosi>
 		<wealth>0.00</wealth>
 		<demandPDF>NORMAL(10,2)</demandPDF>
-		<demandAffiliatedProbability>0.3</demandAffiliatedProbability>
-		<extortionLevel>0.3</extortionLevel>
-		<punishmentSeverity>0.4</punishmentSeverity>
+		<demandAffiliatedProbability>0.5</demandAffiliatedProbability>
+		<extortionLevel>0.1</extortionLevel>
+		<punishmentSeverity>0.8</punishmentSeverity>
 		<collectionPDF>CONSTANT(10)</collectionPDF>
 		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
-		<maximumBenefit>0.2</maximumBenefit>
+		<maximumBenefit>0.1</maximumBenefit>
 		<pentitiProbability>0.01</pentitiProbability>
 		<!-- recruitingThreshold does not work -->
 		<recruitingThreshold>0.5</recruitingThreshold>
@@ -248,8 +446,8 @@
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionConsumers>0.1</proportionConsumers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 	</intermediaryOrg>
 
 </scenario>

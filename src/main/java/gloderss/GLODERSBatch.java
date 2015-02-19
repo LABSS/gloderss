@@ -4,18 +4,19 @@ import gloderss.main.RunSimulation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GLODERSSimulator {
+public class GLODERSBatch {
 	
 	private final static Logger	logger	= LoggerFactory
-																					.getLogger(GLODERSSimulator.class);
+																					.getLogger(GLODERSBatch.class);
 	
 	
 	public static void main(String[] args) {
 		if(args.length < 2) {
-			System.out
-					.println("Syntax: GLODERSSimulator [XML Filename] [XSD Filename]");
+			System.out.println("Syntax: GLODERSBatch [XML Config Filename] [XSD Config Filename] [Param values]");
 			System.exit(1);
 		}
+		
+		String original = args[0];
 		
 		long startTime = System.currentTimeMillis();
 		logger.debug("[START_TIME] " + startTime);
@@ -27,4 +28,5 @@ public class GLODERSSimulator {
 		
 		logger.debug("[ELAPSED] " + (endTime - startTime));
 	}
+	
 }

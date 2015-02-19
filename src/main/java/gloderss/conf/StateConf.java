@@ -11,7 +11,7 @@ public class StateConf {
 	
 	private String	generalInvestigationDurationPDF;
 	
-	private String	burocraticActivityDurationPDF;
+	private String	bureaucraticActivityDurationPDF;
 	
 	private String	specificInvestigationDurationPDF;
 	
@@ -71,15 +71,15 @@ public class StateConf {
 	}
 	
 	
-	public String getBurocraticActivityDurationPDF() {
-		return this.burocraticActivityDurationPDF;
+	public String getBureaucraticActivityDurationPDF() {
+		return this.bureaucraticActivityDurationPDF;
 	}
 	
 	
-	@XmlElement(name = Constants.TAG_STATE_BUROCRATIC_ACTIVITY_DURATION_PDF)
-	public void setBurocraticActivityDurationPDF(
-			String burocraticActivityDurationPDF) {
-		this.burocraticActivityDurationPDF = burocraticActivityDurationPDF;
+	@XmlElement(name = Constants.TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF)
+	public void setBureaucraticActivityDurationPDF(
+			String bureaucraticActivityDurationPDF) {
+		this.bureaucraticActivityDurationPDF = bureaucraticActivityDurationPDF;
 	}
 	
 	

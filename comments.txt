@@ -1,6 +1,15 @@
 Changes
 =======
 
+19/02/2015
+----------
+1. Fixed an error on the OutputController that was not using the timeToWrite parameter
+
+2. Changed the DenounceExtortion and DenouncePunishment in order to make a denounce more probable
+   only in the case in which the salience to Denounce is very high. A DENOUNCE_FACTOR configuration
+   parameter was hard-coded with value 5. In the future, this will become a configuration parameter. 
+   
+
 14/01/2015
 ----------
 1. Added a new Sanction message that Consumers send to sanction non-compliant Entrepreneurs
@@ -17,6 +26,6 @@ Changes
   
 2. Consider Denounce and Not Denounce actions in the Entrepreneurs reputation
 
-3. Burocratic time between general investigation
+3. Bureaucratic time between general investigation
 
-4. Flexible State and Intermediary Organization information spreading 
+4. Flexible State and Intermediary Organization information spreading

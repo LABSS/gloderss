@@ -3,7 +3,7 @@
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
 dir <- ""
-replica <- "/0"
+replica <- "04-after2000/80/0"
 
 ##
 ## Load files
@@ -59,12 +59,16 @@ if (!is.null(extortion)) {
   nNDenExt <- nrow(subset(extortion, paid == "false" &
                             denouncedExtortion == "false"))
   nDenPun <- nrow(subset(extortion, paid == "false" &
+                           mafiaPunished == "true" &
                            denouncedPunishment == "true"))
   nNDenPun <- nrow(subset(extortion, paid == "false" &
+                            mafiaPunished == "true" &
                             denouncedExtortion == "false"))
   nInv <- nrow(subset(extortion, paid == "false" &
                       (investigatedExtortion == "true" |
-                         investigatedPunishment == "true")))
+                         investigatedPunishment == "true") &
+                        (denouncedExtortion == "true" |
+                           denouncedPunishment == "true")))
   nInvCus <- nrow(subset(extortion, paid == "false" &
                          (investigatedExtortion == "true"  |
                             investigatedPunishment == "true") &
@@ -85,11 +89,9 @@ if (!is.null(extortion)) {
 }
 
 if (!is.null(compensation)) {
-  nDenPun <- nrow(subset(compensation, denouncedPunishment == "true"))
   nComp <- nrow(subset(compensation, denouncedPunishment == "true" &
                        stateCompensate == "true"))
 } else {
-  nDenPun <- 0
   nComp <- 0
 }
 
@@ -144,3 +146,11 @@ prop <- cbind(nExtortion, nCustody, nImprisonment,
 write.table(prop, file=paste(base,"/summary.csv", sep=""),
             quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)
 
+hist(entrepreneur$saliencePayExtortion)
+hist(entrepreneur$salienceNotPayExtortion)
+hist(entrepreneur$salienceDenounce)
+hist(entrepreneur$salienceNotDenounce)
+
+hist(extortion[extortion$paid == "true",]$time)
+hist(extortion[extortion$paid == "false",]$time)
+hist(extortion$time)

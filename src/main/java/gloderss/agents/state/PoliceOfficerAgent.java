@@ -28,7 +28,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	
 	private PDFAbstract		generalInvestigationDurationPDF;
 	
-	private PDFAbstract		burocraticActivityDurationPDF;
+	private PDFAbstract		bureaucraticActivityDurationPDF;
 	
 	private PDFAbstract		specificInvestigationDurationPDF;
 	
@@ -65,8 +65,8 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		this.generalInvestigationDurationPDF = PDFAbstract.getInstance(conf
 				.getGeneralInvestigationDurationPDF());
 		
-		this.burocraticActivityDurationPDF = PDFAbstract.getInstance(conf
-				.getBurocraticActivityDurationPDF());
+		this.bureaucraticActivityDurationPDF = PDFAbstract.getInstance(conf
+				.getBureaucraticActivityDurationPDF());
 		
 		this.specificInvestigationDurationPDF = PDFAbstract.getInstance(conf
 				.getSpecificInvestigationDurationPDF());
@@ -167,7 +167,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 		this.addObservation(this.id, this.observed);
 		
 		this.event = new Event(this.simulator.now()
-				+ this.burocraticActivityDurationPDF.nextValue(), this,
+				+ this.bureaucraticActivityDurationPDF.nextValue(), this,
 				Constants.EVENT_BUROCRATIC_ACTIVITY);
 		this.simulator.insert(this.event);
 	}

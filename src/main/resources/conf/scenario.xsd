@@ -372,7 +372,7 @@
 							<!-- Police -->
 							<element name="numberPoliceOfficers" type="nonNegativeInteger" />
 							<element name="generalInvestigationDurationPDF" type="string" />
-							<element name="burocraticActivityDurationPDF" type="string" />
+							<element name="bureaucraticActivityDurationPDF" type="string" />
 							<element name="specificInvestigationDurationPDF" type="string" />
 							<element name="specificInvestigationProbability">
 								<simpleType>

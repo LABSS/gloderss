@@ -1,10 +1,15 @@
 package gloderss.engine.devs;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gloderss.engine.event.Event;
 
 public class EventSimulator extends AbstractEventSimulator {
 	
-	private double	time;
+	private final static Logger	logger	= LoggerFactory
+																					.getLogger(EventSimulator.class);
+	
+	private double							time;
 	
 	
 	public double now() {
@@ -17,6 +22,7 @@ public class EventSimulator extends AbstractEventSimulator {
 		while((this.time < stop)
 				&& ((event = (Event) this.events.removeFirst()) != null)) {
 			this.time = event.getTime();
+			logger.debug(event.getCommand().toString());
 			event.execute(this);
 		}
 	}

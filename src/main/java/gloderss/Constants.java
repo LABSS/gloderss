@@ -203,7 +203,7 @@ public final class Constants {
 	
 	public static final String	TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF			= "generalInvestigationDurationPDF";
 	
-	public static final String	TAG_STATE_BUROCRATIC_ACTIVITY_DURATION_PDF				= "burocraticActivityDurationPDF";
+	public static final String	TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF			= "bureaucraticActivityDurationPDF";
 	
 	public static final String	TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF			= "specificInvestigationDurationPDF";
 	

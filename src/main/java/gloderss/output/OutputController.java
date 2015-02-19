@@ -19,8 +19,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OutputController implements EventHandler {
+	
+	private final static Logger														logger	= LoggerFactory
+																																		.getLogger(OutputController.class);
 	
 	private static OutputController												instance;
 	
@@ -209,19 +214,6 @@ public class OutputController implements EventHandler {
 	}
 	
 	
-	// public synchronized AbstractEntity getEntity(EntityType type, int id) {
-	// AbstractEntity entity = null;
-	
-	// if(this.entities.containsKey(type)) {
-	// Map<Integer, AbstractEntity> typeEntities = this.entities.get(type);
-	// if(typeEntities.containsKey(id)) {
-	// entity = typeEntities.get(id);
-	// }
-	// }
-	
-	// return entity;
-	// }
-	
 	public void setEntity(EntityType type, AbstractEntity entity) {
 		int id = entity.getEntityId();
 		
@@ -290,8 +282,14 @@ public class OutputController implements EventHandler {
 			case Constants.EVENT_WRITE_DATA:
 				try {
 					this.write(false);
+					
+					// Schedule the next writing event
+					Event nextEvent = new Event(this.simulator.now() + this.timeToWrite,
+							this, Constants.EVENT_WRITE_DATA);
+					this.simulator.insert(nextEvent);
+					
 				} catch(IOException e) {
-					e.printStackTrace();
+					logger.debug(e.toString());
 				}
 				break;
 		}

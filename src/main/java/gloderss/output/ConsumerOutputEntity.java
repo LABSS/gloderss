@@ -3,6 +3,7 @@ package gloderss.output;
 public class ConsumerOutputEntity extends AbstractEntity {
 	
 	public enum Field {
+		TIME("time", DataType.INTEGER),
 		CONSUMER_ID("consumerId", DataType.INTEGER),
 		ENTREPRENEUR_REP("entrepreneurRep", DataType.STRING),
 		NUMBER_PRODUCTS("numberProducts", DataType.INTEGER),
@@ -49,6 +50,7 @@ public class ConsumerOutputEntity extends AbstractEntity {
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
 		
+		this.entity[Field.TIME.ordinal()] = -1;
 		this.entity[Field.CONSUMER_ID.ordinal()] = -1;
 		this.entity[Field.ENTREPRENEUR_REP.ordinal()] = "";
 		this.entity[Field.NUMBER_PRODUCTS.ordinal()] = 0;

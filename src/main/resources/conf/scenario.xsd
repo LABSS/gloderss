@@ -101,6 +101,7 @@
 								<complexType>
 									<sequence>
 										<element name="numberConsumers" type="nonNegativeInteger" />
+										<element name="loggingTimeUnit" type="nonNegativeInteger" />
 
 										<!-- Economic -->
 										<element name="buyPDF" type="string" />
@@ -208,6 +209,7 @@
 								<complexType>
 									<sequence>
 										<element name="numberEntrepreneurs" type="nonNegativeInteger" />
+										<element name="loggingTimeUnit" type="nonNegativeInteger" />
 
 										<!-- Economic -->
 										<element name="wealth">

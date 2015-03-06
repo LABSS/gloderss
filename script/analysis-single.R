@@ -1,156 +1,667 @@
+library(ggplot2)
+library(data.table)
 ##
 ## Directory
 ##
 base <- "/data/workspace/gloders/gloderss/output/"
-dir <- ""
-replica <- "04-after2000/80/0"
+dir <- c("01-before1980",
+         "02-1980-1990",
+         "03-1990-2000/10",
+         "03-1990-2000/20",
+         "03-1990-2000/40",
+         "03-1990-2000/50",
+         "03-1990-2000/60",
+         "03-1990-2000/80",
+         "04-after2000/10",
+         "04-after2000/20",
+         "04-after2000/40",
+         "04-after2000/50",
+         "04-after2000/60",
+         "04-after2000/80")
+replica <- "/0"
 
+xaxis <- c(1,2,3,3,3,3,3,3,4,4,4,4,4,4)
+
+compensation <- NULL
+consumer <- NULL
+entrepreneur <- NULL
+extortion <- NULL
+io <- NULL
+mafia <- NULL
+mafiosi <- NULL
+normative <- NULL
+purchase <- NULL
+state <- NULL
+
+nCustody <- NULL
+nImprisonment <- NULL
+nExtortion <- NULL
+nPaid <- NULL
+nNPaid <- NULL
+nDenExt <- NULL
+nNDenExt <- NULL
+nDenPun <- NULL
+nNDenPun <- NULL
+nPun <- NULL
+nInv <- NULL
+nInvCus <- NULL
+nInvCon <- NULL
+nDen <- NULL
+nComp <- NULL
+
+nAffiliated <- NULL
+
+propPaid <- NULL
+propDenExt <- NULL
+propDenPun <- NULL
+propInv <- NULL
+propCus <- NULL
+propCon <- NULL
+propComp <- NULL
+propCompleted <- NULL
+propNDen <- NULL
+
+mESalPay <- NULL
+sESalPay <- NULL
+mESalNPay <- NULL
+sESalNPay <- NULL
+mESalDen <- NULL
+sESalDen <- NULL
+mESalNDen <- NULL
+sESalNDen <- NULL
+
+mCSalPay <- NULL
+sCSalPay <- NULL
+mCSalNPay <- NULL
+sCSalNPay <- NULL
+mCSalDen <- NULL
+sCSalDen <- NULL
+mCSalNDen <- NULL
+sCSalNDen <- NULL
+mCSalBuyPE <- NULL
+sCSalBuyPE <- NULL
+mCSalBuyNPE <- NULL
+sCSalBuyNPE <- NULL
+
+prop <- NULL
+
+for(i in 1:length(dir)){
 ##
 ## Load files
 ##
-compensation <- try(read.csv(paste(base,dir,replica,"/compensation.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(compensation, 'try-error')) { compensation <- NULL }
+compensation[[i]] <- try(read.csv(paste(base,dir[i],replica,"/compensation.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(compensation[[i]], 'try-error')) { compensation[[i]] <- NULL }
 
-consumer <- try(read.csv(paste(base,dir,replica,"/consumer.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(consumer, 'try-error')) { consumer <- NULL }
+consumer[[i]] <- try(read.csv(paste(base,dir[i],replica,"/consumer.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(consumer[[i]], 'try-error')) { consumer[[i]] <- NULL }
 
-entrepreneur <- try(read.csv(paste(base,dir,replica,"/entrepreneur.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(entrepreneur, 'try-error')) { entrepreneur <- NULL }
+entrepreneur[[i]] <- try(read.csv(paste(base,dir[i],replica,"/entrepreneur.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(entrepreneur[[i]], 'try-error')) { entrepreneur[[i]] <- NULL }
 
-extortion <- try(read.csv(paste(base,dir,replica,"/extortion.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(extortion, 'try-error')) { extortion <- NULL }
+extortion[[i]] <- try(read.csv(paste(base,dir[i],replica,"/extortion.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(extortion[[i]], 'try-error')) { extortion[[i]] <- NULL }
 
-#io <- try(read.csv(paste(base,dir,replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
-#if (inherits(io, 'try-error')) { io <- NULL }
+#io[[i]] <- try(read.csv(paste(base,dir[i],replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
+#if (inherits(io[[i]], 'try-error')) { io[[i]] <- NULL }
 
-mafia <- try(read.csv(paste(base,dir,replica,"/mafia.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(mafia, 'try-error')) { mafia <- NULL }
+mafia[[i]] <- try(read.csv(paste(base,dir[i],replica,"/mafia.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(mafia[[i]], 'try-error')) { mafia[[i]] <- NULL }
 
-mafiosi <- try(read.csv(paste(base,dir,replica,"/mafiosi.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(mafiosi, 'try-error')) { mafiosi <- NULL }
+mafiosi[[i]] <- try(read.csv(paste(base,dir[i],replica,"/mafiosi.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(mafiosi[[i]], 'try-error')) { mafiosi[[i]] <- NULL }
   
-normative <- try(read.csv(paste(base,dir,replica,"/normative.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(normative, 'try-error')) { normative <- NULL }
+normative[[i]] <- try(read.csv(paste(base,dir[i],replica,"/normative.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(normative[[i]], 'try-error')) { normative[[i]] <- NULL }
 
-purchase <- try(read.csv(paste(base,dir,replica,"/purchase.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(purchase, 'try-error')) { purchase <- NULL }
+purchase[[i]] <- try(read.csv(paste(base,dir[i],replica,"/purchase.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(purchase[[i]], 'try-error')) { purchase[[i]] <- NULL }
 
-state <- try(read.csv(paste(base,dir,replica,"/state.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(state, 'try-error')) { state <- NULL }
+state[[i]] <- try(read.csv(paste(base,dir[i],replica,"/state.csv", sep=""), header=TRUE, sep=";"))
+if (inherits(state[[i]], 'try-error')) { state[[i]] <- NULL }
 
 ##
 ## Variables
 ##
-
-if (!is.null(mafiosi)) {
-  nCustody <- nrow(subset(mafiosi, custodyTime > 0 & imprisonmentTime == 0))
-  nImprisonment <- nrow(subset(mafiosi, imprisonmentTime > 0))
+if (!is.null(mafiosi[[i]])) {
+  nCustody[[i]] <- nrow(subset(mafiosi[[i]], custodyTime > 0 & imprisonmentTime == 0))
+  nImprisonment[[i]] <- nrow(subset(mafiosi[[i]], imprisonmentTime > 0))
 } else {
-  nCustody <- 0
-  nImprisonment <- 0
+  nCustody[[i]] <- 0
+  nImprisonment[[i]] <- 0
 }
 
-if (!is.null(extortion)) {
-  nExtortion <- nrow(extortion)
-  nPaid <- nrow(subset(extortion, paid == "true"))
-  nNPaid <- nrow(subset(extortion, paid == "false"))
-  nDenExt <- nrow(subset(extortion, paid == "false" &
-                           denouncedExtortion == "true"))
-  nNDenExt <- nrow(subset(extortion, paid == "false" &
-                            denouncedExtortion == "false"))
-  nDenPun <- nrow(subset(extortion, paid == "false" &
-                           mafiaPunished == "true" &
-                           denouncedPunishment == "true"))
-  nNDenPun <- nrow(subset(extortion, paid == "false" &
-                            mafiaPunished == "true" &
-                            denouncedExtortion == "false"))
-  nInv <- nrow(subset(extortion, paid == "false" &
-                      (investigatedExtortion == "true" |
-                         investigatedPunishment == "true") &
-                        (denouncedExtortion == "true" |
-                           denouncedPunishment == "true")))
-  nInvCus <- nrow(subset(extortion, paid == "false" &
-                         (investigatedExtortion == "true"  |
-                            investigatedPunishment == "true") &
-                         mafiosoCustody == "true"))
-  nInvCon <- nrow(subset(extortion, paid == "false" &
-                         (investigatedExtortion == "true"  |
-                            investigatedPunishment == "true") &
-                         mafiosoConvicted == "true"))
+if (!is.null(extortion[[i]])) {
+  nExtortion[[i]] <- nrow(extortion[[i]])
+  nPaid[[i]] <- nrow(subset(extortion[[i]], paid == "true"))
+  nNPaid[[i]] <- nrow(subset(extortion[[i]], paid == "false"))
+  nDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                denouncedExtortion == "true"))
+  nNDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                 denouncedExtortion == "false"))
+  nDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                mafiaPunished == "true" &
+                                denouncedPunishment == "true"))
+  nNDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                 mafiaPunished == "true" &
+                                 denouncedExtortion == "false"))
+  nInv[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                             (investigatedExtortion == "true" |
+                                investigatedPunishment == "true") &
+                             (denouncedExtortion == "true" |
+                                denouncedPunishment == "true")))
+  nInvCus[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                (investigatedExtortion == "true"  |
+                                   investigatedPunishment == "true") &
+                                mafiosoCustody == "true"))
+  nInvCon[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                (investigatedExtortion == "true"  |
+                                   investigatedPunishment == "true") &
+                                mafiosoConvicted == "true"))
+  nDen[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                             (denouncedExtortion == "true" |
+                                denouncedPunishment == "true")))
+  nPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                             mafiaPunished == "true"))
 } else {
-  nExtortion <- 0
-  nPaid <- 0
-  nNPaid <- 0
-  nDen <- 0
-  nNDen <- 0
-  nInv <- 0
-  nInvCus <- 0
-  nInvCon <- 0
+  nExtortion[[i]] <- 0
+  nPaid[[i]] <- 0
+  nNPaid[[i]] <- 0
+  nDen[[i]] <- 0
+  nNDen[[i]] <- 0
+  nInv[[i]] <- 0
+  nInvCus[[i]] <- 0
+  nInvCon[[i]] <- 0
+  nDen[[i]] <- 0
+  nPun[[i]] <- 0
 }
 
-if (!is.null(compensation)) {
-  nComp <- nrow(subset(compensation, denouncedPunishment == "true" &
-                       stateCompensate == "true"))
+if (!is.null(compensation[[i]])) {
+  nComp[[i]] <- nrow(subset(compensation[[i]], denouncedPunishment == "true" &
+                              stateCompensate == "true"))
 } else {
-  nComp <- 0
+  nComp[[i]] <- 0
 }
+
+nAffiliated[[i]] <- nrow(subset(entrepreneur[[i]], affiliated == "true"))
 
 ##
 ## Calculation
 ##
-propPaid <- nPaid / nExtortion
-propDenExt <- nDenExt / nExtortion
-propDenPun <- nDenPun / nNPaid
-propInv <- nInv / (nDenExt + nDenPun)
-propCus <- nInvCus / (nDenExt + nDenPun)
-propCon <- nInvCon / (nDenExt + nDenPun)
-propComp <- nComp / nDenPun
+propPaid[[i]] <- nPaid[[i]] / nExtortion[[i]]
+propDenExt[[i]] <- nDenExt[[i]] / nExtortion[[i]]
+propDenPun[[i]] <- nDenPun[[i]] / nNPaid[[i]]
+propInv[[i]] <- nInv[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+propCus[[i]] <- nInvCus[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+propCon[[i]] <- nInvCon[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+propComp[[i]] <- nComp[[i]] / nDenPun[[i]]
 
-mESalPay <- mean(entrepreneur$saliencePayExtortion)
-sESalPay <- sd(entrepreneur$saliencePayExtortion)
-mESalNPay <- mean(entrepreneur$salienceNotPayExtortion)
-sESalNPay <- sd(entrepreneur$salienceNotPayExtortion)
-mESalDen <- mean(entrepreneur$salienceDenounce)
-sESalDen <- sd(entrepreneur$salienceDenounce)
-mESalNDen <- mean(entrepreneur$salienceNotDenounce)
-sESalNDen <- sd(entrepreneur$salienceNotDenounce)
+propCompleted[[i]] <- nInvCon[[i]] / nInv[[i]]
 
-mCSalPay <- mean(consumer$saliencePayExtortion)
-sCSalPay <- sd(consumer$saliencePayExtortion)
-mCSalNPay <- mean(consumer$salienceNotPayExtortion)
-sCSalNPay <- sd(consumer$salienceNotPayExtortion)
-mCSalDen <- mean(consumer$salienceDenounce)
-sCSalDen <- sd(consumer$salienceDenounce)
-mCSalNDen <- mean(consumer$salienceNotDenounce)
-sCSalNDen <- sd(consumer$salienceNotDenounce)
-mCSalBuyPE <- mean(consumer$salienceBuyPayingEntrepreneurs)
-sCSalBuyPE <- sd(consumer$salienceBuyPayingEntrepreneurs)
-mCSalBuyNPE <- mean(consumer$salienceBuyNotPayingEntrepreneurs)
-sCSalBuyNPE <- sd(consumer$salienceBuyNotPayingEntrepreneurs)
+propNDen[[i]] <- 1 - (nDen[[i]] / nExtortion[[i]])
+
+mESalPay[[i]] <- mean(entrepreneur[[i]]$saliencePayExtortion)
+sESalPay[[i]] <- sd(entrepreneur[[i]]$saliencePayExtortion)
+mESalNPay[[i]] <- mean(entrepreneur[[i]]$salienceNotPayExtortion)
+sESalNPay[[i]] <- sd(entrepreneur[[i]]$salienceNotPayExtortion)
+mESalDen[[i]] <- mean(entrepreneur[[i]]$salienceDenounce)
+sESalDen[[i]] <- sd(entrepreneur[[i]]$salienceDenounce)
+mESalNDen[[i]] <- mean(entrepreneur[[i]]$salienceNotDenounce)
+sESalNDen[[i]] <- sd(entrepreneur[[i]]$salienceNotDenounce)
+
+mCSalPay[[i]] <- mean(consumer[[i]]$saliencePayExtortion)
+sCSalPay[[i]] <- sd(consumer[[i]]$saliencePayExtortion)
+mCSalNPay[[i]] <- mean(consumer[[i]]$salienceNotPayExtortion)
+sCSalNPay[[i]] <- sd(consumer[[i]]$salienceNotPayExtortion)
+mCSalDen[[i]] <- mean(consumer[[i]]$salienceDenounce)
+sCSalDen[[i]] <- sd(consumer[[i]]$salienceDenounce)
+mCSalNDen[[i]] <- mean(consumer[[i]]$salienceNotDenounce)
+sCSalNDen[[i]] <- sd(consumer[[i]]$salienceNotDenounce)
+mCSalBuyPE[[i]] <- mean(consumer[[i]]$salienceBuyPayingEntrepreneurs)
+sCSalBuyPE[[i]] <- sd(consumer[[i]]$salienceBuyPayingEntrepreneurs)
+mCSalBuyNPE[[i]] <- mean(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
+sCSalBuyNPE[[i]] <- sd(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
 
 ##
 ## Proportion
 ##
-prop <- cbind(nExtortion, nCustody, nImprisonment,
-              propPaid, nPaid, propDenExt, nDenExt, propDenPun, nDenPun,
-              propInv, nInv, propCus, propCon, propComp,
-              mESalPay, sESalPay, mESalNPay, sESalNPay,
-              mESalDen, sESalDen, mESalNDen, sESalNDen,
-              mCSalPay, sCSalPay, mCSalNPay, sCSalNPay,
-              mCSalDen, sCSalDen, mCSalNDen, sCSalNDen,
-              mCSalBuyPE, sCSalBuyPE, mCSalBuyNPE, sCSalBuyNPE)
+prop[[i]] <- cbind(nExtortion[[i]], nCustody[[i]], nImprisonment[[i]],
+                   propPaid[[i]], nPaid[[i]], propDenExt[[i]], nDenExt[[i]],
+                   propDenPun[[i]], nDenPun[[i]],
+                   propInv[[i]], nInv[[i]], propCus[[i]], propCon[[i]], propComp[[i]],
+                   mESalPay[[i]], sESalPay[[i]], mESalNPay[[i]], sESalNPay[[i]],
+                   mESalDen[[i]], sESalDen[[i]], mESalNDen[[i]], sESalNDen[[i]],
+                   mCSalPay[[i]], sCSalPay[[i]], mCSalNPay[[i]], sCSalNPay[[i]],
+                   mCSalDen[[i]], sCSalDen[[i]], mCSalNDen[[i]], sCSalNDen[[i]],
+                   mCSalBuyPE[[i]], sCSalBuyPE[[i]], mCSalBuyNPE[[i]], sCSalBuyNPE[[i]])
+}
 
 ##
 ## Write
 ##
-write.table(prop, file=paste(base,"/summary.csv", sep=""),
+write.table(prop[[i]], file=paste0(base,dir[i],"/summary.csv"),
             quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)
 
-hist(entrepreneur$saliencePayExtortion)
-hist(entrepreneur$salienceNotPayExtortion)
-hist(entrepreneur$salienceDenounce)
-hist(entrepreneur$salienceNotDenounce)
+##
+## Histogram of the Pay Extortion salience
+##
+png(filename=paste0(base,dir[i],"/salPayExtortion.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=saliencePayExtortion)) +
+  xlim(0,1) + ylim(0,30) +
+  ylab('Number of Entrepreneurs') + xlab('Salience Pay Extortion') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(saliencePayExtortion, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
 
-hist(extortion[extortion$paid == "true",]$time)
-hist(extortion[extortion$paid == "false",]$time)
-hist(extortion$time)
+##
+## Histogram of the Do Not Pay Extortion salience
+##
+png(filename=paste0(base,dir[i],"/salNotPayExtortion.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceNotPayExtortion)) +
+  xlim(0,1) + ylim(0,30) +
+  ylab('Number of Entrepreneurs') + xlab('Salience Do Not Pay Extortion') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceNotPayExtortion, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of the Do Not Denounce Extortion salience
+##
+png(filename=paste0(base,dir[i],"/salNotDenounce.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceNotDenounce)) +
+  xlim(0,1) + ylim(0,30) +
+  ylab('Number of Entrepreneurs') + xlab('Salience Do Not Denounce Extortion') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceNotDenounce, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of the Denounce Extortion salience
+##
+png(filename=paste0(base,dir[i],"/salDenounce.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceDenounce)) +
+  xlim(0,1) + ylim(0,30) +
+  ylab('Number of Entrepreneurs') + xlab('Salience Denounce Extortion') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceDenounce, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Paid Extortion
+##
+png(filename=paste0(base,dir[i],"/histPaidExtortion.png"), width=1024, height=768)
+ggplot(extortion[[i]][extortion[[i]]$paid == "true",], aes(x=time)) +
+  xlim(0,5000) + ylim(0,600) +
+  ylab('Number of Paid Extortion') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Non-Paid Extortion
+##
+png(filename=paste0(base,dir[i],"/histNotPaidExtortion.png"), width=1024, height=768)
+ggplot(extortion[[i]][extortion[[i]]$paid == "false",], aes(x=time)) +
+  xlim(0,5000) + ylim(0,600) +
+  ylab('Number of Non-Paid Extortion') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Extortion
+##
+png(filename=paste0(base,dir[i],"/histExtortion.png"), width=1024, height=768)
+ggplot(extortion[[i]], aes(x=time)) +
+  xlim(0,5000) + ylim(0,600) +
+  ylab('Number of Extortion') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Denounce
+##
+png(filename=paste0(base,dir[i],"/histDenounce.png"), width=1024, height=768)
+ggplot(extortion[[i]][extortion[[i]]$denouncedExtortion == "true" |
+                        extortion[[i]]$denouncedPunishment == "true",], aes(x=time)) +
+  xlim(0,5000) + ylim(0,55) +
+  ylab('Number of Denounces') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Denounced Extortion
+##
+png(filename=paste0(base,dir[i],"/histDenExt.png"), width=1024, height=768)
+ggplot(extortion[[i]][extortion[[i]]$denouncedExtortion == "true",], aes(x=time)) +
+  xlim(0,5000) + ylim(0,55) +
+  ylab('Number of Denounced Extortion') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Histogram of Number of Denounced Punishment
+##
+png(filename=paste0(base,dir[i],"/histDenPun.png"), width=1024, height=768)
+ggplot(extortion[[i]][extortion[[i]]$denouncedPunishment == "true",], aes(x=time)) +
+  xlim(0,5000) + ylim(0,55) +
+  ylab('Number of Denounced Punishment') + xlab('Time') +
+  geom_histogram(aes(y=..count..),
+                 binwidth=500, colour="black", fill="grey", size=1.5) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+##
+## Scatterplot of Extortions
+##
+data <- data.table(cbind(dir,xaxis,nExtortion))
+png(filename=paste0(base,"/numExtortion.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nExtortion)))) +
+  xlab('') + ylab('Number of Extortions') + ylim(0,5000) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        #legend.title=element_blank(),
+        #legend.text = element_text(colour="black", size=24, face="bold"))
+        legend.position = 'none')
+dev.off()
+
+#legend.title=element_blank(),
+#legend.text = element_text(colour="black", size=24, face="bold"))
+
+##
+## Scatterplot of Paid of Extortion
+##
+data <- data.table(cbind(dir,xaxis,nPaid))
+png(filename=paste0(base,"/numPaidExt.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)))) +
+  xlab('') + ylab('Number of Paid Extortions') + ylim(0,3500) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Paid of Extortions
+##
+data <- data.table(cbind(dir,xaxis,propPaid))
+png(filename=paste0(base,"/propPaidExt.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPaid)))) +
+  xlab('') + ylab('% Paid Extortions') + ylim(0,1) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Denounce
+##
+data <- data.table(cbind(dir,xaxis,nDen))
+png(filename=paste0(base,"/numDenounce.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nDen)))) +
+  xlab('') + ylab('Number of Denounces') + ylim(0,200) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Denounces of Extortion
+##
+data <- data.table(cbind(dir,xaxis,propDenExt))
+png(filename=paste0(base,"/propDenExt.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenExt)))) +
+  xlab('') + ylab('% Denounced Extortions') + ylim(0,1) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Denounces of Punishments
+##
+data <- data.table(cbind(dir,xaxis,propDenPun))
+png(filename=paste0(base,"/propDenPun.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenPun)))) +
+  xlab('') + ylab('% Denounces Punishments') + ylim(0,1) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 0.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=0.5, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=0.5, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Denounces
+##
+propDen <- propDenExt + propDenPun
+data <- data.table(cbind(dir,xaxis,propDen))
+png(filename=paste0(base,"/propDen.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDen)))) +
+  xlab('') + ylab('% Denounces') + ylim(0,1) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Imprisonment
+##
+data <- data.table(cbind(dir,xaxis,nInvCon))
+png(filename=paste0(base,"/numImprisonment.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nInvCon)))) +
+  xlab('') + ylab('Number Imprisonment') + ylim(0,100) +
+  geom_point(aes(color=as.character(dir)), size=10) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.position = 'none')
+dev.off()
+
+##
+## Norms' set shift
+##
+for(i in 1:length(dir)){
+  new <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$salienceDenounce >= 
+                                   entrepreneur[[i]]$salienceNotDenounce) &
+                                  (entrepreneur[[i]]$saliencePayExtortion < 
+                                     entrepreneur[[i]]$salienceNotPayExtortion),])
+  
+  traditional <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$salienceDenounce <
+                                           entrepreneur[[i]]$salienceNotDenounce) &
+                                          (entrepreneur[[i]]$saliencePayExtortion >=
+                                             entrepreneur[[i]]$salienceNotPayExtortion),])
+  
+  onlyNotPay <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$saliencePayExtortion < 
+                                          entrepreneur[[i]]$salienceNotPayExtortion),]) - new
+  
+  onlyDenounce <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$salienceDenounce >= 
+                                            entrepreneur[[i]]$salienceNotDenounce),]) - new
+  
+  print(c(i, new, traditional, onlyNotPay, onlyDenounce, (new+traditional+onlyNotPay+onlyDenounce)))
+}
+
+##
+## Validation Information
+##
+city <- c("Agrigento",
+          "Catania",
+          "Messina",
+          "Siracusa",
+          "01-before1980",
+          "02-1980-1990",
+          "03-1990-2000-10",
+          "03-1990-2000-20",
+          "03-1990-2000-40",
+          "03-1990-2000-50",
+          "03-1990-2000-60",
+          "03-1990-2000-80",
+          "04-after2000-10",
+          "04-after2000-20",
+          "04-after2000-40",
+          "04-after2000-50",
+          "04-after2000-60",
+          "04-after2000-80")
+y <- c(0.65,0.85,0.78,0.82,as.array(propPaid))
+x <- c(0.70,0.75,0.74,0.85,as.array(1 - (propDenExt + propDenPun)))
+
+data <- data.table(cbind(city,x,y))
+
+ggplot(data, aes(x=as.numeric(as.character(x))*100, y=as.numeric(as.character(y))*100)) +
+  xlim(0,100) + ylim(0,100) +
+  xlab('% Unreported Cases') + ylab('% Completed Extortions') +
+  geom_point(aes(color=as.character(city)), size=6) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))

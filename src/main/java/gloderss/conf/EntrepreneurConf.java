@@ -10,7 +10,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class EntrepreneurConf {
 	
 	// Number of entrepreneurs
-	private int															number;
+	private int															numberEntrepreneurs;
+	
+	// Logging timeunit
+	private int															loggingTimeUnit;
 	
 	// Initial wealth
 	private double													wealth;
@@ -66,14 +69,25 @@ public class EntrepreneurConf {
 	private Map<Integer, NormSalienceConf>	salienceConf;
 	
 	
-	public int getNumber() {
-		return this.number;
+	public int getNumberEntrepreneurs() {
+		return this.numberEntrepreneurs;
 	}
 	
 	
 	@XmlElement(name = Constants.TAG_ENTREPRENEUR_NUMBER_ENTREPRENEURS)
-	public void setNumber(int number) {
-		this.number = number;
+	public void setNumberEntrepreneurs(int numberEntrepreneurs) {
+		this.numberEntrepreneurs = numberEntrepreneurs;
+	}
+	
+	
+	public int getLoggingTimeUnit() {
+		return this.loggingTimeUnit;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_LOGGING_TIME_UNIT)
+	public void setLoggingTimeUnit(int loggingTimeUnit) {
+		this.loggingTimeUnit = loggingTimeUnit;
 	}
 	
 	

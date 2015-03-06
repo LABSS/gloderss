@@ -130,6 +130,38 @@ public class CommunicationController {
 	
 	
 	/**
+	 * Reset the CommunicationController
+	 * 
+	 * @param conf
+	 *          Communication configuration
+	 * @return none
+	 */
+	public void reset(CommunicationConf conf) {
+		this.actionVisibility = new HashMap<String, Double>();
+		
+		Map<String, Double> types = new HashMap<String, Double>();
+		for(TypeConf type : conf.getTypesConf()) {
+			types.put(type.getName(), type.getProbability());
+		}
+		
+		double probability;
+		for(ActionConf action : conf.getActionsConf()) {
+			
+			if(types.containsKey(action.getType())) {
+				probability = types.get(action.getType());
+			} else {
+				probability = 0.0;
+			}
+			
+			this.actionVisibility.put(action.getName(), probability);
+		}
+		
+		this.agents = new HashMap<Integer, IComm>();
+		this.observe = new Hashtable<Integer, List<Integer>>();
+	}
+	
+	
+	/**
 	 * Send the message to the recipients
 	 * 
 	 * @param msg

@@ -12,6 +12,9 @@ public class ConsumerConf {
 	// Number of consumers
 	private int															numberConsumers;
 	
+	// Logging timeunit
+	private int															loggingTimeUnit;
+	
 	// Buying PDF
 	private String													buyPDF;
 	
@@ -48,6 +51,17 @@ public class ConsumerConf {
 	@XmlElement(name = Constants.TAG_CONSUMER_NUMBER_CONSUMERS)
 	public void setNumberConsumers(int numberConsumers) {
 		this.numberConsumers = numberConsumers;
+	}
+	
+	
+	public int getLoggingTimeUnit() {
+		return this.loggingTimeUnit;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_CONSUMER_LOGGING_TIME_UNIT)
+	public void setLoggingTimeUnit(int loggingTimeUnit) {
+		this.loggingTimeUnit = loggingTimeUnit;
 	}
 	
 	

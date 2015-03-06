@@ -373,6 +373,10 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		Event event = new Event(this.simulator.now() + this.buyPDF.nextValue(),
 				this, Constants.EVENT_BUY_PRODUCT);
 		this.simulator.insert(event);
+		
+		event = new Event(this.simulator.now(), this,
+				Constants.EVENT_LOGGING_CONSUMERS);
+		this.simulator.insert(event);
 	}
 	
 	
@@ -522,6 +526,28 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 					selectedEntrepreneurId, buy);
 			this.sendMsg(msg);
 			
+			// Normative
+			Message newMsg;
+			if(this.entrepreneurRep.getReputation(selectedEntrepreneurId) < this.conf
+					.getReputationConf().getEntrepreneurRepThreshold()) {
+				
+				BuyPayExtortionAction newAction = new BuyPayExtortionAction(this.id,
+						selectedEntrepreneurId);
+				
+				newMsg = new Message(msg.getTime(), msg.getSender(), msg.getReceiver(),
+						newAction);
+				
+			} else {
+				
+				BuyNotPayExtortionAction newAction = new BuyNotPayExtortionAction(
+						this.id, selectedEntrepreneurId);
+				
+				newMsg = new Message(msg.getTime(), msg.getSender(), msg.getReceiver(),
+						newAction);
+				
+			}
+			this.normative.input(newMsg);
+			
 			outputEntity.setValue(PurchaseOutputEntity.Field.RESEARCHED.name(),
 					outputResearched);
 			outputEntity.setValue(PurchaseOutputEntity.Field.ENTREPRENEUR_ID.name(),
@@ -567,13 +593,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	}
 	
 	
-	@Override
-	public void finalizeSim() {
-		
+	public void loggingConsumers() {
 		this.normative.update();
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.CONSUMER);
+		outputEntity.setValue(ConsumerOutputEntity.Field.TIME.name(),
+				(int) this.simulator.now());
 		outputEntity.setValue(ConsumerOutputEntity.Field.CONSUMER_ID.name(),
 				this.id);
 		
@@ -637,6 +663,17 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				this.normative.getNormSalience(Constants.Norms.DENOUNCE.ordinal()));
 		
 		outputEntity.setActive();
+		
+		Event event = new Event(this.simulator.now()
+				+ this.conf.getLoggingTimeUnit(), this,
+				Constants.EVENT_LOGGING_CONSUMERS);
+		this.simulator.insert(event);
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+		this.loggingConsumers();
 	}
 	
 	
@@ -966,6 +1003,9 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_BUY_PRODUCT:
 				this.buyProduct();
+				break;
+			case Constants.EVENT_LOGGING_CONSUMERS:
+				this.loggingConsumers();
 				break;
 		}
 	}

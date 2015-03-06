@@ -50,6 +50,15 @@ public class OutputController implements EventHandler {
 	private Map<EntityType, Boolean>											firstWrite;
 	
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param simulator
+	 *          Event-based simulator
+	 * @param conf
+	 *          Output configuration
+	 * @return none
+	 */
 	public OutputController(EventSimulator simulator, OutputConf conf) {
 		this.simulator = simulator;
 		
@@ -77,6 +86,12 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Include the Output Controller into the event simulation queue
+	 * 
+	 * @param none
+	 * @return none
+	 */
 	public void initializeSim() {
 		Event event = new Event(this.simulator.now() + this.timeToWrite, this,
 				Constants.EVENT_WRITE_DATA);
@@ -84,11 +99,24 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Retrieve the instance of the current OutputController
+	 * 
+	 * @param none
+	 * @return OutputController instance
+	 */
 	public static OutputController getInstance() {
 		return instance;
 	}
 	
 	
+	/**
+	 * Create a new instance of OutputController
+	 * 
+	 * @param replica
+	 *          Replica of the simulation
+	 * @return none
+	 */
 	public void newInstance(int replica) {
 		if(this.replication != replica) {
 			this.file = new HashMap<EntityType, BufferedWriter>();
@@ -101,6 +129,15 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Initialize the entities associated to a filename
+	 * 
+	 * @param type
+	 *          Entity type
+	 * @param filename
+	 *          File name to write the data of this entity type
+	 * @return none
+	 */
 	public void init(EntityType type, String filename) {
 		
 		if(!this.file.containsKey(type)) {
@@ -131,6 +168,13 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Retrieve all entities of a specific type
+	 * 
+	 * @param type
+	 *          Entity type
+	 * @return Set of entities
+	 */
 	public Collection<AbstractEntity> getEntities(EntityType type) {
 		if(this.entities.containsKey(type)) {
 			return this.entities.get(type).values();
@@ -140,6 +184,13 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Retrieve an existing entity
+	 * 
+	 * @param type
+	 *          Entity type
+	 * @return Entity
+	 */
 	public synchronized AbstractEntity getEntity(EntityType type) {
 		AbstractEntity entity = null;
 		
@@ -158,6 +209,15 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Retrieve an entity or create a new one in case it does not exist
+	 * 
+	 * @param type
+	 *          Entity type
+	 * @param id
+	 *          Identity to retrieve
+	 * @return Entity
+	 */
 	public synchronized AbstractEntity getEntity(EntityType type, int id) {
 		AbstractEntity entity = null;
 		
@@ -214,6 +274,15 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Set the content of an entity
+	 * 
+	 * @param type
+	 *          Type of the entity
+	 * @param entity
+	 *          Actual entity
+	 * @return none
+	 */
 	public void setEntity(EntityType type, AbstractEntity entity) {
 		int id = entity.getEntityId();
 		
@@ -229,6 +298,16 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Write data to the file
+	 * 
+	 * @param active
+	 *          Indicate whether only active entities should be written to the
+	 *          file
+	 * @throws IOException
+	 *           IO Exception
+	 * @return none
+	 */
 	public void write(boolean active) throws IOException {
 		
 		for(EntityType type : EntityType.values()) {
@@ -275,6 +354,13 @@ public class OutputController implements EventHandler {
 	}
 	
 	
+	/**
+	 * Handle output controller events
+	 * 
+	 * @param event
+	 *          Event to evaluate
+	 * @return none
+	 */
 	@Override
 	public void handleEvent(Event event) {
 		

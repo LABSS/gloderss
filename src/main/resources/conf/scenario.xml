@@ -4,8 +4,8 @@
 
 	<!-- General Configuration Information -->
 	<general>
-		<numberReplications>1</numberReplications>
-		<numberCycles>5000</numberCycles>
+		<numberReplications>3</numberReplications>
+		<numberCycles>3000</numberCycles>
 		<seeds>
 			<seed>557704</seed>
 			<seed>467948</seed>
@@ -120,7 +120,8 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>200</numberConsumers>
+			<numberConsumers>1000</numberConsumers>
+			<loggingTimeUnit>1500</loggingTimeUnit>
 
 			<!-- Economic -->
 			<buyPDF>NORMAL(30,10)</buyPDF>
@@ -135,7 +136,7 @@
 			<!-- Sanction -->
 			<sanction>
 				<threshold>0.90</threshold>
-				<discernability>0.75</discernability>
+				<discernability>0.1</discernability>
 			</sanction>
 
 			<!-- Normative -->
@@ -172,7 +173,8 @@
 		</consumer>
 
 		<consumer>
-			<numberConsumers>800</numberConsumers>
+			<numberConsumers>0</numberConsumers>
+			<loggingTimeUnit>1500</loggingTimeUnit>
 
 			<!-- Economic -->
 			<buyPDF>NORMAL(30,10)</buyPDF>
@@ -227,7 +229,8 @@
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>100</numberEntrepreneurs>
+			<numberEntrepreneurs>500</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
 			<wealth>0.00</wealth>
@@ -242,17 +245,17 @@
 			<denounceAlpha>0.5</denounceAlpha>
 
 			<!-- State -->
-			<collaborationProbability>0.9</collaborationProbability>
+			<collaborationProbability>0.1</collaborationProbability>
 
 			<!-- Intermediary Organization -->
-			<affiliateThreshold>0.95</affiliateThreshold>
+			<affiliateThreshold>1.0</affiliateThreshold>
 			<affiliated>false</affiliated>
 
 			<!-- Reputation -->
 			<reputation>
-				<stateProtector>0.5</stateProtector>
-				<statePunisher>0.3</statePunisher>
-				<mafiaPunisher>0.7</mafiaPunisher>
+				<stateProtector>0.0</stateProtector>
+				<statePunisher>0.0</statePunisher>
+				<mafiaPunisher>1.0</mafiaPunisher>
 			</reputation>
 
 			<!-- Normative -->
@@ -281,7 +284,8 @@
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>395</numberEntrepreneurs>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
 			<wealth>0.00</wealth>
@@ -335,7 +339,8 @@
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>5</numberEntrepreneurs>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
 			<wealth>0.00</wealth>
@@ -392,32 +397,32 @@
 	<!-- State Configuration Information -->
 	<state>
 		<!-- Police -->
-		<numberPoliceOfficers>20</numberPoliceOfficers>
-		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
-		<bureaucraticActivityDurationPDF>NORMAL(50,10)</bureaucraticActivityDurationPDF>
-		<specificInvestigationDurationPDF>NORMAL(300,10)</specificInvestigationDurationPDF>
-		<specificInvestigationProbability>0.8</specificInvestigationProbability>
-		<captureProbability>0.8</captureProbability>
-		<evidenceProbability>0.2</evidenceProbability>
+		<numberPoliceOfficers>5</numberPoliceOfficers>
+		<generalInvestigationDurationPDF>NORMAL(10,5)</generalInvestigationDurationPDF>
+		<bureaucraticActivityDurationPDF>NORMAL(100,5)</bureaucraticActivityDurationPDF>
+		<specificInvestigationDurationPDF>NORMAL(10,5)</specificInvestigationDurationPDF>
+		<specificInvestigationProbability>0.2</specificInvestigationProbability>
+		<captureProbability>0.2</captureProbability>
+		<evidenceProbability>0.0</evidenceProbability>
 
 		<!-- Justice -->
-		<custodyDurationPDF>CONSTANT(150)</custodyDurationPDF>
-		<convictionProbability>0.6</convictionProbability>
+		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
+		<convictionProbability>0.1</convictionProbability>
 		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
-		<imprisonmentDurationPDF>NORMAL(500,100)</imprisonmentDurationPDF>
-		<noCollaborationPunishmentProbability>0.3</noCollaborationPunishmentProbability>
-		<noCollaborationPunishment>0.5</noCollaborationPunishment>
+		<imprisonmentDurationPDF>NORMAL(100,5)</imprisonmentDurationPDF>
+		<noCollaborationPunishmentProbability>0.0</noCollaborationPunishmentProbability>
+		<noCollaborationPunishment>0.0</noCollaborationPunishment>
 
 		<!-- Fondo di Solidarieta -->
 		<timeToCompensationPDF>CONSTANT(50)</timeToCompensationPDF>
-		<resourceFondo>4000</resourceFondo>
+		<resourceFondo>0</resourceFondo>
 		<periodicityFondoPDF>NORMAL(500,100)</periodicityFondoPDF>
-		<proportionTransferFondo>0.5</proportionTransferFondo>
+		<proportionTransferFondo>0.0</proportionTransferFondo>
 
 		<!-- Information Spreading -->
-		<spreadInfoFunction>200</spreadInfoFunction>
-		<proportionConsumers>0.05</proportionConsumers>
-		<proportionEntrepreneurs>0.05</proportionEntrepreneurs>
+		<spreadInfoFunction>3000</spreadInfoFunction>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 	</state>
 
 	<!-- Mafia Configuration Information -->
@@ -425,7 +430,7 @@
 		<numberMafiosi>20</numberMafiosi>
 		<wealth>0.00</wealth>
 		<demandPDF>NORMAL(10,2)</demandPDF>
-		<demandAffiliatedProbability>0.5</demandAffiliatedProbability>
+		<demandAffiliatedProbability>1.0</demandAffiliatedProbability>
 		<extortionLevel>0.1</extortionLevel>
 		<punishmentSeverity>0.8</punishmentSeverity>
 		<collectionPDF>CONSTANT(10)</collectionPDF>
@@ -446,8 +451,8 @@
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
-		<proportionConsumers>0.1</proportionConsumers>
-		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 	</intermediaryOrg>
-
+	
 </scenario>

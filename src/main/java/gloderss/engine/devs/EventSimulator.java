@@ -12,6 +12,11 @@ public class EventSimulator extends AbstractEventSimulator {
 	private double							time;
 	
 	
+	public void init() {
+		this.time = 0.0;
+	}
+	
+	
 	public double now() {
 		return this.time;
 	}

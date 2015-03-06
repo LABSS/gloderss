@@ -1,6 +1,17 @@
 Changes
 =======
 
+08/03/2015
+----------
+1. Fixed Mafiosi output logging
+
+2. Entrepreneurs and Consumers consider their own actions in the Norm Salience calculation
+
+3. New feature allowing the log of Entrepreneurs and Consumers in certain intervals instead of
+   only at the end of the simulation. XML TAG <loggingTimeUnit> added.
+   
+4. Fixed the replication feature that was not reseting the data structures and time 
+
 19/02/2015
 ----------
 1. Fixed an error on the OutputController that was not using the timeToWrite parameter
@@ -29,3 +40,8 @@ Changes
 3. Bureaucratic time between general investigation
 
 4. Flexible State and Intermediary Organization information spreading
+
+
+TO DO
+=====
+1. (New Feature) Enable the creation of shocking scenarios 

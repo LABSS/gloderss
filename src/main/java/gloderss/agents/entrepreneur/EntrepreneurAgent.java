@@ -386,6 +386,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		Event event = new Event(this.simulator.now(), this,
 				Constants.EVENT_RECEIVE_WAGE);
 		this.simulator.insert(event);
+		
+		event = new Event(this.simulator.now(), this,
+				Constants.EVENT_LOGGING_ENTREPRENEURS);
+		this.simulator.insert(event);
 	}
 	
 	
@@ -613,6 +617,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						denounceAction);
 				this.sendMsg(msg);
 				
+				// Normative update
+				this.normative.input(msg);
+				
 				// Reputation
 				this.stateProtectorRep.updateReputation(denounceAction);
 				
@@ -626,6 +633,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
 						denounceAction);
 				this.sendMsg(msg);
+				
+				// Normative update
+				this.normative.input(msg);
 				
 				// Reputation
 				this.stateProtectorRep.updateReputation(denounceAction);
@@ -648,6 +658,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						notDenounceExtortionAction);
 				this.sendMsg(msg);
 				
+				// Normative update
+				this.normative.input(msg);
+				
 			} else {
 				NotDenounceExtortionAction notDenounceExtortionAction = new NotDenounceExtortionAction(
 						extortionId, this.id, this.stateId, mafiosoId);
@@ -655,6 +668,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
 						notDenounceExtortionAction);
 				this.sendMsg(msg);
+				
+				// Normative update
+				this.normative.input(msg);
 			}
 			
 			// Output
@@ -705,6 +721,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			// Output
 			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(), true);
 			
+			// Normative update
+			this.normative.input(msg);
+			
 			// Reputation
 			this.stateFinderRep.updateReputation(payAction);
 			
@@ -716,6 +735,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			Message msg = new Message(this.simulator.now(), victimId, mafiosoId,
 					notPayAction);
 			this.sendMsg(msg);
+			
+			// Normative update
+			this.normative.input(msg);
 			
 			// Spread action to IO
 			this.spreadActionInformation(msg);
@@ -880,6 +902,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						denounceAction);
 				this.sendMsg(msg);
 				
+				// Normative update
+				this.normative.input(msg);
+				
 				// Reputation
 				this.stateProtectorRep.updateReputation(denounceAction);
 				
@@ -893,6 +918,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
 						denounceAction);
 				this.sendMsg(msg);
+				
+				// Normative update
+				this.normative.input(msg);
 				
 				// Reputation
 				this.stateProtectorRep.updateReputation(denounceAction);
@@ -926,6 +954,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 						notDenouncePunishmentAction);
 				this.sendMsg(msg);
 				
+				// Normative update
+				this.normative.input(msg);
+				
 			} else {
 				NotDenouncePunishmentAction notDenouncePunishmentAction = new NotDenouncePunishmentAction(
 						extortionId, this.id, this.stateId, mafiosoId, punishment);
@@ -933,6 +964,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				Message msg = new Message(this.simulator.now(), this.id, this.stateId,
 						notDenouncePunishmentAction);
 				this.sendMsg(msg);
+				
+				// Normative update
+				this.normative.input(msg);
 			}
 			
 			// Output
@@ -1059,13 +1093,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	}
 	
 	
-	@Override
-	public void finalizeSim() {
-		
+	public void loggingEntrepreneurs() {
 		this.normative.update();
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.ENTREPRENEUR);
+		
+		outputEntity.setValue(EntrepreneurOutputEntity.Field.TIME.name(),
+				(int) this.simulator.now());
 		
 		outputEntity.setValue(
 				EntrepreneurOutputEntity.Field.ENTREPRENEUR_ID.name(), this.id);
@@ -1120,6 +1155,17 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				this.normative.getNormSalience(Constants.Norms.NOT_DENOUNCE.ordinal()));
 		
 		outputEntity.setActive();
+		
+		Event event = new Event(this.simulator.now()
+				+ this.conf.getLoggingTimeUnit(), this,
+				Constants.EVENT_LOGGING_ENTREPRENEURS);
+		this.simulator.insert(event);
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+		this.loggingEntrepreneurs();
 	}
 	
 	
@@ -1525,6 +1571,9 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_RECEIVE_WAGE:
 				this.receiveWage();
+				break;
+			case Constants.EVENT_LOGGING_ENTREPRENEURS:
+				this.loggingEntrepreneurs();
 				break;
 		}
 	}

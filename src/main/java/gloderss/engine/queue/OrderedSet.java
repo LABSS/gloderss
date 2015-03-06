@@ -4,7 +4,7 @@ import gloderss.engine.event.Comparable;
 
 public abstract class OrderedSet {
 	
-	public abstract void insert(Comparable x);
+	public abstract void insert(Comparable event);
 	
 	
 	public abstract Comparable removeFirst();
@@ -13,5 +13,5 @@ public abstract class OrderedSet {
 	public abstract int size();
 	
 	
-	public abstract Comparable remove(Comparable x);
+	public abstract Comparable remove(Comparable event);
 }

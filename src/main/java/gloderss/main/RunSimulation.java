@@ -88,7 +88,11 @@ public class RunSimulation extends EventSimulator {
 		
 		int nextSeed = 0;
 		for(int replica = 0; replica < numReplications; replica++) {
+			this.init();
 			this.events = new ListQueue();
+			
+			CommunicationController.getInstance().reset(
+					this.scenarioConf.getCommunicationConf());
 			
 			/**
 			 * Output controller
@@ -154,8 +158,8 @@ public class RunSimulation extends EventSimulator {
 			int nEntrepreneurs[] = new int[entrepreneursConf.size()];
 			index = 0;
 			for(EntrepreneurConf entrepreneurConf : entrepreneursConf) {
-				nEntrepreneurs[index++] = entrepreneurConf.getNumber();
-				totalEntrepreneurs += entrepreneurConf.getNumber();
+				nEntrepreneurs[index++] = entrepreneurConf.getNumberEntrepreneurs();
+				totalEntrepreneurs += entrepreneurConf.getNumberEntrepreneurs();
 			}
 			
 			EntrepreneurAgent entrepreneur;

@@ -102,6 +102,8 @@ public final class Constants {
 	
 	public static final String	TAG_CONSUMER_NUMBER_CONSUMERS											= "numberConsumers";
 	
+	public static final String	TAG_CONSUMER_LOGGING_TIME_UNIT										= "loggingTimeUnit";
+	
 	public static final String	TAG_CONSUMER_BUY_PDF															= "buyPDF";
 	
 	public static final String	TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH					= "numberEntrepreneursSearch";
@@ -126,6 +128,8 @@ public final class Constants {
 	public static final String	TAG_ENTREPRENEUR																	= "entrepreneur";
 	
 	public static final String	TAG_ENTREPRENEUR_NUMBER_ENTREPRENEURS							= "numberEntrepreneurs";
+	
+	public static final String	TAG_ENTREPRENEUR_LOGGING_TIME_UNIT								= "loggingTimeUnit";
 	
 	public static final String	TAG_ENTREPRENEUR_WEALTH														= "wealth";
 	
@@ -397,6 +401,10 @@ public final class Constants {
 	public static final String	EVENT_DEMAND_EXTORTION			= "decideExtortion";
 	
 	public static final String	EVENT_GENERAL_INVESTIGATION	= "generalInvestigation";
+	
+	public static final String	EVENT_LOGGING_CONSUMERS			= "loggingConsumers";
+	
+	public static final String	EVENT_LOGGING_ENTREPRENEURS	= "loggingEntrepreneurs";
 	
 	public static final String	EVENT_RECEIVE_WAGE					= "receiveWage";
 	

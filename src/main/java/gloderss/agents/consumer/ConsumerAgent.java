@@ -208,10 +208,10 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		List<Actions> noActions = new ArrayList<Actions>();
-		actions.add(Actions.NOT_DENOUNCE_EXTORTION);
-		actions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
-		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
-		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
+		noActions.add(Actions.NOT_DENOUNCE_EXTORTION);
+		noActions.add(Actions.NOT_DENOUNCE_EXTORTION_AFFILIATED);
+		noActions.add(Actions.NOT_DENOUNCE_PUNISHMENT);
+		noActions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		NormContentSet normContentSet = new NormContentSet(actions, noActions);
 		
@@ -252,12 +252,12 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		actions.add(Actions.NOT_DENOUNCE_PUNISHMENT_AFFILIATED);
 		
 		noActions = new ArrayList<Actions>();
-		actions.add(Actions.DENOUNCE_EXTORTION);
-		actions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
-		actions.add(Actions.DENOUNCE_PUNISHMENT);
-		actions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
+		noActions.add(Actions.DENOUNCE_EXTORTION);
+		noActions.add(Actions.DENOUNCE_EXTORTION_AFFILIATED);
+		noActions.add(Actions.DENOUNCE_PUNISHMENT);
+		noActions.add(Actions.DENOUNCE_PUNISHMENT_AFFILIATED);
 		
-		normContentSet = new NormContentSet(noActions, actions);
+		normContentSet = new NormContentSet(actions, noActions);
 		
 		norm = new NormEntity(Norms.NOT_DENOUNCE.ordinal(), NormType.SOCIAL,
 				NormSource.DISTRIBUTED, NormStatus.GOAL, normContentSet);

@@ -4,7 +4,7 @@
 
 	<!-- General Configuration Information -->
 	<general>
-		<numberReplications>3</numberReplications>
+		<numberReplications>1</numberReplications>
 		<numberCycles>3000</numberCycles>
 		<seeds>
 			<seed>557704</seed>
@@ -120,7 +120,7 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>1000</numberConsumers>
+			<numberConsumers>800</numberConsumers>
 			<loggingTimeUnit>1500</loggingTimeUnit>
 
 			<!-- Economic -->
@@ -173,7 +173,7 @@
 		</consumer>
 
 		<consumer>
-			<numberConsumers>0</numberConsumers>
+			<numberConsumers>200</numberConsumers>
 			<loggingTimeUnit>1500</loggingTimeUnit>
 
 			<!-- Economic -->
@@ -229,7 +229,7 @@
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>500</numberEntrepreneurs>
+			<numberEntrepreneurs>400</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
@@ -284,7 +284,7 @@
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<numberEntrepreneurs>75</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
@@ -339,7 +339,7 @@
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<numberEntrepreneurs>25</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 
 			<!-- Economic -->
@@ -431,13 +431,13 @@
 		<wealth>0.00</wealth>
 		<demandPDF>NORMAL(10,2)</demandPDF>
 		<demandAffiliatedProbability>1.0</demandAffiliatedProbability>
-		<extortionLevel>0.1</extortionLevel>
-		<punishmentSeverity>0.8</punishmentSeverity>
+		<extortionLevel>0.5</extortionLevel>
+		<punishmentSeverity>1.0</punishmentSeverity>
 		<collectionPDF>CONSTANT(10)</collectionPDF>
-		<punishmentProbability>0.5</punishmentProbability>
+		<punishmentProbability>0.9</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
 		<maximumBenefit>0.1</maximumBenefit>
-		<pentitiProbability>0.01</pentitiProbability>
+		<pentitiProbability>0.0</pentitiProbability>
 		<!-- recruitingThreshold does not work -->
 		<recruitingThreshold>0.5</recruitingThreshold>
 		<!-- recruitingProbability does not work -->

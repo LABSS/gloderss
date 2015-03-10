@@ -1,6 +1,11 @@
 Changes
 =======
 
+10/03/2015
+----------
+1. Fixed a bug regarding the Denounce Norm
+
+
 08/03/2015
 ----------
 1. Fixed Mafiosi output logging

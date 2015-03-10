@@ -70,7 +70,6 @@ public class EventClassifier extends EventClassifierAbstract {
 				
 				// Not denounce Extortion
 			} else if(content instanceof NotDenounceExtortionAction) {
-				
 				NotDenounceExtortionAction action = (NotDenounceExtortionAction) content;
 				
 				entity = new ActionEvent(msg.getTime(),
@@ -82,7 +81,6 @@ public class EventClassifier extends EventClassifierAbstract {
 				
 				// Not denounce Extortion Affiliated
 			} else if(content instanceof NotDenounceExtortionAffiliatedAction) {
-				
 				NotDenounceExtortionAffiliatedAction action = (NotDenounceExtortionAffiliatedAction) content;
 				
 				entity = new ActionEvent(

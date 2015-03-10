@@ -18,9 +18,93 @@ dir <- c("01-before1980",
          "04-after2000/50",
          "04-after2000/60",
          "04-after2000/80")
+
+dir <- c("Snpun-nnorm-Mhard-IOinactive/0",
+         "Snpun-nnorm-Mhard-IOinactive/20",
+         "Snpun-nnorm-Mhard-IOinactive/40",
+         "Snpun-nnorm-Mhard-IOinactive/50",
+         "Snpun-nnorm-Mhard-IOinactive/60",
+         "Snpun-nnorm-Mhard-IOinactive/80",
+         "Snpun-nnorm-Mhard-IOactive/0",
+         "Snpun-nnorm-Mhard-IOactive/20",
+         "Snpun-nnorm-Mhard-IOactive/40",
+         "Snpun-nnorm-Mhard-IOactive/50",
+         "Snpun-nnorm-Mhard-IOactive/60",
+         "Snpun-nnorm-Mhard-IOactive/80",
+         "Snpun-nnorm-Msoft-IOinactive/0",
+         "Snpun-nnorm-Msoft-IOinactive/20",
+         "Snpun-nnorm-Msoft-IOinactive/40",
+         "Snpun-nnorm-Msoft-IOinactive/50",
+         "Snpun-nnorm-Msoft-IOinactive/60",
+         "Snpun-nnorm-Msoft-IOinactive/80",
+         "Snpun-nnorm-Msoft-IOactive/0",
+         "Snpun-nnorm-Msoft-IOactive/20",
+         "Snpun-nnorm-Msoft-IOactive/40",
+         "Snpun-nnorm-Msoft-IOactive/50",
+         "Snpun-nnorm-Msoft-IOactive/60",
+         "Snpun-nnorm-Msoft-IOactive/80",
+         "Spun-norm-Mhard-IOinactive/0",
+         "Spun-norm-Mhard-IOinactive/20",
+         "Spun-norm-Mhard-IOinactive/40",
+         "Spun-norm-Mhard-IOinactive/50",
+         "Spun-norm-Mhard-IOinactive/60",
+         "Spun-norm-Mhard-IOinactive/80",
+         "Spun-norm-Mhard-IOactive/0",
+         "Spun-norm-Mhard-IOactive/20",
+         "Spun-norm-Mhard-IOactive/40",
+         "Spun-norm-Mhard-IOactive/50",
+         "Spun-norm-Mhard-IOactive/60",
+         "Spun-norm-Mhard-IOactive/80",
+         "Spun-norm-Msoft-IOinactive/0",
+         "Spun-norm-Msoft-IOinactive/20",
+         "Spun-norm-Msoft-IOinactive/40",
+         "Spun-norm-Msoft-IOinactive/50",
+         "Spun-norm-Msoft-IOinactive/60",
+         "Spun-norm-Msoft-IOinactive/80",
+         "Spun-norm-Msoft-IOactive/0",
+         "Spun-norm-Msoft-IOactive/20",
+         "Spun-norm-Msoft-IOactive/40",
+         "Spun-norm-Msoft-IOactive/50",
+         "Spun-norm-Msoft-IOactive/60",
+         "Spun-norm-Msoft-IOactive/80",
+         "Spun-nnorm-Mhard-IOinactive/0",
+         "Spun-nnorm-Mhard-IOinactive/20",
+         "Spun-nnorm-Mhard-IOinactive/40",
+         "Spun-nnorm-Mhard-IOinactive/50",
+         "Spun-nnorm-Mhard-IOinactive/60",
+         "Spun-nnorm-Mhard-IOinactive/80",
+         "Spun-nnorm-Mhard-IOactive/0",
+         "Spun-nnorm-Mhard-IOactive/20",
+         "Spun-nnorm-Mhard-IOactive/40",
+         "Spun-nnorm-Mhard-IOactive/50",
+         "Spun-nnorm-Mhard-IOactive/60",
+         "Spun-nnorm-Mhard-IOactive/80",
+         "Spun-nnorm-Msoft-IOinactive/0",
+         "Spun-nnorm-Msoft-IOinactive/20",
+         "Spun-nnorm-Msoft-IOinactive/40",
+         "Spun-nnorm-Msoft-IOinactive/50",
+         "Spun-nnorm-Msoft-IOinactive/60",
+         "Spun-nnorm-Msoft-IOinactive/80",
+         "Spun-nnorm-Msoft-IOactive/0",
+         "Spun-nnorm-Msoft-IOactive/20",
+         "Spun-nnorm-Msoft-IOactive/40",
+         "Spun-nnorm-Msoft-IOactive/50",
+         "Spun-nnorm-Msoft-IOactive/60",
+         "Spun-nnorm-Msoft-IOactive/80")
+
 replica <- "/0"
 
-xaxis <- c(1,2,3,3,3,3,3,3,4,4,4,4,4,4)
+xvaxis <- c(1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,
+           5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,
+           9,9,9,9,9,9,10,10,10,10,10,10,11,11,11,11,11,11,
+           12,12,12,12,12,12)
+
+xaxis <- c(1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
+           1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
+           1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6)
+
+simLen <- 3000
+ent <- 501
 
 compensation <- NULL
 consumer <- NULL
@@ -84,8 +168,10 @@ mCSalBuyNPE <- NULL
 sCSalBuyNPE <- NULL
 
 prop <- NULL
+#dirs <- length(dir)
+dirs <- 24
 
-for(i in 1:length(dir)){
+for(i in 1:dirs){
 ##
 ## Load files
 ##
@@ -239,7 +325,10 @@ prop[[i]] <- cbind(nExtortion[[i]], nCustody[[i]], nImprisonment[[i]],
 ## Write
 ##
 write.table(prop[[i]], file=paste0(base,dir[i],"/summary.csv"),
-            quote=FALSE, append=FALSE,sep=";", col.names=TRUE, row.names=FALSE)
+            quote=FALSE, append=FALSE, sep=";", col.names=TRUE, row.names=FALSE)
+
+write.table(prop[[i]], file=paste0(base,"/summary.csv"),
+            quote=FALSE, append=TRUE, sep=";", col.names=FALSE, row.names=FALSE)
 
 ##
 ## Histogram of the Pay Extortion salience
@@ -447,11 +536,13 @@ dev.off()
 ##
 ## Scatterplot of Extortions
 ##
-data <- data.table(cbind(dir,xaxis,nExtortion))
+data <- data.table(cbind(dir,xaxis,xvaxis,nExtortion))
 png(filename=paste0(base,"/numExtortion.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nExtortion)))) +
-  xlab('') + ylab('Number of Extortions') + ylim(0,5000) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+ggplot(data, aes(x=xaxis, y=as.numeric(as.character(nExtortion)),
+                 group=xvaxis, color=as.character(xvaxis))) +
+  xlab('') + ylab('Number of Extortions') + ylim(0,2900) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -460,9 +551,9 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nExtortion)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        #legend.title=element_blank(),
-        #legend.text = element_text(colour="black", size=24, face="bold"))
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        #legend.position = 'none')
 dev.off()
 
 #legend.title=element_blank(),
@@ -471,11 +562,13 @@ dev.off()
 ##
 ## Scatterplot of Paid of Extortion
 ##
-data <- data.table(cbind(dir,xaxis,nPaid))
+data <- data.table(cbind(dir,xaxis,xvaxis,nPaid))
 png(filename=paste0(base,"/numPaidExt.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)))) +
-  xlab('') + ylab('Number of Paid Extortions') + ylim(0,3500) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)),
+                 group=xvaxis, color=as.character(xvaxis))) +
+  xlab('') + ylab('Number of Paid Extortions') + ylim(0,2200) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -484,17 +577,21 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        #legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Proportion of Paid of Extortions
 ##
-data <- data.table(cbind(dir,xaxis,propPaid))
+data <- data.table(cbind(dir,xaxis,xvaxis,propPaid))
 png(filename=paste0(base,"/propPaidExt.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPaid)))) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPaid)),
+                 group=xvaxis, color=as.character(xvaxis))) +
   xlab('') + ylab('% Paid Extortions') + ylim(0,1) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -503,17 +600,21 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPaid)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Denounce
 ##
-data <- data.table(cbind(dir,xaxis,nDen))
+data <- data.table(cbind(dir,xaxis,xvaxis,nDen))
 png(filename=paste0(base,"/numDenounce.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nDen)))) +
-  xlab('') + ylab('Number of Denounces') + ylim(0,200) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nDen)),
+                 group=xvaxis, color=as.character(xvaxis))) +
+  xlab('') + ylab('Number of Denounces') + ylim(0,350) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -522,17 +623,21 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nDen)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Proportion of Denounces of Extortion
 ##
-data <- data.table(cbind(dir,xaxis,propDenExt))
+data <- data.table(cbind(dir,xaxis,xvaxis,propDenExt))
 png(filename=paste0(base,"/propDenExt.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenExt)))) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenExt)),
+                 group=xvaxis, color=as.character(xvaxis))) +
   xlab('') + ylab('% Denounced Extortions') + ylim(0,1) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -541,17 +646,21 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenExt)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Proportion of Denounces of Punishments
 ##
-data <- data.table(cbind(dir,xaxis,propDenPun))
+data <- data.table(cbind(dir,xaxis,xvaxis,propDenPun))
 png(filename=paste0(base,"/propDenPun.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenPun)))) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenPun)),
+                 group=xvaxis, color=as.character(xvaxis))) +
   xlab('') + ylab('% Denounces Punishments') + ylim(0,1) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -560,18 +669,22 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenPun)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=0.5, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=0.5, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Proportion of Denounces
 ##
 propDen <- propDenExt + propDenPun
-data <- data.table(cbind(dir,xaxis,propDen))
+data <- data.table(cbind(dir,xaxis,xvaxis,propDen))
 png(filename=paste0(base,"/propDen.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDen)))) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDen)),
+                 group=xvaxis, color=as.character(xvaxis))) +
   xlab('') + ylab('% Denounces') + ylim(0,1) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -580,17 +693,21 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDen)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Scatterplot of Imprisonment
 ##
-data <- data.table(cbind(dir,xaxis,nInvCon))
+data <- data.table(cbind(dir,xaxis,xvaxis,nInvCon))
 png(filename=paste0(base,"/numImprisonment.png"), width=1024, height=768)
-ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nInvCon)))) +
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nInvCon)),
+                 group=xvaxis, color=as.character(xvaxis))) +
   xlab('') + ylab('Number Imprisonment') + ylim(0,100) +
-  geom_point(aes(color=as.character(dir)), size=10) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_blank(),
@@ -599,13 +716,15 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nInvCon)))) +
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.position = 'none')
+        legend.title=element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+        # legend.position = 'none')
 dev.off()
 
 ##
 ## Norms' set shift
 ##
-for(i in 1:length(dir)){
+for(i in 1:dirs){
   new <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$salienceDenounce >= 
                                    entrepreneur[[i]]$salienceNotDenounce) &
                                   (entrepreneur[[i]]$saliencePayExtortion < 
@@ -616,13 +735,43 @@ for(i in 1:length(dir)){
                                           (entrepreneur[[i]]$saliencePayExtortion >=
                                              entrepreneur[[i]]$salienceNotPayExtortion),])
   
-  onlyNotPay <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$saliencePayExtortion < 
+  onlyNotPay <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$saliencePayExtortion <= 
                                           entrepreneur[[i]]$salienceNotPayExtortion),]) - new
   
   onlyDenounce <- nrow(entrepreneur[[i]][(entrepreneur[[i]]$salienceDenounce >= 
                                             entrepreneur[[i]]$salienceNotDenounce),]) - new
   
   print(c(i, new, traditional, onlyNotPay, onlyDenounce, (new+traditional+onlyNotPay+onlyDenounce)))
+}
+
+##
+## Norms' set shift
+##
+n <- c(0,100,200,250,300,400)
+for(i in 1:dirs){
+  aux <- data.table(entrepreneur[[i]])
+  new <- nrow(aux[which((time == simLen) &
+                          (saliencePayExtortion <= salienceNotPayExtortion) &
+                          (salienceDenounce >= salienceNotDenounce)),])
+  
+  traditional <- nrow(aux[which((time == simLen) &
+                                  (saliencePayExtortion > salienceNotPayExtortion) &
+                                  (salienceDenounce < salienceNotDenounce)),])
+      
+  onlyNotPay <- nrow(aux[which((time == simLen) &
+                                 (saliencePayExtortion <= salienceNotPayExtortion) &
+                                 (salienceDenounce < salienceNotDenounce)),])
+      
+  onlyDenounce <- nrow(aux[which((time == simLen) &
+                                   (saliencePayExtortion > salienceNotPayExtortion) &
+                                   (salienceDenounce >= salienceNotDenounce)),])
+      
+  print(c(i, traditional, onlyNotPay, onlyDenounce, new, (new+traditional+onlyNotPay+onlyDenounce)))
+  z <- i %% 6
+  if(z == 0){
+    z <- 6
+  }
+  print(c(i, (((ent-n[z])-traditional)/ent), onlyNotPay/ent, onlyDenounce/ent, ((new-n[z])/ent)))
 }
 
 ##
@@ -646,6 +795,84 @@ city <- c("Agrigento",
           "04-after2000-50",
           "04-after2000-60",
           "04-after2000-80")
+
+city <- c("Agrigento",
+          "Catania",
+          "Messina",
+          "Siracusa",
+          "Snpun-nnorm-Mhard-IOinactive/0",
+          "Snpun-nnorm-Mhard-IOinactive/20",
+          "Snpun-nnorm-Mhard-IOinactive/40",
+          "Snpun-nnorm-Mhard-IOinactive/50",
+          "Snpun-nnorm-Mhard-IOinactive/60",
+          "Snpun-nnorm-Mhard-IOinactive/80",
+          "Snpun-nnorm-Mhard-IOactive/0",
+          "Snpun-nnorm-Mhard-IOactive/20",
+          "Snpun-nnorm-Mhard-IOactive/40",
+          "Snpun-nnorm-Mhard-IOactive/50",
+          "Snpun-nnorm-Mhard-IOactive/60",
+          "Snpun-nnorm-Mhard-IOactive/80",
+          "Snpun-nnorm-Msoft-IOinactive/0",
+          "Snpun-nnorm-Msoft-IOinactive/20",
+          "Snpun-nnorm-Msoft-IOinactive/40",
+          "Snpun-nnorm-Msoft-IOinactive/50",
+          "Snpun-nnorm-Msoft-IOinactive/60",
+          "Snpun-nnorm-Msoft-IOinactive/80",
+          "Snpun-nnorm-Msoft-IOactive/0",
+          "Snpun-nnorm-Msoft-IOactive/20",
+          "Snpun-nnorm-Msoft-IOactive/40",
+          "Snpun-nnorm-Msoft-IOactive/50",
+          "Snpun-nnorm-Msoft-IOactive/60",
+          "Snpun-nnorm-Msoft-IOactive/80",
+          "Spun-norm-Mhard-IOinactive/0",
+          "Spun-norm-Mhard-IOinactive/20",
+          "Spun-norm-Mhard-IOinactive/40",
+          "Spun-norm-Mhard-IOinactive/50",
+          "Spun-norm-Mhard-IOinactive/60",
+          "Spun-norm-Mhard-IOinactive/80",
+          "Spun-norm-Mhard-IOactive/0",
+          "Spun-norm-Mhard-IOactive/20",
+          "Spun-norm-Mhard-IOactive/40",
+          "Spun-norm-Mhard-IOactive/50",
+          "Spun-norm-Mhard-IOactive/60",
+          "Spun-norm-Mhard-IOactive/80",
+          "Spun-norm-Msoft-IOinactive/0",
+          "Spun-norm-Msoft-IOinactive/20",
+          "Spun-norm-Msoft-IOinactive/40",
+          "Spun-norm-Msoft-IOinactive/50",
+          "Spun-norm-Msoft-IOinactive/60",
+          "Spun-norm-Msoft-IOinactive/80",
+          "Spun-norm-Msoft-IOactive/0",
+          "Spun-norm-Msoft-IOactive/20",
+          "Spun-norm-Msoft-IOactive/40",
+          "Spun-norm-Msoft-IOactive/50",
+          "Spun-norm-Msoft-IOactive/60",
+          "Spun-norm-Msoft-IOactive/80",
+          "Spun-nnorm-Mhard-IOinactive/0",
+          "Spun-nnorm-Mhard-IOinactive/20",
+          "Spun-nnorm-Mhard-IOinactive/40",
+          "Spun-nnorm-Mhard-IOinactive/50",
+          "Spun-nnorm-Mhard-IOinactive/60",
+          "Spun-nnorm-Mhard-IOinactive/80",
+          "Spun-nnorm-Mhard-IOactive/0",
+          "Spun-nnorm-Mhard-IOactive/20",
+          "Spun-nnorm-Mhard-IOactive/40",
+          "Spun-nnorm-Mhard-IOactive/50",
+          "Spun-nnorm-Mhard-IOactive/60",
+          "Spun-nnorm-Mhard-IOactive/80",
+          "Spun-nnorm-Msoft-IOinactive/0",
+          "Spun-nnorm-Msoft-IOinactive/20",
+          "Spun-nnorm-Msoft-IOinactive/40",
+          "Spun-nnorm-Msoft-IOinactive/50",
+          "Spun-nnorm-Msoft-IOinactive/60",
+          "Spun-nnorm-Msoft-IOinactive/80",
+          "Spun-nnorm-Msoft-IOactive/0",
+          "Spun-nnorm-Msoft-IOactive/20",
+          "Spun-nnorm-Msoft-IOactive/40",
+          "Spun-nnorm-Msoft-IOactive/50",
+          "Spun-nnorm-Msoft-IOactive/60",
+          "Spun-nnorm-Msoft-IOactive/80")
+
 y <- c(0.65,0.85,0.78,0.82,as.array(propPaid))
 x <- c(0.70,0.75,0.74,0.85,as.array(1 - (propDenExt + propDenPun)))
 

@@ -103,8 +103,10 @@ xaxis <- c(1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
            1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
            1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6)
 
-simLen <- 3000
-ent <- 501
+simLen <- 10000
+delta <- 100
+con <- 200
+ent <- 100
 
 compensation <- NULL
 consumer <- NULL
@@ -144,6 +146,8 @@ propCon <- NULL
 propComp <- NULL
 propCompleted <- NULL
 propNDen <- NULL
+propPunNPay <- NULL
+propPun <- NULL
 
 mESalPay <- NULL
 sESalPay <- NULL
@@ -168,42 +172,44 @@ mCSalBuyNPE <- NULL
 sCSalBuyNPE <- NULL
 
 prop <- NULL
-#dirs <- length(dir)
-dirs <- 24
 
-for(i in 1:dirs){
+dirs <- 1:length(dir)
+content <- c(1,49,61,67,68,69,70,71,72,43,44,45,46,47,48)
+dirs <- content
+for(i in dirs){
 ##
 ## Load files
 ##
-compensation[[i]] <- try(read.csv(paste(base,dir[i],replica,"/compensation.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(compensation[[i]], 'try-error')) { compensation[[i]] <- NULL }
+compensation[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/compensation.csv", sep=""),
+                                         header=TRUE, sep=";"))[which(time <= simLen),]
 
-consumer[[i]] <- try(read.csv(paste(base,dir[i],replica,"/consumer.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(consumer[[i]], 'try-error')) { consumer[[i]] <- NULL }
 
-entrepreneur[[i]] <- try(read.csv(paste(base,dir[i],replica,"/entrepreneur.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(entrepreneur[[i]], 'try-error')) { entrepreneur[[i]] <- NULL }
+consumer[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/consumer.csv", sep=""),
+                                     header=TRUE, sep=";"))[which(time <= simLen),]
 
-extortion[[i]] <- try(read.csv(paste(base,dir[i],replica,"/extortion.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(extortion[[i]], 'try-error')) { extortion[[i]] <- NULL }
+entrepreneur[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/entrepreneur.csv", sep=""),
+                                         header=TRUE, sep=";"))[which(time <= simLen),]
 
-#io[[i]] <- try(read.csv(paste(base,dir[i],replica,"/intermediaryOrganization.csv", sep=""), header=TRUE, sep=";"))
-#if (inherits(io[[i]], 'try-error')) { io[[i]] <- NULL }
+extortion[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/extortion.csv", sep=""),
+                                      header=TRUE, sep=";"))[which(time <= simLen),]
 
-mafia[[i]] <- try(read.csv(paste(base,dir[i],replica,"/mafia.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(mafia[[i]], 'try-error')) { mafia[[i]] <- NULL }
+#io[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/intermediaryOrganization.csv", sep=""),
+#                               header=TRUE, sep=";"))[which(time <= simLen),]
 
-mafiosi[[i]] <- try(read.csv(paste(base,dir[i],replica,"/mafiosi.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(mafiosi[[i]], 'try-error')) { mafiosi[[i]] <- NULL }
+mafia[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/mafia.csv", sep=""),
+                                  header=TRUE, sep=";"))#[which(time <= simLen),]
+
+mafiosi[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/mafiosi.csv", sep=""),
+                                    header=TRUE, sep=";"))#[which(time <= simLen),]
   
-normative[[i]] <- try(read.csv(paste(base,dir[i],replica,"/normative.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(normative[[i]], 'try-error')) { normative[[i]] <- NULL }
+normative[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/normative.csv", sep=""),
+                                      header=TRUE, sep=";"))[which(time <= simLen),]
 
-purchase[[i]] <- try(read.csv(paste(base,dir[i],replica,"/purchase.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(purchase[[i]], 'try-error')) { purchase[[i]] <- NULL }
+purchase[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/purchase.csv", sep=""),
+                                     header=TRUE, sep=";"))[which(time <= simLen),]
 
-state[[i]] <- try(read.csv(paste(base,dir[i],replica,"/state.csv", sep=""), header=TRUE, sep=";"))
-if (inherits(state[[i]], 'try-error')) { state[[i]] <- NULL }
+state[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/state.csv", sep=""),
+                                  header=TRUE, sep=";"))[which(time <= simLen),]
 
 ##
 ## Variables
@@ -280,6 +286,8 @@ propInv[[i]] <- nInv[[i]] / (nDenExt[[i]] + nDenPun[[i]])
 propCus[[i]] <- nInvCus[[i]] / (nDenExt[[i]] + nDenPun[[i]])
 propCon[[i]] <- nInvCon[[i]] / (nDenExt[[i]] + nDenPun[[i]])
 propComp[[i]] <- nComp[[i]] / nDenPun[[i]]
+propPun[[i]] <- nPun[[i]] / nExtortion[[i]]
+propPunNPay[[i]] <- nPun[[i]] / nNPaid[[i]]
 
 propCompleted[[i]] <- nInvCon[[i]] / nInv[[i]]
 
@@ -312,7 +320,7 @@ sCSalBuyNPE[[i]] <- sd(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
 ##
 prop[[i]] <- cbind(nExtortion[[i]], nCustody[[i]], nImprisonment[[i]],
                    propPaid[[i]], nPaid[[i]], propDenExt[[i]], nDenExt[[i]],
-                   propDenPun[[i]], nDenPun[[i]],
+                   propDenPun[[i]], nDenPun[[i]],propPun[[i]],propPunNPay[[i]],
                    propInv[[i]], nInv[[i]], propCus[[i]], propCon[[i]], propComp[[i]],
                    mESalPay[[i]], sESalPay[[i]], mESalNPay[[i]], sESalNPay[[i]],
                    mESalDen[[i]], sESalDen[[i]], mESalNDen[[i]], sESalNDen[[i]],
@@ -551,12 +559,12 @@ ggplot(data, aes(x=xaxis, y=as.numeric(as.character(nExtortion)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         #legend.position = 'none')
 dev.off()
 
-#legend.title=element_blank(),
+#legend.title = element_blank(),
 #legend.text = element_text(colour="black", size=24, face="bold"))
 
 ##
@@ -566,7 +574,7 @@ data <- data.table(cbind(dir,xaxis,xvaxis,nPaid))
 png(filename=paste0(base,"/numPaidExt.png"), width=1024, height=768)
 ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)),
                  group=xvaxis, color=as.character(xvaxis))) +
-  xlab('') + ylab('Number of Paid Extortions') + ylim(0,2200) +
+  xlab('') + ylab('Number of Paid Extortions') + ylim(0,20200) +
   geom_line() +
   geom_point(aes(color=as.character(xvaxis))) +
   theme(axis.title.x = element_blank(),
@@ -577,7 +585,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nPaid)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         #legend.position = 'none')
 dev.off()
@@ -600,9 +608,55 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPaid)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Punishment general
+##
+data <- data.table(cbind(dir,xaxis,xvaxis,propPun))
+png(filename=paste0(base,"/propPun.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPun)),
+                 group=xvaxis, color=as.character(xvaxis))) +
+  xlab('') + ylab('% Punishments') + ylim(0,1) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+# legend.position = 'none')
+dev.off()
+
+##
+## Scatterplot of Proportion of Punishment per No Payment
+##
+data <- data.table(cbind(dir,xaxis,xvaxis,propPunNPay))
+png(filename=paste0(base,"/propPunNPay.png"), width=1024, height=768)
+ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propPunNPay)),
+                 group=xvaxis, color=as.character(xvaxis))) +
+  xlab('') + ylab('% Punishments') + ylim(0,1) +
+  geom_line() +
+  geom_point(aes(color=as.character(xvaxis))) +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_blank(),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
+        panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))
+# legend.position = 'none')
 dev.off()
 
 ##
@@ -623,7 +677,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nDen)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
 dev.off()
@@ -646,7 +700,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenExt)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
 dev.off()
@@ -669,7 +723,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDenPun)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=0.5, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=0.5, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
 dev.off()
@@ -693,7 +747,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(propDen)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
 dev.off()
@@ -716,7 +770,7 @@ ggplot(data, aes(x=xaxis,y=as.numeric(as.character(nInvCon)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))
         # legend.position = 'none')
 dev.off()
@@ -890,5 +944,5 @@ ggplot(data, aes(x=as.numeric(as.character(x))*100, y=as.numeric(as.character(y)
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
-        legend.title=element_blank(),
+        legend.title = element_blank(),
         legend.text = element_text(colour="black", size=24, face="bold"))

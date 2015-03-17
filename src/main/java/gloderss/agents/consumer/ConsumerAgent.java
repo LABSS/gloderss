@@ -548,8 +548,9 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			}
 			this.normative.input(newMsg);
 			
-			outputEntity.setValue(PurchaseOutputEntity.Field.RESEARCHED.name(),
-					outputResearched);
+			// TODO
+			// outputEntity.setValue(PurchaseOutputEntity.Field.RESEARCHED.name(),
+			// outputResearched);
 			outputEntity.setValue(PurchaseOutputEntity.Field.ENTREPRENEUR_ID.name(),
 					selectedEntrepreneurId);
 			outputEntity.setValue(
@@ -593,7 +594,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	}
 	
 	
-	public void loggingConsumers() {
+	/**
+	 * Log consumers data
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void loggingConsumers() {
 		this.normative.update();
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
@@ -617,8 +624,9 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		if(!rep.isEmpty()) {
 			rep = rep.substring(0, (rep.length() - 1));
 		}
-		outputEntity.setValue(ConsumerOutputEntity.Field.ENTREPRENEUR_REP.name(),
-				rep);
+		// TODO
+		// outputEntity.setValue(ConsumerOutputEntity.Field.ENTREPRENEUR_REP.name(),
+		// rep);
 		
 		int numProducts = 0;
 		for(Integer numProd : this.numberProducts.values()) {

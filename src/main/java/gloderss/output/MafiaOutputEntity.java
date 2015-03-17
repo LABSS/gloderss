@@ -3,6 +3,7 @@ package gloderss.output;
 public class MafiaOutputEntity extends AbstractEntity {
 	
 	public enum Field {
+		TIME("time", DataType.INTEGER),
 		MAFIOSO_ID("mafiosoId", DataType.INTEGER),
 		EXTORTION_LEVEL("extortionLevel", DataType.DOUBLE),
 		PUNISHMENT_SEVERITY("punishmentSeverity", DataType.DOUBLE),
@@ -43,6 +44,7 @@ public class MafiaOutputEntity extends AbstractEntity {
 		this.separator = separator;
 		this.entity = new Object[Field.values().length];
 		
+		this.entity[Field.TIME.ordinal()] = -1;
 		this.entity[Field.MAFIOSO_ID.ordinal()] = -1;
 		this.entity[Field.EXTORTION_LEVEL.ordinal()] = 0.0;
 		this.entity[Field.PUNISHMENT_SEVERITY.ordinal()] = 0.0;

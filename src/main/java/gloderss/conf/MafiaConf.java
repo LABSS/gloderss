@@ -9,6 +9,8 @@ public class MafiaConf {
 	
 	private int			numberMafiosi;
 	
+	private int			loggingTimeUnit;
+	
 	private double	wealth;
 	
 	private String	demandPDF;
@@ -42,6 +44,17 @@ public class MafiaConf {
 	@XmlElement(name = Constants.TAG_MAFIA_NUMBER_MAFIOSI)
 	public void setNumberMafiosi(int numberMafiosi) {
 		this.numberMafiosi = numberMafiosi;
+	}
+	
+	
+	public int getLoggingTimeUnit() {
+		return this.loggingTimeUnit;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_MAFIA_LOGGING_TIME_UNIT)
+	public void setLoggingTimeUnit(int loggingTimeUnit) {
+		this.loggingTimeUnit = loggingTimeUnit;
 	}
 	
 	

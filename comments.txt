@@ -1,6 +1,19 @@
 Changes
 =======
 
+15/03/2015
+----------
+1. Removed Reputation information from Consumer output and Decision information from Purchase
+   output to improve simulation execution
+
+2. Added the possibility to define the Network topology between MESH and SCALEFREE
+
+3. Added the possibility to cluster the Citizens of the same group
+
+4. A DENOUNCE_FACTOR configuration parameter was changed to 5. In the future, this will become
+   a configuration parameter.
+ 
+
 10/03/2015
 ----------
 1. Fixed a bug regarding the Denounce Norm
@@ -21,7 +34,7 @@ Changes
 ----------
 1. Fixed an error on the OutputController that was not using the timeToWrite parameter
 
-2. Changed the DenounceExtortion and DenouncePunishment in order to make a denounce more probable
+2. Changed the DenounceExtortion and DenouncePunishment in order to make a denounce less probable
    only in the case in which the salience to Denounce is very high. A DENOUNCE_FACTOR configuration
    parameter was hard-coded with value 5. In the future, this will become a configuration parameter. 
    

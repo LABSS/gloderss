@@ -79,7 +79,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	private final static double				ATAN_FACTOR			= 0.01;
 	
-	private final static double				DENOUNCE_FACTOR	= 5;
+	private final static double				DENOUNCE_FACTOR	= 2;
 	
 	private EntrepreneurConf					conf;
 	

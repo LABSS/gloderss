@@ -5,7 +5,8 @@ public class ConsumerOutputEntity extends AbstractEntity {
 	public enum Field {
 		TIME("time", DataType.INTEGER),
 		CONSUMER_ID("consumerId", DataType.INTEGER),
-		ENTREPRENEUR_REP("entrepreneurRep", DataType.STRING),
+		// TODO
+		// ENTREPRENEUR_REP("entrepreneurRep", DataType.STRING),
 		NUMBER_PRODUCTS("numberProducts", DataType.INTEGER),
 		TOTAL_PRICE("totalPrice", DataType.DOUBLE),
 		SALIENCE_BUY_FROM_PAYING_ENTREPRENEURS(
@@ -52,7 +53,7 @@ public class ConsumerOutputEntity extends AbstractEntity {
 		
 		this.entity[Field.TIME.ordinal()] = -1;
 		this.entity[Field.CONSUMER_ID.ordinal()] = -1;
-		this.entity[Field.ENTREPRENEUR_REP.ordinal()] = "";
+		// this.entity[Field.ENTREPRENEUR_REP.ordinal()] = "";
 		this.entity[Field.NUMBER_PRODUCTS.ordinal()] = 0;
 		this.entity[Field.TOTAL_PRICE.ordinal()] = 0.0;
 		this.entity[Field.SALIENCE_BUY_FROM_NOT_PAYING_ENTREPRENEURS.ordinal()] = 0.0;

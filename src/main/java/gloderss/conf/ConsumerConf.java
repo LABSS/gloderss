@@ -15,6 +15,9 @@ public class ConsumerConf {
 	// Logging timeunit
 	private int															loggingTimeUnit;
 	
+	// Clustered
+	private boolean													clustered;
+	
 	// Buying PDF
 	private String													buyPDF;
 	
@@ -62,6 +65,17 @@ public class ConsumerConf {
 	@XmlElement(name = Constants.TAG_CONSUMER_LOGGING_TIME_UNIT)
 	public void setLoggingTimeUnit(int loggingTimeUnit) {
 		this.loggingTimeUnit = loggingTimeUnit;
+	}
+	
+	
+	public boolean getClustered() {
+		return this.clustered;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_CONSUMER_CLUSTERED)
+	public void setClustered(boolean clustered) {
+		this.clustered = clustered;
 	}
 	
 	

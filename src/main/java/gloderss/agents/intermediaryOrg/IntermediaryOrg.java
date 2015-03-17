@@ -40,6 +40,7 @@ import gloderss.output.NormativeOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.distribution.PDFAbstract;
+import gloderss.util.function.Const;
 import gloderss.util.function.Tanh;
 import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
@@ -114,6 +115,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		
 		this.spreadInfoFunction = new Evaluator();
 		this.spreadInfoFunction.putFunction(new Tanh());
+		this.spreadInfoFunction.putFunction(new Const());
 		
 		this.proportionConsumers = new Evaluator();
 		
@@ -182,8 +184,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		if(RandomUtil.nextDouble() < probSpreadInfo) {
 			
 			// Spread information to Consumers
-			NormInvocationAction notBuyPayExtortion = new NormInvocationAction(this.id,
-					Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+			NormInvocationAction notBuyPayExtortion = new NormInvocationAction(
+					this.id, Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
 			
 			this.proportionConsumers.clearVariables();
 			
@@ -217,8 +219,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			NormInvocationAction notPayExtortion = new NormInvocationAction(this.id,
 					Norms.NOT_PAY_EXTORTION.name());
 			
-			NormInvocationAction denounceExtortion = new NormInvocationAction(this.id,
-					Norms.DENOUNCE.name());
+			NormInvocationAction denounceExtortion = new NormInvocationAction(
+					this.id, Norms.DENOUNCE.name());
 			
 			this.proportionEntrepreneurs.clearVariables();
 			
@@ -343,25 +345,9 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	}
 	
 	
-	/**
-	 * Calculate the hyperbolic tangent
+	/*******************************
 	 * 
-	 * @param x
-	 *          Input parameter
-	 * @return Hyperbolic tangent of x
-	 *
-	 *         private double tanh(int x) {
-	 * 
-	 *         final double y = (Math.exp(this.conf.getSlope() * x) - 1.0)
-	 *         / (Math.exp(this.conf.getSlope() * x) + 1.0);
-	 * 
-	 *         return y;
-	 *         }
-	 * 
-	 * 
-	 *         /*******************************
-	 * 
-	 *         Handle communication requests
+	 * Handle communication requests
 	 * 
 	 *******************************/
 	

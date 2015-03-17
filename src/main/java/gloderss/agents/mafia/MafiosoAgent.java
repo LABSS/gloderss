@@ -417,6 +417,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.MAFIOSI, this.outputId);
 		
+		outputEntity.setValue(MafiosiOutputEntity.Field.TIME.name(),
+				(int) this.simulator.now());
 		outputEntity.setValue(
 				MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
 				this.simulator.now());

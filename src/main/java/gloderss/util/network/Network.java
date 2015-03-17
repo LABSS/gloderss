@@ -68,6 +68,24 @@ public class Network<E> {
 	
 	
 	/**
+	 * 
+	 */
+	public void generateMeshNetwork(Collection<E> nodes) {
+		
+		if((nodes != null) && (!nodes.isEmpty())) {
+			this.network = new HashMap<E, List<E>>();
+			for(E newNode : nodes) {
+				List<E> newNeighbors = new ArrayList<E>();
+				newNeighbors.addAll(nodes);
+				newNeighbors.remove(newNode);
+				this.network.put(newNode, newNeighbors);
+			}
+			this.degree = (int) ((double) (nodes.size() * (nodes.size() - 1)) / (double) 2);
+		}
+	}
+	
+	
+	/**
 	 * Get the number of edges of the network
 	 * 
 	 * @param none

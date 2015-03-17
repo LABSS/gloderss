@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Vector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import gloderss.Constants;
 import gloderss.agents.consumer.ConsumerAgent;
 import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.agents.intermediaryOrg.IntermediaryOrg;
@@ -61,6 +62,209 @@ public class RunSimulation extends EventSimulator {
 			System.out.println("INVALID XML FILE");
 			System.exit(1);
 		}
+	}
+	
+	
+	/**
+	 * Create the citizens distributed in a way they will be randomly distributed
+	 * in the network
+	 * 
+	 * @param id
+	 *          Initial agents identification
+	 * @param citizens
+	 *          Random citizens
+	 * @return Next available agent identification
+	 */
+	private int randomDistribution(int id, List<Integer> citizens) {
+		int citizenId = id;
+		int index;
+		
+		logger.debug("CREATE CONSUMERS");
+		int totalConsumers = 0;
+		List<ConsumerConf> consumersConf = new Vector<ConsumerConf>();
+		consumersConf.addAll(this.scenarioConf.getConsumersConf());
+		int nConsumers[] = new int[consumersConf.size()];
+		index = 0;
+		for(ConsumerConf consumerConf : consumersConf) {
+			nConsumers[index++] = consumerConf.getNumberConsumers();
+			totalConsumers += consumerConf.getNumberConsumers();
+		}
+		
+		int totalEntrepreneurs = 0;
+		List<EntrepreneurConf> entrepreneursConf = new Vector<EntrepreneurConf>();
+		entrepreneursConf.addAll(this.scenarioConf.getEntrepreneursConf());
+		int nEntrepreneurs[] = new int[entrepreneursConf.size()];
+		index = 0;
+		for(EntrepreneurConf entrepreneurConf : entrepreneursConf) {
+			nEntrepreneurs[index++] = entrepreneurConf.getNumberEntrepreneurs();
+			totalEntrepreneurs += entrepreneurConf.getNumberEntrepreneurs();
+		}
+		
+		EntrepreneurAgent entrepreneur;
+		ConsumerAgent consumer;
+		for(int i = 0; i < (totalConsumers + totalEntrepreneurs);) {
+			
+			index = RandomUtil.nextIntFromTo(0,
+					(nConsumers.length + nEntrepreneurs.length) - 1);
+			
+			if(index <= (nConsumers.length - 1)) {
+				if(nConsumers[index] > 0) {
+					consumer = new ConsumerAgent(citizenId, this,
+							consumersConf.get(index));
+					this.consumers.put(citizenId, consumer);
+					citizens.add(citizenId);
+					nConsumers[index]--;
+					i++;
+					citizenId++;
+				}
+			} else {
+				index -= nConsumers.length;
+				if(nEntrepreneurs[index] > 0) {
+					entrepreneur = new EntrepreneurAgent(citizenId, this,
+							entrepreneursConf.get(index));
+					this.entrepreneurs.put(citizenId, entrepreneur);
+					citizens.add(citizenId);
+					nEntrepreneurs[index]--;
+					i++;
+					citizenId++;
+				}
+			}
+		}
+		
+		return citizenId;
+	}
+	
+	
+	/**
+	 * Create the citizens clustered in the network
+	 * 
+	 * @param id
+	 *          Initial agents identification
+	 * @param citizens
+	 *          Clustered citizens
+	 * @return Next available agent identification
+	 */
+	private int clusteredDistribution(int id, List<Integer> citizens) {
+		int citizenId = id;
+		int index;
+		
+		List<ConsumerConf> consumersConf = new Vector<ConsumerConf>();
+		consumersConf.addAll(this.scenarioConf.getConsumersConf());
+		int nConsumers[] = new int[consumersConf.size()];
+		
+		List<EntrepreneurConf> entrepreneursConf = new Vector<EntrepreneurConf>();
+		entrepreneursConf.addAll(this.scenarioConf.getEntrepreneursConf());
+		int nEntrepreneurs[] = new int[entrepreneursConf.size()];
+		
+		logger.debug("CREATE CONSUMERS CLUSTERED");
+		index = 0;
+		int totalConsumers = 0;
+		for(ConsumerConf consumerConf : consumersConf) {
+			if(consumerConf.getClustered()) {
+				nConsumers[index++] = consumerConf.getNumberConsumers();
+				totalConsumers += consumerConf.getNumberConsumers();
+			} else {
+				nConsumers[index++] = 0;
+			}
+		}
+		
+		logger.debug("CREATE ENTREPRENEURS CLUSTERED");
+		index = 0;
+		int totalEntrepreneurs = 0;
+		for(EntrepreneurConf entrepreneurConf : entrepreneursConf) {
+			if(entrepreneurConf.getClustered()) {
+				nEntrepreneurs[index++] = entrepreneurConf.getNumberEntrepreneurs();
+				totalEntrepreneurs += entrepreneurConf.getNumberEntrepreneurs();
+			} else {
+				nEntrepreneurs[index++] = 0;
+			}
+		}
+		
+		EntrepreneurAgent entrepreneur;
+		ConsumerAgent consumer;
+		for(int i = 0; i < (totalConsumers + totalEntrepreneurs);) {
+			
+			index = RandomUtil.nextIntFromTo(0,
+					(nConsumers.length + nEntrepreneurs.length) - 1);
+			
+			if(index <= (nConsumers.length - 1)) {
+				if(nConsumers[index] > 0) {
+					consumer = new ConsumerAgent(citizenId, this,
+							consumersConf.get(index));
+					this.consumers.put(citizenId, consumer);
+					citizens.add(citizenId);
+					nConsumers[index]--;
+					i++;
+					citizenId++;
+				}
+			} else {
+				index -= nConsumers.length;
+				if(nEntrepreneurs[index] > 0) {
+					entrepreneur = new EntrepreneurAgent(citizenId, this,
+							entrepreneursConf.get(index));
+					this.entrepreneurs.put(citizenId, entrepreneur);
+					citizens.add(citizenId);
+					nEntrepreneurs[index]--;
+					i++;
+					citizenId++;
+				}
+			}
+		}
+		
+		logger.debug("CREATE CONSUMERS");
+		index = 0;
+		totalConsumers = 0;
+		for(ConsumerConf consumerConf : consumersConf) {
+			if(!consumerConf.getClustered()) {
+				nConsumers[index++] = consumerConf.getNumberConsumers();
+				totalConsumers += consumerConf.getNumberConsumers();
+			} else {
+				nConsumers[index++] = 0;
+			}
+		}
+		
+		logger.debug("CREATE ENTREPRENEURS");
+		index = 0;
+		totalEntrepreneurs = 0;
+		for(EntrepreneurConf entrepreneurConf : entrepreneursConf) {
+			if(!entrepreneurConf.getClustered()) {
+				nEntrepreneurs[index++] = entrepreneurConf.getNumberEntrepreneurs();
+				totalEntrepreneurs += entrepreneurConf.getNumberEntrepreneurs();
+			} else {
+				nEntrepreneurs[index++] = 0;
+			}
+		}
+		
+		for(int i = 0; i < (totalConsumers + totalEntrepreneurs);) {
+			
+			index = RandomUtil.nextIntFromTo(0,
+					(nConsumers.length + nEntrepreneurs.length) - 1);
+			
+			if(index <= (nConsumers.length - 1)) {
+				if(nConsumers[index] > 0) {
+					consumer = new ConsumerAgent(citizenId, this,
+							consumersConf.get(index));
+					this.consumers.put(citizenId, consumer);
+					citizens.add(citizenId);
+					nConsumers[index]--;
+					i++;
+					citizenId++;
+				}
+			} else {
+				index -= nConsumers.length;
+				if(nEntrepreneurs[index] > 0) {
+					entrepreneur = new EntrepreneurAgent(citizenId, this,
+							entrepreneursConf.get(index));
+					this.entrepreneurs.put(citizenId, entrepreneur);
+					citizens.add(citizenId);
+					nEntrepreneurs[index]--;
+					i++;
+					citizenId++;
+				}
+			}
+		}
+		
+		return citizenId;
 	}
 	
 	
@@ -134,62 +338,26 @@ public class RunSimulation extends EventSimulator {
 			 * Create agents
 			 */
 			int id = 0;
-			int index = 0;
 			
 			// Create Citizens
 			this.consumers = new HashMap<Integer, ConsumerAgent>();
 			this.entrepreneurs = new HashMap<Integer, EntrepreneurAgent>();
 			
-			logger.debug("CREATE CONSUMERS");
-			int totalConsumers = 0;
-			List<ConsumerConf> consumersConf = new Vector<ConsumerConf>();
-			consumersConf.addAll(this.scenarioConf.getConsumersConf());
-			int nConsumers[] = new int[consumersConf.size()];
-			index = 0;
-			for(ConsumerConf consumerConf : consumersConf) {
-				nConsumers[index++] = consumerConf.getNumberConsumers();
-				totalConsumers += consumerConf.getNumberConsumers();
+			List<Integer> citizens = new ArrayList<Integer>();
+			switch(Constants.CitizensDistribution.valueOf(this.scenarioConf
+					.getGeneralConf().getCitizensDistribution())) {
+				case CLUSTERED:
+					id = this.clusteredDistribution(id, citizens);
+					break;
+				case RANDOM:
+					id = this.randomDistribution(id, citizens);
+					break;
+				default:
+					id = this.randomDistribution(id, citizens);
+					break;
 			}
 			
-			logger.debug("CREATE ENTREPRENEURS");
-			int totalEntrepreneurs = 0;
-			List<EntrepreneurConf> entrepreneursConf = new Vector<EntrepreneurConf>();
-			entrepreneursConf.addAll(this.scenarioConf.getEntrepreneursConf());
-			int nEntrepreneurs[] = new int[entrepreneursConf.size()];
-			index = 0;
-			for(EntrepreneurConf entrepreneurConf : entrepreneursConf) {
-				nEntrepreneurs[index++] = entrepreneurConf.getNumberEntrepreneurs();
-				totalEntrepreneurs += entrepreneurConf.getNumberEntrepreneurs();
-			}
-			
-			EntrepreneurAgent entrepreneur;
 			ConsumerAgent consumer;
-			for(int i = 0; i < (totalConsumers + totalEntrepreneurs);) {
-				
-				index = RandomUtil.nextIntFromTo(0,
-						(nConsumers.length + nEntrepreneurs.length) - 1);
-				
-				if(index <= (nConsumers.length - 1)) {
-					if(nConsumers[index] > 0) {
-						consumer = new ConsumerAgent(id, this, consumersConf.get(index));
-						this.consumers.put(id, consumer);
-						nConsumers[index]--;
-						i++;
-						id++;
-					}
-				} else {
-					index -= nConsumers.length;
-					if(nEntrepreneurs[index] > 0) {
-						entrepreneur = new EntrepreneurAgent(id, this,
-								entrepreneursConf.get(index));
-						this.entrepreneurs.put(id, entrepreneur);
-						nEntrepreneurs[index]--;
-						i++;
-						id++;
-					}
-				}
-			}
-			
 			// Provide the set of Entrepreneurs to the Consumers
 			for(Integer consumerId : this.consumers.keySet()) {
 				consumer = this.consumers.get(consumerId);
@@ -226,11 +394,18 @@ public class RunSimulation extends EventSimulator {
 			Network<Integer> socialNetwork = new Network<Integer>();
 			
 			// Customers and Entrepreneurs network
-			List<Integer> citizens = new ArrayList<Integer>();
-			citizens.addAll(this.entrepreneurs.keySet());
-			citizens.addAll(this.consumers.keySet());
-			
-			socialNetwork.generateBarabasiAlbertScaleFreeNetwork(citizens);
+			switch(Constants.NetworkTopolgy.valueOf(this.scenarioConf
+					.getGeneralConf().getNetworkTopology())) {
+				case MESH:
+					socialNetwork.generateMeshNetwork(citizens);
+					break;
+				case SCALEFREE:
+					socialNetwork.generateBarabasiAlbertScaleFreeNetwork(citizens);
+					break;
+				default:
+					socialNetwork.generateBarabasiAlbertScaleFreeNetwork(citizens);
+					break;
+			}
 			
 			for(EntrepreneurAgent e : this.entrepreneurs.values()) {
 				e.setNeighbors(socialNetwork.getNeighbors(e.getId()));

@@ -15,6 +15,9 @@ public class EntrepreneurConf {
 	// Logging timeunit
 	private int															loggingTimeUnit;
 	
+	// clustered
+	private boolean													clustered;
+	
 	// Initial wealth
 	private double													wealth;
 	
@@ -88,6 +91,17 @@ public class EntrepreneurConf {
 	@XmlElement(name = Constants.TAG_ENTREPRENEUR_LOGGING_TIME_UNIT)
 	public void setLoggingTimeUnit(int loggingTimeUnit) {
 		this.loggingTimeUnit = loggingTimeUnit;
+	}
+	
+	
+	public boolean getClustered() {
+		return this.clustered;
+	}
+	
+	
+	@XmlElement(name = Constants.TAG_ENTREPRENEUR_CLUSTERED)
+	public void setClustered(boolean clustered) {
+		this.clustered = clustered;
 	}
 	
 	

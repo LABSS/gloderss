@@ -31,6 +31,10 @@ public final class Constants {
 	
 	public static final String	TAG_NUMBER_CYCLES																	= "numberCycles";
 	
+	public static final String	TAG_NETWORK_TOPOLOGY															= "networkTopology";
+	
+	public static final String	TAG_CITIZENS_DISTRIBUTION													= "citizensDistribution";
+	
 	/**
 	 * Seed tags
 	 */
@@ -104,6 +108,8 @@ public final class Constants {
 	
 	public static final String	TAG_CONSUMER_LOGGING_TIME_UNIT										= "loggingTimeUnit";
 	
+	public static final String	TAG_CONSUMER_CLUSTERED														= "clustered";
+	
 	public static final String	TAG_CONSUMER_BUY_PDF															= "buyPDF";
 	
 	public static final String	TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH					= "numberEntrepreneursSearch";
@@ -130,6 +136,8 @@ public final class Constants {
 	public static final String	TAG_ENTREPRENEUR_NUMBER_ENTREPRENEURS							= "numberEntrepreneurs";
 	
 	public static final String	TAG_ENTREPRENEUR_LOGGING_TIME_UNIT								= "loggingTimeUnit";
+	
+	public static final String	TAG_ENTREPRENEUR_CLUSTERED												= "clustered";
 	
 	public static final String	TAG_ENTREPRENEUR_WEALTH														= "wealth";
 	
@@ -250,6 +258,8 @@ public final class Constants {
 	
 	public static final String	TAG_MAFIA_NUMBER_MAFIOSI													= "numberMafiosi";
 	
+	public static final String	TAG_MAFIA_LOGGING_TIME_UNIT												= "loggingTimeUnit";
+	
 	public static final String	TAG_MAFIA_WEALTH																	= "wealth";
 	
 	public static final String	TAG_MAFIA_DEMAND_PDF															= "demandPDF";
@@ -350,6 +360,22 @@ public final class Constants {
 	}
 	
 	/**
+	 * Citizens distribution
+	 */
+	public static enum CitizensDistribution {
+		CLUSTERED,
+		RANDOM;
+	}
+	
+	/**
+	 * Network topology
+	 */
+	public static enum NetworkTopolgy {
+		MESH,
+		SCALEFREE;
+	}
+	
+	/**
 	 * Information request
 	 */
 	public static final String	REQUEST_AFFILIATION					= "affiliated";
@@ -405,6 +431,8 @@ public final class Constants {
 	public static final String	EVENT_LOGGING_CONSUMERS			= "loggingConsumers";
 	
 	public static final String	EVENT_LOGGING_ENTREPRENEURS	= "loggingEntrepreneurs";
+	
+	public static final String	EVENT_LOGGING_MAFIOSI				= "loggingMafiosi";
 	
 	public static final String	EVENT_RECEIVE_WAGE					= "receiveWage";
 	

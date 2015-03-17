@@ -18,6 +18,14 @@
 						<sequence>
 							<element name="numberReplications" type="nonNegativeInteger" />
 							<element name="numberCycles" type="decimal" />
+							<!-- Citizens network topology -->
+							<!-- MESH -->
+							<!-- SCALEFREE -->
+							<element name="networkTopology" type="string" />
+							<!-- Citizens (Entrepreneurs and Consumers) Distribution -->
+							<!-- CLUSTERED - Clustered citizens -->
+							<!-- RANDOM - Randomly organized -->
+							<element name="citizensDistribution" type="string" />
 							<element maxOccurs="1" name="seeds">
 								<complexType>
 									<choice maxOccurs="unbounded" minOccurs="0">
@@ -102,6 +110,7 @@
 									<sequence>
 										<element name="numberConsumers" type="nonNegativeInteger" />
 										<element name="loggingTimeUnit" type="nonNegativeInteger" />
+										<element name="clustered" type="boolean" />
 
 										<!-- Economic -->
 										<element name="buyPDF" type="string" />
@@ -210,6 +219,7 @@
 									<sequence>
 										<element name="numberEntrepreneurs" type="nonNegativeInteger" />
 										<element name="loggingTimeUnit" type="nonNegativeInteger" />
+										<element name="clustered" type="boolean" />
 
 										<!-- Economic -->
 										<element name="wealth">
@@ -463,6 +473,7 @@
 					<complexType>
 						<sequence>
 							<element name="numberMafiosi" type="nonNegativeInteger" />
+							<element name="loggingTimeUnit" type="nonNegativeInteger" />
 							<element name="wealth">
 								<simpleType>
 									<restriction base="decimal">

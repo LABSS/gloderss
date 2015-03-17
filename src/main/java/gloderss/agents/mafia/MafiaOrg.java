@@ -131,6 +131,10 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 		for(MafiosoAgent mafioso : this.mafiosi.values()) {
 			mafioso.initializeSim();
 		}
+		
+		Event event = new Event(this.simulator.now(), this,
+				Constants.EVENT_LOGGING_MAFIOSI);
+		this.simulator.insert(event);
 	}
 	
 	
@@ -140,11 +144,18 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	}
 	
 	
-	@Override
-	public void finalizeSim() {
+	/**
+	 * Log Mafiosi data
+	 * 
+	 * @param none
+	 * @return none
+	 */
+	private void loggingMafiosi() {
 		for(MafiosoAgent mafioso : this.mafiosi.values()) {
 			AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 					EntityType.MAFIA);
+			outputEntity.setValue(MafiaOutputEntity.Field.TIME.name(),
+					(int) this.simulator.now());
 			outputEntity.setValue(MafiaOutputEntity.Field.MAFIOSO_ID.name(),
 					mafioso.getId());
 			outputEntity.setValue(MafiaOutputEntity.Field.EXTORTION_LEVEL.name(),
@@ -163,6 +174,16 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 					mafioso.getPentitoStatus());
 			outputEntity.setActive();
 		}
+		
+		Event event = new Event(this.simulator.now()
+				+ this.conf.getLoggingTimeUnit(), this, Constants.EVENT_LOGGING_MAFIOSI);
+		this.simulator.insert(event);
+	}
+	
+	
+	@Override
+	public void finalizeSim() {
+		this.loggingMafiosi();
 	}
 	
 	
@@ -216,6 +237,10 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	@Override
 	public void handleEvent(Event event) {
-		// NOTHING
+		switch((String) event.getCommand()) {
+			case Constants.EVENT_LOGGING_MAFIOSI:
+				this.loggingMafiosi();
+				break;
+		}
 	}
 }

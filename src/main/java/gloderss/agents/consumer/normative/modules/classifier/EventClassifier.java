@@ -203,7 +203,7 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(StatePunishmentAction.Param.STATE_ID),
 						(int) action.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID),
 						this.agentId, NormativeEventType.PUNISHMENT_OBSERVED,
-						Norms.PAY_EXTORTION.ordinal());
+						Norms.NOT_PAY_EXTORTION.ordinal());
 				entities.add(entity);
 				
 				// Mafia punishment
@@ -215,7 +215,7 @@ public class EventClassifier extends EventClassifierAbstract {
 						(int) action.getParam(MafiaPunishmentAction.Param.MAFIOSO_ID),
 						(int) action.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID),
 						this.agentId, NormativeEventType.PUNISHMENT_OBSERVED,
-						Norms.NOT_PAY_EXTORTION.ordinal());
+						Norms.PAY_EXTORTION.ordinal());
 				entities.add(entity);
 				
 				// Normative Information
@@ -398,7 +398,7 @@ public class EventClassifier extends EventClassifierAbstract {
 							(int) action
 									.getParam(StatePunishmentAction.Param.ENTREPRENEUR_ID),
 							msg.getSender(), NormativeEventType.PUNISHMENT_OBSERVED,
-							Norms.PAY_EXTORTION.ordinal());
+							Norms.NOT_PAY_EXTORTION.ordinal());
 					entities.add(entity);
 					
 					// Mafia punishment
@@ -411,7 +411,7 @@ public class EventClassifier extends EventClassifierAbstract {
 							(int) action
 									.getParam(MafiaPunishmentAction.Param.ENTREPRENEUR_ID),
 							msg.getSender(), NormativeEventType.PUNISHMENT_OBSERVED,
-							Norms.NOT_PAY_EXTORTION.ordinal());
+							Norms.PAY_EXTORTION.ordinal());
 					entities.add(entity);
 					
 				}

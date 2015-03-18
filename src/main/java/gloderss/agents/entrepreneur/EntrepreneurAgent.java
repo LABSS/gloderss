@@ -507,9 +507,28 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			if(RandomUtil.nextDouble() < probPay) {
 				this.pay.put(extortionId, true);
 				
+				// Normative update
+				PayExtortionAction payAction = new PayExtortionAction(extortionId,
+						mafiosoId, this.id, extortion);
+				
+				Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
+						payAction);
+				
+				this.normative.input(msg);
+				
 				// Decide not paying extortion
 			} else {
 				this.pay.put(extortionId, false);
+				
+				// Normative update
+				NotPayExtortionAction notPayAction = new NotPayExtortionAction(
+						extortionId, mafiosoId, this.id, extortion);
+				
+				Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
+						notPayAction);
+				
+				this.normative.input(msg);
+				
 				this.decideDenounceExtortion(action);
 			}
 			
@@ -718,14 +737,11 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			this.currentWage -= extortion;
 			
-			// Output
-			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(), true);
-			
-			// Normative update
-			this.normative.input(msg);
-			
 			// Reputation
 			this.stateFinderRep.updateReputation(payAction);
+			
+			// Output
+			outputEntity.setValue(ExtortionOutputEntity.Field.PAID.name(), true);
 			
 		} else {
 			
@@ -735,9 +751,6 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			Message msg = new Message(this.simulator.now(), victimId, mafiosoId,
 					notPayAction);
 			this.sendMsg(msg);
-			
-			// Normative update
-			this.normative.input(msg);
 			
 			// Spread action to IO
 			this.spreadActionInformation(msg);

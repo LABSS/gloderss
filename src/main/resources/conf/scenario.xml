@@ -5,7 +5,7 @@
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>1</numberReplications>
-		<numberCycles>50000</numberCycles>
+		<numberCycles>20000</numberCycles>
 		<networkTopology>SCALEFREE</networkTopology>
 		<citizensDistribution>CLUSTERED</citizensDistribution>
 		<seeds>
@@ -54,7 +54,7 @@
 			<directory>./output</directory>
 			<append>false</append>
 			<separator>;</separator>
-			<timeToWrite>50000</timeToWrite>
+			<timeToWrite>20000</timeToWrite>
 		</output>
 		<filename>
 			<extortion>extortion.csv</extortion>
@@ -122,7 +122,7 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>40</numberConsumers>
+			<numberConsumers>1000</numberConsumers>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>false</clustered>
 
@@ -145,25 +145,25 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Pay Extortion -->
 				<normSalience id="1" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Denounce -->
 				<normSalience id="2" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Buy from Not Paying Entrepreneurs -->
 				<normSalience id="4" active="true" compliance="10"
 					violation="10" obsCompliance="10" obsViolation="10" punishment="0"
@@ -176,7 +176,7 @@
 		</consumer>
 
 		<consumer>
-			<numberConsumers>160</numberConsumers>
+			<numberConsumers>0</numberConsumers>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>true</clustered>
 
@@ -199,25 +199,25 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Denounce -->
-				<normSalience id="2" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Denounce -->
 				<normSalience id="3" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Buy from Not Paying Entrepreneurs -->
 				<normSalience id="4" active="true" compliance="10"
 					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
@@ -233,7 +233,7 @@
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>20</numberEntrepreneurs>
+			<numberEntrepreneurs>500</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>false</clustered>
 
@@ -258,38 +258,38 @@
 
 			<!-- Reputation -->
 			<reputation>
-				<stateProtector>0.0</stateProtector>
-				<statePunisher>0.0</statePunisher>
-				<mafiaPunisher>1.0</mafiaPunisher>
+				<stateProtector>0.1</stateProtector>
+				<statePunisher>0.1</statePunisher>
+				<mafiaPunisher>0.9</mafiaPunisher>
 			</reputation>
 
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
-				<normSalience id="0" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Pay Extortion -->
 				<normSalience id="1" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Denounce -->
 				<normSalience id="2" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Denounce -->
-				<normSalience id="3" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>75</numberEntrepreneurs>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>true</clustered>
 
@@ -322,30 +322,30 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Denounce -->
-				<normSalience id="2" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Denounce -->
 				<normSalience id="3" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
 		</entrepreneur>
 
 		<entrepreneur>
-			<numberEntrepreneurs>5</numberEntrepreneurs>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>true</clustered>
 
@@ -378,25 +378,25 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.2</individualWeight>
-			<normativeWeight>0.8</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Pay Extortion -->
-				<normSalience id="1" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Denounce -->
-				<normSalience id="2" active="true" compliance="2"
-					violation="1" obsCompliance="2" obsViolation="1" punishment="0"
-					sanction="2" invocationCompliance="2" invocationViolation="1" />
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 				<!-- Not Denounce -->
 				<normSalience id="3" active="true" compliance="1"
-					violation="2" obsCompliance="1" obsViolation="2" punishment="0"
-					sanction="0" invocationCompliance="1" invocationViolation="2" />
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
 		</entrepreneur>
 	</entrepreneurs>
@@ -437,14 +437,14 @@
 		<numberMafiosi>20</numberMafiosi>
 		<loggingTimeUnit>100</loggingTimeUnit>
 		<wealth>0.00</wealth>
-		<demandPDF>NORMAL(10,2)</demandPDF>
-		<demandAffiliatedProbability>1.0</demandAffiliatedProbability>
-		<extortionLevel>0.1</extortionLevel>
-		<punishmentSeverity>0.8</punishmentSeverity>
-		<collectionPDF>CONSTANT(10)</collectionPDF>
+		<demandPDF>NORMAL(3,2)</demandPDF>
+		<demandAffiliatedProbability>0.9</demandAffiliatedProbability>
+		<extortionLevel>0.03</extortionLevel>
+		<punishmentSeverity>0.5</punishmentSeverity>
+		<collectionPDF>CONSTANT(2)</collectionPDF>
 		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
-		<maximumBenefit>0.1</maximumBenefit>
+		<maximumBenefit>0.01</maximumBenefit>
 		<pentitiProbability>0.01</pentitiProbability>
 		<!-- recruitingThreshold does not work -->
 		<recruitingThreshold>0.5</recruitingThreshold>

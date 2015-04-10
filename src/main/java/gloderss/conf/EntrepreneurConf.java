@@ -1,8 +1,11 @@
 package gloderss.conf;
 
 import gloderss.Constants;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -70,6 +73,9 @@ public class EntrepreneurConf {
 	
 	// Initial norm salience
 	private Map<Integer, NormSalienceConf>	salienceConf;
+	
+	// Changes configuration
+	private List<ChangeConf>								changesConf	= new ArrayList<ChangeConf>();
 	
 	
 	public int getNumberEntrepreneurs() {
@@ -301,5 +307,17 @@ public class EntrepreneurConf {
 	@XmlJavaTypeAdapter(NormSalienceAdapter.class)
 	public void setSaliences(Map<Integer, NormSalienceConf> salienceConf) {
 		this.salienceConf = salienceConf;
+	}
+	
+	
+	public List<ChangeConf> getChangesConf() {
+		return this.changesConf;
+	}
+	
+	
+	@XmlElementWrapper(name = Constants.TAG_CHANGES)
+	@XmlElement(name = Constants.TAG_CHANGE)
+	public void setChangesConf(List<ChangeConf> changesConf) {
+		this.changesConf = changesConf;
 	}
 }

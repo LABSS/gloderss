@@ -22,15 +22,21 @@ import java.util.List;
 
 public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer {
 	
-	private StateConf			conf;
-	
 	private int						stateId;
+	
+	private String				generalInvestigationDuration;
 	
 	private PDFAbstract		generalInvestigationDurationPDF;
 	
+	private String				bureaucraticActivityDuration;
+	
 	private PDFAbstract		bureaucraticActivityDurationPDF;
 	
+	private String				specificInvestigationDuration;
+	
 	private PDFAbstract		specificInvestigationDurationPDF;
+	
+	private double				captureProbability;
 	
 	private int						observed;
 	
@@ -58,18 +64,27 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 			StateConf conf, int stateId) {
 		super(id, simulator);
 		
-		this.conf = conf;
-		
 		this.stateId = stateId;
 		
-		this.generalInvestigationDurationPDF = PDFAbstract.getInstance(conf
-				.getGeneralInvestigationDurationPDF());
+		this.generalInvestigationDuration = conf
+				.getGeneralInvestigationDurationPDF();
 		
-		this.bureaucraticActivityDurationPDF = PDFAbstract.getInstance(conf
-				.getBureaucraticActivityDurationPDF());
+		this.generalInvestigationDurationPDF = PDFAbstract
+				.getInstance(this.generalInvestigationDuration);
 		
-		this.specificInvestigationDurationPDF = PDFAbstract.getInstance(conf
-				.getSpecificInvestigationDurationPDF());
+		this.bureaucraticActivityDuration = conf
+				.getBureaucraticActivityDurationPDF();
+		
+		this.bureaucraticActivityDurationPDF = PDFAbstract
+				.getInstance(this.bureaucraticActivityDuration);
+		
+		this.specificInvestigationDuration = conf
+				.getSpecificInvestigationDurationPDF();
+		
+		this.specificInvestigationDurationPDF = PDFAbstract
+				.getInstance(this.specificInvestigationDuration);
+		
+		this.captureProbability = conf.getCaptureProbability();
 		
 		this.observed = -1;
 		
@@ -87,6 +102,58 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	 * Getters and Setters
 	 * 
 	 *******************************/
+	
+	public String getGeneralInvestigationDuration() {
+		return this.generalInvestigationDuration;
+	}
+	
+	
+	public void setGeneralInvestigationDuration(
+			String generalInvestigationDuration) {
+		this.generalInvestigationDuration = generalInvestigationDuration;
+		
+		this.generalInvestigationDurationPDF = PDFAbstract
+				.getInstance(this.generalInvestigationDuration);
+	}
+	
+	
+	public String getBureaucraticActivityDuration() {
+		return this.bureaucraticActivityDuration;
+	}
+	
+	
+	public void setBureaucraticActivityDuration(
+			String bureaucraticActivityDuration) {
+		this.bureaucraticActivityDuration = bureaucraticActivityDuration;
+		
+		this.bureaucraticActivityDurationPDF = PDFAbstract
+				.getInstance(this.bureaucraticActivityDuration);
+	}
+	
+	
+	public String getSpecificInvestigationDuration() {
+		return this.specificInvestigationDuration;
+	}
+	
+	
+	public void setSpecificInvestigationDuration(
+			String specificInvestigationDuration) {
+		this.specificInvestigationDuration = specificInvestigationDuration;
+		
+		this.specificInvestigationDurationPDF = PDFAbstract
+				.getInstance(this.specificInvestigationDuration);
+	}
+	
+	
+	public double getCaptureProbability() {
+		return this.captureProbability;
+	}
+	
+	
+	public void setCaptureProbability(double captureProbability) {
+		this.captureProbability = captureProbability;
+	}
+	
 	
 	public int getObserved() {
 		return this.observed;
@@ -210,7 +277,7 @@ public class PoliceOfficerAgent extends AbstractAgent implements IPoliceOfficer 
 	 */
 	private void captureMafioso(int mafiosoId) {
 		
-		if(RandomUtil.nextDouble() < this.conf.getCaptureProbability()) {
+		if(RandomUtil.nextDouble() < this.captureProbability) {
 			
 			CaptureMafiosoAction action;
 			if(this.specificInvestigation) {

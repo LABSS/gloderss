@@ -1,51 +1,57 @@
 package gloderss.conf;
 
+import java.util.ArrayList;
+import java.util.List;
 import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = Constants.TAG_STATE, namespace = Constants.TAG_NAMESPACE)
 public class StateConf {
 	
-	private int			numberPoliceOfficers;
+	private int								numberPoliceOfficers;
 	
-	private String	generalInvestigationDurationPDF;
+	private String						generalInvestigationDurationPDF;
 	
-	private String	bureaucraticActivityDurationPDF;
+	private String						bureaucraticActivityDurationPDF;
 	
-	private String	specificInvestigationDurationPDF;
+	private String						specificInvestigationDurationPDF;
 	
-	private double	specificInvestigationProbability;
+	private double						specificInvestigationProbability;
 	
-	private double	captureProbability;
+	private double						captureProbability;
 	
-	private double	evidenceProbability;
+	private double						evidenceProbability;
 	
-	private String	custodyDurationPDF;
+	private String						custodyDurationPDF;
 	
-	private double	convictionProbability;
+	private double						convictionProbability;
 	
-	private String	collaborationConvictionFunction;
+	private String						collaborationConvictionFunction;
 	
-	private String	imprisonmentDurationPDF;
+	private String						imprisonmentDurationPDF;
 	
-	private double	noCollaborationPunishmentProbability;
+	private double						noCollaborationPunishmentProbability;
 	
-	private double	noCollaborationPunishment;
+	private double						noCollaborationPunishment;
 	
-	private String	timeToCompensationPDF;
+	private String						timeToCompensationPDF;
 	
-	private double	resourceFondo;
+	private double						resourceFondo;
 	
-	private String	periodicityFondoPDF;
+	private String						periodicityFondoPDF;
 	
-	private double	proportionTransferFondo;
+	private double						proportionTransferFondo;
 	
-	private String	spreadInfoFunction;
+	private String						spreadInfoFunction;
 	
-	private String	proportionConsumers;
+	private String						proportionConsumers;
 	
-	private String	proportionEntrepreneurs;
+	private String						proportionEntrepreneurs;
+	
+	// Changes configuration
+	private List<ChangeConf>	changesConf	= new ArrayList<ChangeConf>();
 	
 	
 	public int getNumberPoliceOfficers() {
@@ -271,5 +277,17 @@ public class StateConf {
 	@XmlElement(name = Constants.TAG_STATE_PROPORTION_ENTREPRENEURS)
 	public void setProportionEntrepreneurs(String proportionEntrepreneurs) {
 		this.proportionEntrepreneurs = proportionEntrepreneurs;
+	}
+	
+	
+	public List<ChangeConf> getChangesConf() {
+		return this.changesConf;
+	}
+	
+	
+	@XmlElementWrapper(name = Constants.TAG_CHANGES)
+	@XmlElement(name = Constants.TAG_CHANGE)
+	public void setChangesConf(List<ChangeConf> changesConf) {
+		this.changesConf = changesConf;
 	}
 }

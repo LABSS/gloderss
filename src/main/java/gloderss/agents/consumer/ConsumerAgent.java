@@ -59,6 +59,7 @@ import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
 import gloderss.communication.Message;
+import gloderss.conf.ChangeConf;
 import gloderss.conf.ConsumerConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
@@ -79,7 +80,22 @@ import gloderss.util.random.RandomUtil;
 public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		NormEnforcementListener {
 	
-	private ConsumerConf										conf;
+	private int															loggingTimeUnit;
+	
+	private int															numberEntrepreneursSearch;
+	
+	private double													reputationEntrepreneurThreshold;
+	
+	@SuppressWarnings("unused")
+	private double													sanctionThreshold;
+	
+	private double													sanctionDiscernability;
+	
+	private double													individualWeight;
+	
+	private double													normativeWeight;
+	
+	private List<ChangeConf>								changesConf;
 	
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
@@ -107,7 +123,23 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	 */
 	public ConsumerAgent(Integer id, EventSimulator simulator, ConsumerConf conf) {
 		super(id, simulator);
-		this.conf = conf;
+		
+		this.loggingTimeUnit = conf.getLoggingTimeUnit();
+		
+		this.numberEntrepreneursSearch = conf.getNumberEntrepreneursSearch();
+		
+		this.reputationEntrepreneurThreshold = conf.getReputationConf()
+				.getEntrepreneurRepThreshold();
+		
+		this.sanctionThreshold = conf.getSanctionConf().getThreshold();
+		
+		this.sanctionDiscernability = conf.getSanctionConf().getDiscernability();
+		
+		this.individualWeight = conf.getIndividualWeight();
+		
+		this.normativeWeight = conf.getNormativeWeight();
+		
+		this.changesConf = conf.getChangesConf();
 		
 		this.entrepreneurs = new HashMap<Integer, EntrepreneurAgent>();
 		this.entrepreneurRep = new EntrepreneurReputation(conf.getReputationConf()
@@ -120,7 +152,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		 * Normative
 		 */
 		this.normative = new EmiliaControllerConsumer(id, conf.getNormativeXML(),
-				this.conf.getNormativeXSD(), this.conf.getSanctionConf().getThreshold());
+				conf.getNormativeXSD(), conf.getSanctionConf().getThreshold());
 		this.normative.init();
 		this.normative.registerNormEnforcement(this);
 		
@@ -377,6 +409,12 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		event = new Event(this.simulator.now(), this,
 				Constants.EVENT_LOGGING_CONSUMERS);
 		this.simulator.insert(event);
+		
+		// Schedule changes
+		for(ChangeConf change : this.changesConf) {
+			event = new Event(change.getTime(), this, change.getParameter(), change);
+			this.simulator.insert(event);
+		}
 	}
 	
 	
@@ -397,7 +435,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		double maxPrice = 0.0;
 		Map<Integer, Double> buyList = new HashMap<Integer, Double>();
 		while((buyList.size() < this.entrepreneurs.size())
-				&& (buyList.size() < this.conf.getNumberEntrepreneursSearch())) {
+				&& (buyList.size() < this.numberEntrepreneursSearch)) {
 			
 			int entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
 					.nextIntFromTo(0, (this.entrepreneurs.size() - 1))];
@@ -455,6 +493,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			avgRep = this.entrepreneurRep.getUnknownValue();
 		}
 		
+		@SuppressWarnings("unused")
 		String outputResearched = new String();
 		
 		// Score each Entrepreneur
@@ -471,18 +510,18 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				reputation = avgRep;
 			}
 			
-			double score = (1 - (price / maxPrice)) * this.conf.getIndividualWeight();
+			double score = (1 - (price / maxPrice)) * this.individualWeight;
 			// BUY PAYING ENTREPRENEURS and NOT BUY PAYING ENTREPRENEURS norms active
 			if((buyPayExtortionStatus) && (notBuyPayExtortionStatus)) {
 				
 				if(buyNotPayExtortionSalience > buyPayExtortionSalience) {
 					
-					score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
+					score += (buyNotPayExtortionSalience * this.normativeWeight)
 							* reputation;
 					
 				} else {
 					
-					score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
+					score += (buyPayExtortionSalience * this.normativeWeight)
 							* (1 - reputation);
 					
 				}
@@ -490,13 +529,13 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 				// BUY PAYING ENTREPRENEURS norm active
 			} else if(buyPayExtortionStatus) {
 				
-				score += (buyPayExtortionSalience * this.conf.getNormativeWeight())
+				score += (buyPayExtortionSalience * this.normativeWeight)
 						* (1 - reputation);
 				
 				// NOT BUY PAYING ENTREPRENEURS norm active
 			} else if(notBuyPayExtortionStatus) {
 				
-				score += (buyNotPayExtortionSalience * this.conf.getNormativeWeight())
+				score += (buyNotPayExtortionSalience * this.normativeWeight)
 						* reputation;
 				
 				// NONE norm active
@@ -528,8 +567,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			
 			// Normative
 			Message newMsg;
-			if(this.entrepreneurRep.getReputation(selectedEntrepreneurId) < this.conf
-					.getReputationConf().getEntrepreneurRepThreshold()) {
+			if(this.entrepreneurRep.getReputation(selectedEntrepreneurId) < this.reputationEntrepreneurThreshold) {
 				
 				BuyPayExtortionAction newAction = new BuyPayExtortionAction(this.id,
 						selectedEntrepreneurId);
@@ -672,8 +710,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		
 		outputEntity.setActive();
 		
-		Event event = new Event(this.simulator.now()
-				+ this.conf.getLoggingTimeUnit(), this,
+		Event event = new Event(this.simulator.now() + this.loggingTimeUnit, this,
 				Constants.EVENT_LOGGING_CONSUMERS);
 		this.simulator.insert(event);
 	}
@@ -834,8 +871,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 						.getParam(BuyProductAction.Param.ENTREPRENEUR_ID);
 				
 				Message newMsg;
-				if(this.entrepreneurRep.getReputation(entrepreneurId) < this.conf
-						.getReputationConf().getEntrepreneurRepThreshold()) {
+				if(this.entrepreneurRep.getReputation(entrepreneurId) < this.reputationEntrepreneurThreshold) {
 					
 					BuyPayExtortionAction newAction = new BuyPayExtortionAction(
 							consumerId, entrepreneurId);
@@ -989,8 +1025,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 			}
 			
 			// The sanction may be discernible to the target
-			if(RandomUtil.nextDouble() < this.conf.getSanctionConf()
-					.getDiscernability()) {
+			if(RandomUtil.nextDouble() < this.sanctionDiscernability) {
 				Message msg = new Message(this.simulator.now(), this.id,
 						entrepreneurId, action);
 				this.sendMsg(msg);
@@ -1008,12 +1043,59 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	@Override
 	public void handleEvent(Event event) {
 		
+		ChangeConf change = null;
+		if((event.getParameter() != null)
+				&& (event.getParameter() instanceof ChangeConf)) {
+			change = (ChangeConf) event.getParameter();
+		}
+		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_BUY_PRODUCT:
 				this.buyProduct();
 				break;
 			case Constants.EVENT_LOGGING_CONSUMERS:
 				this.loggingConsumers();
+				break;
+			case Constants.TAG_CONSUMER_LOGGING_TIME_UNIT:
+				if(change != null) {
+					this.loggingTimeUnit = Integer.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_CONSUMER_BUY_PDF:
+				if(change != null) {
+					this.buyPDF = PDFAbstract.getInstance(change.getValue());
+				}
+				break;
+			case Constants.TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH:
+				if(change != null) {
+					this.numberEntrepreneursSearch = Integer.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_THRESHOLD:
+				if(change != null) {
+					this.reputationEntrepreneurThreshold = Double.valueOf(change
+							.getValue());
+				}
+				break;
+			case Constants.TAG_CONSUMER_SANCTION_THRESHOLD:
+				if(change != null) {
+					this.sanctionThreshold = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_CONSUMER_SANCTION_DISCERNABILITY:
+				if(change != null) {
+					this.sanctionDiscernability = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT:
+				if(change != null) {
+					this.individualWeight = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT:
+				if(change != null) {
+					this.normativeWeight = Double.valueOf(change.getValue());
+				}
 				break;
 		}
 	}

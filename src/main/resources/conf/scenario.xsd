@@ -203,6 +203,23 @@
 												</sequence>
 											</complexType>
 										</element>
+
+										<!-- Parameter Changes -->
+										<element maxOccurs="1" name="changes">
+											<complexType>
+												<sequence>
+													<element maxOccurs="unbounded" minOccurs="0" name="change">
+														<complexType>
+															<sequence>
+																<element name="time" type="decimal" />
+																<element name="parameter" type="string" />
+																<element name="value" type="string" />
+															</sequence>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
 									</sequence>
 								</complexType>
 							</element>
@@ -370,6 +387,22 @@
 											</complexType>
 										</element>
 
+										<!-- Parameter Changes -->
+										<element maxOccurs="1" name="changes">
+											<complexType>
+												<sequence>
+													<element maxOccurs="unbounded" minOccurs="0" name="change">
+														<complexType>
+															<sequence>
+																<element name="time" type="decimal" />
+																<element name="parameter" type="string" />
+																<element name="value" type="string" />
+															</sequence>
+														</complexType>
+													</element>
+												</sequence>
+											</complexType>
+										</element>
 									</sequence>
 								</complexType>
 							</element>
@@ -464,6 +497,23 @@
 							<element name="spreadInfoFunction" type="string" />
 							<element name="proportionConsumers" type="string" />
 							<element name="proportionEntrepreneurs" type="string" />
+
+							<!-- Parameter Changes -->
+							<element maxOccurs="1" name="changes">
+								<complexType>
+									<sequence>
+										<element maxOccurs="unbounded" minOccurs="0" name="change">
+											<complexType>
+												<sequence>
+													<element name="time" type="decimal" />
+													<element name="parameter" type="string" />
+													<element name="value" type="string" />
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>
@@ -551,6 +601,23 @@
 									</restriction>
 								</simpleType>
 							</element>
+
+							<!-- Parameter Changes -->
+							<element maxOccurs="1" name="changes">
+								<complexType>
+									<sequence>
+										<element maxOccurs="unbounded" minOccurs="0" name="change">
+											<complexType>
+												<sequence>
+													<element name="time" type="decimal" />
+													<element name="parameter" type="string" />
+													<element name="value" type="string" />
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>
@@ -566,6 +633,23 @@
 							<element name="spreadInfoFunction" type="string" />
 							<element name="proportionConsumers" type="string" />
 							<element name="proportionEntrepreneurs" type="string" />
+
+							<!-- Parameter Changes -->
+							<element maxOccurs="1" name="changes">
+								<complexType>
+									<sequence>
+										<element maxOccurs="unbounded" minOccurs="0" name="change">
+											<complexType>
+												<sequence>
+													<element name="time" type="decimal" />
+													<element name="parameter" type="string" />
+													<element name="value" type="string" />
+												</sequence>
+											</complexType>
+										</element>
+									</sequence>
+								</complexType>
+							</element>
 						</sequence>
 					</complexType>
 				</element>

@@ -1,6 +1,20 @@
 Changes
 =======
 
+10/04/2015
+----------
+1. (New Feature) Enable the creation of Exogenous Shock scenarios. The feature is configurable
+   through the CHANGES section in the XML as follows
+   
+   <changes>
+     <change>
+       <time>10000</time>
+       <parameter>loggingTimeUnit</parameter>
+       <value>200</value>
+     <change>
+   </changes>
+   
+
 15/03/2015
 ----------
 1. Removed Reputation information from Consumer output and Decision information from Purchase
@@ -62,4 +76,4 @@ Changes
 
 TO DO
 =====
-1. (New Feature) Enable the creation of shocking scenarios 
+ 

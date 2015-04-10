@@ -31,6 +31,7 @@ import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
 import gloderss.communication.Message;
+import gloderss.conf.ChangeConf;
 import gloderss.conf.IntermediaryOrgConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
@@ -60,19 +61,25 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	
 	private final static String							NUMBER_ACTIONS	= "NUMBER_ACTIONS";
 	
-	private IntermediaryOrgConf							conf;
-	
 	private Map<Integer, ConsumerAgent>			consumers;
 	
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
 	private PDFAbstract											timeToAffiliatePDF;
 	
+	private String													spreadInfoFunctionStr;
+	
 	private Evaluator												spreadInfoFunction;
+	
+	private String													proportionConsumersStr;
 	
 	private Evaluator												proportionConsumers;
 	
+	private String													proportionEntrepreneursStr;
+	
 	private Evaluator												proportionEntrepreneurs;
+	
+	private List<ChangeConf>								changesConf;
 	
 	private List<Integer>										affiliated;
 	
@@ -105,21 +112,27 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			Map<Integer, EntrepreneurAgent> entrepreneurs) {
 		super(id, simulator);
 		
-		this.conf = conf;
-		
 		this.consumers = consumers;
 		this.entrepreneurs = entrepreneurs;
 		
 		this.timeToAffiliatePDF = PDFAbstract.getInstance(conf
 				.getTimeToAffiliatePDF());
 		
+		this.spreadInfoFunctionStr = conf.getSpreadInfoFunction();
+		
 		this.spreadInfoFunction = new Evaluator();
 		this.spreadInfoFunction.putFunction(new Tanh());
 		this.spreadInfoFunction.putFunction(new Const());
 		
+		this.proportionConsumersStr = conf.getProportionConsumers();
+		
 		this.proportionConsumers = new Evaluator();
 		
+		this.proportionEntrepreneursStr = conf.getProportionEntrepreneurs();
+		
 		this.proportionEntrepreneurs = new Evaluator();
+		
+		this.changesConf = conf.getChangesConf();
 		
 		this.affiliated = new ArrayList<Integer>();
 		
@@ -151,6 +164,13 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		for(Integer consumerId : this.consumers.keySet()) {
 			this.comm.addObservation(this.id, consumerId);
 		}
+		
+		// Schedule changes
+		for(ChangeConf change : this.changesConf) {
+			Event event = new Event(change.getTime(), this, change.getParameter(),
+					change);
+			this.simulator.insert(event);
+		}
 	}
 	
 	
@@ -175,8 +195,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 		
 		double probSpreadInfo = 0.0;
 		try {
-			probSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
-					.getSpreadInfoFunction());
+			probSpreadInfo = this.spreadInfoFunction
+					.getNumberResult(this.spreadInfoFunctionStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -191,8 +211,8 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			
 			double propConsumers = 0.0;
 			try {
-				propConsumers = this.proportionConsumers.getNumberResult(this.conf
-						.getProportionConsumers());
+				propConsumers = this.proportionConsumers
+						.getNumberResult(this.proportionConsumersStr);
 			} catch(EvaluationException e) {
 				logger.debug(e.toString());
 			}
@@ -227,7 +247,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 			double propEntrepreneurs = 0.0;
 			try {
 				propEntrepreneurs = this.proportionEntrepreneurs
-						.getNumberResult(this.conf.getProportionEntrepreneurs());
+						.getNumberResult(this.proportionEntrepreneursStr);
 			} catch(EvaluationException e) {
 				logger.debug(e.toString());
 			}
@@ -480,9 +500,35 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	@Override
 	public void handleEvent(Event event) {
 		
+		ChangeConf change = null;
+		if((event.getParameter() != null)
+				&& (event.getParameter() instanceof ChangeConf)) {
+			change = (ChangeConf) event.getParameter();
+		}
+		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_AFFILIATE_PROCESSING:
 				this.affiliate();
+				break;
+			case Constants.TAG_INTERMEDIARY_ORG_TIME_TO_AFFILIATE_PDF:
+				if(change != null) {
+					this.timeToAffiliatePDF = PDFAbstract.getInstance(change.getValue());
+				}
+				break;
+			case Constants.TAG_INTERMEDIARY_ORG_SPREAD_INFO_FUNCTION:
+				if(change != null) {
+					this.spreadInfoFunctionStr = change.getValue();
+				}
+				break;
+			case Constants.TAG_INTERMEDIARY_ORG_PROPORTION_CONSUMERS:
+				if(change != null) {
+					this.proportionConsumersStr = change.getValue();
+				}
+				break;
+			case Constants.TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS:
+				if(change != null) {
+					this.proportionEntrepreneursStr = change.getValue();
+				}
 				break;
 		}
 	}

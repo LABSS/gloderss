@@ -6,6 +6,7 @@ import gloderss.agents.entrepreneur.EntrepreneurAgent;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
 import gloderss.communication.Message;
+import gloderss.conf.ChangeConf;
 import gloderss.conf.MafiaConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
@@ -22,7 +23,23 @@ import java.util.Vector;
 
 public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
-	private MafiaConf												conf;
+	private double													loggingTimeUnit;
+	
+	private double													minBenefit;
+	
+	private double													maxBenefit;
+	
+	private double													extortionLevel;
+	
+	private double													punishmentSeverity;
+	
+	@SuppressWarnings("unused")
+	private double													recruitingThreshold;
+	
+	@SuppressWarnings("unused")
+	private double													recruitingProbability;
+	
+	private List<ChangeConf>								changesConf;
 	
 	private Map<Integer, MafiosoAgent>			mafiosi;
 	
@@ -51,7 +68,22 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	public MafiaOrg(Integer id, EventSimulator simulator, MafiaConf conf,
 			Integer stateId, Map<Integer, EntrepreneurAgent> entrepreneurs) {
 		super(id, simulator);
-		this.conf = conf;
+		
+		this.changesConf = conf.getChangesConf();
+		
+		this.loggingTimeUnit = conf.getLoggingTimeUnit();
+		
+		this.minBenefit = conf.getMinimumBenefit();
+		
+		this.maxBenefit = conf.getMaximumBenefit();
+		
+		this.extortionLevel = conf.getExtortionLevel();
+		
+		this.punishmentSeverity = conf.getPunishmentSeverity();
+		
+		this.recruitingThreshold = conf.getRecruitingThreshold();
+		
+		this.recruitingProbability = conf.getRecruitingProbability();
 		
 		this.entrepreneurs = entrepreneurs;
 		this.domain = new Vector<Integer>();
@@ -60,8 +92,8 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 		MafiosoAgent mafioso;
 		int mafiosoId = id + 1;
 		this.mafiosi = new HashMap<Integer, MafiosoAgent>();
-		for(int i = 0; i < this.conf.getNumberMafiosi(); i++, mafiosoId++) {
-			mafioso = new MafiosoAgent(mafiosoId, simulator, this.conf, this.getId(),
+		for(int i = 0; i < conf.getNumberMafiosi(); i++, mafiosoId++) {
+			mafioso = new MafiosoAgent(mafiosoId, simulator, conf, this.getId(),
 					stateId);
 			this.mafiosi.put(mafiosoId, mafioso);
 		}
@@ -79,12 +111,9 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	 * @return none
 	 */
 	private void setupBenefits() {
-		double minBenefit = this.conf.getMinimumBenefit();
-		double maxBenefit = this.conf.getMaximumBenefit();
-		
 		for(Integer eId : this.entrepreneurs.keySet()) {
-			double benefit = minBenefit
-					+ ((maxBenefit - minBenefit) * RandomUtil.nextDouble());
+			double benefit = this.minBenefit
+					+ ((this.maxBenefit - this.minBenefit) * RandomUtil.nextDouble());
 			
 			this.benefits.put(eId, benefit);
 		}
@@ -135,6 +164,12 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 		Event event = new Event(this.simulator.now(), this,
 				Constants.EVENT_LOGGING_MAFIOSI);
 		this.simulator.insert(event);
+		
+		// Schedule changes
+		for(ChangeConf change : this.changesConf) {
+			event = new Event(change.getTime(), this, change.getParameter(), change);
+			this.simulator.insert(event);
+		}
 	}
 	
 	
@@ -159,9 +194,9 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 			outputEntity.setValue(MafiaOutputEntity.Field.MAFIOSO_ID.name(),
 					mafioso.getId());
 			outputEntity.setValue(MafiaOutputEntity.Field.EXTORTION_LEVEL.name(),
-					this.conf.getExtortionLevel());
+					this.extortionLevel);
 			outputEntity.setValue(MafiaOutputEntity.Field.PUNISHMENT_SEVERITY.name(),
-					this.conf.getPunishmentSeverity());
+					this.punishmentSeverity);
 			outputEntity.setValue(MafiaOutputEntity.Field.NEIGHBORS.name(), mafioso
 					.getNeighbors().size());
 			outputEntity.setValue(MafiaOutputEntity.Field.WEALTH.name(),
@@ -175,8 +210,8 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 			outputEntity.setActive();
 		}
 		
-		Event event = new Event(this.simulator.now()
-				+ this.conf.getLoggingTimeUnit(), this, Constants.EVENT_LOGGING_MAFIOSI);
+		Event event = new Event(this.simulator.now() + this.loggingTimeUnit, this,
+				Constants.EVENT_LOGGING_MAFIOSI);
 		this.simulator.insert(event);
 	}
 	
@@ -237,9 +272,95 @@ public class MafiaOrg extends AbstractAgent implements IMafiaOrg {
 	
 	@Override
 	public void handleEvent(Event event) {
+		
+		ChangeConf change = null;
+		if((event.getParameter() != null)
+				&& (event.getParameter() instanceof ChangeConf)) {
+			change = (ChangeConf) event.getParameter();
+		}
+		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_LOGGING_MAFIOSI:
 				this.loggingMafiosi();
+				break;
+			case Constants.TAG_MAFIA_LOGGING_TIME_UNIT:
+				if(change != null) {
+					this.loggingTimeUnit = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_MAFIA_DEMAND_PDF:
+				if(change != null) {
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setDemandPDF(change.getValue());
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_DEMAND_AFFILIATED_PROBABILITY:
+				if(change != null) {
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setDemandAffiliatedProbability(Double.valueOf(change
+								.getValue()));
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_EXTORTION_LEVEL:
+				if(change != null) {
+					this.extortionLevel = Double.valueOf(change.getValue());
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setExtortionLevel(this.extortionLevel);
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_PUNISHMENT_SEVERITY:
+				if(change != null) {
+					this.punishmentSeverity = Double.valueOf(change.getValue());
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setPunishmentSeverity(this.punishmentSeverity);
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_COLLECTION_PDF:
+				if(change != null) {
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setCollectionPDF(change.getValue());
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_PUNISHMENT_PROBABILITY:
+				if(change != null) {
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setPunishmentProbability(Double.valueOf(change.getValue()));
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_MINIMUM_BENEFIT:
+				if(change != null) {
+					this.minBenefit = Double.valueOf(change.getValue());
+					this.setupBenefits();
+				}
+				break;
+			case Constants.TAG_MAFIA_MAXIMUM_BENEFIT:
+				if(change != null) {
+					this.maxBenefit = Double.valueOf(change.getValue());
+					this.setupBenefits();
+				}
+				break;
+			case Constants.TAG_MAFIA_PENTITI_PROBABILITY:
+				if(change != null) {
+					for(MafiosoAgent mafioso : this.mafiosi.values()) {
+						mafioso.setPentitiProbability(Double.valueOf(change.getValue()));
+					}
+				}
+				break;
+			case Constants.TAG_MAFIA_RECRUITING_THRESHOLD:
+				if(change != null) {
+					this.recruitingThreshold = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_MAFIA_RECRUITING_PROBABILITY:
+				if(change != null) {
+					this.recruitingProbability = Double.valueOf(change.getValue());
+				}
 				break;
 		}
 	}

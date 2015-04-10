@@ -37,6 +37,7 @@ import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
 import gloderss.communication.InfoSet;
 import gloderss.communication.Message;
+import gloderss.conf.ChangeConf;
 import gloderss.conf.StateConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
@@ -57,21 +58,43 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	
 	private static final String								COLLABORATION	= "COLLABORATION";
 	
-	private StateConf													conf;
-	
 	private int																ioId;
 	
-	private PDFAbstract												imprisonmentDurationPDF;
+	private List<ChangeConf>									changesConf;
 	
-	private PDFAbstract												custodyPDF;
+	private double														specificInvestigationProbability;
+	
+	private double														evidenceProbability;
+	
+	private double														convictionProbability;
+	
+	private double														noCollaborationPunishmentProbability;
+	
+	private double														noCollaborationPunishment;
+	
+	private double														resourceFondo;
+	
+	private double														proportionTransferFondo;
+	
+	private PDFAbstract												custodyDurationPDF;
+	
+	private PDFAbstract												imprisonmentDurationPDF;
 	
 	private PDFAbstract												timeToCompensationPDF;
 	
 	private PDFAbstract												periodicityFondoPDF;
 	
+	private String														collaborationConvictionFunction;
+	
+	private String														spreadInfoFunctionStr;
+	
 	private Evaluator													spreadInfoFunction;
 	
+	private String														proportionConsumersStr;
+	
 	private Evaluator													proportionConsumers;
+	
+	private String														proportionEntrepreneursStr;
 	
 	private Evaluator													proportionEntrepreneurs;
 	
@@ -116,11 +139,29 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			Map<Integer, EntrepreneurAgent> entrepreneurs) {
 		super(id, simulator);
 		
-		this.conf = conf;
+		this.changesConf = conf.getChangesConf();
+		
+		this.specificInvestigationProbability = conf
+				.getSpecificInvestigationProbability();
+		
+		this.evidenceProbability = conf.getEvidenceProbability();
+		
+		this.convictionProbability = conf.getConvictionProbability();
+		
+		this.noCollaborationPunishmentProbability = conf
+				.getNoCollaborationPunishmentProbability();
+		
+		this.noCollaborationPunishment = conf.getNoCollaborationPunishment();
+		
+		this.resourceFondo = conf.getResourceFondo();
+		
+		this.proportionTransferFondo = conf.getProportionTransferFondo();
+		
+		this.custodyDurationPDF = PDFAbstract.getInstance(conf
+				.getCustodyDurationPDF());
+		
 		this.imprisonmentDurationPDF = PDFAbstract.getInstance(conf
 				.getImprisonmentDurationPDF());
-		
-		this.custodyPDF = PDFAbstract.getInstance(conf.getCustodyDurationPDF());
 		
 		this.timeToCompensationPDF = PDFAbstract.getInstance(conf
 				.getTimeToCompensationPDF());
@@ -128,9 +169,18 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.periodicityFondoPDF = PDFAbstract.getInstance(conf
 				.getPeriodicityFondoPDF());
 		
+		this.collaborationConvictionFunction = conf
+				.getCollaborationConvictionFunction();
+		
+		this.spreadInfoFunctionStr = conf.getSpreadInfoFunction();
+		
 		this.spreadInfoFunction = new Evaluator();
 		
+		this.proportionConsumersStr = conf.getProportionConsumers();
+		
 		this.proportionConsumers = new Evaluator();
+		
+		this.proportionEntrepreneursStr = conf.getProportionEntrepreneurs();
 		
 		this.proportionEntrepreneurs = new Evaluator();
 		
@@ -154,8 +204,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		PoliceOfficerAgent police;
 		int policeId = id + 1;
 		this.policeOfficers = new HashMap<Integer, PoliceOfficerAgent>();
-		for(int i = 0; i < this.conf.getNumberPoliceOfficers(); i++, policeId++) {
-			police = new PoliceOfficerAgent(policeId, simulator, this.conf, this.id);
+		for(int i = 0; i < conf.getNumberPoliceOfficers(); i++, policeId++) {
+			police = new PoliceOfficerAgent(policeId, simulator, conf, this.id);
 			this.policeOfficers.put(policeId, police);
 		}
 		
@@ -216,8 +266,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.spreadInfoFunction.clearVariables();
 		double nextSpreadInfo = 0.0;
 		try {
-			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
-					.getSpreadInfoFunction());
+			nextSpreadInfo = this.spreadInfoFunction
+					.getNumberResult(this.spreadInfoFunctionStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -225,6 +275,12 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		event = new Event(this.simulator.now() + nextSpreadInfo, this,
 				Constants.EVENT_SPREAD_INFORMATION);
 		this.simulator.insert(event);
+		
+		// Schedule changes
+		for(ChangeConf change : this.changesConf) {
+			event = new Event(change.getTime(), this, change.getParameter(), change);
+			this.simulator.insert(event);
+		}
 	}
 	
 	
@@ -241,8 +297,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				EntityType.EXTORTION, extortionId);
 		
 		if((!this.investigateEntrepreneurs.contains(entrepreneurId))
-				&& (RandomUtil.nextDouble() < this.conf
-						.getSpecificInvestigationProbability())) {
+				&& (RandomUtil.nextDouble() < this.specificInvestigationProbability)) {
 			
 			int mafiosoId = (int) action
 					.getParam(DenounceExtortionAction.Param.MAFIOSO_ID);
@@ -299,8 +354,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				EntityType.EXTORTION, extortionId);
 		
 		if((!this.investigateEntrepreneurs.contains(entrepreneurId))
-				&& (RandomUtil.nextDouble() < this.conf
-						.getSpecificInvestigationProbability())) {
+				&& (RandomUtil.nextDouble() < this.specificInvestigationProbability)) {
 			
 			int mafiosoId = (int) action
 					.getParam(DenounceExtortionAffiliatedAction.Param.MAFIOSO_ID);
@@ -488,7 +542,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				.getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
 		
 		CustodyAction custody = new CustodyAction(extortionId, this.id, mafiosoId,
-				this.custodyPDF.nextValue());
+				this.custodyDurationPDF.nextValue());
 		
 		Message msg = new Message(this.simulator.now(), this.id, mafiosoId, custody);
 		this.sendMsg(msg);
@@ -500,7 +554,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				EntityType.EXTORTION, extortionId);
 		
 		// Collaboration evidence collection
-		if(RandomUtil.nextDouble() < this.conf.getEvidenceProbability()) {
+		if(RandomUtil.nextDouble() < this.evidenceProbability) {
 			
 			InfoRequest info = new InfoRequest(this.id, mafiosoId,
 					Constants.REQUEST_COLLECT_PAYERS);
@@ -529,8 +583,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 					true);
 		}
 		
-		Event event = new Event(this.simulator.now() + this.custodyPDF.nextValue(),
-				this, Constants.EVENT_RELEASE_CUSTODY);
+		Event event = new Event(this.simulator.now()
+				+ this.custodyDurationPDF.nextValue(), this,
+				Constants.EVENT_RELEASE_CUSTODY);
 		this.simulator.insert(event);
 		
 		this.custodyQueue.offer(action);
@@ -553,7 +608,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		}
 		
 		// Calculate conviction probability
-		double convictionProb = this.conf.getConvictionProbability();
+		double convictionProb = this.convictionProbability;
 		if(this.collaborations.containsKey(mafiosoId)) {
 			int numCollaborations = this.collaborations.get(mafiosoId);
 			
@@ -562,8 +617,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 					(new Integer(numCollaborations)).toString());
 			
 			try {
-				convictionProb += eval.getNumberResult(this.conf
-						.getCollaborationConvictionFunction());
+				convictionProb += eval
+						.getNumberResult(this.collaborationConvictionFunction);
 			} catch(EvaluationException e) {
 				logger.debug(e.toString());
 			}
@@ -576,7 +631,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 					Constants.REQUEST_WEALTH);
 			double wealth = (double) this.sendInfo(wealthRequest);
 			
-			this.fondoSolidarieta += wealth * this.conf.getProportionTransferFondo();
+			this.fondoSolidarieta += wealth * this.proportionTransferFondo;
 			
 			InfoSet wealthSet = new InfoSet(this.id, mafiosoId,
 					Constants.PARAMETER_WEALTH, 0.0);
@@ -683,8 +738,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void decideStatePunishment(NotCollaborateAction action) {
 		
-		if(RandomUtil.nextDouble() < this.conf
-				.getNoCollaborationPunishmentProbability()) {
+		if(RandomUtil.nextDouble() < this.noCollaborationPunishmentProbability) {
 			int entrepreneurId = (int) action
 					.getParam(NotCollaborateAction.Param.ENTREPRENEUR_ID);
 			
@@ -693,7 +747,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 			}
 			
 			StatePunishmentAction punishment = new StatePunishmentAction(this.id,
-					entrepreneurId, this.conf.getNoCollaborationPunishment());
+					entrepreneurId, this.noCollaborationPunishment);
 			
 			Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
 					punishment);
@@ -792,8 +846,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		double propConsumers = 0.0;
 		try {
-			propConsumers = this.proportionConsumers.getNumberResult(this.conf
-					.getProportionConsumers());
+			propConsumers = this.proportionConsumers
+					.getNumberResult(this.proportionConsumersStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -827,7 +881,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		double propEntrepreneurs = 0.0;
 		try {
 			propEntrepreneurs = this.proportionEntrepreneurs
-					.getNumberResult(this.conf.getProportionEntrepreneurs());
+					.getNumberResult(this.proportionEntrepreneursStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -871,8 +925,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		this.spreadInfoFunction.clearVariables();
 		double nextSpreadInfo = 0.0;
 		try {
-			nextSpreadInfo = this.spreadInfoFunction.getNumberResult(this.conf
-					.getSpreadInfoFunction());
+			nextSpreadInfo = this.spreadInfoFunction
+					.getNumberResult(this.spreadInfoFunctionStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -911,7 +965,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	 */
 	private void increaseFondo() {
 		
-		this.fondoSolidarieta += this.conf.getResourceFondo();
+		this.fondoSolidarieta += this.resourceFondo;
 		
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				AbstractEntity.EntityType.STATE);
@@ -984,8 +1038,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		
 		double propConsumers = 0.0;
 		try {
-			propConsumers = this.proportionConsumers.getNumberResult(this.conf
-					.getProportionConsumers());
+			propConsumers = this.proportionConsumers
+					.getNumberResult(this.proportionConsumersStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -1014,7 +1068,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 		double propEntrepreneurs = 0.0;
 		try {
 			propEntrepreneurs = this.proportionEntrepreneurs
-					.getNumberResult(this.conf.getProportionEntrepreneurs());
+					.getNumberResult(this.proportionEntrepreneursStr);
 		} catch(EvaluationException e) {
 			logger.debug(e.toString());
 		}
@@ -1139,6 +1193,12 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 	@Override
 	public void handleEvent(Event event) {
 		
+		ChangeConf change = null;
+		if((event.getParameter() != null)
+				&& (event.getParameter() instanceof ChangeConf)) {
+			change = (ChangeConf) event.getParameter();
+		}
+		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_RESOURCE_FONDO:
 				this.increaseFondo();
@@ -1154,6 +1214,114 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
 				break;
 			case Constants.EVENT_SPREAD_INFORMATION:
 				this.spreadNormativeInformation();
+				break;
+			case Constants.TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF:
+				if(change != null) {
+					for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+						police.setGeneralInvestigationDuration((String) change.getValue());
+					}
+				}
+				break;
+			case Constants.TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF:
+				if(change != null) {
+					for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+						police.setBureaucraticActivityDuration((String) change.getValue());
+					}
+				}
+				break;
+			case Constants.TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF:
+				if(change != null) {
+					for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+						police.setSpecificInvestigationDuration((String) change.getValue());
+					}
+				}
+				break;
+			case Constants.TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY:
+				if(change != null) {
+					this.specificInvestigationProbability = Double.valueOf(change
+							.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_CAPTURE_PROBABILITY:
+				if(change != null) {
+					for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+						police.setCaptureProbability(Double.valueOf(change.getValue()));
+					}
+				}
+				break;
+			case Constants.TAG_STATE_EVIDENCE_PROBABILITY:
+				if(change != null) {
+					this.evidenceProbability = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_CUSTODY_DURATION_PDF:
+				if(change != null) {
+					this.custodyDurationPDF = PDFAbstract.getInstance(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_CONVICTION_PROBABILITY:
+				if(change != null) {
+					this.convictionProbability = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_COLLABORATION_CONVICTION_FUNCTION:
+				if(change != null) {
+					this.collaborationConvictionFunction = change.getValue();
+				}
+				break;
+			case Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF:
+				if(change != null) {
+					this.imprisonmentDurationPDF = PDFAbstract.getInstance(change
+							.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT_PROBABILITY:
+				if(change != null) {
+					this.noCollaborationPunishmentProbability = Double.valueOf(change
+							.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT:
+				if(change != null) {
+					this.noCollaborationPunishment = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_TIME_TO_COMPENSATION_PDF:
+				if(change != null) {
+					this.timeToCompensationPDF = PDFAbstract.getInstance(change
+							.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_RESOURCE_FONDO:
+				if(change != null) {
+					this.resourceFondo = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_PERIODICITY_FONDO_PDF:
+				if(change != null) {
+					this.periodicityFondoPDF = PDFAbstract.getInstance(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_PROPORTION_TRANSFER_FONDO:
+				if(change != null) {
+					this.proportionTransferFondo = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_STATE_SPREAD_INFO_FUNCTION:
+				if(change != null) {
+					this.spreadInfoFunctionStr = change.getValue();
+				}
+				break;
+			case Constants.TAG_STATE_PROPORTION_CONSUMERS:
+				if(change != null) {
+					this.proportionConsumersStr = change.getValue();
+				}
+				break;
+			case Constants.TAG_STATE_PROPORTION_ENTREPRENEURS:
+				if(change != null) {
+					this.proportionEntrepreneursStr = change.getValue();
+				}
+				break;
 		}
 	}
 }

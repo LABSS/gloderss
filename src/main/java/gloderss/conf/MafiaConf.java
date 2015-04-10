@@ -1,39 +1,45 @@
 package gloderss.conf;
 
+import java.util.ArrayList;
+import java.util.List;
 import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = Constants.TAG_MAFIA, namespace = Constants.TAG_NAMESPACE)
 public class MafiaConf {
 	
-	private int			numberMafiosi;
+	private int								numberMafiosi;
 	
-	private int			loggingTimeUnit;
+	private int								loggingTimeUnit;
 	
-	private double	wealth;
+	private double						wealth;
 	
-	private String	demandPDF;
+	private String						demandPDF;
 	
-	private double	demandAffiliatedProbability;
+	private double						demandAffiliatedProbability;
 	
-	private double	extortionLevel;
+	private double						extortionLevel;
 	
-	private double	punishmentSeverity;
+	private double						punishmentSeverity;
 	
-	private String	collectionPDF;
+	private String						collectionPDF;
 	
-	private double	punishmentProbability;
+	private double						punishmentProbability;
 	
-	private double	minimumBenefit;
+	private double						minimumBenefit;
 	
-	private double	maximumBenefit;
+	private double						maximumBenefit;
 	
-	private double	pentitiProbability;
+	private double						pentitiProbability;
 	
-	private double	recruitingThreshold;
+	private double						recruitingThreshold;
 	
-	private double	recruitingProbability;
+	private double						recruitingProbability;
+	
+	// Changes configuration
+	private List<ChangeConf>	changesConf	= new ArrayList<ChangeConf>();
 	
 	
 	public int getNumberMafiosi() {
@@ -187,5 +193,17 @@ public class MafiaConf {
 	@XmlElement(name = Constants.TAG_MAFIA_RECRUITING_PROBABILITY)
 	public void setRecruitingProbability(double recruitingProbability) {
 		this.recruitingProbability = recruitingProbability;
+	}
+	
+	
+	public List<ChangeConf> getChangesConf() {
+		return this.changesConf;
+	}
+	
+	
+	@XmlElementWrapper(name = Constants.TAG_CHANGES)
+	@XmlElement(name = Constants.TAG_CHANGE)
+	public void setChangesConf(List<ChangeConf> changesConf) {
+		this.changesConf = changesConf;
 	}
 }

@@ -12,10 +12,12 @@ public class GLODERSBatch {
 	
 	public static void main(String[] args) {
 		if(args.length < 2) {
-			System.out.println("Syntax: GLODERSBatch [XML Config Filename] [XSD Config Filename] [Param values]");
+			System.out
+					.println("Syntax: GLODERSBatch [XML Config Filename] [XSD Config Filename] [Param values]");
 			System.exit(1);
 		}
 		
+		@SuppressWarnings("unused")
 		String original = args[0];
 		
 		long startTime = System.currentTimeMillis();

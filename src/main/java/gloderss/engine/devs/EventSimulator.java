@@ -27,7 +27,14 @@ public class EventSimulator extends AbstractEventSimulator {
 		while((this.time < stop)
 				&& ((event = (Event) this.events.removeFirst()) != null)) {
 			this.time = event.getTime();
-			logger.debug(event.getCommand().toString());
+			
+			if(event.getParameter() == null) {
+				logger.debug(event.getCommand().toString());
+			} else {
+				logger.debug(event.getCommand().toString() + " "
+						+ event.getParameter().toString());
+			}
+			
 			event.execute(this);
 		}
 	}

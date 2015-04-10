@@ -78,7 +78,15 @@ dir <- c("Snpun-nnorm-Mhard-IOinactive/0",
          "Spun-nnorm-Msoft-IOactive/60",
          "Spun-nnorm-Msoft-IOactive/80")
 
-replicas <- 0:4
+dir <- c("S1-before-1980/0",
+         "S2-1980-1990/0",
+         "S3-1990-1995/0",
+         "S4-1995-2000/0",
+         "S5-after-2000/0")
+
+dir <- "S-before-1980-after-2000"
+
+replicas <- 0:0
 
 xvaxis <- c(1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,
            5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,
@@ -89,7 +97,7 @@ xaxis <- c(1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
            1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,
            1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6,1,2,3,4,5,6)
 
-simLen <- 5000
+simLen <- 50000
 delta <- 100
 con <- 200
 ent <- 100
@@ -170,170 +178,251 @@ sCSalBuyNPE <- NULL
 prop <- NULL
 
 dirs <- 1:length(dir)
-dirs <- content
+nReplicas <- length(replicas)
 for(i in dirs){
-#for(replica in replicas){
-##
-## Load files
-##
-
-#aux <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/compensation.csv", sep=""),
-#                           header=TRUE, sep=";"))[which(time <= simLen),]
-#aux[,r:=replica]
-
-#compensation[[i]] <- rbind(compensation[[i]], aux)
   
-compensation[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/compensation.csv", sep=""),
-                                         header=TRUE, sep=";"))[which(time <= simLen),]
-
-
-consumer[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/consumer.csv", sep=""),
-                                     header=TRUE, sep=";"))[which(time <= simLen),]
-#aux <- data.table(read.csv(paste(base,dir[i],"/",replica,"/","/consumer.csv", sep=""),
-#                           header=TRUE, sep=";"))[which(time <= simLen),]
-#aux[,rep:=replica]
-entrepreneur[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/entrepreneur.csv", sep=""),
-                                         header=TRUE, sep=";"))[which(time <= simLen),]
-
-extortion[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/extortion.csv", sep=""),
-                                      header=TRUE, sep=";"))[which(time <= simLen),]
-
-#io[[i]] <- data.table(read.csv(paste(base,dir[i],replica,"/intermediaryOrganization.csv", sep=""),
-#                               header=TRUE, sep=";"))[which(time <= simLen),]
-
-mafia[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/mafia.csv", sep=""),
-                                  header=TRUE, sep=";"))#[which(time <= simLen),]
-
-mafiosi[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/mafiosi.csv", sep=""),
-                                    header=TRUE, sep=";"))#[which(time <= simLen),]
+  compensations <- NULL
+  consumers <- NULL
+  entrepreneurs <- NULL
+  extortions <- NULL
+  ios <- NULL
+  mafias <- NULL
+  mafiosis <- NULL
+  normatives <- NULL
+  purchases <- NULL
+  states<- NULL
   
-normative[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/normative.csv", sep=""),
-                                      header=TRUE, sep=";"))[which(time <= simLen),]
+  for(replica in replicas){
 
-purchase[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/purchase.csv", sep=""),
-                                     header=TRUE, sep=";"))[which(time <= simLen),]
+    ##
+    ## Compensation
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/compensation.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      compensations <- rbind(compensations, aux)
+    }
+    
+    ##
+    ## Consumer
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/consumer.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      consumers <- rbind(consumers, aux)
+    }
+    
+    ##
+    ## Entrepreneur
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/entrepreneur.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      entrepreneurs <- rbind(entrepreneurs, aux)
+    }
+    
+    ##
+    ## Extortion
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/extortion.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      extortions <- rbind(extortions, aux)
+    }
+    
+    ##
+    ## Intermediary Organization
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/intermediaryOrganization.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      ios <- rbind(ios, aux)
+    }
+    
+    ##
+    ## Mafia
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/mafia.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      mafias <- rbind(mafias, aux)
+    }
+    
+    ##
+    ## Mafiosi
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/mafiosi.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      mafiosis <- rbind(mafiosis, aux)
+    }
+    
+    ##
+    ## Normative
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/normative.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      normatives <- rbind(normatives, aux)
+    }
+    
+    ##
+    ## Purchase
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/purchase.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      purchases <- rbind(purchases, aux)
+    }
+    
+    ##
+    ## State
+    ##
+    fname <- paste(base,"/",dir[i],"/",replica,"/state.csv", sep="")
+    if (file.info(fname)$size > 0) {
+      aux <- data.table(read.csv(fname, header=TRUE, sep=";"))[which(time <= simLen),]
+      aux[,r:=replica]
+      states <- rbind(states, aux)
+    }
+  }
+  
+  compensation[[i]] <- compensations
+  consumer[[i]] <- consumers
+  entrepreneur[[i]] <- entrepreneurs
+  extortion[[i]] <- extortions
+  io[[i]] <- ios
+  mafia[[i]] <- mafias
+  mafiosi[[i]] <- mafiosis
+  normative[[i]] <- normatives
+  purchase[[i]] <- purchases
+  state[[i]] <- states
 
-state[[i]] <- data.table(read.csv(paste(base,"/",dir[i],"/",replica,"/state.csv", sep=""),
-                                  header=TRUE, sep=";"))[which(time <= simLen),]
+  ##
+  ## Variables
+  ##
+  if (!is.null(mafiosi[[i]])) {
+    nCustody[[i]] <- nrow(subset(mafiosi[[i]], custodyTime > 0 & imprisonmentTime == 0)) / nReplicas
+    nImprisonment[[i]] <- nrow(subset(mafiosi[[i]], imprisonmentTime > 0)) / nReplicas
+  } else {
+    nCustody[[i]] <- 0
+    nImprisonment[[i]] <- 0
+  }
 
-##
-## Variables
-##
-if (!is.null(mafiosi[[i]])) {
-  nCustody[[i]] <- nrow(subset(mafiosi[[i]], custodyTime > 0 & imprisonmentTime == 0))
-  nImprisonment[[i]] <- nrow(subset(mafiosi[[i]], imprisonmentTime > 0))
-} else {
-  nCustody[[i]] <- 0
-  nImprisonment[[i]] <- 0
+  if (!is.null(extortion[[i]])) {
+    nExtortion[[i]] <- nrow(extortion[[i]]) / nReplicas
+    nPaid[[i]] <- nrow(subset(extortion[[i]], paid == "true")) / nReplicas
+    nNPaid[[i]] <- nrow(subset(extortion[[i]], paid == "false")) / nReplicas
+    nDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                  denouncedExtortion == "true")) / nReplicas
+    nNDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                   denouncedExtortion == "false")) / nReplicas
+    nDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                  mafiaPunished == "true" &
+                                  denouncedPunishment == "true")) / nReplicas
+    nNDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                   mafiaPunished == "true" &
+                                   denouncedExtortion == "false")) / nReplicas
+    nInv[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                               (investigatedExtortion == "true" |
+                                  investigatedPunishment == "true") &
+                               (denouncedExtortion == "true" |
+                                  denouncedPunishment == "true"))) / nReplicas
+    nInvCus[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                  (investigatedExtortion == "true"  |
+                                     investigatedPunishment == "true") &
+                                  mafiosoCustody == "true")) / nReplicas
+    nInvCon[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                                  (investigatedExtortion == "true"  |
+                                     investigatedPunishment == "true") &
+                                  mafiosoConvicted == "true")) / nReplicas
+    nDen[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                               (denouncedExtortion == "true" |
+                                  denouncedPunishment == "true"))) / nReplicas
+    nPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
+                               mafiaPunished == "true")) / nReplicas
+  } else {
+    nExtortion[[i]] <- 0
+    nPaid[[i]] <- 0
+    nNPaid[[i]] <- 0
+    nDen[[i]] <- 0
+    nNDen[[i]] <- 0
+    nInv[[i]] <- 0
+    nInvCus[[i]] <- 0
+    nInvCon[[i]] <- 0
+    nDen[[i]] <- 0
+    nPun[[i]] <- 0
+  }
+
+  if (!is.null(compensation[[i]])) {
+    nComp[[i]] <- nrow(subset(compensation[[i]], denouncedPunishment == "true" &
+                                stateCompensate == "true")) / nReplicas
+  } else {
+    nComp[[i]] <- 0
+  }
+
+  nAffiliated[[i]] <- nrow(subset(entrepreneur[[i]], affiliated == "true")) / nReplicas
+
+  ##
+  ## Calculation
+  ##
+  propPaid[[i]] <- nPaid[[i]] / nExtortion[[i]]
+  propDenExt[[i]] <- nDenExt[[i]] / nExtortion[[i]]
+  propDenPun[[i]] <- nDenPun[[i]] / nNPaid[[i]]
+  propInv[[i]] <- nInv[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+  propCus[[i]] <- nInvCus[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+  propCon[[i]] <- nInvCon[[i]] / (nDenExt[[i]] + nDenPun[[i]])
+  propComp[[i]] <- nComp[[i]] / nDenPun[[i]]
+  propPun[[i]] <- nPun[[i]] / nExtortion[[i]]
+  propPunNPay[[i]] <- nPun[[i]] / nNPaid[[i]]
+  
+  propCompleted[[i]] <- nInvCon[[i]] / nInv[[i]]
+  
+  propNDen[[i]] <- 1 - (nDen[[i]] / nExtortion[[i]])
+  
+  mESalPay[[i]] <- mean(entrepreneur[[i]]$saliencePayExtortion)
+  sESalPay[[i]] <- sd(entrepreneur[[i]]$saliencePayExtortion)
+  mESalNPay[[i]] <- mean(entrepreneur[[i]]$salienceNotPayExtortion)
+  sESalNPay[[i]] <- sd(entrepreneur[[i]]$salienceNotPayExtortion)
+  mESalDen[[i]] <- mean(entrepreneur[[i]]$salienceDenounce)
+  sESalDen[[i]] <- sd(entrepreneur[[i]]$salienceDenounce)
+  mESalNDen[[i]] <- mean(entrepreneur[[i]]$salienceNotDenounce)
+  sESalNDen[[i]] <- sd(entrepreneur[[i]]$salienceNotDenounce)
+  
+  mCSalPay[[i]] <- mean(consumer[[i]]$saliencePayExtortion)
+  sCSalPay[[i]] <- sd(consumer[[i]]$saliencePayExtortion)
+  mCSalNPay[[i]] <- mean(consumer[[i]]$salienceNotPayExtortion)
+  sCSalNPay[[i]] <- sd(consumer[[i]]$salienceNotPayExtortion)
+  mCSalDen[[i]] <- mean(consumer[[i]]$salienceDenounce)
+  sCSalDen[[i]] <- sd(consumer[[i]]$salienceDenounce)
+  mCSalNDen[[i]] <- mean(consumer[[i]]$salienceNotDenounce)
+  sCSalNDen[[i]] <- sd(consumer[[i]]$salienceNotDenounce)
+  mCSalBuyPE[[i]] <- mean(consumer[[i]]$salienceBuyPayingEntrepreneurs)
+  sCSalBuyPE[[i]] <- sd(consumer[[i]]$salienceBuyPayingEntrepreneurs)
+  mCSalBuyNPE[[i]] <- mean(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
+  sCSalBuyNPE[[i]] <- sd(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
+
+  ##
+  ## Proportion
+  ##
+  prop[[i]] <- cbind(nExtortion[[i]], nCustody[[i]], nImprisonment[[i]],
+                     propPaid[[i]], nPaid[[i]], propDenExt[[i]], nDenExt[[i]],
+                     propDenPun[[i]], nDenPun[[i]],propPun[[i]],propPunNPay[[i]],
+                     propInv[[i]], nInv[[i]], propCus[[i]], propCon[[i]], propComp[[i]],
+                     mESalPay[[i]], sESalPay[[i]], mESalNPay[[i]], sESalNPay[[i]],
+                     mESalDen[[i]], sESalDen[[i]], mESalNDen[[i]], sESalNDen[[i]],
+                     mCSalPay[[i]], sCSalPay[[i]], mCSalNPay[[i]], sCSalNPay[[i]],
+                     mCSalDen[[i]], sCSalDen[[i]], mCSalNDen[[i]], sCSalNDen[[i]],
+                     mCSalBuyPE[[i]], sCSalBuyPE[[i]], mCSalBuyNPE[[i]], sCSalBuyNPE[[i]])
 }
-
-if (!is.null(extortion[[i]])) {
-  nExtortion[[i]] <- nrow(extortion[[i]])
-  nPaid[[i]] <- nrow(subset(extortion[[i]], paid == "true"))
-  nNPaid[[i]] <- nrow(subset(extortion[[i]], paid == "false"))
-  nDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                denouncedExtortion == "true"))
-  nNDenExt[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                 denouncedExtortion == "false"))
-  nDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                mafiaPunished == "true" &
-                                denouncedPunishment == "true"))
-  nNDenPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                 mafiaPunished == "true" &
-                                 denouncedExtortion == "false"))
-  nInv[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                             (investigatedExtortion == "true" |
-                                investigatedPunishment == "true") &
-                             (denouncedExtortion == "true" |
-                                denouncedPunishment == "true")))
-  nInvCus[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                (investigatedExtortion == "true"  |
-                                   investigatedPunishment == "true") &
-                                mafiosoCustody == "true"))
-  nInvCon[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                                (investigatedExtortion == "true"  |
-                                   investigatedPunishment == "true") &
-                                mafiosoConvicted == "true"))
-  nDen[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                             (denouncedExtortion == "true" |
-                                denouncedPunishment == "true")))
-  nPun[[i]] <- nrow(subset(extortion[[i]], paid == "false" &
-                             mafiaPunished == "true"))
-} else {
-  nExtortion[[i]] <- 0
-  nPaid[[i]] <- 0
-  nNPaid[[i]] <- 0
-  nDen[[i]] <- 0
-  nNDen[[i]] <- 0
-  nInv[[i]] <- 0
-  nInvCus[[i]] <- 0
-  nInvCon[[i]] <- 0
-  nDen[[i]] <- 0
-  nPun[[i]] <- 0
-}
-
-if (!is.null(compensation[[i]])) {
-  nComp[[i]] <- nrow(subset(compensation[[i]], denouncedPunishment == "true" &
-                              stateCompensate == "true"))
-} else {
-  nComp[[i]] <- 0
-}
-
-nAffiliated[[i]] <- nrow(subset(entrepreneur[[i]], affiliated == "true"))
-
-##
-## Calculation
-##
-propPaid[[i]] <- nPaid[[i]] / nExtortion[[i]]
-propDenExt[[i]] <- nDenExt[[i]] / nExtortion[[i]]
-propDenPun[[i]] <- nDenPun[[i]] / nNPaid[[i]]
-propInv[[i]] <- nInv[[i]] / (nDenExt[[i]] + nDenPun[[i]])
-propCus[[i]] <- nInvCus[[i]] / (nDenExt[[i]] + nDenPun[[i]])
-propCon[[i]] <- nInvCon[[i]] / (nDenExt[[i]] + nDenPun[[i]])
-propComp[[i]] <- nComp[[i]] / nDenPun[[i]]
-propPun[[i]] <- nPun[[i]] / nExtortion[[i]]
-propPunNPay[[i]] <- nPun[[i]] / nNPaid[[i]]
-
-propCompleted[[i]] <- nInvCon[[i]] / nInv[[i]]
-
-propNDen[[i]] <- 1 - (nDen[[i]] / nExtortion[[i]])
-
-mESalPay[[i]] <- mean(entrepreneur[[i]]$saliencePayExtortion)
-sESalPay[[i]] <- sd(entrepreneur[[i]]$saliencePayExtortion)
-mESalNPay[[i]] <- mean(entrepreneur[[i]]$salienceNotPayExtortion)
-sESalNPay[[i]] <- sd(entrepreneur[[i]]$salienceNotPayExtortion)
-mESalDen[[i]] <- mean(entrepreneur[[i]]$salienceDenounce)
-sESalDen[[i]] <- sd(entrepreneur[[i]]$salienceDenounce)
-mESalNDen[[i]] <- mean(entrepreneur[[i]]$salienceNotDenounce)
-sESalNDen[[i]] <- sd(entrepreneur[[i]]$salienceNotDenounce)
-
-mCSalPay[[i]] <- mean(consumer[[i]]$saliencePayExtortion)
-sCSalPay[[i]] <- sd(consumer[[i]]$saliencePayExtortion)
-mCSalNPay[[i]] <- mean(consumer[[i]]$salienceNotPayExtortion)
-sCSalNPay[[i]] <- sd(consumer[[i]]$salienceNotPayExtortion)
-mCSalDen[[i]] <- mean(consumer[[i]]$salienceDenounce)
-sCSalDen[[i]] <- sd(consumer[[i]]$salienceDenounce)
-mCSalNDen[[i]] <- mean(consumer[[i]]$salienceNotDenounce)
-sCSalNDen[[i]] <- sd(consumer[[i]]$salienceNotDenounce)
-mCSalBuyPE[[i]] <- mean(consumer[[i]]$salienceBuyPayingEntrepreneurs)
-sCSalBuyPE[[i]] <- sd(consumer[[i]]$salienceBuyPayingEntrepreneurs)
-mCSalBuyNPE[[i]] <- mean(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
-sCSalBuyNPE[[i]] <- sd(consumer[[i]]$salienceBuyNotPayingEntrepreneurs)
-
-##
-## Proportion
-##
-prop[[i]] <- cbind(nExtortion[[i]], nCustody[[i]], nImprisonment[[i]],
-                   propPaid[[i]], nPaid[[i]], propDenExt[[i]], nDenExt[[i]],
-                   propDenPun[[i]], nDenPun[[i]],propPun[[i]],propPunNPay[[i]],
-                   propInv[[i]], nInv[[i]], propCus[[i]], propCon[[i]], propComp[[i]],
-                   mESalPay[[i]], sESalPay[[i]], mESalNPay[[i]], sESalNPay[[i]],
-                   mESalDen[[i]], sESalDen[[i]], mESalNDen[[i]], sESalNDen[[i]],
-                   mCSalPay[[i]], sCSalPay[[i]], mCSalNPay[[i]], sCSalNPay[[i]],
-                   mCSalDen[[i]], sCSalDen[[i]], mCSalNDen[[i]], sCSalNDen[[i]],
-                   mCSalBuyPE[[i]], sCSalBuyPE[[i]], mCSalBuyNPE[[i]], sCSalBuyNPE[[i]])
-}
-#}
 
 ##
 ## Write
@@ -437,7 +526,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histPaidExtortion.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$paid == "true",], aes(x=time)) +
-  xlim(0,5000) + ylim(0,600) +
+  xlim(0,simLen) + ylim(0,700) +
   ylab('Number of Paid Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -456,7 +545,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histNotPaidExtortion.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$paid == "false",], aes(x=time)) +
-  xlim(0,5000) + ylim(0,600) +
+  xlim(0,simLen) + ylim(0,400) +
   ylab('Number of Non-Paid Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -475,7 +564,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histExtortion.png"), width=1024, height=768)
 ggplot(extortion[[i]], aes(x=time)) +
-  xlim(0,5000) + ylim(0,600) +
+  xlim(0,simLen) + ylim(0,600) +
   ylab('Number of Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -495,7 +584,7 @@ dev.off()
 png(filename=paste0(base,dir[i],"/histDenounce.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$denouncedExtortion == "true" |
                         extortion[[i]]$denouncedPunishment == "true",], aes(x=time)) +
-  xlim(0,5000) + ylim(0,55) +
+  xlim(0,simLen) + ylim(0,55) +
   ylab('Number of Denounces') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -514,7 +603,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histDenExt.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$denouncedExtortion == "true",], aes(x=time)) +
-  xlim(0,5000) + ylim(0,55) +
+  xlim(0,simLen) + ylim(0,55) +
   ylab('Number of Denounced Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -533,7 +622,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histDenPun.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$denouncedPunishment == "true",], aes(x=time)) +
-  xlim(0,5000) + ylim(0,55) +
+  xlim(0,simLen) + ylim(0,55) +
   ylab('Number of Denounced Punishment') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +

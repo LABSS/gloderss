@@ -298,6 +298,19 @@ public final class Constants {
 	public static final String	TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS			= "proportionEntrepreneurs";
 	
 	/**
+	 * Change tags
+	 */
+	public static final String	TAG_CHANGES																				= "changes";
+	
+	public static final String	TAG_CHANGE																				= "change";
+	
+	public static final String	TAG_CHANGE_TIME																		= "time";
+	
+	public static final String	TAG_CHANGE_PARAMETER															= "parameter";
+	
+	public static final String	TAG_CHANGE_VALUE																	= "value";
+	
+	/**
 	 * Actions
 	 */
 	public static enum Actions {
@@ -414,35 +427,35 @@ public final class Constants {
 	/**
 	 * Events
 	 */
-	public static final String	EVENT_AFFILIATE_PROCESSING	= "affiliateProcessing";
+	public static final String	EVENT_AFFILIATE_PROCESSING	= "eventAffiliateProcessing";
 	
-	public static final String	EVENT_ASSIST_ENTREPRENEUR		= "assistEntrepreneur";
+	public static final String	EVENT_ASSIST_ENTREPRENEUR		= "eventAssistEntrepreneur";
 	
-	public static final String	EVENT_BUROCRATIC_ACTIVITY		= "burocraticActivity";
+	public static final String	EVENT_BUROCRATIC_ACTIVITY		= "eventBurocraticActivity";
 	
-	public static final String	EVENT_BUY_PRODUCT						= "buyProduct";
+	public static final String	EVENT_BUY_PRODUCT						= "eventBuyProduct";
 	
-	public static final String	EVENT_COLLECT_EXTORTION			= "collectExtortion";
+	public static final String	EVENT_COLLECT_EXTORTION			= "eventCollectExtortion";
 	
-	public static final String	EVENT_DEMAND_EXTORTION			= "decideExtortion";
+	public static final String	EVENT_DEMAND_EXTORTION			= "eventDecideExtortion";
 	
-	public static final String	EVENT_GENERAL_INVESTIGATION	= "generalInvestigation";
+	public static final String	EVENT_GENERAL_INVESTIGATION	= "eventgeneralInvestigation";
 	
-	public static final String	EVENT_LOGGING_CONSUMERS			= "loggingConsumers";
+	public static final String	EVENT_LOGGING_CONSUMERS			= "eventLoggingConsumers";
 	
-	public static final String	EVENT_LOGGING_ENTREPRENEURS	= "loggingEntrepreneurs";
+	public static final String	EVENT_LOGGING_ENTREPRENEURS	= "eventLoggingEntrepreneurs";
 	
-	public static final String	EVENT_LOGGING_MAFIOSI				= "loggingMafiosi";
+	public static final String	EVENT_LOGGING_MAFIOSI				= "eventLoggingMafiosi";
 	
-	public static final String	EVENT_RECEIVE_WAGE					= "receiveWage";
+	public static final String	EVENT_RECEIVE_WAGE					= "eventReceiveWage";
 	
-	public static final String	EVENT_RELEASE_PRISON				= "releasePrison";
+	public static final String	EVENT_RELEASE_PRISON				= "eventReleasePrison";
 	
-	public static final String	EVENT_RELEASE_CUSTODY				= "releaseCustody";
+	public static final String	EVENT_RELEASE_CUSTODY				= "eventReleaseCustody";
 	
-	public static final String	EVENT_RESOURCE_FONDO				= "resourceFondo";
+	public static final String	EVENT_RESOURCE_FONDO				= "eventResourceFondo";
 	
-	public static final String	EVENT_SPREAD_INFORMATION		= "spreadInformation";
+	public static final String	EVENT_SPREAD_INFORMATION		= "eventSpreadInformation";
 	
-	public static final String	EVENT_WRITE_DATA						= "writeData";
+	public static final String	EVENT_WRITE_DATA						= "eventWriteData";
 }

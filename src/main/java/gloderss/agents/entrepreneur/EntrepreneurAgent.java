@@ -47,6 +47,7 @@ import gloderss.communication.InfoAbstract;
 import gloderss.communication.InfoRequest;
 import gloderss.communication.InfoSet;
 import gloderss.communication.Message;
+import gloderss.conf.ChangeConf;
 import gloderss.conf.EntrepreneurConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
@@ -81,9 +82,34 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	
 	private final static double				DENOUNCE_FACTOR	= 2;
 	
-	private EntrepreneurConf					conf;
+	private int												loggingTimeUnit;
 	
 	private PDFAbstract								periodicityWagePDF;
+	
+	private double										minWage;
+	
+	private double										maxWage;
+	
+	private double										varWage;
+	
+	private double										minPrice;
+	
+	private double										maxPrice;
+	
+	@SuppressWarnings("unused")
+	private double										varPrice;
+	
+	private double										denounceAlpha;
+	
+	private double										collaborationProbability;
+	
+	private double										affiliateThreshold;
+	
+	private double										individualWeight;
+	
+	private double										normativeWeight;
+	
+	private List<ChangeConf>					changesConf;
 	
 	private int												stateId;
 	
@@ -128,25 +154,48 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	public EntrepreneurAgent(int id, EventSimulator simulator,
 			EntrepreneurConf conf) {
 		super(id, simulator);
-		this.conf = conf;
 		
-		this.periodicityWagePDF = PDFAbstract.getInstance(this.conf
+		this.loggingTimeUnit = conf.getLoggingTimeUnit();
+		
+		this.periodicityWagePDF = PDFAbstract.getInstance(conf
 				.getPeriodicityWagePDF());
+		
+		this.minWage = conf.getMinimumWage();
+		
+		this.maxWage = conf.getMaximumWage();
+		
+		this.varWage = conf.getVariationWage();
+		
+		this.minPrice = conf.getMinimumPrice();
+		
+		this.maxPrice = conf.getMaximumPrice();
+		
+		this.varPrice = conf.getVariationPrice();
+		
+		this.denounceAlpha = conf.getDenounceAlpha();
+		
+		this.collaborationProbability = conf.getCollaborationProbability();
+		
+		this.affiliateThreshold = conf.getAffiliateThreshold();
+		
+		this.individualWeight = conf.getIndividualWeight();
+		
+		this.normativeWeight = conf.getNormativeWeight();
+		
+		this.changesConf = conf.getChangesConf();
 		
 		/**
 		 * Economic
 		 */
 		this.wealth = conf.getWealth();
 		
-		this.defaultWage = conf.getMinimumWage()
-				+ (RandomUtil.nextDouble() * (conf.getMaximumWage() - conf
-						.getMinimumWage()));
+		this.defaultWage = this.minWage
+				+ (RandomUtil.nextDouble() * (this.maxWage - this.minWage));
 		
 		this.currentWage = 0.0;
 		
-		this.productPrice = conf.getMinimumPrice()
-				+ (RandomUtil.nextDouble() * (conf.getMaximumPrice() - conf
-						.getMinimumPrice()));
+		this.productPrice = this.minPrice
+				+ (RandomUtil.nextDouble() * (this.maxPrice - this.minPrice));
 		
 		/**
 		 * State
@@ -176,7 +225,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		 * Normative
 		 */
 		this.normative = new EmiliaController(id, conf.getNormativeXML(),
-				this.conf.getNormativeXSD());
+				conf.getNormativeXSD());
 		this.normative.init();
 		this.normative.registerNormEnforcement(this);
 		
@@ -390,6 +439,12 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		event = new Event(this.simulator.now(), this,
 				Constants.EVENT_LOGGING_ENTREPRENEURS);
 		this.simulator.insert(event);
+		
+		// Schedule changes
+		for(ChangeConf change : this.changesConf) {
+			event = new Event(change.getTime(), this, change.getParameter(), change);
+			this.simulator.insert(event);
+		}
 	}
 	
 	
@@ -400,10 +455,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		// Define the current Wage
 		if(RandomUtil.nextDouble() < 0.5) {
 			this.currentWage = this.defaultWage
-					* (1 + (this.conf.getVariationWage() * RandomUtil.nextDouble()));
+					* (1 + (this.varWage * RandomUtil.nextDouble()));
 		} else {
 			this.currentWage = this.defaultWage
-					* (1 - (this.conf.getVariationWage() * RandomUtil.nextDouble()));
+					* (1 - (this.varWage * RandomUtil.nextDouble()));
 		}
 		
 		Event event = new Event(this.simulator.now()
@@ -439,8 +494,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			double benefit = (double) action.getParam(ExtortionAction.Param.BENEFIT);
 			
 			double TpayIG = (benefit - extortion)
-					- (this.statePunishment * this.stateFinderRep.getReputation() * (1 - this.conf
-							.getCollaborationProbability()));
+					- (this.statePunishment * this.stateFinderRep.getReputation() * (1 - this.collaborationProbability));
 			
 			double TpayNG = this.normative.getNormSalience(Norms.PAY_EXTORTION
 					.ordinal());
@@ -474,27 +528,27 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 				
 				if(TpayNG > TnotPayNG) {
 					
-					probPay = (this.conf.getIndividualWeight() * IG)
-							+ (this.conf.getNormativeWeight() * TpayNG);
+					probPay = (this.individualWeight * IG)
+							+ (this.normativeWeight * TpayNG);
 					
 				} else {
 					
-					probPay = (this.conf.getIndividualWeight() * IG)
-							+ (this.conf.getNormativeWeight() * (1 - TnotPayNG));
+					probPay = (this.individualWeight * IG)
+							+ (this.normativeWeight * (1 - TnotPayNG));
 					
 				}
 				
 				// PAY EXTORTION norm active
 			} else if(normPay.getStatus().equals(NormStatus.GOAL)) {
 				
-				probPay = (this.conf.getIndividualWeight() * IG)
-						+ (this.conf.getNormativeWeight() * TpayNG);
+				probPay = (this.individualWeight * IG)
+						+ (this.normativeWeight * TpayNG);
 				
 				// NOT PAY EXTORTION norm active
 			} else if(normNotPay.getStatus().equals(NormStatus.GOAL)) {
 				
-				probPay = (this.conf.getIndividualWeight() * IG)
-						+ (this.conf.getNormativeWeight() * (1 - TnotPayNG));
+				probPay = (this.individualWeight * IG)
+						+ (this.normativeWeight * (1 - TnotPayNG));
 				
 				// NONE norm active
 			} else {
@@ -571,10 +625,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		double denounceIG = (this.conf.getDenounceAlpha()
+		double denounceIG = (this.denounceAlpha
 				* (1 - this.mafiaPunisherRep.getReputation()) * this.stateProtectorRep
 					.getReputation())
-				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
+				+ ((1 - this.denounceAlpha) * this.criticalConsumers);
 		
 		NormEntityAbstract normDenounce = this.normative.getNorm(Norms.DENOUNCE
 				.ordinal());
@@ -593,27 +647,27 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			if(denounceNG > notDenounceNG) {
 				
-				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-						+ (this.conf.getNormativeWeight() * denounceNG);
+				probDenounce = (this.individualWeight * denounceIG)
+						+ (this.normativeWeight * denounceNG);
 				
 			} else {
 				
-				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-						+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
+				probDenounce = (this.individualWeight * denounceIG)
+						+ (this.normativeWeight * (1 - notDenounceNG));
 				
 			}
 			
 			// DENOUNCE EXTORTION norm active
 		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-					+ (this.conf.getNormativeWeight() * denounceNG);
+			probDenounce = (this.individualWeight * denounceIG)
+					+ (this.normativeWeight * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
 		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-					+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
+			probDenounce = (this.individualWeight * denounceIG)
+					+ (this.normativeWeight * (1 - notDenounceNG));
 			
 			// NONE norm active
 		} else {
@@ -845,10 +899,10 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		AbstractEntity outputEntity = OutputController.getInstance().getEntity(
 				EntityType.EXTORTION, extortionId);
 		
-		double denounceIG = (this.conf.getDenounceAlpha()
+		double denounceIG = (this.denounceAlpha
 				* (1 - this.mafiaPunisherRep.getReputation()) * this.stateProtectorRep
 					.getReputation())
-				+ ((1 - this.conf.getDenounceAlpha()) * this.criticalConsumers);
+				+ ((1 - this.denounceAlpha) * this.criticalConsumers);
 		
 		NormEntityAbstract normDenounce = this.normative.getNorm(Norms.DENOUNCE
 				.ordinal());
@@ -867,27 +921,27 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 			if(denounceNG > notDenounceNG) {
 				
-				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-						+ (this.conf.getNormativeWeight() * denounceNG);
+				probDenounce = (this.individualWeight * denounceIG)
+						+ (this.normativeWeight * denounceNG);
 				
 			} else {
 				
-				probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-						+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
+				probDenounce = (this.individualWeight * denounceIG)
+						+ (this.normativeWeight * (1 - notDenounceNG));
 				
 			}
 			
 			// DENOUNCE EXTORTION norm active
 		} else if(normDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-					+ (this.conf.getNormativeWeight() * denounceNG);
+			probDenounce = (this.individualWeight * denounceIG)
+					+ (this.normativeWeight * denounceNG);
 			
 			// NOT DENOUNCE EXTORTION norm active
 		} else if(normNotDenounce.getStatus().equals(NormStatus.GOAL)) {
 			
-			probDenounce = (this.conf.getIndividualWeight() * denounceIG)
-					+ (this.conf.getNormativeWeight() * (1 - notDenounceNG));
+			probDenounce = (this.individualWeight * denounceIG)
+					+ (this.normativeWeight * (1 - notDenounceNG));
 			
 			// NONE norm active
 		} else {
@@ -1009,7 +1063,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		int mafiosoId = (int) action
 				.getParam(CollaborationRequestAction.Param.MAFIOSO_ID);
 		
-		if(RandomUtil.nextDouble() < this.conf.getCollaborationProbability()) {
+		if(RandomUtil.nextDouble() < this.collaborationProbability) {
 			
 			CollaborateAction collaborate = new CollaborateAction(mafiosoId,
 					entrepreneurId);
@@ -1095,7 +1149,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			
 		}
 		
-		if(probAffiliate >= this.conf.getAffiliateThreshold()) {
+		if(probAffiliate >= this.affiliateThreshold) {
 			
 			AffiliateRequestAction affiliation = new AffiliateRequestAction(this.id,
 					this.ioId);
@@ -1169,8 +1223,7 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		
 		outputEntity.setActive();
 		
-		Event event = new Event(this.simulator.now()
-				+ this.conf.getLoggingTimeUnit(), this,
+		Event event = new Event(this.simulator.now() + this.loggingTimeUnit, this,
 				Constants.EVENT_LOGGING_ENTREPRENEURS);
 		this.simulator.insert(event);
 	}
@@ -1581,12 +1634,100 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 	@Override
 	public void handleEvent(Event event) {
 		
+		ChangeConf change = null;
+		if((event.getParameter() != null)
+				&& (event.getParameter() instanceof ChangeConf)) {
+			change = (ChangeConf) event.getParameter();
+		}
+		
 		switch((String) event.getCommand()) {
 			case Constants.EVENT_RECEIVE_WAGE:
 				this.receiveWage();
 				break;
 			case Constants.EVENT_LOGGING_ENTREPRENEURS:
 				this.loggingEntrepreneurs();
+				break;
+			case Constants.TAG_ENTREPRENEUR_LOGGING_TIME_UNIT:
+				if(change != null) {
+					this.loggingTimeUnit = Integer.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_PERIODICITY_WAGE_PDF:
+				if(change != null) {
+					this.periodicityWagePDF = PDFAbstract.getInstance(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_MINIMUM_WAGE:
+				if(change != null) {
+					this.minWage = Double.valueOf(change.getValue());
+					
+					this.defaultWage = this.minWage
+							+ (RandomUtil.nextDouble() * (this.maxWage - this.minWage));
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_MAXIMUM_WAGE:
+				if(change != null) {
+					this.maxWage = Double.valueOf(change.getValue());
+					
+					this.defaultWage = this.minWage
+							+ (RandomUtil.nextDouble() * (this.maxWage - this.minWage));
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_VARIATION_WAGE:
+				if(change != null) {
+					this.varWage = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_MINIMUM_PRICE:
+				if(change != null) {
+					this.minPrice = Double.valueOf(change.getValue());
+					
+					this.productPrice = this.minPrice
+							+ (RandomUtil.nextDouble() * (this.maxPrice - this.minPrice));
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_MAXIMUM_PRICE:
+				if(change != null) {
+					this.maxPrice = Double.valueOf(change.getValue());
+					
+					this.productPrice = this.minPrice
+							+ (RandomUtil.nextDouble() * (this.maxPrice - this.minPrice));
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_VARIATION_PRICE:
+				if(change != null) {
+					this.varPrice = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_DENOUNCE_ALPHA:
+				if(change != null) {
+					this.denounceAlpha = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_COLLABORATION_PROBABILITY:
+				if(change != null) {
+					this.collaborationProbability = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_AFFILIATE_THRESHOLD:
+				if(change != null) {
+					this.affiliateThreshold = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_ENTREPRENEUR_AFFILIATED:
+				if(change != null) {
+					this.affiliated = Boolean.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT:
+				if(change != null) {
+					this.individualWeight = Double.valueOf(change.getValue());
+				}
+				break;
+			case Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT:
+				if(change != null) {
+					this.normativeWeight = Double.valueOf(change.getValue());
+				}
 				break;
 		}
 	}

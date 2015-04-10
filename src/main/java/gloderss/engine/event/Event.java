@@ -10,6 +10,8 @@ public class Event extends AbstractEvent {
 	
 	private Object									command;
 	
+	private Object									parameter;
+	
 	private AbstractEventSimulator	simulator;
 	
 	
@@ -20,12 +22,21 @@ public class Event extends AbstractEvent {
 	public Event(EventHandler eventHandler) {
 		this.eventHandler = eventHandler;
 		this.command = null;
+		this.parameter = null;
 	}
 	
 	
 	public Event(EventHandler eventHandler, Object command) {
 		this.eventHandler = eventHandler;
 		this.command = command;
+		this.parameter = null;
+	}
+	
+	
+	public Event(EventHandler eventHandler, Object command, Object parameter) {
+		this.eventHandler = eventHandler;
+		this.command = command;
+		this.parameter = parameter;
 	}
 	
 	
@@ -33,6 +44,16 @@ public class Event extends AbstractEvent {
 		this.time = time;
 		this.eventHandler = eventHandler;
 		this.command = command;
+		this.parameter = null;
+	}
+	
+	
+	public Event(double time, EventHandler eventHandler, Object command,
+			Object parameter) {
+		this.time = time;
+		this.eventHandler = eventHandler;
+		this.command = command;
+		this.parameter = parameter;
 	}
 	
 	
@@ -47,8 +68,15 @@ public class Event extends AbstractEvent {
 	
 	
 	public void set(double time, Object command) {
-		this.command = command;
 		this.setTime(time);
+		this.command = command;
+	}
+	
+	
+	public void set(double time, Object command, Object parameter) {
+		this.setTime(time);
+		this.command = command;
+		this.parameter = parameter;
 	}
 	
 	
@@ -69,6 +97,16 @@ public class Event extends AbstractEvent {
 	
 	public void setCommand(Object command) {
 		this.command = command;
+	}
+	
+	
+	public Object getParameter() {
+		return this.parameter;
+	}
+	
+	
+	public void setParameter(Object parameter) {
+		this.parameter = parameter;
 	}
 	
 	
@@ -106,7 +144,8 @@ public class Event extends AbstractEvent {
 	public String toString() {
 		String str = new String();
 		
-		str = "Time = [" + time + "] Command = [" + command.toString() + "]";
+		str = "Time = [" + this.time + "] Command = [" + this.command.toString()
+				+ "] Parameter = [" + this.parameter.toString() + "]";
 		
 		return str;
 	}

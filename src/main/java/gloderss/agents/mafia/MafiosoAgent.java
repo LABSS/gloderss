@@ -34,11 +34,19 @@ import java.util.Map;
 
 public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
-	private MafiaConf							conf;
-	
 	private PDFAbstract						demandPDF;
 	
 	private PDFAbstract						collectionPDF;
+	
+	private double								demandAffiliatedProbability;
+	
+	private double								extortionLevel;
+	
+	private double								punishmentSeverity;
+	
+	private double								punishmentProbability;
+	
+	private double								pentitiProbability;
 	
 	private int										mafiaId;
 	
@@ -85,17 +93,26 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	public MafiosoAgent(int id, EventSimulator simulator, MafiaConf conf,
 			int mafiaId, int stateId) {
 		super(id, simulator);
-		this.conf = conf;
 		
 		this.demandPDF = PDFAbstract.getInstance(conf.getDemandPDF());
 		this.collectionPDF = PDFAbstract.getInstance(conf.getCollectionPDF());
+		
+		this.demandAffiliatedProbability = conf.getDemandAffiliatedProbability();
+		
+		this.extortionLevel = conf.getExtortionLevel();
+		
+		this.punishmentSeverity = conf.getPunishmentSeverity();
+		
+		this.punishmentProbability = conf.getPunishmentProbability();
+		
+		this.pentitiProbability = conf.getPentitiProbability();
 		
 		this.mafiaId = mafiaId;
 		this.stateId = stateId;
 		
 		this.neighbors = new ArrayList<Integer>();
 		
-		this.wealth = this.conf.getWealth();
+		this.wealth = conf.getWealth();
 		
 		this.pentito = false;
 		this.custodyStatus = false;
@@ -111,6 +128,76 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	 * Getters and Setters
 	 * 
 	 *******************************/
+	
+	public PDFAbstract getDemandPDF() {
+		return this.demandPDF;
+	}
+	
+	
+	public void setDemandPDF(String demandPDF) {
+		this.demandPDF = PDFAbstract.getInstance(demandPDF);
+	}
+	
+	
+	public PDFAbstract getCollectionPDF() {
+		return this.collectionPDF;
+	}
+	
+	
+	public void setCollectionPDF(String collectionPDF) {
+		this.collectionPDF = PDFAbstract.getInstance(collectionPDF);
+	}
+	
+	
+	public double getDemandAffiliatedProbability() {
+		return this.demandAffiliatedProbability;
+	}
+	
+	
+	public void setDemandAffiliatedProbability(double demandAffiliatedProbability) {
+		this.demandAffiliatedProbability = demandAffiliatedProbability;
+	}
+	
+	
+	public double getExtortionLevel() {
+		return this.extortionLevel;
+	}
+	
+	
+	public void setExtortionLevel(double extortionLevel) {
+		this.extortionLevel = extortionLevel;
+	}
+	
+	
+	public double getPunishmentSeverity() {
+		return this.punishmentSeverity;
+	}
+	
+	
+	public void setPunishmentSeverity(double punishmentSeverity) {
+		this.punishmentSeverity = punishmentSeverity;
+	}
+	
+	
+	public double getPunishmentProbability() {
+		return this.punishmentProbability;
+	}
+	
+	
+	public void setPunishmentProbability(double punishmentProbability) {
+		this.punishmentProbability = punishmentProbability;
+	}
+	
+	
+	public double getPentitiProbability() {
+		return this.pentitiProbability;
+	}
+	
+	
+	public void setPentitiProbability(double pentitiProbability) {
+		this.pentitiProbability = pentitiProbability;
+	}
+	
 	
 	public List<Integer> getNeighbors() {
 		return this.neighbors;
@@ -205,16 +292,15 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 				affiliated = (boolean) this.sendInfo(affiliationRequest);
 				
 			} while((affiliated)
-					&& (RandomUtil.nextDouble() < this.conf
-							.getDemandAffiliatedProbability()));
+					&& (RandomUtil.nextDouble() < this.demandAffiliatedProbability));
 			
 			double wage = 0.0;
 			InfoRequest wageRequest = new InfoRequest(this.id, targetId,
 					Constants.REQUEST_DEFAULT_WAGE);
 			wage = (double) this.sendInfo(wageRequest);
 			
-			double extortion = wage * this.conf.getExtortionLevel();
-			double punishment = wage * this.conf.getPunishmentSeverity();
+			double extortion = wage * this.extortionLevel;
+			double punishment = wage * this.punishmentSeverity;
 			
 			double benefit = 0.0;
 			if(this.benefits.containsKey(targetId)) {
@@ -336,7 +422,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 					EntityType.EXTORTION, extortionId);
 			
 			// Probability to punish
-			if(RandomUtil.nextDouble() < this.conf.getPunishmentProbability()) {
+			if(RandomUtil.nextDouble() < this.punishmentProbability) {
 				
 				MafiaPunishmentAction punish = new MafiaPunishmentAction(extortionId,
 						entrepreneurId, this.id,
@@ -484,7 +570,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
 	
 	@Override
 	public void decidePentito() {
-		if(RandomUtil.nextDouble() < this.conf.getPentitiProbability()) {
+		if(RandomUtil.nextDouble() < this.pentitiProbability) {
 			
 			List<Integer> payerEntrepreneurs = new ArrayList<Integer>();
 			payerEntrepreneurs.addAll(this.payingEntrepreneurs);

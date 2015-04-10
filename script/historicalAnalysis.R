@@ -6,11 +6,20 @@ sizes <- c(10,10,10,10,12,14,16,18,20,10,12,14,16,18,20)
 
 # 0 innovators
 content <- c(1,49,61,67,43)
+content <- c(1,2,3,4,5)
 order <- c('S1','S2','S3','S4','S5')
 shapes <- c(15,16,17,18,19)
 sizes <- c(10,10,10,10,10)
 fills <- c("black","black","black","black","black")
 lines <- c(1,2,3,4,6)
+
+# Single run
+content <- 1
+order <- 'S1'
+shapes <- 15
+sizes <- 10
+fills <- "black"
+lines <- 1
 
 # 20% 50% and 80% of innovators
 content <- c(67,68,70,43,44,46)
@@ -27,20 +36,20 @@ data <- data.table(cbind(order,dir[content],nExtortion[content]))
 setnames(data,c("V2","V3"),c("dir","nExtortion"))
 png(filename=paste0(base,"/numExtortionH.png"), width=1024, height=768)
 ggplot(data, aes(x=order, y=as.numeric(as.character(nExtortion)))) +
-  xlab('') + ylab('Number of Extortions') + ylim(0,10000) +
+  xlab('Scenarios') + ylab('Number of Extortions') + ylim(0,18000) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
-  theme(axis.title.x = element_blank(),
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent", colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-#legend.position = 'none')
+        #legend.text = element_text(colour="black", size=24, face="bold"))
+        legend.position = 'none')
 dev.off()
 
 #legend.title = element_blank(),
@@ -54,7 +63,7 @@ data <- data.table(cbind(order,dir[content],nPaid[content]))
 setnames(data,c("V2","V3"),c("dir","nPaid"))
 png(filename=paste0(base,"/numPaidExtH.png"), width=1024, height=768)
 ggplot(data, aes(x=order, y=as.numeric(as.character(nPaid)))) +
-  xlab('') + ylab('Number of Paid Extortions') + ylim(0,27000) +
+  xlab('') + ylab('Number of Paid Extortions') + ylim(0,40000) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
   theme(axis.title.x = element_blank(),
@@ -76,21 +85,21 @@ dev.off()
 data <- data.table(cbind(order,dir[content],propPaid[content]))
 setnames(data,c("V2","V3"),c("dir","propPaid"))
 png(filename=paste0(base,"/propPaidExtH.png"), width=1024, height=768)
-ggplot(data, aes(x=order, y=as.numeric(as.character(propPaid)))) +
-  xlab('') + ylab('% Paid Extortions') + ylim(0,1) +
+ggplot(data, aes(x=order, y=as.numeric(as.character(propPaid))*100)) +
+  xlab('Scenarios') + ylab('% Paid Extortions') + ylim(0,100) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
-  theme(axis.title.x = element_blank(),
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-# legend.position = 'none')
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.position = 'none')
 dev.off()
 
 ##
@@ -99,21 +108,21 @@ dev.off()
 data <- data.table(cbind(order,dir[content],propPun[content]))
 setnames(data,c("V2","V3"),c("dir","propPun"))
 png(filename=paste0(base,"/propPunH.png"), width=1024, height=768)
-ggplot(data, aes(x=order,y=as.numeric(as.character(propPun)))) +
-  xlab('') + ylab('% Punishments') + ylim(0,1) +
+ggplot(data, aes(x=order,y=as.numeric(as.character(propPun))*100)) +
+  xlab('Scenarios') + ylab('% Punishments') + ylim(0,100) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(aes(colour=as.character(order)), size=10) +
-  theme(axis.title.x = element_blank(),
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-# legend.position = 'none')
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.position = 'none')
 dev.off()
 
 ##
@@ -122,21 +131,21 @@ dev.off()
 data <- data.table(cbind(order,dir[content],propPunNPay[content]))
 setnames(data,c("V2","V3"),c("dir","propPunNPay"))
 png(filename=paste0(base,"/propPunNPayH.png"), width=1024, height=768)
-ggplot(data, aes(x=order, y=as.numeric(as.character(propPunNPay)))) +
-  xlab('') + ylab('% Punishments') + ylim(0,1) +
+ggplot(data, aes(x=order, y=as.numeric(as.character(propPunNPay))*100)) +
+  xlab('Scenarios') + ylab('% Punishments') + ylim(0,100) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
-  theme(axis.title.x = element_blank(),
-        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+  theme(axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-# legend.position = 'none')
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.position = 'none')
 dev.off()
 
 ##
@@ -215,21 +224,21 @@ propDen <- propDenExt + propDenPun
 data <- data.table(cbind(order,dir[content],propDen[content]))
 setnames(data,c("V2","V3"),c("dir","propDen"))
 png(filename=paste0(base,"/propDenH.png"), width=1024, height=768)
-ggplot(data, aes(x=order, y=as.numeric(as.character(propDen)))) +
-  xlab('') + ylab('% Denounces') + ylim(0,1) +
+ggplot(data, aes(x=order, y=as.numeric(as.character(propDen))*100)) +
+  xlab('Scenarios') + ylab('% Denounces') + ylim(0,100) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   #geom_point(aes(shape=as.character(order)), size=10) +
-  theme(axis.title.x = element_blank(),
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-# legend.position = 'none')
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.position = 'none')
 dev.off()
 
 ##
@@ -238,21 +247,21 @@ dev.off()
 data <- data.table(cbind(order,dir[content],nInvCon[content]/nExtortion[content]))
 setnames(data,c("V2","V3"),c("dir","nInvCon"))
 png(filename=paste0(base,"/propImprisonmentH.png"), width=1024, height=768)
-ggplot(data, aes(x=order, y=as.numeric(as.character(nInvCon)))) +
-  xlab('') + ylab('Number of Imprisonment') + ylim(0,1) +
+ggplot(data, aes(x=order, y=as.numeric(as.character(nInvCon))*100)) +
+  xlab('Scenarios') + ylab('Proportion of Imprisonment') + ylim(0,100) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   #geom_point(aes(shape=as.character(order)), size=10) +
-  theme(axis.title.x = element_blank(),
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
         axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_line(color='gray', size=1.0, linetype='dotted'),
         panel.grid.major = element_line(color='gray', size=1.0, linetype='dotted'),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-# legend.position = 'none')
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.position = 'none')
 dev.off()
 
 ##
@@ -313,7 +322,9 @@ write.table(nShift, file=paste0(base,"/nShift.csv"),
 city <- c("Agrigento",
           "Catania",
           "Messina",
+          "Palermo",
           "Siracusa",
+          "Trapani",
           "Snpun-nnorm-Mhard-IOinactive/0",
           "Snpun-nnorm-Mhard-IOinactive/20",
           "Snpun-nnorm-Mhard-IOinactive/40",
@@ -387,17 +398,23 @@ city <- c("Agrigento",
           "Spun-nnorm-Msoft-IOactive/60",
           "Spun-nnorm-Msoft-IOactive/80")
 
-y <- c(0.65,0.85,0.78,0.82,as.array(propPaid[content]))
-x <- c(0.70,0.75,0.74,0.85,as.array(1 - (propDenExt[content] + propDenPun[content])))
-c <- city[c(1,2,3,4,(content+4))]
+y <- c(0.630,0.845,0.759,0.669,0.833,0.333,as.array(propPaid[content]))
+x <- c(0.716,0.764,0.759,0.829,0.867,0.762,as.array(1 - (propDenExt[content] + propDenPun[content])))
+#c <- city[c(1,2,3,4,(content+4))]
+c <- c(city[c(1,2,3,4,5,6)],"","","","","")
 
-data <- data.table(cbind(c("Agrigento","Catania","Messina","Siracusa",order),c,x,y))
+data <- data.table(cbind(c("Agrigento","Catania","Messina","Palermo",
+                           "Siracusa","Trapani",order),c,x,y))
 
 png(filename=paste0(base,"/validationI.png"), width=1024, height=768)
-ggplot(data, aes(x=as.numeric(as.character(x))*100, y=as.numeric(as.character(y))*100)) +
+ggplot(data, aes(x=as.numeric(as.character(x))*100,
+                 y=as.numeric(as.character(y))*100,
+                 label=c)) +
   xlim(0,100) + ylim(0,100) +
   xlab('% Unreported Cases') + ylab('% Completed Extortions') +
-  geom_point(aes(colour=as.character(c("Agrigento","Catania","Messina","Siracusa",order))), size=6) +
+  geom_point(aes(shape=as.character(c("Empirical","Empirical","Empirical",
+                                      "Empirical","Empirical","Empirical",order))), size=6) +
+  geom_text(hjust=0.3, vjust=1.6, size=6) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -407,7 +424,8 @@ ggplot(data, aes(x=as.numeric(as.character(x))*100, y=as.numeric(as.character(y)
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
+        legend.text = element_text(colour="black", size=24, face="bold"),
+        legend.background = element_blank())
 dev.off()
 
 
@@ -446,7 +464,7 @@ png(filename=paste0(base,"/salPayExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
                      group=treatment, linetype=as.factor(treatment))) +
-  xlim(0,simLen) + ylim(0.25,0.75) +
+  xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Pay Extortion\' Norm Salience') +
   geom_line(size=2) +
   #coord_cartesian(ylim=c(0.25, 0.75)) + 
@@ -494,7 +512,7 @@ png(filename=paste0(base,"/salNotPayExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
                      group=treatment, linetype=as.factor(treatment))) +
-  xlim(0,simLen) + ylim(0.25,0.75) +
+  xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Do Not Pay Extortion\' Norm Salience') +
   geom_line(size=2) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -539,7 +557,7 @@ png(filename=paste0(base,"/salDenExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
                      group=treatment, linetype=as.factor(treatment))) +
-  xlim(0,simLen) + ylim(0.25,0.75) +
+  xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Denounce Extortion\' Norm Salience') +
   geom_line(size=2) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -585,7 +603,7 @@ png(filename=paste0(base,"/salNotDenExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
                      group=treatment, linetype=as.factor(treatment))) +
-  xlim(0,simLen) + ylim(0.25,0.75) +
+  xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Do Not Denounce Extortion\' Norm Salience') +
   geom_line(size=2) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),

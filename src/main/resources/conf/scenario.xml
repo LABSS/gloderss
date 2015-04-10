@@ -4,7 +4,7 @@
 
 	<!-- General Configuration Information -->
 	<general>
-		<numberReplications>1</numberReplications>
+		<numberReplications>10</numberReplications>
 		<numberCycles>20000</numberCycles>
 		<networkTopology>SCALEFREE</networkTopology>
 		<citizensDistribution>CLUSTERED</citizensDistribution>
@@ -54,7 +54,7 @@
 			<directory>./output</directory>
 			<append>false</append>
 			<separator>;</separator>
-			<timeToWrite>20000</timeToWrite>
+			<timeToWrite>10000</timeToWrite>
 		</output>
 		<filename>
 			<extortion>extortion.csv</extortion>
@@ -122,7 +122,7 @@
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
-			<numberConsumers>1000</numberConsumers>
+			<numberConsumers>200</numberConsumers>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>false</clustered>
 
@@ -173,6 +173,9 @@
 					violation="10" obsCompliance="10" obsViolation="10" punishment="0"
 					sanction="10" invocationCompliance="10" invocationViolation="10" />
 			</normsSalience>
+
+			<changes>
+			</changes>
 		</consumer>
 
 		<consumer>
@@ -227,13 +230,16 @@
 					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
 					sanction="10" invocationCompliance="10" invocationViolation="10" />
 			</normsSalience>
+
+			<changes>
+			</changes>
 		</consumer>
 	</consumers>
 
 	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
-			<numberEntrepreneurs>500</numberEntrepreneurs>
+			<numberEntrepreneurs>100</numberEntrepreneurs>
 			<loggingTimeUnit>100</loggingTimeUnit>
 			<clustered>false</clustered>
 
@@ -286,6 +292,9 @@
 					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
 					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
+
+			<changes>
+			</changes>
 		</entrepreneur>
 
 		<entrepreneur>
@@ -342,6 +351,9 @@
 					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
 					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
+
+			<changes>
+			</changes>
 		</entrepreneur>
 
 		<entrepreneur>
@@ -398,6 +410,9 @@
 					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
 					sanction="0" invocationCompliance="3" invocationViolation="3" />
 			</normsSalience>
+
+			<changes>
+			</changes>
 		</entrepreneur>
 	</entrepreneurs>
 
@@ -428,8 +443,76 @@
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>200</spreadInfoFunction>
-		<proportionConsumers>0.05</proportionConsumers>
-		<proportionEntrepreneurs>0.05</proportionEntrepreneurs>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+
+		<changes>
+			<change>
+				<time>10000</time>
+				<parameter>generalInvestigationDurationPDF</parameter>
+				<value>NORMAL(10,5)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>bureaucraticActivityDurationPDF</parameter>
+				<value>NORMAL(100,5)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>specificInvestigationDurationPDF</parameter>
+				<value>NORMAL(10,5)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>specificInvestigationProbability</parameter>
+				<value>0.2</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>captureProbability</parameter>
+				<value>0.2</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>evidenceProbability</parameter>
+				<value>0.01</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>custodyDurationPDF</parameter>
+				<value>CONSTANT(10)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>convictionProbability</parameter>
+				<value>0.1</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>imprisonmentDurationPDF</parameter>
+				<value>NORMAL(100,5)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>noCollaborationPunishmentProbability</parameter>
+				<value>0.1</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>noCollaborationPunishment</parameter>
+				<value>0.1</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>resourceFondo</parameter>
+				<value>0</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>proportionTransferFondo</parameter>
+				<value>0.0</value>
+			</change>
+		</changes>
 	</state>
 
 	<!-- Mafia Configuration Information -->
@@ -450,6 +533,9 @@
 		<recruitingThreshold>0.5</recruitingThreshold>
 		<!-- recruitingProbability does not work -->
 		<recruitingProbability>0.05</recruitingProbability>
+
+		<changes>
+		</changes>
 	</mafia>
 
 	<!-- Intermediary Organization Configuration Information -->
@@ -461,6 +547,9 @@
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
 		<proportionConsumers>0.1</proportionConsumers>
 		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
+
+		<changes>
+		</changes>
 	</intermediaryOrg>
 
 </scenario>

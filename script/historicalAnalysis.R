@@ -1,9 +1,3 @@
-content <- c(1,49,61,67,68,69,70,71,72,43,44,45,46,47,48)
-order <- c('S1/0','S2/0','S3/0','S4/0','S4/20','S4/40','S4/50','S4/60','S4/80',
-           'S5/0','S5/20','S5/40','S5/50','S5/60','S5/80')
-shapes <- c(15,17,3,18,18,18,18,18,18,20,20,20,20,20,20)
-sizes <- c(10,10,10,10,12,14,16,18,20,10,12,14,16,18,20)
-
 # 0 innovators
 content <- c(1,49,61,67,43)
 content <- c(1,2,3,4,5)
@@ -14,20 +8,65 @@ fills <- c("black","black","black","black","black")
 lines <- c(1,2,3,4,6)
 
 # Single run
-content <- 1
-order <- 'S1'
-shapes <- 15
-sizes <- 10
-fills <- "black"
-lines <- 1
+content <- c(1,2)
+order <- c('S1','S2')
+shapes <- c(15,16)
+sizes <- c(10,10)
+fills <- c("white","white")
+lines <- c(1,2)
 
-# 20% 50% and 80% of innovators
-content <- c(67,68,70,43,44,46)
-order <- c('S4','S4/20','S4/50','S5','S5/20','S5/50')
-shapes <- c(17,17,17,18,18,18)
-sizes <- c(10,14,18,10,14,18)
-fills <- c("black","black","black","black","black","black")
-lines <- c(1,2,3,4,6)
+# S3 and S4
+content <- c(1,2)
+order <- c('P3','P4')
+shapes <- c(15,16)
+sizes <- c(10,10)
+fills <- c("white","white")
+lines <- c(1,2)
+
+# S1s
+content <- c(1,49,61,67)
+content <- c(1,2,3,4)
+order <- c("S1", "S1-IO", "S1-IO-Norm", "S1-Norm")
+shapes <- c(15,16,17,18)
+sizes <- c(10,10,10,10)
+fills <- c("black","black","black","black")
+lines <- c(1,2,3,4)
+
+# S2s
+content <- c(5,6,7)
+order <- c("S2", "S2-IO", "S2-IO-Norm")
+shapes <- c(15,16,17)
+sizes <- c(10,10,10)
+fills <- c("black","black","black")
+lines <- c(1,2,3)
+
+# S3s
+content <- c(8,9,10,11)
+order <- c("S3", "S3-IO-Weak", "S3-IO-Weak-Norm", "S3-Weak")
+shapes <- c(15,16,17,18)
+sizes <- c(10,10,10,10)
+fills <- c("black","black","black","black")
+lines <- c(1,2,3,4)
+
+# Ss
+content <- c(1,2,3,4,5,6,7,8,9,10,11,12,13)
+order <- c("S1",
+           "S1-IO",
+           "S1-IO-Norm",
+           "S1-Norm",
+           "S2",
+           "S2-IO",
+           "S2-IO-Norm",
+           "S3",
+           "S3-IO-Weak",
+           "S3-IO-Weak-Norm",
+           "S3-Weak",
+           "S4",
+           "S5")
+shapes <- c(15,16,17,18)
+sizes <- c(10,10,10,10,10,10,10,10,10,10,10,10,10)
+fills <- c("black","black","black","black","black","black","black","black",
+           "black","black","black","black","black")
 
 ##
 ## Scatterplot of Extortions
@@ -36,7 +75,7 @@ data <- data.table(cbind(order,dir[content],nExtortion[content]))
 setnames(data,c("V2","V3"),c("dir","nExtortion"))
 png(filename=paste0(base,"/numExtortionH.png"), width=1024, height=768)
 ggplot(data, aes(x=order, y=as.numeric(as.character(nExtortion)))) +
-  xlab('Scenarios') + ylab('Number of Extortions') + ylim(0,18000) +
+  xlab('Scenarios') + ylab('Number of Extortions') + ylim(0,2500) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -63,7 +102,7 @@ data <- data.table(cbind(order,dir[content],nPaid[content]))
 setnames(data,c("V2","V3"),c("dir","nPaid"))
 png(filename=paste0(base,"/numPaidExtH.png"), width=1024, height=768)
 ggplot(data, aes(x=order, y=as.numeric(as.character(nPaid)))) +
-  xlab('') + ylab('Number of Paid Extortions') + ylim(0,40000) +
+  xlab('') + ylab('Number of Paid Extortions') + ylim(0,100000) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
   theme(axis.title.x = element_blank(),
@@ -149,13 +188,13 @@ ggplot(data, aes(x=order, y=as.numeric(as.character(propPunNPay))*100)) +
 dev.off()
 
 ##
-## Scatterplot of Denounce
+## Scatterplot of Number of Denounces
 ##
 data <- data.table(cbind(order,dir[content],nDen[content]))
 setnames(data,c("V2","V3"),c("dir","nDen"))
 png(filename=paste0(base,"/numDenounceH.png"), width=1024, height=768)
 ggplot(data, aes(x=order, y=as.numeric(as.character(nDen)))) +
-  xlab('') + ylab('Number of Denounces') + ylim(0,500) +
+  xlab('') + ylab('Number of Denounces') + ylim(0,1600) +
   geom_point(aes(shape=as.character(order)), fill=fills, size=sizes) +
   # geom_point(shape=shapes, fill=fills, size=sizes) +
   theme(axis.title.x = element_blank(),
@@ -463,12 +502,20 @@ setnames(salience, c("time", "V2", "mV", "sV"),
 png(filename=paste0(base,"/salPayExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment, colour=as.factor(treatment))) +
   xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Pay Extortion\' Norm Salience') +
   geom_line(size=2) +
   #coord_cartesian(ylim=c(0.25, 0.75)) + 
   #scale_y_continuous(breaks=seq(0.25, 0.75, 0.10)) +
+  #geom_vline(aes(xintercept=10000),
+  #           color="red", linetype="dashed", size=1.5) +
+  #geom_vline(aes(xintercept=20000),
+  #           color="red", linetype="dashed", size=1.5) +
+  #geom_vline(aes(xintercept=30000),
+  #           color="red", linetype="dashed", size=1.5) +
+  #geom_vline(aes(xintercept=40000),
+  #           color="red", linetype="dashed", size=1.5) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -477,6 +524,7 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
+        # legend.position = 'none',
         legend.title = element_blank(),
         legend.text = element_text(colour="black", size=36, face="bold"))
 dev.off()
@@ -511,7 +559,7 @@ setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
 png(filename=paste0(base,"/salNotPayExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment, colour=as.factor(treatment))) +
   xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Do Not Pay Extortion\' Norm Salience') +
   geom_line(size=2) +
@@ -556,7 +604,7 @@ setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
 png(filename=paste0(base,"/salDenExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment, colour=as.factor(treatment))) +
   xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Denounce Extortion\' Norm Salience') +
   geom_line(size=2) +
@@ -602,7 +650,7 @@ setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
 png(filename=paste0(base,"/salNotDenExtH.png"), width=1024, height=768)
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment, colour=as.factor(treatment))) +
   xlim(0,simLen) + ylim(0.25,0.65) +
   xlab('Time Units') + ylab('\'Do Not Denounce Extortion\' Norm Salience') +
   geom_line(size=2) +
@@ -614,6 +662,146 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.background = element_rect(fill = "transparent",colour = NA),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=36, face="bold"))
+dev.off()
+
+
+##
+## Graphics Reputation
+##
+
+##
+## State Finder
+##
+data <- NULL
+reputation <- NULL
+time <- seq(0,simLen,delta)
+p <- 1
+for(i in content){
+  dataE <- data.table(entrepreneur[[i]])
+  
+  mV <- NULL
+  sV <- NULL
+  for(t in time){
+    sal <- c(dataE[which(time == t),]$reputationStateFinder)
+    mV <- c(mV, mean(sal))
+    sV <- c(sV, sd(sal))
+  }
+  
+  reputation <- rbind(reputation, cbind(time, rep(order[p], length(mV)), mV, sV))
+  p = p + 1
+}
+reputation <- data.table(reputation)
+setnames(reputation, c("time", "V2", "mV", "sV"),
+         c("time", "treatment", "mV", "sV"))
+
+png(filename=paste0(base,"/repStateFinder.png"), width=1024, height=768)
+ggplot(reputation, aes(x=as.numeric(as.character(time)),
+                       y=as.numeric(as.character(mV)),
+                       group=treatment, colour=as.factor(treatment))) +
+  xlim(0,simLen) + ylim(0,1) +
+  xlab('Time Units') + ylab('Reputation State Finder') +
+  geom_line(size=2) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        # legend.position = 'none',
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=36, face="bold"))
+dev.off()
+
+##
+## State Protector
+##
+data <- NULL
+reputation <- NULL
+time <- seq(0,simLen,delta)
+p <- 1
+for(i in content){
+  dataE <- data.table(entrepreneur[[i]])
+  
+  mV <- NULL
+  sV <- NULL
+  for(t in time){
+    sal <- c(dataE[which(time == t),]$reputationStateProtector)
+    mV <- c(mV, mean(sal))
+    sV <- c(sV, sd(sal))
+  }
+  
+  reputation <- rbind(reputation, cbind(time, rep(order[p], length(mV)), mV, sV))
+  p = p + 1
+}
+reputation <- data.table(reputation)
+setnames(reputation, c("time", "V2", "mV", "sV"),
+         c("time", "treatment", "mV", "sV"))
+
+png(filename=paste0(base,"/repStateProtector.png"), width=1024, height=768)
+ggplot(reputation, aes(x=as.numeric(as.character(time)),
+                       y=as.numeric(as.character(mV)),
+                       group=treatment, colour=as.factor(treatment))) +
+  xlim(0,simLen) + ylim(0,1) +
+  xlab('Time Units') + ylab('Reputation State Protector') +
+  geom_line(size=2) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        # legend.position = 'none',
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=36, face="bold"))
+dev.off()
+
+##
+## Mafia Punisher
+##
+data <- NULL
+reputation <- NULL
+time <- seq(0,simLen,delta)
+p <- 1
+for(i in content){
+  dataE <- data.table(entrepreneur[[i]])
+  
+  mV <- NULL
+  sV <- NULL
+  for(t in time){
+    sal <- c(dataE[which(time == t),]$reputationMafiaPunisher)
+    mV <- c(mV, mean(sal))
+    sV <- c(sV, sd(sal))
+  }
+  
+  reputation <- rbind(reputation, cbind(time, rep(order[p], length(mV)), mV, sV))
+  p = p + 1
+}
+reputation <- data.table(reputation)
+setnames(reputation, c("time", "V2", "mV", "sV"),
+         c("time", "treatment", "mV", "sV"))
+
+png(filename=paste0(base,"/repMafiaPunisher.png"), width=1024, height=768)
+ggplot(reputation, aes(x=as.numeric(as.character(time)),
+                       y=as.numeric(as.character(mV)),
+                       group=treatment, colour=as.factor(treatment))) +
+  xlim(0,simLen) + ylim(0,1) +
+  xlab('Time Units') + ylab('Reputation Mafia Punisher') +
+  geom_line(size=2) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        # legend.position = 'none',
         legend.title = element_blank(),
         legend.text = element_text(colour="black", size=36, face="bold"))
 dev.off()

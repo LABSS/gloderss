@@ -5,88 +5,32 @@ library(data.table)
 ##
 base <- "/data/workspace/gloders/gloderss/output"
 
-dir <- c("Snpun-nnorm-Mhard-IOinactive/0",
-         "Snpun-nnorm-Mhard-IOinactive/20",
-         "Snpun-nnorm-Mhard-IOinactive/40",
-         "Snpun-nnorm-Mhard-IOinactive/50",
-         "Snpun-nnorm-Mhard-IOinactive/60",
-         "Snpun-nnorm-Mhard-IOinactive/80",
-         "Snpun-nnorm-Mhard-IOactive/0",
-         "Snpun-nnorm-Mhard-IOactive/20",
-         "Snpun-nnorm-Mhard-IOactive/40",
-         "Snpun-nnorm-Mhard-IOactive/50",
-         "Snpun-nnorm-Mhard-IOactive/60",
-         "Snpun-nnorm-Mhard-IOactive/80",
-         "Snpun-nnorm-Msoft-IOinactive/0",
-         "Snpun-nnorm-Msoft-IOinactive/20",
-         "Snpun-nnorm-Msoft-IOinactive/40",
-         "Snpun-nnorm-Msoft-IOinactive/50",
-         "Snpun-nnorm-Msoft-IOinactive/60",
-         "Snpun-nnorm-Msoft-IOinactive/80",
-         "Snpun-nnorm-Msoft-IOactive/0",
-         "Snpun-nnorm-Msoft-IOactive/20",
-         "Snpun-nnorm-Msoft-IOactive/40",
-         "Snpun-nnorm-Msoft-IOactive/50",
-         "Snpun-nnorm-Msoft-IOactive/60",
-         "Snpun-nnorm-Msoft-IOactive/80",
-         "Spun-norm-Mhard-IOinactive/0",
-         "Spun-norm-Mhard-IOinactive/20",
-         "Spun-norm-Mhard-IOinactive/40",
-         "Spun-norm-Mhard-IOinactive/50",
-         "Spun-norm-Mhard-IOinactive/60",
-         "Spun-norm-Mhard-IOinactive/80",
-         "Spun-norm-Mhard-IOactive/0",
-         "Spun-norm-Mhard-IOactive/20",
-         "Spun-norm-Mhard-IOactive/40",
-         "Spun-norm-Mhard-IOactive/50",
-         "Spun-norm-Mhard-IOactive/60",
-         "Spun-norm-Mhard-IOactive/80",
-         "Spun-norm-Msoft-IOinactive/0",
-         "Spun-norm-Msoft-IOinactive/20",
-         "Spun-norm-Msoft-IOinactive/40",
-         "Spun-norm-Msoft-IOinactive/50",
-         "Spun-norm-Msoft-IOinactive/60",
-         "Spun-norm-Msoft-IOinactive/80",
-         "Spun-norm-Msoft-IOactive/0",
-         "Spun-norm-Msoft-IOactive/20",
-         "Spun-norm-Msoft-IOactive/40",
-         "Spun-norm-Msoft-IOactive/50",
-         "Spun-norm-Msoft-IOactive/60",
-         "Spun-norm-Msoft-IOactive/80",
-         "Spun-nnorm-Mhard-IOinactive/0",
-         "Spun-nnorm-Mhard-IOinactive/20",
-         "Spun-nnorm-Mhard-IOinactive/40",
-         "Spun-nnorm-Mhard-IOinactive/50",
-         "Spun-nnorm-Mhard-IOinactive/60",
-         "Spun-nnorm-Mhard-IOinactive/80",
-         "Spun-nnorm-Mhard-IOactive/0",
-         "Spun-nnorm-Mhard-IOactive/20",
-         "Spun-nnorm-Mhard-IOactive/40",
-         "Spun-nnorm-Mhard-IOactive/50",
-         "Spun-nnorm-Mhard-IOactive/60",
-         "Spun-nnorm-Mhard-IOactive/80",
-         "Spun-nnorm-Msoft-IOinactive/0",
-         "Spun-nnorm-Msoft-IOinactive/20",
-         "Spun-nnorm-Msoft-IOinactive/40",
-         "Spun-nnorm-Msoft-IOinactive/50",
-         "Spun-nnorm-Msoft-IOinactive/60",
-         "Spun-nnorm-Msoft-IOinactive/80",
-         "Spun-nnorm-Msoft-IOactive/0",
-         "Spun-nnorm-Msoft-IOactive/20",
-         "Spun-nnorm-Msoft-IOactive/40",
-         "Spun-nnorm-Msoft-IOactive/50",
-         "Spun-nnorm-Msoft-IOactive/60",
-         "Spun-nnorm-Msoft-IOactive/80")
-
 dir <- c("S1-before-1980/0",
          "S2-1980-1990/0",
          "S3-1990-1995/0",
          "S4-1995-2000/0",
          "S5-after-2000/0")
 
+dir <- c("S1-before-1980/0",
+         "S1-IO/0",
+         "S1-IO-Norm/0",
+         "S1-Norm/0",
+         "S2-1980-1990/0",
+         "S2-IO/0",
+         "S2-IO-Norm/0",
+         "S3-1990-1995/0",
+         "S3-IO-Weak/0",
+         "S3-IO-Weak-Norm/0",
+         "S3-Weak/0",
+         "S4-1995-2000/0",
+         "S5-after-2000/0")
+
 dir <- "S-before-1980-after-2000"
 
-replicas <- 0:0
+dir <- c("S3-to-WeakState",
+         "S4-to-WeakState")
+
+replicas <- 0:9
 
 xvaxis <- c(1,1,1,1,1,1,2,2,2,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,
            5,5,5,5,5,5,6,6,6,6,6,6,7,7,7,7,7,7,8,8,8,8,8,8,
@@ -369,7 +313,11 @@ for(i in dirs){
     nComp[[i]] <- 0
   }
 
-  nAffiliated[[i]] <- nrow(subset(entrepreneur[[i]], affiliated == "true")) / nReplicas
+  if (!is.null(entrepreneur[[i]])) {
+    nAffiliated[[i]] <- nrow(subset(entrepreneur[[i]], affiliated == "true")) / nReplicas
+  } else {
+    nAffiliated[[i]] <- 0
+  }
 
   ##
   ## Calculation
@@ -438,7 +386,7 @@ write.table(prop[[i]], file=paste0(base,"/summary.csv"),
 ##
 png(filename=paste0(base,dir[i],"/salPayExtortion.png"), width=1024, height=768)
 ggplot(entrepreneur[[i]], aes(x=saliencePayExtortion)) +
-  xlim(0,1) + ylim(0,30) +
+  xlim(0,1) + ylim(0,20) +
   ylab('Number of Entrepreneurs') + xlab('Salience Pay Extortion') +
   geom_histogram(aes(y=..density..),
                  binwidth=.05, colour="black", fill="white", size=1.5) +
@@ -460,7 +408,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/salNotPayExtortion.png"), width=1024, height=768)
 ggplot(entrepreneur[[i]], aes(x=salienceNotPayExtortion)) +
-  xlim(0,1) + ylim(0,30) +
+  xlim(0,1) + ylim(0,20) +
   ylab('Number of Entrepreneurs') + xlab('Salience Do Not Pay Extortion') +
   geom_histogram(aes(y=..density..),
                  binwidth=.05, colour="black", fill="white", size=1.5) +
@@ -482,7 +430,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/salNotDenounce.png"), width=1024, height=768)
 ggplot(entrepreneur[[i]], aes(x=salienceNotDenounce)) +
-  xlim(0,1) + ylim(0,30) +
+  xlim(0,1) + ylim(0,20) +
   ylab('Number of Entrepreneurs') + xlab('Salience Do Not Denounce Extortion') +
   geom_histogram(aes(y=..density..),
                  binwidth=.05, colour="black", fill="white", size=1.5) +
@@ -504,7 +452,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/salDenounce.png"), width=1024, height=768)
 ggplot(entrepreneur[[i]], aes(x=salienceDenounce)) +
-  xlim(0,1) + ylim(0,30) +
+  xlim(0,1) + ylim(0,20) +
   ylab('Number of Entrepreneurs') + xlab('Salience Denounce Extortion') +
   geom_histogram(aes(y=..density..),
                  binwidth=.05, colour="black", fill="white", size=1.5) +
@@ -523,10 +471,10 @@ dev.off()
 
 ##
 ## Histogram of Number of Paid Extortion
-##
+## 
 png(filename=paste0(base,dir[i],"/histPaidExtortion.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$paid == "true",], aes(x=time)) +
-  xlim(0,simLen) + ylim(0,700) +
+  xlim(0,simLen) + ylim(0,15000) +
   ylab('Number of Paid Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -564,7 +512,7 @@ dev.off()
 ##
 png(filename=paste0(base,dir[i],"/histExtortion.png"), width=1024, height=768)
 ggplot(extortion[[i]], aes(x=time)) +
-  xlim(0,simLen) + ylim(0,600) +
+  xlim(0,simLen) + ylim(0,20000) +
   ylab('Number of Extortion') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +
@@ -584,7 +532,7 @@ dev.off()
 png(filename=paste0(base,dir[i],"/histDenounce.png"), width=1024, height=768)
 ggplot(extortion[[i]][extortion[[i]]$denouncedExtortion == "true" |
                         extortion[[i]]$denouncedPunishment == "true",], aes(x=time)) +
-  xlim(0,simLen) + ylim(0,55) +
+  xlim(0,simLen) + ylim(0,10000) +
   ylab('Number of Denounces') + xlab('Time') +
   geom_histogram(aes(y=..count..),
                  binwidth=500, colour="black", fill="grey", size=1.5) +

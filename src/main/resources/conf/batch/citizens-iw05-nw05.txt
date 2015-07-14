@@ -1,0 +1,296 @@
+	<!-- Consumers Configuration Information -->
+	<consumers>
+		<consumer>
+			<numberConsumers>200</numberConsumers>
+			<loggingTimeUnit>100</loggingTimeUnit>
+			<clustered>false</clustered>
+
+			<!-- Economic -->
+			<buyPDF>NORMAL(30,10)</buyPDF>
+			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
+
+			<!-- Reputation -->
+			<reputation>
+				<entrepreneur>0.0</entrepreneur>
+				<entrepreneurThreshold>0.0</entrepreneurThreshold>
+			</reputation>
+
+			<!-- Sanction -->
+			<sanction>
+				<threshold>0.90</threshold>
+				<discernability>0.1</discernability>
+			</sanction>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Buy from Not Paying Entrepreneurs -->
+				<normSalience id="4" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="0"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+				<!-- Buy from Paying Entrepreneurs -->
+				<normSalience id="5" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="0"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+			</normsSalience>
+
+			<changes>
+			</changes>
+		</consumer>
+
+		<consumer>
+			<numberConsumers>0</numberConsumers>
+			<loggingTimeUnit>100</loggingTimeUnit>
+			<clustered>true</clustered>
+
+			<!-- Economic -->
+			<buyPDF>NORMAL(30,10)</buyPDF>
+			<numberEntrepreneursSearch>5</numberEntrepreneursSearch>
+
+			<!-- Reputation -->
+			<reputation>
+				<entrepreneur>0.5</entrepreneur>
+				<entrepreneurThreshold>0.5</entrepreneurThreshold>
+			</reputation>
+
+			<!-- Sanction -->
+			<sanction>
+				<threshold>0.75</threshold>
+				<discernability>0.75</discernability>
+			</sanction>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Buy from Not Paying Entrepreneurs -->
+				<normSalience id="4" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+				<!-- Buy from Paying Entrepreneurs -->
+				<normSalience id="5" active="true" compliance="10"
+					violation="10" obsCompliance="10" obsViolation="10" punishment="10"
+					sanction="10" invocationCompliance="10" invocationViolation="10" />
+			</normsSalience>
+
+			<changes>
+			</changes>
+		</consumer>
+	</consumers>
+	
+		<!-- Entrepreneurs Configuration Information -->
+	<entrepreneurs>
+		<entrepreneur>
+			<numberEntrepreneurs>100</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
+			<clustered>false</clustered>
+
+			<!-- Economic -->
+			<wealth>0.00</wealth>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
+
+			<!-- State -->
+			<collaborationProbability>0.1</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliateThreshold>1.0</affiliateThreshold>
+			<affiliated>false</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.1</stateProtector>
+				<statePunisher>0.1</statePunisher>
+				<mafiaPunisher>0.9</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+			</normsSalience>
+
+			<changes>
+			</changes>
+		</entrepreneur>
+
+		<entrepreneur>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
+			<clustered>true</clustered>
+
+			<!-- Economic -->
+			<wealth>0.00</wealth>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
+
+			<!-- State -->
+			<collaborationProbability>0.9</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliateThreshold>0.95</affiliateThreshold>
+			<affiliated>false</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.3</statePunisher>
+				<mafiaPunisher>0.7</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+			</normsSalience>
+
+			<changes>
+			</changes>
+		</entrepreneur>
+
+		<entrepreneur>
+			<numberEntrepreneurs>0</numberEntrepreneurs>
+			<loggingTimeUnit>100</loggingTimeUnit>
+			<clustered>true</clustered>
+
+			<!-- Economic -->
+			<wealth>0.00</wealth>
+			<periodicityWagePDF>NORMAL(30,2)</periodicityWagePDF>
+			<minimumWage>500.00</minimumWage>
+			<maximumWage>1000.00</maximumWage>
+			<variationWage>0.5</variationWage>
+			<minimumPrice>50.00</minimumPrice>
+			<maximumPrice>100.00</maximumPrice>
+
+			<!-- Balance between risk and opportunity -->
+			<denounceAlpha>0.5</denounceAlpha>
+
+			<!-- State -->
+			<collaborationProbability>0.9</collaborationProbability>
+
+			<!-- Intermediary Organization -->
+			<affiliateThreshold>0.95</affiliateThreshold>
+			<affiliated>true</affiliated>
+
+			<!-- Reputation -->
+			<reputation>
+				<stateProtector>0.5</stateProtector>
+				<statePunisher>0.3</statePunisher>
+				<mafiaPunisher>0.7</mafiaPunisher>
+			</reputation>
+
+			<!-- Normative -->
+			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
+			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
+			<individualWeight>0.5</individualWeight>
+			<normativeWeight>0.5</normativeWeight>
+			<normsSalience>
+				<!-- Pay Extortion -->
+				<normSalience id="0" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Pay Extortion -->
+				<normSalience id="1" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Denounce -->
+				<normSalience id="2" active="true" compliance="3"
+					violation="1" obsCompliance="3" obsViolation="1" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+				<!-- Not Denounce -->
+				<normSalience id="3" active="true" compliance="1"
+					violation="3" obsCompliance="1" obsViolation="3" punishment="0"
+					sanction="0" invocationCompliance="3" invocationViolation="3" />
+			</normsSalience>
+
+			<changes>
+			</changes>
+		</entrepreneur>
+	</entrepreneurs>

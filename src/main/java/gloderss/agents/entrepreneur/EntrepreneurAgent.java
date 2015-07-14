@@ -499,8 +499,13 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 			double TpayNG = this.normative.getNormSalience(Norms.PAY_EXTORTION
 					.ordinal());
 			
-			double TnotPayIG = (extortion - benefit)
-					- (punishment * this.mafiaPunisherRep.getReputation());
+			// Old utility of Not Pay Extortion
+			// double TnotPayIG = (extortion - benefit)
+			// - (punishment * this.mafiaPunisherRep.getReputation());
+			
+			// New utility of Pay Extortion
+			double TnotPayIG = -1
+					* (punishment * this.mafiaPunisherRep.getReputation());
 			
 			double TnotPayNG = this.normative.getNormSalience(Norms.NOT_PAY_EXTORTION
 					.ordinal());

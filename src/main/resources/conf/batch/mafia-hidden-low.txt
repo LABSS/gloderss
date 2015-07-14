@@ -1,0 +1,22 @@
+	<!-- Mafia Configuration Information -->
+	<mafia>
+		<numberMafiosi>20</numberMafiosi>
+		<loggingTimeUnit>100</loggingTimeUnit>
+		<wealth>0.00</wealth>
+		<demandPDF>NORMAL(3,2)</demandPDF>
+		<demandAffiliatedProbability>0.9</demandAffiliatedProbability>
+		<extortionLevel>0.03</extortionLevel>
+		<punishmentSeverity>0.5</punishmentSeverity>
+		<collectionPDF>CONSTANT(2)</collectionPDF>
+		<punishmentProbability>0.5</punishmentProbability>
+		<minimumBenefit>0.0</minimumBenefit>
+		<maximumBenefit>0.01</maximumBenefit>
+		<pentitiProbability>0.01</pentitiProbability>
+		<!-- recruitingThreshold does not work -->
+		<recruitingThreshold>0.5</recruitingThreshold>
+		<!-- recruitingProbability does not work -->
+		<recruitingProbability>0.05</recruitingProbability>
+
+		<changes>
+		</changes>
+	</mafia>

@@ -1,6 +1,19 @@
 Changes
 =======
 
+10/06/2015
+1. (New Feature) Created the GLODERSBatch that allows the execution of a set of combinatorial 
+   simulations in batch mode. An XML file needs to be provided with the configuration of the
+   files containing the parts of the SCENARIOS.XML to generate and run the simulation.
+   
+2. Change the Not Pay utility function
+
+FROM
+double TnotPayIG = (extortion - benefit) - (punishment * this.mafiaPunisherRep.getReputation());
+
+TO
+double TnotPayIG = -1 * (punishment * this.mafiaPunisherRep.getReputation());
+
 10/04/2015
 ----------
 1. (New Feature) Enable the creation of Exogenous Shock scenarios. The feature is configurable

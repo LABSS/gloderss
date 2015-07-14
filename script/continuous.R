@@ -1,30 +1,4 @@
-# S1 + S2
-content <- c(1,2)
-order <- c('S1','S2')
-shapes <- c(15,16)
-sizes <- c(10,10)
-fills <- c("white","white")
-lines <- c(1,2)
-
-# S1 + S2 + S3
-content <- c(1,49,61)
-content <- c(1,2,3)
-order <- c('S1','S2','S3')
-shapes <- c(15,16,17)
-sizes <- c(10,10,10)
-fills <- c("white","white","white")
-lines <- c(1,2,3)
-
-# S2 + S3 + S4 + S5
-content <- c(2,3,4,5)
-order <- c('S2','S3','S4','S5')
-shapes <- c(16,17,18,19)
-sizes <- c(10,10,10,10)
-fills <- c("white","white","white","white")
-lines <- c(2,3,4,6)
-
 # S1 + S2 + S3 + S4 + S5
-content <- c(1,49,61,67,43)
 content <- c(1,2,3,4,5)
 order <- c('P1','P2','P3','P4','P5')
 shapes <- c(15,16,17,18,19)
@@ -32,33 +6,12 @@ sizes <- c(10,10,10,10,10)
 fills <- c("white","white","white","white","white")
 lines <- c(1,2,3,4,6)
 
-# S1s
-content <- c(1,49,61,67)
-content <- c(1,2,3,4)
-order <- c('S1','S1-IO','S1-IO-State','S1-IO-State-Norm')
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-# Ss
-content <- c(1,2,3,4,5,6,7,8,9,10,11,12,13)
-order <- c("S1",
-           "S1-IO",
-           "S1-IO-Norm",
-           "S1-Norm",
-           "S2",
-           "S2-IO",
-           "S2-IO-Norm",
-           "S3",
-           "S3-IO-Weak",
-           "S3-IO-Weak-Norm",
-           "S3-Weak",
-           "S4",
-           "S5")
-shapes <- c(15,16,17,18)
-fills <- c("black","black","black","black","black","black","black","black",
-           "black","black","black","black","black")
+dir <- c("S1-before-1980/0",
+         "S2-1980-1990/0",
+         "S3-1990-1995/0",
+         "S4-1995-2000/0",
+         "S5-after-2000/0")
+dirs <- 1:5
 
 ##
 ## Number of Extortions
@@ -66,8 +19,12 @@ fills <- c("black","black","black","black","black","black","black","black",
 ne <- matrix(rep(0,max(dirs)*max(replicas+1)),nrow=max(replicas+1))
 for(i in dirs){
   for(replica in replicas) {
-  
-    ne[replica+1,i] <- nrow(subset(extortion[[i]], r == replica))
+    
+    min <- ((i-1) * 10000)
+    max <- i * 10000
+    
+    ne[replica+1,i] <- nrow(subset(extortion[[1]], time >= min & time <= max &
+                                     r == replica))
     
   }
 }
@@ -78,10 +35,9 @@ for(i in content){
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","numExt"))
-png(filename=paste0(base,"/numExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(numExt)),
                  fill=factor(scenario))) +
-  xlab('Periods') + ylab('Number of Extortions') + ylim(0,35000) +
+  xlab('Periods') + ylab('Number of Extortions') + ylim(0,20000) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -94,7 +50,6 @@ ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(numExt)),
         legend.title = element_blank(),
         #legend.text = element_text(colour="black", size=24, face="bold"))
         legend.position = 'none')
-dev.off()
 
 ##
 ## Hypothesis test
@@ -112,8 +67,13 @@ pe <- matrix(rep(0,max(dirs)*max(replicas+1)),nrow=max(replicas+1))
 for(i in dirs){
   for(replica in replicas) {
     
-    pe[replica+1,i] <- nrow(subset(extortion[[i]], (paid == "true" & r == replica))) /
-      nrow(subset(extortion[[i]], r == replica))
+    min <- ((i-1) * 10000)
+    max <- i * 10000
+    
+    pe[replica+1,i] <- nrow(subset(extortion[[1]], (time >= min & time <= max &
+                                                      paid == "true" & r == replica))) /
+      nrow(subset(extortion[[1]], time >= min & time <= max &
+                    r == replica))
     
   }
 }
@@ -124,10 +84,9 @@ for(i in content){
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","paidExt"))
-png(filename=paste0(base,"/propPaidExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(paidExt))*100,
                  fill=factor(scenario))) +
-  xlab('Periods') + ylab('% of Paid Extortion') + ylim(55,80) +
+  xlab('Periods') + ylab('% of Paid Extortion') + ylim(65,85) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -140,7 +99,6 @@ ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(paidExt))*100,
         legend.title = element_blank(),
         #legend.text = element_text(colour="black", size=24, face="bold"))
         legend.position = 'none')
-dev.off()
 
 ##
 ## Hypothesis test
@@ -159,17 +117,24 @@ pd <- matrix(rep(0,max(dirs)*max(replicas+1)),nrow=max(replicas+1))
 for(i in dirs){
   for(replica in replicas) {
     
-    nDenExt <- nrow(subset(extortion[[i]], (paid == "false" &
+    min <- ((i-1) * 10000)
+    max <- i * 10000
+    
+    nDenExt <- nrow(subset(extortion[[1]], (time >= min & time <= max &
+                                              paid == "false" &
                                               denouncedExtortion == "true" &
                                               r == replica)))
     
-    nDenPun <- nrow(subset(extortion[[i]], (paid == "false" &
+    nDenPun <- nrow(subset(extortion[[1]], (time >= min & time <= max &
+                                              paid == "false" &
                                               denouncedPunishment == "true" &
                                               r == replica)))
     
-    nExtortion <- nrow(subset(extortion[[i]], r == replica))
+    nExtortion <- nrow(subset(extortion[[1]], time >= min & time <= max &
+                                r == replica))
     
-    nNPaid <- nrow(subset(extortion[[i]], (paid == "false" & r == replica)))
+    nNPaid <- nrow(subset(extortion[[1]], (time >= min & time <= max &
+                                             paid == "false" & r == replica)))
     
     propDenExt <- nDenExt / nExtortion
     
@@ -186,7 +151,6 @@ for(i in content){
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","propDen"))
-png(filename=paste0(base,"/propDenExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propDen))*100,
                  fill=factor(scenario))) +
   xlab('Periods') + ylab('% Denunciation') + ylim(0,25) +
@@ -202,7 +166,7 @@ ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propDen))*100,
         legend.title = element_blank(),
         #legend.text = element_text(colour="black", size=24, face="bold"))
         legend.position = 'none')
-dev.off()
+
 
 ##
 ## Hypothesis test
@@ -220,10 +184,15 @@ wilcox.test(pd[,4],pd[,5], paired=FALSE, alternative="two.sided")$p.value
 pc <- matrix(rep(0,max(dirs)*max(replicas+1)),nrow=max(replicas+1))
 for(i in dirs){
   for(replica in replicas) {
-      
-    nExtortion <- nrow(subset(extortion[[i]], r == replica))
     
-    nInvCon <- nrow(subset(extortion[[i]], (paid == "false" &
+    min <- ((i-1) * 10000)
+    max <- i * 10000
+    
+    nExtortion <- nrow(subset(extortion[[1]], time >= min & time <= max &
+                                r == replica))
+    
+    nInvCon <- nrow(subset(extortion[[1]], (time >= min & time <= max &
+                                              paid == "false" &
                                               (investigatedExtortion == "true" |
                                                  investigatedPunishment == "true") &
                                               mafiosoConvicted == "true" &
@@ -240,10 +209,9 @@ for(i in content){
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","propConv"))
-png(filename=paste0(base,"/propImprisonment.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propConv))*100,
                  fill=factor(scenario))) +
-  xlab('Periods') + ylab('% Investigations Leading\n to Imprisonment') + ylim(0,8.5) +
+  xlab('Periods') + ylab('% Investigations Leading\n to Imprisonment') + ylim(0,10) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -256,7 +224,6 @@ ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propConv))*100,
         legend.title = element_blank(),
         #legend.text = element_text(colour="black", size=24, face="bold"))
         legend.position = 'none')
-dev.off()
 
 ##
 ## Hypothesis test
@@ -271,6 +238,7 @@ wilcox.test(pc[,4],pc[,5], paired=FALSE, alternative="two.sided")$p.value
 ##
 ## Pay Extortion
 ##
+data <- NULL
 salience <- NULL
 time <- seq(0,simLen,delta)
 p <- 1
@@ -295,13 +263,21 @@ for(i in content){
 salience <- data.table(salience)
 setnames(salience, c("time", "V2", "mV", "sV"),
          c("time", "treatment", "mV", "sV"))
-png(filename=paste0(base,"/salPayExt.png"), width=1024, height=768)
+
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment)) +
   xlim(0,simLen) + ylim(0.2,0.7) +
   xlab('Time Units') + ylab('\'Pay Extortion\'\n Norm Salience') +
   geom_line(size=1) +
+  geom_vline(aes(xintercept=10000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=20000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=30000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=40000),
+             color="black", linetype="dashed", size=1.5) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -311,12 +287,13 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-dev.off()
+        legend.text = element_text(colour="black", size=36, face="bold"))
+
 
 ##
 ## Not Pay Extortion
 ##
+data <- NULL
 salience <- NULL
 time <- seq(0,simLen,delta)
 p <- 1
@@ -340,13 +317,21 @@ for(i in content){
 }
 salience <- data.table(salience)
 setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
-png(filename=paste0(base,"/salNotPayExt.png"), width=1024, height=768)
+
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment)) +
   xlim(0,simLen) + ylim(0.2,0.7) +
   xlab('Time Units') + ylab('\'Do Not Pay Extortion\'\n Norm Salience') +
   geom_line(size=1) +
+  geom_vline(aes(xintercept=10000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=20000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=30000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=40000),
+             color="black", linetype="dashed", size=1.5) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -356,12 +341,12 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-dev.off()
+        legend.text = element_text(colour="black", size=36, face="bold"))
 
 ##
 ## Denounce Extortion
 ##
+data <- NULL
 salience <- NULL
 time <- seq(0,simLen,delta)
 p <- 1
@@ -385,13 +370,21 @@ for(i in content){
 }
 salience <- data.table(salience)
 setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
-png(filename=paste0(base,"/salDenExt.png"), width=1024, height=768)
+
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment)) +
   xlim(0,simLen) + ylim(0.2,0.7) +
   xlab('Time Units') + ylab('\'Denounce Extortion\'\n Norm Salience') +
   geom_line(size=1) +
+  geom_vline(aes(xintercept=10000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=20000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=30000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=40000),
+             color="black", linetype="dashed", size=1.5) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -401,12 +394,13 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-dev.off()
+        legend.text = element_text(colour="black", size=36, face="bold"))
+
 
 ##
 ## Not Denounce Extortion
 ##
+data <- NULL
 salience <- NULL
 time <- seq(0,simLen,delta)
 p <- 1
@@ -430,13 +424,21 @@ for(i in content){
 }
 salience <- data.table(salience)
 setnames(salience, c("time", "V2","mV","sV"), c("time", "treatment","mV","sV"))
-png(filename=paste0(base,"/salNotDenExt.png"), width=1024, height=768)
+
 ggplot(salience, aes(x=as.numeric(as.character(time)),
                      y=as.numeric(as.character(mV)),
-                     group=treatment, linetype=as.factor(treatment))) +
+                     group=treatment)) +
   xlim(0,simLen) + ylim(0.2,0.7) +
   xlab('Time Units') + ylab('\'Do Not Denounce Extortion\'\n Norm Salience') +
   geom_line(size=1) +
+  geom_vline(aes(xintercept=10000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=20000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=30000),
+             color="black", linetype="dashed", size=1.5) +
+  geom_vline(aes(xintercept=40000),
+             color="black", linetype="dashed", size=1.5) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -446,28 +448,26 @@ ggplot(salience, aes(x=as.numeric(as.character(time)),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
-        legend.text = element_text(colour="black", size=24, face="bold"))
-dev.off()
+        legend.text = element_text(colour="black", size=36, face="bold"))
 
-##
-## Norms' set shift
-##
+
 nShift <- NULL
-for(i in content){
-  aux <- data.table(entrepreneur[[i]])
-  new <- nrow(aux[which((time == simLen) &
+for(p in 1:5){
+  sLen <- 10000 * p
+  aux <- data.table(entrepreneur[[1]])
+  new <- nrow(aux[which((time == sLen) &
                           (saliencePayExtortion <= salienceNotPayExtortion) &
                           (salienceDenounce >= salienceNotDenounce)),]) / nReplicas
   
-  traditional <- nrow(aux[which((time == simLen) &
+  traditional <- nrow(aux[which((time == sLen) &
                                   (saliencePayExtortion > salienceNotPayExtortion) &
                                   (salienceDenounce < salienceNotDenounce)),]) / nReplicas
   
-  onlyNotPay <- nrow(aux[which((time == simLen) &
+  onlyNotPay <- nrow(aux[which((time == sLen) &
                                  (saliencePayExtortion <= salienceNotPayExtortion) &
                                  (salienceDenounce < salienceNotDenounce)),]) / nReplicas
   
-  onlyDenounce <- nrow(aux[which((time == simLen) &
+  onlyDenounce <- nrow(aux[which((time == sLen) &
                                    (saliencePayExtortion > salienceNotPayExtortion) &
                                    (salienceDenounce >= salienceNotDenounce)),]) / nReplicas
   
@@ -489,6 +489,6 @@ for(i in content){
   #                                                (salienceDenounce >= salienceNotDenounce)),]) / nReplicas
   
   numAgents <- ent #+ con
-  nShift <- rbind(nShift, c(i, ((numAgents-traditional)/numAgents), onlyNotPay/numAgents,
+  nShift <- rbind(nShift, c(((numAgents-traditional)/numAgents), onlyNotPay/numAgents,
                             onlyDenounce/numAgents, (new/numAgents)))
 }

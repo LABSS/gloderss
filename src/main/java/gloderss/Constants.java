@@ -311,6 +311,41 @@ public final class Constants {
 	public static final String	TAG_CHANGE_VALUE																	= "value";
 	
 	/**
+	 * Batch tags
+	 */
+	public static final String	TAG_BATCH																					= "batch";
+	
+	public static final String	TAG_BATCH_BASE																		= "base";
+	
+	public static final String	TAG_BATCH_OUTPUT																	= "output";
+	
+	public static final String	TAG_BATCH_REPLICA																	= "replica";
+	
+	public static final String	TAG_BATCH_XML_SCENARIO														= "xmlScenario";
+	
+	public static final String	TAG_BATCH_XSD_SCENARIO														= "xsdScenario";
+	
+	public static final String	TAG_BATCH_HEADER																	= "header";
+	
+	public static final String	TAG_BATCH_GENERAL																	= "general";
+	
+	public static final String	TAG_BATCH_COMMUNICATION														= "communication";
+	
+	public static final String	TAG_BATCH_CITIZENS																= "citizens";
+	
+	public static final String	TAG_BATCH_STATES																	= "states";
+	
+	public static final String	TAG_BATCH_MAFIAS																	= "mafias";
+	
+	public static final String	TAG_BATCH_IOS																			= "ios";
+	
+	public static final String	TAG_BATCH_TAIL																		= "tail";
+	
+	public static final String	TAG_BATCH_CODE																		= "code";
+	
+	public static final String	TAG_BATCH_CONTENT																	= "content";
+	
+	/**
 	 * Actions
 	 */
 	public static enum Actions {

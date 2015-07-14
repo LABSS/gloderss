@@ -1,0 +1,48 @@
+	<!-- Environment Configuration Information -->
+	<communication>
+		<types>
+			<type name="NONE">0.0</type>
+			<type name="PARTIAL">0.5</type>
+			<type name="COMPLETE">1.0</type>
+		</types>
+		<actions>
+			<action name="gloderss.actions.AffiliateRequestAction">COMPLETE</action>
+			<action name="gloderss.actions.AffiliationAcceptedAction">COMPLETE</action>
+			<action name="gloderss.actions.AffiliationDeniedAction">COMPLETE</action>
+			<action name="gloderss.actions.BuyNotPayExtortionAction">COMPLETE</action>
+			<action name="gloderss.actions.BuyPayExtortionAction">COMPLETE</action>
+			<action name="gloderss.actions.BuyProductAction">COMPLETE</action>
+			<action name="gloderss.actions.CaptureMafiosoAction">COMPLETE</action>
+			<action name="gloderss.actions.CollaborateAction">PARTIAL</action>
+			<action name="gloderss.actions.CollaborationRequestAction">PARTIAL</action>
+			<action name="gloderss.actions.CollectAction">PARTIAL</action>
+			<action name="gloderss.actions.CriticalConsumerInfoAction">NONE</action>
+			<action name="gloderss.actions.CustodyAction">COMPLETE</action>
+			<action name="gloderss.actions.DeliverProductAction">COMPLETE</action>
+			<action name="gloderss.actions.DenounceExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.DenounceExtortionAffiliatedAction">COMPLETE</action>
+			<action name="gloderss.actions.DenouncePunishmentAction">PARTIAL</action>
+			<action name="gloderss.actions.DenouncePunishmentAffiliatedAction">COMPLETE</action>
+			<action name="gloderss.actions.ExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.ImprisonmentAction">COMPLETE</action>
+			<action name="gloderss.actions.MafiaBenefitAction">PARTIAL</action>
+			<action name="gloderss.actions.MafiaPunishmentAction">COMPLETE</action>
+			<action name="gloderss.actions.NormInvocationAction">NONE</action>
+			<action name="gloderss.actions.NormSanctionAction">NONE</action>
+			<action name="gloderss.actions.NotCollaborateAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenounceExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenounceExtortionAffiliatedAction">COMPLETE</action>
+			<action name="gloderss.actions.NotDenouncePunishmentAction">PARTIAL</action>
+			<action name="gloderss.actions.NotDenouncePunishmentAffiliatedAction">COMPLETE</action>
+			<action name="gloderss.actions.NotPayExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.PayExtortionAction">PARTIAL</action>
+			<action name="gloderss.actions.PentitoAction">COMPLETE</action>
+			<action name="gloderss.actions.ReleaseCustodyAction">COMPLETE</action>
+			<action name="gloderss.actions.ReleaseImprisonmentAction">COMPLETE</action>
+			<action name="gloderss.actions.ReleaseInvestigationAction">NONE</action>
+			<action name="gloderss.actions.ReputationInfoAction">NONE</action>
+			<action name="gloderss.actions.SpecificInvestigationAction">NONE</action>
+			<action name="gloderss.actions.StateCompensationAction">COMPLETE</action>
+			<action name="gloderss.actions.StatePunishmentAction">COMPLETE</action>
+		</actions>
+	</communication>

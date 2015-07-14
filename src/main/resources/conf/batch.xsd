@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+
+	<element name="batch">
+		<complexType>
+			<sequence>
+				<element name="base" type="string" />
+				<element name="output" type="string" />
+				<element name="replica" type="nonNegativeInteger" />
+				<element name="xmlScenario" type="string" />
+				<element name="xsdScenario" type="string" />
+				<element name="header" type="string" />
+				<element name="general" type="string" />
+				<element name="communication" type="string" />
+				<element maxOccurs="1" name="citizens">
+					<complexType>
+						<sequence>
+							<element minOccurs="1" maxOccurs="unbounded" name="content">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="code" type="string" />
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element maxOccurs="1" name="states">
+					<complexType>
+						<sequence>
+							<element minOccurs="1" maxOccurs="unbounded" name="content">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="code" type="string" />
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element maxOccurs="1" name="mafias">
+					<complexType>
+						<sequence>
+							<element minOccurs="1" maxOccurs="unbounded" name="content">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="code" type="string" />
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element maxOccurs="1" name="ios">
+					<complexType>
+						<sequence>
+							<element minOccurs="1" maxOccurs="unbounded" name="content">
+								<complexType>
+									<simpleContent>
+										<extension base="string">
+											<attribute name="code" type="string" />
+										</extension>
+									</simpleContent>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+				<element name="tail" type="string" />
+			</sequence>
+		</complexType>
+	</element>
+</schema>

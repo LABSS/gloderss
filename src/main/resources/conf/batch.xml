@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<batch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="batch.xsd">
+
+	<base>./src/main/resources/conf</base>
+	<output>./output</output>
+	<replica>10</replica>
+
+	<xmlScenario>./src/main/resources/conf/scenario.xml</xmlScenario>
+	<xsdScenario>./src/main/resources/conf/scenario.xsd</xsdScenario>
+
+	<header>header.txt</header>
+	<general>general.txt</general>
+	<communication>communication.txt</communication>
+	<citizens>
+		<content code="iw03-nw07">citizens-iw03-nw07.txt</content>
+		<content code="iw05-nw05">citizens-iw05-nw05.txt</content>
+	</citizens>
+	<states>
+		<content code="weak-noNorm">state-weak-noNorm.txt</content>
+		<content code="weak-norm">state-weak-norm.txt</content>
+		<content code="strong-noNorm">state-strong-noNorm.txt</content>
+		<content code="strong-norm">state-strong-norm.txt</content>
+	</states>
+	<mafias>
+		<content code="violent-low">mafia-violent-low.txt</content>
+		<content code="violent-medium">mafia-violent-medium.txt</content>
+		<content code="violent-high">mafia-violent-high.txt</content>
+		<content code="hidden-low">mafia-hidden-low.txt</content>
+		<content code="hidden-medium">mafia-hidden-medium.txt</content>
+		<content code="hidden-high">mafia-hidden-high.txt</content>
+	</mafias>
+	<ios>
+		<content code="inactive">io-inactive.txt</content>
+		<content code="active">io-active.txt</content>
+	</ios>
+	<tail>tail.txt</tail>
+</batch>

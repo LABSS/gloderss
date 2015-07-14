@@ -1,7 +1,7 @@
 defaultWage <- 1000
-benefit <- 0.3 * defaultWage
-extortion <- 0.3 * defaultWage
-punish <- 0.3 * defaultWage
+benefit <- 0.01 * defaultWage
+extortion <- 0.1 * defaultWage
+punish <- 0.75 * defaultWage
 
 collProb <- 0.9
 statePun <- 0.5 * defaultWage
@@ -23,7 +23,7 @@ for(stateProtRep in seq(0,1,0.05)){
       
       IG <- atanTpayIG / (atanTpayIG + atanTnotPayIG)
       
-      x <- c(x, IG)
+      x <- rbind(x, c(stateProtRep,stateFinderRep,mafiaPunishRep,IG))
     }
   }
 }

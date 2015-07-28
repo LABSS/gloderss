@@ -5,8 +5,6 @@ import emilia.entity.event.NormativeEventType;
 import emilia.entity.event.type.ActionEvent;
 import emilia.entity.event.type.NormativeEvent;
 import emilia.modules.classifier.EventClassifierAbstract;
-import java.util.ArrayList;
-import java.util.List;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.BuyNotPayExtortionAction;
@@ -26,6 +24,8 @@ import gloderss.actions.NotPayExtortionAction;
 import gloderss.actions.PayExtortionAction;
 import gloderss.actions.StatePunishmentAction;
 import gloderss.communication.Message;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EventClassifier extends EventClassifierAbstract {
 	

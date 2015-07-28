@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import javax.xml.bind.annotation.XmlElement;
 import gloderss.Constants;
+import javax.xml.bind.annotation.XmlElement;
 
 public class ChangeConf {
 	

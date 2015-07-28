@@ -1,14 +1,14 @@
-package gloderss.reputation;
+package gloderss.rating;
 
 import gloderss.actions.MafiaPunishmentAction;
 import gloderss.actions.NotPayExtortionAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class MafiaPunisherReputation extends ReputationAbstract {
+public class MafiaPunisherRating extends ReputationAbstract {
 	
 	private final static Logger	logger	= LoggerFactory
-																					.getLogger(MafiaPunisherReputation.class);
+																					.getLogger(MafiaPunisherRating.class);
 	
 	private int									numNoPayers;
 	
@@ -19,7 +19,7 @@ public class MafiaPunisherReputation extends ReputationAbstract {
 	private double							value;
 	
 	
-	public MafiaPunisherReputation(double unknownValue) {
+	public MafiaPunisherRating(double unknownValue) {
 		super(unknownValue);
 		
 		this.numNoPayers = 0;

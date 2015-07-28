@@ -1,14 +1,14 @@
-package gloderss.reputation;
+package gloderss.rating;
 
 import gloderss.actions.CollaborationRequestAction;
 import gloderss.actions.PayExtortionAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StateFinderReputation extends ReputationAbstract {
+public class StateFinderRating extends ReputationAbstract {
 	
 	private final static Logger	logger	= LoggerFactory
-																					.getLogger(StateFinderReputation.class);
+																					.getLogger(StateFinderRating.class);
 	
 	private int									numPayers;
 	
@@ -19,7 +19,7 @@ public class StateFinderReputation extends ReputationAbstract {
 	private double							value;
 	
 	
-	public StateFinderReputation(double unknownValue) {
+	public StateFinderRating(double unknownValue) {
 		super(unknownValue);
 		
 		this.numPayers = 0;

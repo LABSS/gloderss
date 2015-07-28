@@ -1,10 +1,10 @@
 package gloderss.util.random;
 
-import cern.jet.random.engine.MersenneTwister64;
-import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.Normal;
 import cern.jet.random.Poisson;
 import cern.jet.random.Uniform;
+import cern.jet.random.engine.MersenneTwister64;
+import cern.jet.random.engine.RandomEngine;
 
 public class RandomUtil {
 	

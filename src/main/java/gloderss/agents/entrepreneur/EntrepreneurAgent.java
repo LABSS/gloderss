@@ -51,20 +51,20 @@ import gloderss.conf.ChangeConf;
 import gloderss.conf.EntrepreneurConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
-import gloderss.output.AbstractEntity;
-import gloderss.output.EntrepreneurOutputEntity;
-import gloderss.output.ExtortionOutputEntity;
-import gloderss.output.OutputController;
-import gloderss.output.AbstractEntity.EntityType;
-import gloderss.output.CompensationOutputEntity;
-import gloderss.reputation.MafiaPunisherReputation;
-import gloderss.reputation.StateProtectorReputation;
-import gloderss.reputation.StateFinderReputation;
-import gloderss.util.distribution.PDFAbstract;
-import gloderss.util.random.RandomUtil;
 import gloderss.normative.entity.norm.NormContent;
 import gloderss.normative.entity.norm.NormContentSet;
 import gloderss.normative.entity.norm.NormEntity;
+import gloderss.output.AbstractEntity;
+import gloderss.output.AbstractEntity.EntityType;
+import gloderss.output.CompensationOutputEntity;
+import gloderss.output.EntrepreneurOutputEntity;
+import gloderss.output.ExtortionOutputEntity;
+import gloderss.output.OutputController;
+import gloderss.rating.MafiaPunisherRating;
+import gloderss.rating.StateFinderRating;
+import gloderss.rating.StateProtectorRating;
+import gloderss.util.distribution.PDFAbstract;
+import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -75,69 +75,69 @@ import org.slf4j.LoggerFactory;
 public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		NormEnforcementListener {
 	
-	private final static Logger				logger					= LoggerFactory
-																												.getLogger(EntrepreneurAgent.class);
+	private final static Logger		logger					= LoggerFactory
+																										.getLogger(EntrepreneurAgent.class);
 	
-	private final static double				ATAN_FACTOR			= 0.01;
+	private final static double		ATAN_FACTOR			= 0.01;
 	
-	private final static double				DENOUNCE_FACTOR	= 2;
+	private final static double		DENOUNCE_FACTOR	= 2;
 	
-	private int												loggingTimeUnit;
+	private int										loggingTimeUnit;
 	
-	private PDFAbstract								periodicityWagePDF;
+	private PDFAbstract						periodicityWagePDF;
 	
-	private double										minWage;
+	private double								minWage;
 	
-	private double										maxWage;
+	private double								maxWage;
 	
-	private double										varWage;
+	private double								varWage;
 	
-	private double										minPrice;
+	private double								minPrice;
 	
-	private double										maxPrice;
+	private double								maxPrice;
 	
 	@SuppressWarnings("unused")
-	private double										varPrice;
+	private double								varPrice;
 	
-	private double										denounceAlpha;
+	private double								denounceAlpha;
 	
-	private double										collaborationProbability;
+	private double								collaborationProbability;
 	
-	private double										affiliateThreshold;
+	private double								affiliateThreshold;
 	
-	private double										individualWeight;
+	private double								individualWeight;
 	
-	private double										normativeWeight;
+	private double								normativeWeight;
 	
-	private List<ChangeConf>					changesConf;
+	private List<ChangeConf>			changesConf;
 	
-	private int												stateId;
+	private int										stateId;
 	
-	private int												ioId;
+	private int										ioId;
 	
-	private double										wealth;
+	private double								wealth;
 	
-	private double										defaultWage;
+	private double								defaultWage;
 	
-	private double										currentWage;
+	private double								currentWage;
 	
-	private double										productPrice;
+	private double								productPrice;
 	
-	private double										statePunishment;
+	private double								statePunishment;
 	
-	private boolean										affiliated;
+	private boolean								affiliated;
 	
-	private double										criticalConsumers;
+	private double								criticalConsumers;
 	
-	private StateFinderReputation			stateFinderRep;
+	private StateFinderRating			stateFinderRep;
 	
-	private StateProtectorReputation	stateProtectorRep;
+	private StateProtectorRating	stateProtectorRep;
 	
-	private MafiaPunisherReputation		mafiaPunisherRep;
+	private MafiaPunisherRating		mafiaPunisherRep;
 	
-	private EmiliaController					normative;
+	private EmiliaController			normative;
 	
-	private Map<Integer, Boolean>			pay;
+	private Map<Integer, Boolean>	pay;
 	
 	
 	/**
@@ -212,14 +212,14 @@ public class EntrepreneurAgent extends CitizenAgent implements IEntrepreneur,
 		/**
 		 * Reputation
 		 */
-		this.stateFinderRep = new StateFinderReputation(conf.getReputationConf()
+		this.stateFinderRep = new StateFinderRating(conf.getReputationConf()
 				.getStatePunisher());
 		
-		this.stateProtectorRep = new StateProtectorReputation(conf
-				.getReputationConf().getStateProtector());
+		this.stateProtectorRep = new StateProtectorRating(conf.getReputationConf()
+				.getStateProtector());
 		
-		this.mafiaPunisherRep = new MafiaPunisherReputation(conf
-				.getReputationConf().getMafiaPunisher());
+		this.mafiaPunisherRep = new MafiaPunisherRating(conf.getReputationConf()
+				.getMafiaPunisher());
 		
 		/**
 		 * Normative

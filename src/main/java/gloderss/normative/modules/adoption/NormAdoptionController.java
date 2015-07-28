@@ -33,7 +33,7 @@ public class NormAdoptionController extends NormAdoptionAbstract {
 	public void receive(NormativeBoardEventType type, NormEntityAbstract oldNorm,
 			NormEntityAbstract newNorm) {
 		
-		if ((newNorm != null) && (newNorm.getStatus() != NormStatus.GOAL)) {
+		if((newNorm != null) && (newNorm.getStatus() != NormStatus.GOAL)) {
 			
 			logger.debug(type.name() + " " + newNorm.getContent().toString() + " "
 					+ newNorm.getStatus().name());

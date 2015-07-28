@@ -1,4 +1,4 @@
-package gloderss.reputation;
+package gloderss.rating;
 
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenounceExtortionAffiliatedAction;
@@ -9,10 +9,10 @@ import gloderss.actions.StateCompensationAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StateProtectorReputation extends ReputationAbstract {
+public class StateProtectorRating extends ReputationAbstract {
 	
 	private final static Logger	logger	= LoggerFactory
-																					.getLogger(StateProtectorReputation.class);
+																					.getLogger(StateProtectorRating.class);
 	
 	private int									numDenounces;
 	
@@ -27,7 +27,7 @@ public class StateProtectorReputation extends ReputationAbstract {
 	private double							value;
 	
 	
-	public StateProtectorReputation(double unknownValue) {
+	public StateProtectorRating(double unknownValue) {
 		super(unknownValue);
 		
 		this.numDenounces = 0;

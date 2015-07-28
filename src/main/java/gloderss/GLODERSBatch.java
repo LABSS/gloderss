@@ -1,5 +1,9 @@
 package gloderss;
 
+import gloderss.conf.BatchCodeConf;
+import gloderss.conf.BatchConf;
+import gloderss.main.RunSimulation;
+import gloderss.util.file.FileHandler;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,10 +12,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
-import gloderss.conf.BatchCodeConf;
-import gloderss.conf.BatchConf;
-import gloderss.main.RunSimulation;
-import gloderss.util.file.FileHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -36,10 +36,10 @@ import gloderss.conf.IntermediaryOrgConf;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.Event;
 import gloderss.output.AbstractEntity;
+import gloderss.output.AbstractEntity.EntityType;
 import gloderss.output.IntermediaryOrganizationOutputEntity;
 import gloderss.output.NormativeOutputEntity;
 import gloderss.output.OutputController;
-import gloderss.output.AbstractEntity.EntityType;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.function.Const;
 import gloderss.util.function.Tanh;
@@ -49,10 +49,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
 	

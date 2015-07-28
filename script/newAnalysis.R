@@ -41,118 +41,80 @@ for(i in 1:nrow(comb)){
 ## Research Questions
 ##
 #
-# Q1. How effective is a legal only approach?
+# Q1. Can the state do anything against a hidden and beneficial mafia?
 #
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/newFormula/figures/Q1"
+base <- "/data/workspace/gloders/gloderss/output/data"
+baseOutput <- "/data/workspace/gloders/gloderss/output/article/figures/Q1"
+
+dir <- c("iw05-nw05-weak-noNorm-hidden-high-inactive",
+         "iw05-nw05-strong-noNorm-hidden-high-inactive",
+         "iw05-nw05-strong-norm-hidden-high-inactive",
+         "iw05-nw05-strong-noNorm-hidden-high-active",
+         "iw05-nw05-strong-norm-hidden-high-active")
+
+content <- c(1,2,3,4,5)
+order <- c("W-nN-H-H-I", "S-nN-H-H-I", "S-N-H-H-I", "S-nN-H-H-A", "S-N-H-H-A")
+shapes <- c(15,16,17,18,19)
+sizes <- c(10,10,10,10,10)
+fills <- c("black","black","black","black","black")
+lines <- c(1,2,3,4,5)
+
+#
+# Q2. Can the state do anything against a hidden and not beneficial mafia?
+#
+base <- "/data/workspace/gloders/gloderss/output/data"
+baseOutput <- "/data/workspace/gloders/gloderss/output/article/figures/Q2"
+
+dir <- c("iw05-nw05-weak-noNorm-hidden-low-inactive",
+         "iw05-nw05-strong-noNorm-hidden-low-inactive",
+         "iw05-nw05-strong-norm-hidden-low-inactive",
+         "iw05-nw05-strong-noNorm-hidden-low-active",
+         "iw05-nw05-strong-norm-hidden-low-active")
+
+content <- c(1,2,3,4,5)
+order <- c("W-nN-H-L-I", "S-nN-H-L-I", "S-N-H-L-I", "S-nN-H-L-A", "S-N-H-L-A")
+shapes <- c(15,16,17,18,19)
+sizes <- c(10,10,10,10,10)
+fills <- c("black","black","black","black","black")
+lines <- c(1,2,3,4,5)
+
+#
+# Q3. Can the state do anything against a violent and beneficial mafia?
+#
+base <- "/data/workspace/gloders/gloderss/output/data"
+baseOutput <- "/data/workspace/gloders/gloderss/output/article/figures/Q3"
+
+dir <- c("iw05-nw05-weak-noNorm-violent-high-inactive",
+         "iw05-nw05-strong-noNorm-violent-high-inactive",
+         "iw05-nw05-strong-norm-violent-high-inactive",
+         "iw05-nw05-strong-noNorm-violent-high-active",
+         "iw05-nw05-strong-norm-violent-high-active")
+
+content <- c(1,2,3,4,5)
+order <- c("W-nN-V-H-I", "S-nN-V-H-I", "S-N-V-H-I", "S-nN-V-H-A", "S-N-V-H-A")
+shapes <- c(15,16,17,18,19)
+sizes <- c(10,10,10,10,10)
+fills <- c("black","black","black","black","black")
+lines <- c(1,2,3,4,5)
+
+#
+# Q4. Can the state do anything against a violent and not beneficial mafia?
+#
+base <- "/data/workspace/gloders/gloderss/output/data"
+baseOutput <- "/data/workspace/gloders/gloderss/output/article/figures/Q4"
 
 dir <- c("iw05-nw05-weak-noNorm-violent-low-inactive",
          "iw05-nw05-strong-noNorm-violent-low-inactive",
-         "iw05-nw05-weak-noNorm-hidden-low-inactive",
-         "iw05-nw05-strong-noNorm-hidden-low-inactive")
-
-content <- c(1,2,3,4)
-order <- c("weak-violent", "strong-violent", "weak-hidden", "strong-hidden")
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-
-#
-# Q2. How effective is a social norm only approach against violent mafia?
-#
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/newFormula/figures/Q2"
-
-dir <- c("iw05-nw05-weak-noNorm-violent-low-inactive",
-         "iw05-nw05-weak-norm-violent-low-inactive",
-         "iw05-nw05-weak-noNorm-violent-low-active",
-         "iw05-nw05-weak-norm-violent-low-active")
-
-content <- c(1,2,3,4)
-order <- c("noNorm-inactive", "norm-inactive", "noNorm-active", "norm-active")
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-
-#
-# Q3. How effective is a social norm only approach against hidden mafia?
-#
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/newFormula/figures/Q3"
-
-dir <- c("iw05-nw05-weak-noNorm-hidden-low-inactive",
-         "iw05-nw05-weak-norm-hidden-low-inactive",
-         "iw05-nw05-weak-noNorm-hidden-low-active",
-         "iw05-nw05-weak-norm-hidden-low-active")
-
-content <- c(1,2,3,4)
-order <- c("noNorm-inactive", "norm-inactive", "noNorm-active", "norm-active")
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-
-#
-# Q4. How effective is a combined approach against violent mafia?
-#
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/newFormula/figures/Q4"
-
-dir <- c("iw05-nw05-strong-noNorm-violent-low-inactive",
          "iw05-nw05-strong-norm-violent-low-inactive",
          "iw05-nw05-strong-noNorm-violent-low-active",
          "iw05-nw05-strong-norm-violent-low-active")
 
-content <- c(1,2,3,4)
-order <- c("noNorm-inactive", "norm-inactive", "noNorm-active", "norm-active")
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-
-#
-# Q5. How effective is a combined approach against hidden mafia?
-#
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/newFormula/figures/Q5"
-
-dir <- c("iw05-nw05-strong-noNorm-hidden-low-inactive",
-         "iw05-nw05-strong-norm-hidden-low-inactive",
-         "iw05-nw05-strong-noNorm-hidden-low-active",
-         "iw05-nw05-strong-norm-hidden-low-active")
-
-content <- c(1,2,3,4)
-order <- c("noNorm-inactive", "norm-inactive", "noNorm-active", "norm-active")
-shapes <- c(15,16,17,18)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
-
-#
-# Test
-#
-base <- "/data/workspace/gloders/gloderss/output/newFormula"
-baseOutput <- "/data/workspace/gloders/gloderss/output/test"
-
-dir <- c("iw05-nw05-strong-noNorm-hidden-low-inactive",
-         "iw05-nw05-strong-noNorm-hidden-low-active",
-         "iw05-nw05-strong-norm-hidden-low-inactive",
-         "iw05-nw05-strong-norm-hidden-low-active")
-
-content <- c(1,2,3,4)
-order <- c("T1", "T2", "T3", "T4")
-shapes <- c(1,2,3,4)
-sizes <- c(10,10,10,10)
-fills <- c("black","black","black","black")
-lines <- c(1,2,3,4)
-
+content <- c(1,2,3,4,5)
+order <- c("W-nN-V-L-I", "S-nN-V-L-I", "S-N-V-L-I", "S-nN-V-L-A", "S-N-V-L-A")
+shapes <- c(15,16,17,18,19)
+sizes <- c(10,10,10,10,10)
+fills <- c("black","black","black","black","black")
+lines <- c(1,2,3,4,5)
 
 
 ##
@@ -506,7 +468,7 @@ for(i in dirs){
 
 data <- NULL
 for(i in content){
-  data <- rbind(data, cbind(dir[i], ne[,i]))
+  data <- rbind(data, cbind(order[i], ne[,i]))
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","numExt"))
@@ -654,7 +616,7 @@ for(i in dirs){
 
 data <- NULL
 for(i in content){
-  data <- rbind(data, cbind(dir[i], pe[,i]))
+  data <- rbind(data, cbind(order[i], pe[,i]))
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","paidExt"))
@@ -725,7 +687,7 @@ for(i in dirs){
 
 data <- NULL
 for(i in content){
-  data <- rbind(data, cbind(dir[i], pd[,i]))
+  data <- rbind(data, cbind(order[i], pd[,i]))
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","propDen"))
@@ -835,7 +797,7 @@ for(i in dirs){
 
 data <- NULL
 for(i in content){
-  data <- rbind(data, cbind(dir[i], pc[,i]))
+  data <- rbind(data, cbind(order[i], pc[,i]))
 }
 data <- data.frame(data)
 setnames(data,c("X1","X2"),c("scenario","propConv"))

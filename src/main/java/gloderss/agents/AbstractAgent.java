@@ -1,13 +1,13 @@
 package gloderss.agents;
 
-import java.util.List;
-import java.util.Map;
 import gloderss.communication.CommunicationController;
 import gloderss.communication.IComm;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.Message;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.EventHandler;
+import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractAgent implements IComm, EventHandler {
 	

@@ -1,8 +1,8 @@
 package gloderss.normative.entity.norm;
 
 import emilia.entity.norm.NormContentInterface;
-import java.util.List;
 import gloderss.Constants.Actions;
+import java.util.List;
 
 public class NormContentSet implements NormContentInterface {
 	

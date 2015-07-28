@@ -7,18 +7,14 @@ import emilia.entity.norm.NormEntityAbstract.NormStatus;
 import emilia.entity.norm.NormEntityAbstract.NormType;
 import emilia.entity.sanction.SanctionCategory;
 import emilia.entity.sanction.SanctionCategory.Discernability;
-import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.entity.sanction.SanctionCategory.Issuer;
 import emilia.entity.sanction.SanctionCategory.Locus;
 import emilia.entity.sanction.SanctionCategory.Mode;
 import emilia.entity.sanction.SanctionCategory.Polarity;
+import emilia.entity.sanction.SanctionEntityAbstract;
 import emilia.entity.sanction.SanctionEntityAbstract.SanctionStatus;
 import emilia.modules.enforcement.NormEnforcementListener;
 import emilia.modules.salience.DataType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import gloderss.Constants;
 import gloderss.Constants.Actions;
 import gloderss.Constants.Norms;
@@ -68,14 +64,18 @@ import gloderss.normative.entity.norm.NormContentSet;
 import gloderss.normative.entity.norm.NormEntity;
 import gloderss.normative.entity.sanction.SanctionEntity;
 import gloderss.output.AbstractEntity;
+import gloderss.output.AbstractEntity.EntityType;
 import gloderss.output.ConsumerOutputEntity;
 import gloderss.output.OutputController;
-import gloderss.output.AbstractEntity.EntityType;
 import gloderss.output.PurchaseOutputEntity;
-import gloderss.reputation.EntrepreneurReputation;
-import gloderss.reputation.ReputationAbstract;
+import gloderss.rating.EntrepreneurRating;
+import gloderss.rating.ReputationAbstract;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		NormEnforcementListener {
@@ -99,7 +99,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 	
 	private Map<Integer, EntrepreneurAgent>	entrepreneurs;
 	
-	private EntrepreneurReputation					entrepreneurRep;
+	private EntrepreneurRating							entrepreneurRep;
 	
 	private EmiliaControllerConsumer				normative;
 	
@@ -142,7 +142,7 @@ public class ConsumerAgent extends CitizenAgent implements IConsumer,
 		this.changesConf = conf.getChangesConf();
 		
 		this.entrepreneurs = new HashMap<Integer, EntrepreneurAgent>();
-		this.entrepreneurRep = new EntrepreneurReputation(conf.getReputationConf()
+		this.entrepreneurRep = new EntrepreneurRating(conf.getReputationConf()
 				.getEntrepreneurRep());
 		this.buyPDF = PDFAbstract.getInstance(conf.getBuyPDF());
 		this.numberProducts = new HashMap<Integer, Integer>();

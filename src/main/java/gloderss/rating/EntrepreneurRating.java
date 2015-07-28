@@ -1,4 +1,4 @@
-package gloderss.reputation;
+package gloderss.rating;
 
 import gloderss.actions.AffiliationAcceptedAction;
 import gloderss.actions.AffiliationDeniedAction;
@@ -26,12 +26,12 @@ import java.util.Map;
  * Reputation of Entrepreneurs as Non-Extortion Payer and Extortion/Punishment
  * Denouncer
  */
-public class EntrepreneurReputation extends ReputationAbstract {
+public class EntrepreneurRating extends ReputationAbstract {
 	
 	private Map<Integer, Double>	value;
 	
 	
-	public EntrepreneurReputation(double unknownValue) {
+	public EntrepreneurRating(double unknownValue) {
 		super(unknownValue);
 		
 		this.value = new HashMap<Integer, Double>();

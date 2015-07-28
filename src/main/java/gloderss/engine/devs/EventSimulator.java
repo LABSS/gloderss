@@ -1,8 +1,8 @@
 package gloderss.engine.devs;
 
+import gloderss.engine.event.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import gloderss.engine.event.Event;
 
 public class EventSimulator extends AbstractEventSimulator {
 	

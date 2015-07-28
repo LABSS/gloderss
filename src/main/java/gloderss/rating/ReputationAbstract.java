@@ -1,4 +1,4 @@
-package gloderss.reputation;
+package gloderss.rating;
 
 public abstract class ReputationAbstract {
 	

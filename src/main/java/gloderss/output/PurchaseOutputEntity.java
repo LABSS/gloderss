@@ -9,8 +9,8 @@ public class PurchaseOutputEntity extends AbstractEntity {
 		ENTREPRENEUR_ID("entrepreneurId", DataType.INTEGER),
 		BUY_PAY_EXTORTION_SALIENCE("buyPaySalience", DataType.DOUBLE),
 		BUY_NOT_PAY_EXTORTION_SALIENCE("buyNotPaySalience", DataType.DOUBLE),
-		MAX_PRICE("max_price", DataType.DOUBLE),
-		PAID_PRICE("paid_price", DataType.DOUBLE);
+		MAX_PRICE("maxPrice", DataType.DOUBLE),
+		PAID_PRICE("paidPrice", DataType.DOUBLE);
 		
 		private String		name;
 		

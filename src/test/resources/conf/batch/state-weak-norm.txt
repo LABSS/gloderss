@@ -1,0 +1,33 @@
+	<!-- State Configuration Information -->
+	<state>
+		<!-- Police -->
+		<numberPoliceOfficers>5</numberPoliceOfficers>
+		<generalInvestigationDurationPDF>NORMAL(10,5)</generalInvestigationDurationPDF>
+		<bureaucraticActivityDurationPDF>NORMAL(100,5)</bureaucraticActivityDurationPDF>
+		<specificInvestigationDurationPDF>NORMAL(10,5)</specificInvestigationDurationPDF>
+		<specificInvestigationProbability>0.2</specificInvestigationProbability>
+		<captureProbability>0.2</captureProbability>
+		<evidenceProbability>0.01</evidenceProbability>
+
+		<!-- Justice -->
+		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
+		<convictionProbability>0.1</convictionProbability>
+		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
+		<imprisonmentDurationPDF>NORMAL(100,5)</imprisonmentDurationPDF>
+		<noCollaborationPunishmentProbability>0.1</noCollaborationPunishmentProbability>
+		<noCollaborationPunishment>0.1</noCollaborationPunishment>
+
+		<!-- Fondo di Solidarieta -->
+		<timeToCompensationPDF>CONSTANT(50)</timeToCompensationPDF>
+		<resourceFondo>0</resourceFondo>
+		<periodicityFondoPDF>NORMAL(500,100)</periodicityFondoPDF>
+		<proportionTransferFondo>0.0</proportionTransferFondo>
+
+		<!-- Information Spreading -->
+		<spreadInfoFunction>200</spreadInfoFunction>
+		<proportionConsumers>0.05</proportionConsumers>
+		<proportionEntrepreneurs>0.05</proportionEntrepreneurs>
+
+		<changes>
+		</changes>
+	</state>

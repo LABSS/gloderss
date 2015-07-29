@@ -1,0 +1,13 @@
+	<!-- Intermediary Organization Configuration Information -->
+	<intermediaryOrg>
+		<!-- Affiliation -->
+		<timeToAffiliatePDF>NORMAL(200,5)</timeToAffiliatePDF>
+
+		<!-- Information Spreading -->
+		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
+		<proportionConsumers>0.0</proportionConsumers>
+		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+
+		<changes>
+		</changes>
+	</intermediaryOrg>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="scenario.xsd">
+
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>10</numberReplications>
-		<numberCycles>100000</numberCycles>
+		<numberCycles>10000</numberCycles>
 		<networkTopology>SCALEFREE</networkTopology>
 		<citizensDistribution>CLUSTERED</citizensDistribution>
 		<seeds>
@@ -68,6 +69,7 @@
 			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
 		</filename>
 	</general>
+
 	<!-- Environment Configuration Information -->
 	<communication>
 		<types>
@@ -116,6 +118,7 @@
 			<action name="gloderss.actions.StatePunishmentAction">COMPLETE</action>
 		</actions>
 	</communication>
+
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
@@ -142,8 +145,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="3"
@@ -199,8 +202,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -232,8 +235,8 @@
 			</changes>
 		</consumer>
 	</consumers>
-	
-		<!-- Entrepreneurs Configuration Information -->
+
+	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
 			<numberEntrepreneurs>100</numberEntrepreneurs>
@@ -269,8 +272,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="3"
@@ -328,8 +331,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -387,8 +390,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -412,53 +415,55 @@
 			</changes>
 		</entrepreneur>
 	</entrepreneurs>
+
 	<!-- State Configuration Information -->
 	<state>
 		<!-- Police -->
-		<numberPoliceOfficers>5</numberPoliceOfficers>
-		<generalInvestigationDurationPDF>NORMAL(10,5)</generalInvestigationDurationPDF>
-		<bureaucraticActivityDurationPDF>NORMAL(100,5)</bureaucraticActivityDurationPDF>
-		<specificInvestigationDurationPDF>NORMAL(10,5)</specificInvestigationDurationPDF>
-		<specificInvestigationProbability>0.2</specificInvestigationProbability>
-		<captureProbability>0.2</captureProbability>
-		<evidenceProbability>0.01</evidenceProbability>
+		<numberPoliceOfficers>20</numberPoliceOfficers>
+		<generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
+		<bureaucraticActivityDurationPDF>NORMAL(50,10)</bureaucraticActivityDurationPDF>
+		<specificInvestigationDurationPDF>NORMAL(300,10)</specificInvestigationDurationPDF>
+		<specificInvestigationProbability>0.8</specificInvestigationProbability>
+		<captureProbability>0.8</captureProbability>
+		<evidenceProbability>0.2</evidenceProbability>
 
 		<!-- Justice -->
-		<custodyDurationPDF>CONSTANT(10)</custodyDurationPDF>
-		<convictionProbability>0.1</convictionProbability>
+		<custodyDurationPDF>CONSTANT(150)</custodyDurationPDF>
+		<convictionProbability>0.6</convictionProbability>
 		<collaborationConvictionFunction>#{COLLABORATION} * 0.05</collaborationConvictionFunction>
-		<imprisonmentDurationPDF>NORMAL(100,5)</imprisonmentDurationPDF>
-		<noCollaborationPunishmentProbability>0.1</noCollaborationPunishmentProbability>
-		<noCollaborationPunishment>0.1</noCollaborationPunishment>
+		<imprisonmentDurationPDF>NORMAL(500,100)</imprisonmentDurationPDF>
+		<noCollaborationPunishmentProbability>0.3</noCollaborationPunishmentProbability>
+		<noCollaborationPunishment>0.5</noCollaborationPunishment>
 
 		<!-- Fondo di Solidarieta -->
 		<timeToCompensationPDF>CONSTANT(50)</timeToCompensationPDF>
-		<resourceFondo>0</resourceFondo>
+		<resourceFondo>4000</resourceFondo>
 		<periodicityFondoPDF>NORMAL(500,100)</periodicityFondoPDF>
-		<proportionTransferFondo>0.0</proportionTransferFondo>
+		<proportionTransferFondo>0.5</proportionTransferFondo>
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>200</spreadInfoFunction>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionConsumers>0.05</proportionConsumers>
+		<proportionEntrepreneurs>0.05</proportionEntrepreneurs>
 
 		<changes>
 		</changes>
 	</state>
+
 	<!-- Mafia Configuration Information -->
 	<mafia>
 		<numberMafiosi>20</numberMafiosi>
 		<loggingTimeUnit>100</loggingTimeUnit>
 		<wealth>0.00</wealth>
-		<demandPDF>NORMAL(10,2)</demandPDF>
-		<demandAffiliatedProbability>1.0</demandAffiliatedProbability>
-		<extortionLevel>0.10</extortionLevel>
-		<punishmentSeverity>0.75</punishmentSeverity>
+		<demandPDF>NORMAL(3,2)</demandPDF>
+		<demandAffiliatedProbability>0.9</demandAffiliatedProbability>
+		<extortionLevel>0.03</extortionLevel>
+		<punishmentSeverity>0.5</punishmentSeverity>
 		<collectionPDF>CONSTANT(2)</collectionPDF>
-		<punishmentProbability>0.9</punishmentProbability>
+		<punishmentProbability>0.5</punishmentProbability>
 		<minimumBenefit>0.0</minimumBenefit>
 		<maximumBenefit>0.01</maximumBenefit>
-		<pentitiProbability>0.0</pentitiProbability>
+		<pentitiProbability>0.01</pentitiProbability>
 		<!-- recruitingThreshold does not work -->
 		<recruitingThreshold>0.5</recruitingThreshold>
 		<!-- recruitingProbability does not work -->
@@ -467,6 +472,7 @@
 		<changes>
 		</changes>
 	</mafia>
+
 	<!-- Intermediary Organization Configuration Information -->
 	<intermediaryOrg>
 		<!-- Affiliation -->
@@ -474,10 +480,11 @@
 
 		<!-- Information Spreading -->
 		<spreadInfoFunction>tanh(#{NUMBER_ACTIONS},0.1)</spreadInfoFunction>
-		<proportionConsumers>0.0</proportionConsumers>
-		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
+		<proportionConsumers>0.1</proportionConsumers>
+		<proportionEntrepreneurs>0.1</proportionEntrepreneurs>
 
 		<changes>
 		</changes>
 	</intermediaryOrg>
+
 </scenario>

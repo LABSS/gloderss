@@ -171,7 +171,7 @@ public class EntrepreneurRating extends ReputationAbstract {
 			int entrepreneurId = (int) ((NotDenouncePunishmentAction) action)
 					.getParam(NotDenouncePunishmentAction.Param.ENTREPRENEUR_ID);
 			
-			this.setReputation(entrepreneurId, ReputationAbstract.MAX);
+			this.setReputation(entrepreneurId, ReputationAbstract.MIN);
 			
 			// Not denounce punishment Affiliated
 		} else if(action instanceof NotDenouncePunishmentAffiliatedAction) {
@@ -179,7 +179,7 @@ public class EntrepreneurRating extends ReputationAbstract {
 			int entrepreneurId = (int) ((NotDenouncePunishmentAffiliatedAction) action)
 					.getParam(NotDenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID);
 			
-			this.setReputation(entrepreneurId, ReputationAbstract.MAX);
+			this.setReputation(entrepreneurId, ReputationAbstract.MIN);
 			
 			// Mafia benefit
 		} else if(action instanceof MafiaBenefitAction) {

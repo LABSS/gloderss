@@ -2,7 +2,7 @@ package gloderss.communication;
 
 public class InfoRequest extends InfoAbstract {
 	
-	private String	infoRequest;
+	private String	parameter;
 	
 	
 	/**
@@ -23,22 +23,22 @@ public class InfoRequest extends InfoAbstract {
 	 *          Sender identification
 	 * @param receiver
 	 *          Receiver identification
-	 * @param infoRequest
+	 * @param parameter
 	 *          Information requested
 	 * @return Value of the information requested
 	 */
-	public InfoRequest(int sender, int receiver, String infoRequest) {
+	public InfoRequest(int sender, int receiver, String parameter) {
 		super(InfoAbstract.Type.REQUEST, sender, receiver);
-		this.infoRequest = infoRequest;
+		this.parameter = parameter;
 	}
 	
 	
 	public String getInfoRequest() {
-		return this.infoRequest;
+		return this.parameter;
 	}
 	
 	
-	public void setInfoRequest(String infoRequest) {
-		this.infoRequest = infoRequest;
+	public void setInfoRequest(String parameter) {
+		this.parameter = parameter;
 	}
 }

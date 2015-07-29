@@ -472,9 +472,9 @@ public final class Constants {
 	
 	public static final String	EVENT_COLLECT_EXTORTION			= "eventCollectExtortion";
 	
-	public static final String	EVENT_DEMAND_EXTORTION			= "eventDecideExtortion";
+	public static final String	EVENT_DEMAND_EXTORTION			= "eventDemandExtortion";
 	
-	public static final String	EVENT_GENERAL_INVESTIGATION	= "eventgeneralInvestigation";
+	public static final String	EVENT_GENERAL_INVESTIGATION	= "eventGeneralInvestigation";
 	
 	public static final String	EVENT_LOGGING_CONSUMERS			= "eventLoggingConsumers";
 	

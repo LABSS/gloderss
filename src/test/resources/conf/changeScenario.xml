@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="scenario.xsd">
+
 	<!-- General Configuration Information -->
 	<general>
 		<numberReplications>10</numberReplications>
-		<numberCycles>100000</numberCycles>
+		<numberCycles>50000</numberCycles>
 		<networkTopology>SCALEFREE</networkTopology>
 		<citizensDistribution>CLUSTERED</citizensDistribution>
 		<seeds>
@@ -68,6 +69,7 @@
 			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
 		</filename>
 	</general>
+
 	<!-- Environment Configuration Information -->
 	<communication>
 		<types>
@@ -116,6 +118,7 @@
 			<action name="gloderss.actions.StatePunishmentAction">COMPLETE</action>
 		</actions>
 	</communication>
+
 	<!-- Consumers Configuration Information -->
 	<consumers>
 		<consumer>
@@ -142,8 +145,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="3"
@@ -199,8 +202,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/consumer.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -232,8 +235,8 @@
 			</changes>
 		</consumer>
 	</consumers>
-	
-		<!-- Entrepreneurs Configuration Information -->
+
+	<!-- Entrepreneurs Configuration Information -->
 	<entrepreneurs>
 		<entrepreneur>
 			<numberEntrepreneurs>100</numberEntrepreneurs>
@@ -269,8 +272,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="3"
@@ -328,8 +331,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -387,8 +390,8 @@
 			<!-- Normative -->
 			<normativeXML>src/main/resources/conf/entrepreneur.xml</normativeXML>
 			<normativeXSD>src/main/resources/conf/emilia.xsd</normativeXSD>
-			<individualWeight>0.5</individualWeight>
-			<normativeWeight>0.5</normativeWeight>
+			<individualWeight>0.3</individualWeight>
+			<normativeWeight>0.7</normativeWeight>
 			<normsSalience>
 				<!-- Pay Extortion -->
 				<normSalience id="0" active="true" compliance="1"
@@ -412,6 +415,7 @@
 			</changes>
 		</entrepreneur>
 	</entrepreneurs>
+
 	<!-- State Configuration Information -->
 	<state>
 		<!-- Police -->
@@ -443,8 +447,84 @@
 		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 
 		<changes>
+			<change>
+				<time>10000</time>
+				<parameter>generalInvestigationDurationPDF</parameter>
+				<value>NORMAL(100,10)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>bureaucraticActivityDurationPDF</parameter>
+				<value>NORMAL(50,10)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>specificInvestigationDurationPDF</parameter>
+				<value>NORMAL(300,10)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>specificInvestigationProbability</parameter>
+				<value>0.8</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>captureProbability</parameter>
+				<value>0.8</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>evidenceProbability</parameter>
+				<value>0.2</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>custodyDurationPDF</parameter>
+				<value>CONSTANT(150)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>convictionProbability</parameter>
+				<value>0.6</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>imprisonmentDurationPDF</parameter>
+				<value>NORMAL(500,100)</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>noCollaborationPunishmentProbability</parameter>
+				<value>0.3</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>noCollaborationPunishment</parameter>
+				<value>0.5</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>resourceFondo</parameter>
+				<value>4000</value>
+			</change>
+			<change>
+				<time>10000</time>
+				<parameter>proportionTransferFondo</parameter>
+				<value>0.5</value>
+			</change>
+			<change>
+				<time>40000</time>
+				<parameter>proportionConsumers</parameter>
+				<value>0.1</value>
+			</change>
+			<change>
+				<time>40000</time>
+				<parameter>proportionEntrepreneurs</parameter>
+				<value>0.1</value>
+			</change>
 		</changes>
 	</state>
+
 	<!-- Mafia Configuration Information -->
 	<mafia>
 		<numberMafiosi>20</numberMafiosi>
@@ -465,8 +545,39 @@
 		<recruitingProbability>0.05</recruitingProbability>
 
 		<changes>
+			<change>
+				<time>20000</time>
+				<parameter>demandPDF</parameter>
+				<value>NORMAL(3,2)</value>
+			</change>
+			<change>
+				<time>20000</time>
+				<parameter>demandAffiliatedProbability</parameter>
+				<value>0.9</value>
+			</change>
+			<change>
+				<time>20000</time>
+				<parameter>extortionLevel</parameter>
+				<value>0.03</value>
+			</change>
+			<change>
+				<time>20000</time>
+				<parameter>punishmentSeverity</parameter>
+				<value>0.5</value>
+			</change>
+			<change>
+				<time>20000</time>
+				<parameter>punishmentProbability</parameter>
+				<value>0.5</value>
+			</change>
+			<change>
+				<time>20000</time>
+				<parameter>pentitiProbability</parameter>
+				<value>0.01</value>
+			</change>
 		</changes>
 	</mafia>
+
 	<!-- Intermediary Organization Configuration Information -->
 	<intermediaryOrg>
 		<!-- Affiliation -->
@@ -478,6 +589,17 @@
 		<proportionEntrepreneurs>0.0</proportionEntrepreneurs>
 
 		<changes>
+			<change>
+				<time>30000</time>
+				<parameter>proportionConsumers</parameter>
+				<value>0.1</value>
+			</change>
+			<change>
+				<time>30000</time>
+				<parameter>proportionEntrepreneurs</parameter>
+				<value>0.1</value>
+			</change>
 		</changes>
 	</intermediaryOrg>
+
 </scenario>

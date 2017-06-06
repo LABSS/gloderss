@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+
+	<element name="randomBatch">
+		<complexType>
+			<sequence>
+				<element name="outputDir" type="string" />
+				<element name="outputFile" type="string" />
+				<element name="replica" type="positiveInteger" />
+				<element name="xmlScenario" type="string" />
+				<element name="xsdScenario" type="string" />
+				<element maxOccurs="1" name="changes">
+					<complexType>
+						<sequence>
+							<element minOccurs="1" maxOccurs="unbounded" name="change">
+								<complexType>
+									<sequence>
+										<element name="name" type="string" />
+										<element name="parameter" type="string" />
+										<element name="type" type="string" />
+										<element name="value" type="string" />
+									</sequence>
+								</complexType>
+							</element>
+						</sequence>
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

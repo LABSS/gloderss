@@ -17,6 +17,8 @@
 		<content code="iw05-nw05">citizens-iw05-nw05.txt</content>
 	</citizens>
 	<states>
+		<content code="no-noNorm">state-no-noNorm.txt</content>
+		<content code="no-norm">state-no-norm.txt</content>
 		<content code="weak-noNorm">state-weak-noNorm.txt</content>
 		<content code="weak-norm">state-weak-norm.txt</content>
 		<content code="strong-noNorm">state-strong-noNorm.txt</content>

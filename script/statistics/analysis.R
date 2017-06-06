@@ -16,7 +16,7 @@ dir <- c("iw05-nw05-weak-noNorm-violent-low-inactive",
 
 content <- c(1, 2)
 order <- c("violent", "hidden")
-fills <- c("black", "black")
+fills <- c("white", "white")
 lines <- c(1, 2)
 
 
@@ -198,7 +198,7 @@ png(filename=paste0(baseOutput,"/numExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario),
                  y=as.numeric(as.character(nExt)),
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Number of requests for pizzo made') +
+  xlab('Configuration') + ylab('Number of requests for pizzo made') +
   ylim(0,350000) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -238,7 +238,7 @@ png(filename=paste0(baseOutput,"/numPaidExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario),
                  y=as.numeric(as.character(nPaid)),
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Number of pizzo payments made') +
+  xlab('Configuration') + ylab('Number of pizzo payments made') +
   ylim(0,350000) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -281,7 +281,7 @@ png(filename=paste0(baseOutput,"/numReported.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario),
                  y=as.numeric(as.character(nRep)),
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Number of pizzo requests reported') +
+  xlab('Configuration') + ylab('Number of pizzo requests reported') +
   ylim(0,5000) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -317,13 +317,13 @@ for(i in content){
   data <- rbind(data, cbind(order[i], np[,i]))
 }
 data <- data.frame(data)
-setnames(data,c("X1","X2"),c("scenario","nPun"))
+setnames(data,c("X1","X2"),c("Configuration","nPun"))
 
 png(filename=paste0(baseOutput,"/numPun.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario),
                  y=as.numeric(as.character(nPun)),
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Number of punishments') +
+  xlab('Configuration') + ylab('Number of punishments') +
   ylim(0,100000) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -369,7 +369,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlab('Time units') + ylab('Number of mafiosi imprisoned') +
   xlim(0,simLen) + ylim(0,20) +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -411,7 +411,7 @@ setnames(data,c("X1","X2"),c("scenario","paidExt"))
 png(filename=paste0(baseOutput,"/propPaidExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(paidExt))*100,
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Proportion of paid extortion') + ylim(0,100) +
+  xlab('Configuration') + ylab('Proportion of paid pizzo') + ylim(0,100) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -465,7 +465,7 @@ setnames(data,c("X1","X2"),c("scenario","propDen"))
 png(filename=paste0(baseOutput,"/propDenExt.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propDen))*100,
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Proportion of pizzo requests reported') + ylim(0,15) +
+  xlab('Configuration') + ylab('Proportion of pizzo requests reported') + ylim(0,15) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -508,7 +508,7 @@ setnames(data,c("X1","X2"),c("scenario","propPun"))
 png(filename=paste0(baseOutput,"/propPun.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propPun))*100,
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Proportion of punishments') + ylim(0,100) +
+  xlab('Configuration') + ylab('Proportion of punishments') + ylim(0,100) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -552,7 +552,7 @@ setnames(data,c("X1","X2"),c("scenario","propPunNPay"))
 png(filename=paste0(baseOutput,"/propPunNPay.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propPunNPay))*100,
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Proportion of punishments') + ylim(0,100) +
+  xlab('Configuration') + ylab('Proportion of punishments') + ylim(0,100) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -598,7 +598,7 @@ setnames(data,c("X1","X2"),c("scenario","propConv"))
 png(filename=paste0(baseOutput,"/propImprisonment.png"), width=1024, height=768)
 ggplot(data, aes(x=factor(scenario), y=as.numeric(as.character(propConv))*100,
                  fill=factor(scenario))) +
-  xlab('Scenario') + ylab('Proportion of investigations\n leading to imprisonment') + ylim(0,5) +
+  xlab('Configuration') + ylab('Proportion of investigations\n leading to imprisonment') + ylim(0,5) +
   geom_boxplot(fill=fills) +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
@@ -650,7 +650,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time units') + ylab('Norm salience of \n \'Pay pizzo\' ') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -696,7 +696,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time units') + ylab('Norm salience of \n \'Do not pay pizzo\' ') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -742,7 +742,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time units') + ylab('Norm salience of \n \'Report\' ') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -788,7 +788,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time Units') + ylab('Norm salience of \n \'Do not report\' ') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -838,7 +838,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time units') + ylab('Reputation of the State as finder') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -884,7 +884,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,1) +
   xlab('Time units') + ylab('Reputation of the State as protector') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -930,7 +930,7 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
   xlim(0,simLen) + ylim(0,100) +
   xlab('Time units') + ylab('Reputation of the Mafia as punisher') +
   geom_line(size=1, colour="black") +
-  scale_linetype_discrete(name='Scenario') +
+  scale_linetype_discrete(name='Configuration') +
   theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
         axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
@@ -944,6 +944,109 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
         legend.title = element_text(colour="black", size=36, face="bold"))
 dev.off()
 
+
+##
+## PER CONFIGURATION GRAPHICS
+##
+
+for(i in dirs){
+  
+##
+## SALIENCE HISTOGRAM
+##
+
+##
+## Pay Pizzo
+##
+png(filename=paste0(base,dir[i],"/histSalPayExt.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=saliencePayExtortion)) +
+  xlim(0,1) + ylim(0,100) +
+  ylab('Number of Entrepreneurs') + xlab('Norm salience of \n \'Pay pizzo\' ') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(saliencePayExtortion, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+
+##
+## Do Not Pay Pizzo
+##
+png(filename=paste0(base,dir[i],"/histSalNotPayExt.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceNotPayExtortion)) +
+  xlim(0,1) + ylim(0,100) +
+  ylab('Number of Entrepreneurs') + xlab('Norm salience of \n \'Do not pay pizzo\' ') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceNotPayExtortion, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+
+##
+## Report
+##
+png(filename=paste0(base,dir[i],"/histSalRep.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceDenounce)) +
+  xlim(0,1) + ylim(0,100) +
+  ylab('Number of Entrepreneurs') + xlab('Norm salience of \n \'Report\' ') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceDenounce, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+
+##
+## Do Not Report
+##
+png(filename=paste0(base,dir[i],"/histSalNotRep.png"), width=1024, height=768)
+ggplot(entrepreneur[[i]], aes(x=salienceNotDenounce)) +
+  xlim(0,1) + ylim(0,100) +
+  ylab('Number of Entrepreneurs') + xlab('Norm salience of \n \'Do not report\' ') +
+  geom_histogram(aes(y=..density..),
+                 binwidth=.05, colour="black", fill="white", size=1.5) +
+  geom_vline(aes(xintercept=mean(salienceNotDenounce, na.rm=T)),
+             color="red", linetype="dashed", size=1.5) +
+  geom_density(alpha=.05, fill="black", linetype="dotted", size=1.0) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank())
+dev.off()
+
+}
 
 ##
 ## DECISION
@@ -1020,3 +1123,70 @@ ggplot(data, aes(x=as.numeric(as.character(time)),
         panel.grid.major = element_blank(),
         legend.title = element_blank(),
         legend.text = element_text(colour="black", size=36, face="bold"))
+
+
+##
+## NORM SHIFT
+##
+n <- c(0,100,200,250,300,400)
+for(i in dirs){
+  aux <- data.table(entrepreneur[[i]])
+  new <- nrow(aux[which((time == simLen) &
+                          (saliencePayExtortion <= salienceNotPayExtortion) &
+                          (salienceDenounce >= salienceNotDenounce)),])
+  
+  traditional <- nrow(aux[which((time == simLen) &
+                                  (saliencePayExtortion > salienceNotPayExtortion) &
+                                  (salienceDenounce < salienceNotDenounce)),])
+  
+  onlyNotPay <- nrow(aux[which((time == simLen) &
+                                 (saliencePayExtortion <= salienceNotPayExtortion) &
+                                 (salienceDenounce < salienceNotDenounce)),])
+  
+  onlyDenounce <- nrow(aux[which((time == simLen) &
+                                   (saliencePayExtortion > salienceNotPayExtortion) &
+                                   (salienceDenounce >= salienceNotDenounce)),])
+  
+  print(c(i, traditional, onlyNotPay, onlyDenounce, new, (new+traditional+onlyNotPay+onlyDenounce)))
+  z <- i %% 6
+  if(z == 0){
+    z <- 6
+  }
+  print(c(i, (((ent-n[z])-traditional)/ent), onlyNotPay/ent, onlyDenounce/ent, ((new-n[z])/ent)))
+}
+
+
+##
+## VALIDATION
+##
+city <- c("Agrigento",
+          "Catania",
+          "Messina",
+          "Palermo",
+          "Siracusa",
+          "Trapani",
+          "P1",
+          "P2",
+          "P3",
+          "P4",
+          "P5")
+
+y <- c(0.630,0.845,0.759,0.669,0.833,0.333,as.array(propPaid))
+x <- c(0.716,0.764,0.759,0.829,0.867,0.762,as.array(1 - propDen))
+
+data <- data.table(cbind(city,x,y))
+
+ggplot(data, aes(x=as.numeric(as.character(x))*100, y=as.numeric(as.character(y))*100)) +
+  xlim(0,100) + ylim(0,100) +
+  xlab('% Unreported Cases') + ylab('% Completed Extortions') +
+  geom_point(aes(color=as.character(city)), size=6) +
+  theme(axis.title.x = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.title.y = element_text(colour = 'black', size = 36, face = 'bold'),
+        axis.text.x = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.text.y = element_text(colour = 'black', size = 24, face = 'bold'),
+        axis.line = element_line(colour = 'black', size = 1.5, linetype = 'solid'),
+        panel.background = element_rect(fill = "transparent",colour = NA),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        legend.title = element_blank(),
+        legend.text = element_text(colour="black", size=24, face="bold"))

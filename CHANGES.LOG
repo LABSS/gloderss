@@ -1,6 +1,14 @@
 Changes
 =======
 
+08/05/2017
+----------
+1. (New Feature) Created the GLODERSRandomBatch that allows the execution of a set of
+   simulations in batch mode with random parameter values.
+
+13/01/2017
+1. (Fix) Fixed the duplicated log of the last timestep of the Mafiosi data
+
 10/06/2015
 1. (New Feature) Created the GLODERSBatch that allows the execution of a set of combinatorial 
    simulations in batch mode. An XML file needs to be provided with the configuration of the

@@ -23,7 +23,7 @@ public class ScenarioTest {
       File file = new File("./src/main/resources/conf/scenario.xsd");
       System.out.println(file.exists());
       
-      file = new File("./src/main/resources/conf/scenario.xml");
+      file = new File("/data/workspace/gloders/gloderss/output/85/scenario.xml");
       System.out.println(file.exists());
       
       Schema schema = factory.newSchema(
@@ -31,12 +31,14 @@ public class ScenarioTest {
       
       Validator validator = schema.newValidator();
       validator
-          .validate(new StreamSource("./src/main/resources/conf/scenario.xml"));
+          .validate(new StreamSource("/data/workspace/gloders/gloderss/output/85/scenario.xml"));
       
       valid = true;
       
     } catch(SAXException e) {
+    	System.out.println(e.getMessage());
     } catch(Exception e) {
+    	System.out.println(e.getMessage());
     }
     
     System.out.println(valid);

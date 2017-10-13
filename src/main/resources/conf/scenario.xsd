@@ -123,16 +123,16 @@
 													<element name="entrepreneur">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
 													<element name="entrepreneurThreshold">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
@@ -147,16 +147,16 @@
 													<element name="threshold">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
 													<element name="discernability">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
@@ -170,16 +170,16 @@
 										<element name="individualWeight">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="normativeWeight">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -242,7 +242,7 @@
 										<element name="wealth">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
+													<minInclusive value="0.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -250,36 +250,36 @@
 										<element name="minimumWage">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
+													<minInclusive value="0.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="maximumWage">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
+													<minInclusive value="0.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="variationWage">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="minimumPrice">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
+													<minInclusive value="0.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="maximumPrice">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
+													<minInclusive value="0.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -288,8 +288,8 @@
 										<element name="denounceAlpha">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -298,8 +298,8 @@
 										<element name="collaborationProbability">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -308,8 +308,8 @@
 										<element name="affiliateThreshold">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -322,24 +322,24 @@
 													<element name="stateProtector">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
 													<element name="statePunisher">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
 													<element name="mafiaPunisher">
 														<simpleType>
 															<restriction base="decimal">
-																<minInclusive value="0.0" />
-																<maxInclusive value="1.0" />
+																<minInclusive value="0.00" />
+																<maxInclusive value="1.00" />
 															</restriction>
 														</simpleType>
 													</element>
@@ -353,16 +353,16 @@
 										<element name="individualWeight">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
 										<element name="normativeWeight">
 											<simpleType>
 												<restriction base="decimal">
-													<minInclusive value="0.0" />
-													<maxInclusive value="1.0" />
+													<minInclusive value="0.00" />
+													<maxInclusive value="1.00" />
 												</restriction>
 											</simpleType>
 										</element>
@@ -422,24 +422,24 @@
 							<element name="specificInvestigationProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="captureProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="evidenceProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -449,8 +449,8 @@
 							<element name="convictionProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -460,16 +460,16 @@
 							<element name="noCollaborationPunishmentProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="noCollaborationPunishment">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -479,7 +479,7 @@
 							<element name="resourceFondo">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -487,8 +487,8 @@
 							<element name="proportionTransferFondo">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -527,7 +527,7 @@
 							<element name="wealth">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -535,22 +535,22 @@
 							<element name="demandAffiliatedProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="extortionLevel">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="punishmentSeverity">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
@@ -558,46 +558,46 @@
 							<element name="punishmentProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxExclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="minimumBenefit">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="maximumBenefit">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
+										<minInclusive value="0.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="pentitiProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="recruitingThreshold">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>
 							<element name="recruitingProbability">
 								<simpleType>
 									<restriction base="decimal">
-										<minInclusive value="0.0" />
-										<maxInclusive value="1.0" />
+										<minInclusive value="0.00" />
+										<maxInclusive value="1.00" />
 									</restriction>
 								</simpleType>
 							</element>

@@ -4,7 +4,7 @@
 	
 	<outputDir>./output</outputDir>
 	<outputFile>config.csv</outputFile>
-	<replica>1000</replica>
+	<replica>500</replica>
 	
 	<xmlScenario>./src/main/resources/conf/scenario.xml</xmlScenario>
 	<xsdScenario>./src/main/resources/conf/scenario.xsd</xsdScenario>

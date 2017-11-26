@@ -7,13 +7,13 @@ public class PDPoisson extends PDFAbstract {
   private double lambda;
   
   
-  public PDPoisson(double lambda) {
+  public PDPoisson( double lambda ) {
     this.lambda = lambda;
   }
   
   
   @Override
   public double nextValue() {
-    return RandomUtil.nextPoisson(this.lambda);
+    return RandomUtil.nextPoisson( this.lambda );
   }
 }

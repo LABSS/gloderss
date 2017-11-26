@@ -1,8 +1,8 @@
 package gloderss.actions;
 
+import java.util.HashMap;
 import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
-import java.util.HashMap;
 
 public class ExtortionAction extends ActionAbstract {
   
@@ -33,16 +33,15 @@ public class ExtortionAction extends ActionAbstract {
    *          Benefit amount
    * @return none
    */
-  public ExtortionAction(int extortionId, int mafiosoId, int entrepreneurId,
-      double extortion, double punishment, double benefit) {
-    super(Actions.EXTORTION.ordinal(), Actions.EXTORTION.name());
+  public ExtortionAction( int extortionId, int mafiosoId, int entrepreneurId, double extortion, double punishment, double benefit ) {
+    super( Actions.EXTORTION.ordinal(), Actions.EXTORTION.name() );
     
     this.params = new HashMap<Object, Object>();
-    this.params.put(Param.EXTORTION_ID, extortionId);
-    this.params.put(Param.MAFIOSO_ID, mafiosoId);
-    this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
-    this.params.put(Param.EXTORTION, extortion);
-    this.params.put(Param.PUNISHMENT, punishment);
-    this.params.put(Param.BENEFIT, benefit);
+    this.params.put( Param.EXTORTION_ID, extortionId );
+    this.params.put( Param.MAFIOSO_ID, mafiosoId );
+    this.params.put( Param.ENTREPRENEUR_ID, entrepreneurId );
+    this.params.put( Param.EXTORTION, extortion );
+    this.params.put( Param.PUNISHMENT, punishment );
+    this.params.put( Param.BENEFIT, benefit );
   }
 }

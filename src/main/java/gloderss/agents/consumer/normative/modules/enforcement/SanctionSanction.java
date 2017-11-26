@@ -21,17 +21,17 @@ public class SanctionSanction implements SanctionContentInterface {
    *          Norm sanctioned
    * @return none
    */
-  public SanctionSanction(int consumerId, String norm) {
+  public SanctionSanction( int consumerId, String norm ) {
     this.consumerId = consumerId;
     this.norm = norm;
   }
   
   
   @Override
-  public void execute(Object input) {
+  public void execute( Object input ) {
     int entrepreneurId = (int) input;
-    this.normSanctionAction = new NormSanctionAction(this.consumerId,
-        entrepreneurId, this.norm);
+    this.normSanctionAction = new NormSanctionAction( this.consumerId,
+        entrepreneurId, this.norm );
   }
   
   

@@ -1,8 +1,8 @@
 package gloderss.agents;
 
-import gloderss.engine.devs.EventSimulator;
 import java.util.ArrayList;
 import java.util.List;
+import gloderss.engine.devs.EventSimulator;
 
 public abstract class CitizenAgent extends AbstractAgent {
   
@@ -16,8 +16,8 @@ public abstract class CitizenAgent extends AbstractAgent {
    *          Citizen agent identification
    * @return none
    */
-  public CitizenAgent(Integer id, EventSimulator simulator) {
-    super(id, simulator);
+  public CitizenAgent( Integer id, EventSimulator simulator ) {
+    super( id, simulator );
     
     this.neighbors = new ArrayList<Integer>();
   }
@@ -34,16 +34,16 @@ public abstract class CitizenAgent extends AbstractAgent {
   }
   
   
-  public void setNeighbors(List<Integer> neighbors) {
+  public void setNeighbors( List<Integer> neighbors ) {
     
     // Remove the current neighbors as observed
-    this.removeObservation(this.id, this.neighbors);
+    this.removeObservation( this.id, this.neighbors );
     
     // Add the new neighbors as observed
     this.neighbors.clear();
-    for(Integer neighborId : neighbors) {
-      this.neighbors.add(neighborId);
+    for ( Integer neighborId : neighbors ) {
+      this.neighbors.add( neighborId );
     }
-    this.addObservation(this.id, this.neighbors);
+    this.addObservation( this.id, this.neighbors );
   }
 }

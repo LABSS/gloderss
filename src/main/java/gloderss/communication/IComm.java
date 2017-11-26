@@ -9,7 +9,7 @@ public interface IComm {
    *          Message
    * @return none
    */
-  public void handleMessage(Message msg);
+  public void handleMessage( Message msg );
   
   
   /**
@@ -19,7 +19,7 @@ public interface IComm {
    *          Info Request or Info Set
    * @return Information requested
    */
-  public Object handleInfo(InfoAbstract info);
+  public Object handleInfo( InfoAbstract info );
   
   
   /**
@@ -29,5 +29,5 @@ public interface IComm {
    *          Message
    * @return none
    */
-  public void handleObservation(Message msg);
+  public void handleObservation( Message msg );
 }

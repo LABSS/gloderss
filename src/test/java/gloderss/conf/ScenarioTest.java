@@ -1,6 +1,6 @@
 package gloderss.conf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import java.io.File;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
@@ -18,31 +18,32 @@ public class ScenarioTest {
     
     try {
       SchemaFactory factory = SchemaFactory
-          .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+          .newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
       
-      File file = new File("./src/main/resources/conf/scenario.xsd");
-      System.out.println(file.exists());
+      File file = new File( "./src/main/resources/conf/scenario.xsd" );
+      System.out.println( file.exists() );
       
-      file = new File("/data/workspace/gloders/gloderss/output/85/scenario.xml");
-      System.out.println(file.exists());
+      file = new File(
+          "/data/workspace/gloders/gloderss/output/85/scenario.xml" );
+      System.out.println( file.exists() );
       
       Schema schema = factory.newSchema(
-          new StreamSource("./src/main/resources/conf/scenario.xsd"));
+          new StreamSource( "./src/main/resources/conf/scenario.xsd" ) );
       
       Validator validator = schema.newValidator();
-      validator
-          .validate(new StreamSource("/data/workspace/gloders/gloderss/output/85/scenario.xml"));
+      validator.validate( new StreamSource(
+          "/data/workspace/gloders/gloderss/output/85/scenario.xml" ) );
       
       valid = true;
       
-    } catch(SAXException e) {
-    	System.out.println(e.getMessage());
-    } catch(Exception e) {
-    	System.out.println(e.getMessage());
+    } catch ( SAXException e ) {
+      System.out.println( e.getMessage() );
+    } catch ( Exception e ) {
+      System.out.println( e.getMessage() );
     }
     
-    System.out.println(valid);
-    assertTrue(valid);
+    System.out.println( valid );
+    assertTrue( valid );
   }
   
 }

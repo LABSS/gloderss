@@ -1,11 +1,5 @@
 package gloderss.output;
 
-import gloderss.Constants;
-import gloderss.conf.OutputConf;
-import gloderss.engine.devs.EventSimulator;
-import gloderss.engine.event.Event;
-import gloderss.engine.event.EventHandler;
-import gloderss.output.AbstractEntity.EntityType;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,11 +15,17 @@ import java.util.LinkedList;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import gloderss.Constants;
+import gloderss.conf.OutputConf;
+import gloderss.engine.devs.EventSimulator;
+import gloderss.engine.event.Event;
+import gloderss.engine.event.EventHandler;
+import gloderss.output.AbstractEntity.EntityType;
 
 public class OutputController implements EventHandler {
   
   private final static Logger                           logger = LoggerFactory
-      .getLogger(OutputController.class);
+      .getLogger( OutputController.class );
   
   private static OutputController                       instance;
   
@@ -59,13 +59,13 @@ public class OutputController implements EventHandler {
    *          Output configuration
    * @return none
    */
-  public OutputController(EventSimulator simulator, OutputConf conf) {
+  public OutputController( EventSimulator simulator, OutputConf conf ) {
     this.simulator = simulator;
     
     this.directory = conf.getDirectory();
     
     this.options = new OpenOption[4];
-    if(conf.getAppend()) {
+    if ( conf.getAppend() ) {
       this.options[0] = StandardOpenOption.CREATE;
       this.options[1] = StandardOpenOption.WRITE;
       this.options[2] = StandardOpenOption.SYNC;
@@ -93,9 +93,9 @@ public class OutputController implements EventHandler {
    * @return none
    */
   public void initializeSim() {
-    Event event = new Event(this.simulator.now() + this.timeToWrite, this,
-        Constants.EVENT_WRITE_DATA);
-    this.simulator.insert(event);
+    Event event = new Event( this.simulator.now() + this.timeToWrite, this,
+        Constants.EVENT_WRITE_DATA );
+    this.simulator.insert( event );
   }
   
   
@@ -117,8 +117,8 @@ public class OutputController implements EventHandler {
    *          Replica of the simulation
    * @return none
    */
-  public void newInstance(int replica) {
-    if(this.replication != replica) {
+  public void newInstance( int replica ) {
+    if ( this.replication != replica ) {
       this.file = new HashMap<EntityType, BufferedWriter>();
       this.entities = new LinkedHashMap<EntityType, Map<Integer, AbstractEntity>>();
       this.entityId = new HashMap<EntityType, Integer>();
@@ -138,29 +138,29 @@ public class OutputController implements EventHandler {
    *          File name to write the data of this entity type
    * @return none
    */
-  public void init(EntityType type, String filename) {
+  public void init( EntityType type, String filename ) {
     
-    if(!this.file.containsKey(type)) {
+    if ( !this.file.containsKey( type ) ) {
       
       try {
-        Path dirPath = FileSystems.getDefault().getPath(this.directory
-            + FileSystems.getDefault().getSeparator() + this.replication);
-        Files.createDirectories(dirPath);
+        Path dirPath = FileSystems.getDefault().getPath( this.directory
+            + FileSystems.getDefault().getSeparator() + this.replication );
+        Files.createDirectories( dirPath );
         
-        Path pFile = FileSystems.getDefault().getPath(dirPath.toString(),
-            filename);
+        Path pFile = FileSystems.getDefault().getPath( dirPath.toString(),
+            filename );
         
-        BufferedWriter file = Files.newBufferedWriter(pFile,
-            Charset.forName(Constants.ENCONDING), this.options);
+        BufferedWriter file = Files.newBufferedWriter( pFile,
+            Charset.forName( Constants.ENCONDING ), this.options );
         
-        this.file.put(type, file);
+        this.file.put( type, file );
         
         Map<Integer, AbstractEntity> typeEntities = new HashMap<Integer, AbstractEntity>();
-        this.entities.put(type, typeEntities);
+        this.entities.put( type, typeEntities );
         
-        this.entityId.put(type, 0);
-        this.firstWrite.put(type, true);
-      } catch(IOException e) {
+        this.entityId.put( type, 0 );
+        this.firstWrite.put( type, true );
+      } catch ( IOException e ) {
         e.printStackTrace();
       }
     }
@@ -174,9 +174,9 @@ public class OutputController implements EventHandler {
    *          Entity type
    * @return Set of entities
    */
-  public Collection<AbstractEntity> getEntities(EntityType type) {
-    if(this.entities.containsKey(type)) {
-      return this.entities.get(type).values();
+  public Collection<AbstractEntity> getEntities( EntityType type ) {
+    if ( this.entities.containsKey( type ) ) {
+      return this.entities.get( type ).values();
     }
     
     return new LinkedList<AbstractEntity>();
@@ -190,17 +190,17 @@ public class OutputController implements EventHandler {
    *          Entity type
    * @return Entity
    */
-  public synchronized AbstractEntity getEntity(EntityType type) {
+  public synchronized AbstractEntity getEntity( EntityType type ) {
     AbstractEntity entity = null;
     
-    if(this.entityId.containsKey(type)) {
+    if ( this.entityId.containsKey( type ) ) {
       
-      int id = this.entityId.get(type);
+      int id = this.entityId.get( type );
       
-      entity = this.getEntity(type, id);
+      entity = this.getEntity( type, id );
       
-      if(entity != null) {
-        this.entityId.put(type, id + 1);
+      if ( entity != null ) {
+        this.entityId.put( type, id + 1 );
       }
     }
     
@@ -217,56 +217,57 @@ public class OutputController implements EventHandler {
    *          Identity to retrieve
    * @return Entity
    */
-  public synchronized AbstractEntity getEntity(EntityType type, int id) {
+  public synchronized AbstractEntity getEntity( EntityType type, int id ) {
     AbstractEntity entity = null;
     
     Map<Integer, AbstractEntity> typeEntities;
-    if(this.entities.containsKey(type)) {
-      typeEntities = this.entities.get(type);
+    if ( this.entities.containsKey( type ) ) {
+      typeEntities = this.entities.get( type );
     } else {
       typeEntities = new HashMap<Integer, AbstractEntity>();
     }
     
-    if(!typeEntities.containsKey(id)) {
-      switch(type) {
+    if ( !typeEntities.containsKey( id ) ) {
+      switch ( type ) {
         case EXTORTION:
-          entity = new ExtortionOutputEntity(id, this.separator);
+          entity = new ExtortionOutputEntity( id, this.separator );
           break;
         case COMPENSATION:
-          entity = new CompensationOutputEntity(id, this.separator);
+          entity = new CompensationOutputEntity( id, this.separator );
           break;
         case PURCHASE:
-          entity = new PurchaseOutputEntity(id, this.separator);
+          entity = new PurchaseOutputEntity( id, this.separator );
           break;
         case NORMATIVE:
-          entity = new NormativeOutputEntity(id, this.separator);
+          entity = new NormativeOutputEntity( id, this.separator );
           break;
         case ENTREPRENEUR:
-          entity = new EntrepreneurOutputEntity(id, this.separator);
+          entity = new EntrepreneurOutputEntity( id, this.separator );
           break;
         case CONSUMER:
-          entity = new ConsumerOutputEntity(id, this.separator);
+          entity = new ConsumerOutputEntity( id, this.separator );
           break;
         case MAFIA:
-          entity = new MafiaOutputEntity(id, this.separator);
+          entity = new MafiaOutputEntity( id, this.separator );
           break;
         case MAFIOSI:
-          entity = new MafiosiOutputEntity(id, this.separator);
+          entity = new MafiosiOutputEntity( id, this.separator );
           break;
         case STATE:
-          entity = new StateOutputEntity(id, this.separator);
+          entity = new StateOutputEntity( id, this.separator );
           break;
         case INTERMEDIARY_ORGANIZATION:
-          entity = new IntermediaryOrganizationOutputEntity(id, this.separator);
+          entity = new IntermediaryOrganizationOutputEntity( id,
+              this.separator );
           break;
       }
       
-      if(entity != null) {
-        typeEntities.put(id, entity);
-        this.entities.put(type, typeEntities);
+      if ( entity != null ) {
+        typeEntities.put( id, entity );
+        this.entities.put( type, typeEntities );
       }
     } else {
-      entity = typeEntities.get(id);
+      entity = typeEntities.get( id );
     }
     
     return entity;
@@ -282,18 +283,18 @@ public class OutputController implements EventHandler {
    *          Actual entity
    * @return none
    */
-  public void setEntity(EntityType type, AbstractEntity entity) {
+  public void setEntity( EntityType type, AbstractEntity entity ) {
     int id = entity.getEntityId();
     
     Map<Integer, AbstractEntity> typeEntities;
-    if(this.entities.containsKey(type)) {
-      typeEntities = this.entities.get(type);
+    if ( this.entities.containsKey( type ) ) {
+      typeEntities = this.entities.get( type );
     } else {
       typeEntities = new HashMap<Integer, AbstractEntity>();
     }
     
-    typeEntities.put(id, entity);
-    this.entities.put(type, typeEntities);
+    typeEntities.put( id, entity );
+    this.entities.put( type, typeEntities );
   }
   
   
@@ -307,46 +308,46 @@ public class OutputController implements EventHandler {
    *           IO Exception
    * @return none
    */
-  public void write(boolean active) throws IOException {
+  public void write( boolean active ) throws IOException {
     
-    for(EntityType type : EntityType.values()) {
+    for ( EntityType type : EntityType.values() ) {
       
       Map<Integer, AbstractEntity> typeEntities = new HashMap<Integer, AbstractEntity>();
-      typeEntities.putAll(this.entities.get(type));
-      for(Integer id : this.entities.get(type).keySet()) {
-        if(typeEntities.containsKey(id)) {
-          AbstractEntity entity = typeEntities.get(id);
-          if((!active) && (!entity.isActive())) {
-            typeEntities.remove(id);
+      typeEntities.putAll( this.entities.get( type ) );
+      for ( Integer id : this.entities.get( type ).keySet() ) {
+        if ( typeEntities.containsKey( id ) ) {
+          AbstractEntity entity = typeEntities.get( id );
+          if ( (!active) && (!entity.isActive()) ) {
+            typeEntities.remove( id );
           }
         }
       }
       
-      for(Integer id : typeEntities.keySet()) {
-        this.entities.remove(id);
+      for ( Integer id : typeEntities.keySet() ) {
+        this.entities.remove( id );
       }
       
-      if((typeEntities != null) && (!typeEntities.isEmpty())) {
+      if ( (typeEntities != null) && (!typeEntities.isEmpty()) ) {
         
-        BufferedWriter bFile = this.file.get(type);
+        BufferedWriter bFile = this.file.get( type );
         
-        for(Integer id : typeEntities.keySet()) {
-          if(this.firstWrite.get(type)) {
-            bFile.write(typeEntities.get(id).getHeader());
+        for ( Integer id : typeEntities.keySet() ) {
+          if ( this.firstWrite.get( type ) ) {
+            bFile.write( typeEntities.get( id ).getHeader() );
             bFile.newLine();
-            this.firstWrite.put(type, false);
+            this.firstWrite.put( type, false );
           }
           
-          if(typeEntities.get(id).isActive()) {
-            AbstractEntity entity = typeEntities.get(id);
-            bFile.write(entity.getLine());
+          if ( typeEntities.get( id ).isActive() ) {
+            AbstractEntity entity = typeEntities.get( id );
+            bFile.write( entity.getLine() );
             bFile.newLine();
           }
         }
         
         typeEntities.clear();
         
-        this.entities.put(type, typeEntities);
+        this.entities.put( type, typeEntities );
         bFile.flush();
       }
     }
@@ -361,20 +362,20 @@ public class OutputController implements EventHandler {
    * @return none
    */
   @Override
-  public void handleEvent(Event event) {
+  public void handleEvent( Event event ) {
     
-    switch((String) event.getCommand()) {
+    switch ( (String) event.getCommand() ) {
       case Constants.EVENT_WRITE_DATA:
         try {
-          this.write(false);
+          this.write( false );
           
           // Schedule the next writing event
-          Event nextEvent = new Event(this.simulator.now() + this.timeToWrite,
-              this, Constants.EVENT_WRITE_DATA);
-          this.simulator.insert(nextEvent);
+          Event nextEvent = new Event( this.simulator.now() + this.timeToWrite,
+              this, Constants.EVENT_WRITE_DATA );
+          this.simulator.insert( nextEvent );
           
-        } catch(IOException e) {
-          logger.debug(e.toString());
+        } catch ( IOException e ) {
+          logger.debug( e.toString() );
         }
         break;
     }

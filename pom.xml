@@ -160,5 +160,29 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>randomBatch</id>
+      <build>
+        <defaultGoal>exec:exec</defaultGoal>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-maven-plugin.version}</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>java</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>java</executable>
+              <commandlineArgs>-Xmx1024m -classpath %classpath gloderss.GLODERSRandomBatch ${exec.args}</commandlineArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
 </project>

@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class FilenameConf {
   
@@ -31,8 +31,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_EXTORTION)
-  public void setExtortion(String extortion) {
+  @XmlElement ( name = Constants.TAG_FILENAME_EXTORTION )
+  public void setExtortion( String extortion ) {
     this.extortion = extortion;
   }
   
@@ -42,8 +42,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_COMPENSATION)
-  public void setCompensation(String compensation) {
+  @XmlElement ( name = Constants.TAG_FILENAME_COMPENSATION )
+  public void setCompensation( String compensation ) {
     this.compensation = compensation;
   }
   
@@ -53,8 +53,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_PURCHASE)
-  public void setPurchase(String purchase) {
+  @XmlElement ( name = Constants.TAG_FILENAME_PURCHASE )
+  public void setPurchase( String purchase ) {
     this.purchase = purchase;
   }
   
@@ -64,8 +64,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_NORMATIVE)
-  public void setNormative(String normative) {
+  @XmlElement ( name = Constants.TAG_FILENAME_NORMATIVE )
+  public void setNormative( String normative ) {
     this.normative = normative;
   }
   
@@ -75,8 +75,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_ENTREPRENEUR)
-  public void setEntrepreneur(String entrepreneur) {
+  @XmlElement ( name = Constants.TAG_FILENAME_ENTREPRENEUR )
+  public void setEntrepreneur( String entrepreneur ) {
     this.entrepreneur = entrepreneur;
   }
   
@@ -86,8 +86,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_CONSUMER)
-  public void setConsumer(String consumer) {
+  @XmlElement ( name = Constants.TAG_FILENAME_CONSUMER )
+  public void setConsumer( String consumer ) {
     this.consumer = consumer;
   }
   
@@ -97,8 +97,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_MAFIA)
-  public void setMafia(String mafia) {
+  @XmlElement ( name = Constants.TAG_FILENAME_MAFIA )
+  public void setMafia( String mafia ) {
     this.mafia = mafia;
   }
   
@@ -108,8 +108,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_MAFIOSI)
-  public void setMafiosi(String mafiosi) {
+  @XmlElement ( name = Constants.TAG_FILENAME_MAFIOSI )
+  public void setMafiosi( String mafiosi ) {
     this.mafiosi = mafiosi;
   }
   
@@ -119,8 +119,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_STATE)
-  public void setState(String state) {
+  @XmlElement ( name = Constants.TAG_FILENAME_STATE )
+  public void setState( String state ) {
     this.state = state;
   }
   
@@ -130,8 +130,8 @@ public class FilenameConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME_INTERMEDIARY_ORGANIZATION)
-  public void setIntermediaryOrganization(String intermediaryOrganization) {
+  @XmlElement ( name = Constants.TAG_FILENAME_INTERMEDIARY_ORGANIZATION )
+  public void setIntermediaryOrganization( String intermediaryOrganization ) {
     this.intermediaryOrganization = intermediaryOrganization;
   }
 }

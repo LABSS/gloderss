@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class EReputationConf {
   
@@ -17,8 +17,8 @@ public class EReputationConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_REPUTATION_STATE_PROTECTOR)
-  public void setStateProtector(double stateProtector) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_REPUTATION_STATE_PROTECTOR )
+  public void setStateProtector( double stateProtector ) {
     this.stateProtector = stateProtector;
   }
   
@@ -28,8 +28,8 @@ public class EReputationConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_REPUTATION_STATE_PUNISHER)
-  public void setStatePunisher(double statePunisher) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_REPUTATION_STATE_PUNISHER )
+  public void setStatePunisher( double statePunisher ) {
     this.statePunisher = statePunisher;
   }
   
@@ -39,8 +39,8 @@ public class EReputationConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_REPUTATION_MAFIA_PUNISHER)
-  public void setMafiaPunisher(double mafiaPunisher) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_REPUTATION_MAFIA_PUNISHER )
+  public void setMafiaPunisher( double mafiaPunisher ) {
     this.mafiaPunisher = mafiaPunisher;
   }
 }

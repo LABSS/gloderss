@@ -1,8 +1,8 @@
 package gloderss.normative.entity.norm;
 
+import java.util.List;
 import emilia.entity.norm.NormContentInterface;
 import gloderss.Constants.Actions;
-import java.util.List;
 
 public class NormContentSet implements NormContentInterface {
   
@@ -22,7 +22,7 @@ public class NormContentSet implements NormContentInterface {
    *          Negated actions
    * @return none
    */
-  public NormContentSet(List<Actions> actions, List<Actions> notActions) {
+  public NormContentSet( List<Actions> actions, List<Actions> notActions ) {
     this.actions = actions;
     this.notActions = notActions;
   }
@@ -51,16 +51,16 @@ public class NormContentSet implements NormContentInterface {
   
   
   @Override
-  public boolean match(Object value) {
-    if(value instanceof String) {
-      for(Actions action : this.actions) {
-        if(action.name().equalsIgnoreCase((String) value)) {
+  public boolean match( Object value ) {
+    if ( value instanceof String ) {
+      for ( Actions action : this.actions ) {
+        if ( action.name().equalsIgnoreCase( (String) value ) ) {
           return true;
         }
       }
       
-      for(Actions noAction : this.notActions) {
-        if(noAction.name().equalsIgnoreCase((String) value)) {
+      for ( Actions noAction : this.notActions ) {
+        if ( noAction.name().equalsIgnoreCase( (String) value ) ) {
           return true;
         }
       }
@@ -71,11 +71,11 @@ public class NormContentSet implements NormContentInterface {
   
   
   @Override
-  public boolean comply(Object value) {
+  public boolean comply( Object value ) {
     
-    if(value instanceof String) {
-      for(Actions action : this.actions) {
-        if(action.name().equalsIgnoreCase((String) value)) {
+    if ( value instanceof String ) {
+      for ( Actions action : this.actions ) {
+        if ( action.name().equalsIgnoreCase( (String) value ) ) {
           return true;
         }
       }

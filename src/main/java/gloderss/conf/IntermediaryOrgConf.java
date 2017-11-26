@@ -1,14 +1,15 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_INTERMEDIARY_ORG,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_INTERMEDIARY_ORG,
+    namespace = Constants.TAG_NAMESPACE )
 public class IntermediaryOrgConf {
   
   private String           timeToAffiliatePDF;
@@ -28,8 +29,8 @@ public class IntermediaryOrgConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_TIME_TO_AFFILIATE_PDF)
-  public void setTimeToAffiliatePDF(String timeToAffiliatePDF) {
+  @XmlElement ( name = Constants.TAG_INTERMEDIARY_ORG_TIME_TO_AFFILIATE_PDF )
+  public void setTimeToAffiliatePDF( String timeToAffiliatePDF ) {
     this.timeToAffiliatePDF = timeToAffiliatePDF;
   }
   
@@ -39,8 +40,8 @@ public class IntermediaryOrgConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_SPREAD_INFO_FUNCTION)
-  public void setSlope(String spreadInfoFunction) {
+  @XmlElement ( name = Constants.TAG_INTERMEDIARY_ORG_SPREAD_INFO_FUNCTION )
+  public void setSlope( String spreadInfoFunction ) {
     this.spreadInfoFunction = spreadInfoFunction;
   }
   
@@ -50,8 +51,8 @@ public class IntermediaryOrgConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_CONSUMERS)
-  public void setProportionConsumers(String proportionConsumers) {
+  @XmlElement ( name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_CONSUMERS )
+  public void setProportionConsumers( String proportionConsumers ) {
     this.proportionConsumers = proportionConsumers;
   }
   
@@ -61,8 +62,8 @@ public class IntermediaryOrgConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS)
-  public void setProportionEntrepreneurs(String proportionEntrepreneurs) {
+  @XmlElement ( name = Constants.TAG_INTERMEDIARY_ORG_PROPORTION_ENTREPRENEURS )
+  public void setProportionEntrepreneurs( String proportionEntrepreneurs ) {
     this.proportionEntrepreneurs = proportionEntrepreneurs;
   }
   
@@ -72,9 +73,9 @@ public class IntermediaryOrgConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_CHANGES)
-  @XmlElement(name = Constants.TAG_CHANGE)
-  public void setChangesConf(List<ChangeConf> changesConf) {
+  @XmlElementWrapper ( name = Constants.TAG_CHANGES )
+  @XmlElement ( name = Constants.TAG_CHANGE )
+  public void setChangesConf( List<ChangeConf> changesConf ) {
     this.changesConf = changesConf;
   }
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-XMLpath=src/main/resources/conf/sampleBatch.xml
-XSDpath=src/main/resources/conf/batch.xsd
+XMLpath=src/main/resources/conf/randomBatch.xml
+XSDpath=src/main/resources/conf/randomBatch.xsd
 
 if [ $# -gt 0 ]
 then
@@ -15,4 +15,4 @@ then
 fi
 
 cd ..
-/usr/bin/mvn exec:exec -Pbatch -Dexec.args="$XMLpath $XSDpath"
+/usr/bin/mvn exec:exec -PrandomBatch -Dexec.args="$XMLpath $XSDpath"

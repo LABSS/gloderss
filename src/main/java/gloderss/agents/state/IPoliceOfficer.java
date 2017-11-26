@@ -10,7 +10,7 @@ public interface IPoliceOfficer {
   public void generalInvestigation();
   
   
-  public void specificInvestigation(SpecificInvestigationAction action);
+  public void specificInvestigation( SpecificInvestigationAction action );
   
   
   public void finalizeSim();

@@ -9,13 +9,13 @@ public class PDNormal extends PDFAbstract {
   private double stDev;
   
   
-  public PDNormal(double mean, double stDev) {
+  public PDNormal( double mean, double stDev ) {
     this.mean = mean;
     this.stDev = stDev;
   }
   
   
   public double nextValue() {
-    return RandomUtil.nextNormal(mean, stDev);
+    return RandomUtil.nextNormal( mean, stDev );
   }
 }

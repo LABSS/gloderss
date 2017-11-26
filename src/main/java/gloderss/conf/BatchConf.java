@@ -1,6 +1,5 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.io.File;
 import java.util.List;
 import javax.xml.XMLConstants;
@@ -15,8 +14,9 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_BATCH)
+@XmlRootElement ( name = Constants.TAG_BATCH )
 public class BatchConf {
   
   private String              batchBase;
@@ -55,24 +55,25 @@ public class BatchConf {
    *          XSD configuration filename
    * @return Batch configuration
    */
-  public static BatchConf getBatchConf(String xmlFilename, String xsdFilename) {
+  public static BatchConf getBatchConf( String xmlFilename,
+      String xsdFilename ) {
     
     BatchConf batchConf = new BatchConf();
     
-    File xmlFile = new File(xmlFilename);
-    File xsdFile = new File(xsdFilename);
+    File xmlFile = new File( xmlFilename );
+    File xsdFile = new File( xsdFilename );
     
-    if((xmlFile.exists()) && (xsdFile.exists())) {
+    if ( (xmlFile.exists()) && (xsdFile.exists()) ) {
       
-      if(isValid(xmlFilename, xsdFilename)) {
+      if ( isValid( xmlFilename, xsdFilename ) ) {
         
         try {
-          JAXBContext jaxbContext = JAXBContext.newInstance(BatchConf.class);
+          JAXBContext jaxbContext = JAXBContext.newInstance( BatchConf.class );
           Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
           
-          batchConf = (BatchConf) jaxbUnmarshaller.unmarshal(xmlFile);
+          batchConf = (BatchConf) jaxbUnmarshaller.unmarshal( xmlFile );
           
-        } catch(JAXBException e) {
+        } catch ( JAXBException e ) {
           e.printStackTrace();
         }
         
@@ -92,21 +93,21 @@ public class BatchConf {
    *          XSD filename
    * @return True if valid, False otherwise
    */
-  public static boolean isValid(String xmlFilename, String xsdFilename) {
+  public static boolean isValid( String xmlFilename, String xsdFilename ) {
     boolean valid = false;
     
     try {
       SchemaFactory factory = SchemaFactory
-          .newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      Schema schema = factory.newSchema(new StreamSource(xsdFilename));
+          .newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
+      Schema schema = factory.newSchema( new StreamSource( xsdFilename ) );
       
       Validator validator = schema.newValidator();
-      validator.validate(new StreamSource(xmlFilename));
+      validator.validate( new StreamSource( xmlFilename ) );
       
       valid = true;
       
-    } catch(SAXException e) {
-    } catch(Exception e) {
+    } catch ( SAXException e ) {
+    } catch ( Exception e ) {
     }
     
     return valid;
@@ -118,8 +119,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_BASE)
-  public void setBatchBase(String batchBase) {
+  @XmlElement ( name = Constants.TAG_BATCH_BASE )
+  public void setBatchBase( String batchBase ) {
     this.batchBase = batchBase;
   }
   
@@ -129,8 +130,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_OUTPUT)
-  public void setBatchOutput(String batchOutput) {
+  @XmlElement ( name = Constants.TAG_BATCH_OUTPUT )
+  public void setBatchOutput( String batchOutput ) {
     this.batchOutput = batchOutput;
   }
   
@@ -140,8 +141,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_REPLICA)
-  public void setBatchReplica(Integer batchReplica) {
+  @XmlElement ( name = Constants.TAG_BATCH_REPLICA )
+  public void setBatchReplica( Integer batchReplica ) {
     this.batchReplica = batchReplica;
   }
   
@@ -151,8 +152,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_XML_SCENARIO)
-  public void setBatchXMLScenario(String batchXMLScenario) {
+  @XmlElement ( name = Constants.TAG_BATCH_XML_SCENARIO )
+  public void setBatchXMLScenario( String batchXMLScenario ) {
     this.batchXMLScenario = batchXMLScenario;
   }
   
@@ -162,8 +163,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_XSD_SCENARIO)
-  public void setBatchXSDScenario(String batchXSDScenario) {
+  @XmlElement ( name = Constants.TAG_BATCH_XSD_SCENARIO )
+  public void setBatchXSDScenario( String batchXSDScenario ) {
     this.batchXSDScenario = batchXSDScenario;
   }
   
@@ -173,8 +174,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_HEADER)
-  public void setBatchHeader(String batchHeader) {
+  @XmlElement ( name = Constants.TAG_BATCH_HEADER )
+  public void setBatchHeader( String batchHeader ) {
     this.batchHeader = batchHeader;
   }
   
@@ -184,8 +185,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_GENERAL)
-  public void setBatchGeneral(String batchGeneral) {
+  @XmlElement ( name = Constants.TAG_BATCH_GENERAL )
+  public void setBatchGeneral( String batchGeneral ) {
     this.batchGeneral = batchGeneral;
   }
   
@@ -195,8 +196,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_COMMUNICATION)
-  public void setBatchCommunication(String batchCommunication) {
+  @XmlElement ( name = Constants.TAG_BATCH_COMMUNICATION )
+  public void setBatchCommunication( String batchCommunication ) {
     this.batchCommunication = batchCommunication;
   }
   
@@ -206,9 +207,9 @@ public class BatchConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_BATCH_CITIZENS)
-  @XmlElement(name = Constants.TAG_BATCH_CONTENT)
-  public void setBatchCitizens(List<BatchCodeConf> batchCitizens) {
+  @XmlElementWrapper ( name = Constants.TAG_BATCH_CITIZENS )
+  @XmlElement ( name = Constants.TAG_BATCH_CONTENT )
+  public void setBatchCitizens( List<BatchCodeConf> batchCitizens ) {
     this.batchCitizens = batchCitizens;
   }
   
@@ -218,9 +219,9 @@ public class BatchConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_BATCH_STATES)
-  @XmlElement(name = Constants.TAG_BATCH_CONTENT)
-  public void setBatchStates(List<BatchCodeConf> batchStates) {
+  @XmlElementWrapper ( name = Constants.TAG_BATCH_STATES )
+  @XmlElement ( name = Constants.TAG_BATCH_CONTENT )
+  public void setBatchStates( List<BatchCodeConf> batchStates ) {
     this.batchStates = batchStates;
   }
   
@@ -230,9 +231,9 @@ public class BatchConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_BATCH_MAFIAS)
-  @XmlElement(name = Constants.TAG_BATCH_CONTENT)
-  public void setBatchMafias(List<BatchCodeConf> batchMafias) {
+  @XmlElementWrapper ( name = Constants.TAG_BATCH_MAFIAS )
+  @XmlElement ( name = Constants.TAG_BATCH_CONTENT )
+  public void setBatchMafias( List<BatchCodeConf> batchMafias ) {
     this.batchMafias = batchMafias;
   }
   
@@ -242,9 +243,9 @@ public class BatchConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_BATCH_IOS)
-  @XmlElement(name = Constants.TAG_BATCH_CONTENT)
-  public void setBatchIOs(List<BatchCodeConf> batchIOs) {
+  @XmlElementWrapper ( name = Constants.TAG_BATCH_IOS )
+  @XmlElement ( name = Constants.TAG_BATCH_CONTENT )
+  public void setBatchIOs( List<BatchCodeConf> batchIOs ) {
     this.batchIOs = batchIOs;
   }
   
@@ -254,8 +255,8 @@ public class BatchConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_BATCH_TAIL)
-  public void setBatchTail(String batchTail) {
+  @XmlElement ( name = Constants.TAG_BATCH_TAIL )
+  public void setBatchTail( String batchTail ) {
     this.batchTail = batchTail;
   }
 }

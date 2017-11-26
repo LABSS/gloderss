@@ -9,7 +9,7 @@ public abstract class ReputationAbstract {
   protected double           unknownValue;
   
   
-  public ReputationAbstract(double unknownValue) {
+  public ReputationAbstract( double unknownValue ) {
     this.unknownValue = unknownValue;
   }
   
@@ -19,14 +19,14 @@ public abstract class ReputationAbstract {
   }
   
   
-  public abstract boolean isUnknown(int... target);
+  public abstract boolean isUnknown( int... target );
   
   
-  public abstract double getReputation(int... target);
+  public abstract double getReputation( int... target );
   
   
-  public abstract void setReputation(int target, double value);
+  public abstract void setReputation( int target, double value );
   
   
-  public abstract void updateReputation(Object action);
+  public abstract void updateReputation( Object action );
 }

@@ -22,26 +22,25 @@ public class ReputationSanction implements SanctionContentInterface {
    *          Entrepreneurs reputation
    * @return none
    */
-  public ReputationSanction(int consumerId,
-      EntrepreneurRating entrepreneurRep) {
+  public ReputationSanction( int consumerId, EntrepreneurRating entrepreneurRep ) {
     this.consumerId = consumerId;
     this.entrepreneurRep = entrepreneurRep;
   }
   
   
   @Override
-  public void execute(Object input) {
+  public void execute( Object input ) {
     
     int entrepreneurId = (int) input;
     double repValue;
-    if(this.entrepreneurRep.isUnknown(entrepreneurId)) {
+    if ( this.entrepreneurRep.isUnknown( entrepreneurId ) ) {
       repValue = this.entrepreneurRep.getUnknownValue();
     } else {
-      repValue = this.entrepreneurRep.getReputation(entrepreneurId);
+      repValue = this.entrepreneurRep.getReputation( entrepreneurId );
     }
     
-    this.repInfoAction = new ReputationInfoAction(this.consumerId,
-        entrepreneurId, repValue);
+    this.repInfoAction = new ReputationInfoAction( this.consumerId,
+        entrepreneurId, repValue );
   }
   
   

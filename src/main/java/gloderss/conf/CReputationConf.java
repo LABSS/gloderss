@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class CReputationConf {
   
@@ -15,8 +15,8 @@ public class CReputationConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR)
-  public void setEntrepreneurRep(double entrepreneurRep) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR )
+  public void setEntrepreneurRep( double entrepreneurRep ) {
     this.entrepreneurRep = entrepreneurRep;
   }
   
@@ -26,8 +26,9 @@ public class CReputationConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_THRESHOLD)
-  public void setEntrepreneurRepThreshold(double entrepreneurRepThreshold) {
+  @XmlElement (
+      name = Constants.TAG_CONSUMER_REPUTATION_ENTREPRENEUR_THRESHOLD )
+  public void setEntrepreneurRepThreshold( double entrepreneurRepThreshold ) {
     this.entrepreneurRepThreshold = entrepreneurRepThreshold;
   }
 }

@@ -1,9 +1,9 @@
 package gloderss.actions;
 
-import emilia.entity.action.ActionAbstract;
-import gloderss.Constants.Actions;
 import java.util.HashMap;
 import java.util.List;
+import emilia.entity.action.ActionAbstract;
+import gloderss.Constants.Actions;
 
 public class PentitoAction extends ActionAbstract {
   
@@ -25,13 +25,12 @@ public class PentitoAction extends ActionAbstract {
    *          List of all Entrepreneurs that have paid extortion
    * @return none
    */
-  public PentitoAction(int mafiosoId, List<Integer> mafiosiList,
-      List<Integer> entrepreneursList) {
-    super(Actions.PENTITI.ordinal(), Actions.PENTITI.name());
+  public PentitoAction( int mafiosoId, List<Integer> mafiosiList, List<Integer> entrepreneursList ) {
+    super( Actions.PENTITI.ordinal(), Actions.PENTITI.name() );
     
     this.params = new HashMap<Object, Object>();
-    this.params.put(Param.MAFIOSO_ID, mafiosoId);
-    this.params.put(Param.MAFIOSI_LIST, mafiosiList);
-    this.params.put(Param.ENTREPRENEUR_LIST, entrepreneursList);
+    this.params.put( Param.MAFIOSO_ID, mafiosoId );
+    this.params.put( Param.MAFIOSI_LIST, mafiosiList );
+    this.params.put( Param.ENTREPRENEUR_LIST, entrepreneursList );
   }
 }

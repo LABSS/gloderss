@@ -9,7 +9,7 @@ public class PDUniform extends PDFAbstract {
   private double maxValue;
   
   
-  public PDUniform(double minValue, double maxValue) {
+  public PDUniform( double minValue, double maxValue ) {
     this.minValue = minValue;
     this.maxValue = maxValue;
   }
@@ -17,6 +17,6 @@ public class PDUniform extends PDFAbstract {
   
   @Override
   public double nextValue() {
-    return RandomUtil.nextDoubleFromTo(this.minValue, this.maxValue);
+    return RandomUtil.nextDoubleFromTo( this.minValue, this.maxValue );
   }
 }

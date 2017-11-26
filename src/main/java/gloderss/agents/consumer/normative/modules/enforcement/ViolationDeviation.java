@@ -11,6 +11,6 @@ public class ViolationDeviation extends DeviationAbstract {
    * @return none
    */
   public ViolationDeviation() {
-    super(Type.VIOLATION);
+    super( Type.VIOLATION );
   }
 }

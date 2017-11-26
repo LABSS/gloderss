@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class ChangeConf {
   
@@ -17,8 +17,8 @@ public class ChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CHANGE_TIME)
-  public void setTime(double time) {
+  @XmlElement ( name = Constants.TAG_CHANGE_TIME )
+  public void setTime( double time ) {
     this.time = time;
   }
   
@@ -28,8 +28,8 @@ public class ChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CHANGE_PARAMETER)
-  public void setParameter(String parameter) {
+  @XmlElement ( name = Constants.TAG_CHANGE_PARAMETER )
+  public void setParameter( String parameter ) {
     this.parameter = parameter;
   }
   
@@ -39,8 +39,8 @@ public class ChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CHANGE_VALUE)
-  public void setValue(String value) {
+  @XmlElement ( name = Constants.TAG_CHANGE_VALUE )
+  public void setValue( String value ) {
     this.value = value;
   }
   

@@ -1,6 +1,5 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +7,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_ENTREPRENEUR,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_ENTREPRENEUR,
+    namespace = Constants.TAG_NAMESPACE )
 public class EntrepreneurConf {
   
   // Number of entrepreneurs
@@ -84,8 +85,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_NUMBER_ENTREPRENEURS)
-  public void setNumberEntrepreneurs(int numberEntrepreneurs) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_NUMBER_ENTREPRENEURS )
+  public void setNumberEntrepreneurs( int numberEntrepreneurs ) {
     this.numberEntrepreneurs = numberEntrepreneurs;
   }
   
@@ -95,8 +96,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_LOGGING_TIME_UNIT)
-  public void setLoggingTimeUnit(int loggingTimeUnit) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_LOGGING_TIME_UNIT )
+  public void setLoggingTimeUnit( int loggingTimeUnit ) {
     this.loggingTimeUnit = loggingTimeUnit;
   }
   
@@ -106,8 +107,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_CLUSTERED)
-  public void setClustered(boolean clustered) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_CLUSTERED )
+  public void setClustered( boolean clustered ) {
     this.clustered = clustered;
   }
   
@@ -117,8 +118,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_WEALTH)
-  public void setWealth(double wealth) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_WEALTH )
+  public void setWealth( double wealth ) {
     this.wealth = wealth;
   }
   
@@ -128,8 +129,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_PERIODICITY_WAGE_PDF)
-  public void setPeriodicityWagePDF(String periodicityWagePDF) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_PERIODICITY_WAGE_PDF )
+  public void setPeriodicityWagePDF( String periodicityWagePDF ) {
     this.periodicityWagePDF = periodicityWagePDF;
   }
   
@@ -139,8 +140,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_MINIMUM_WAGE)
-  public void setMinimumWage(double minimumWage) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_MINIMUM_WAGE )
+  public void setMinimumWage( double minimumWage ) {
     this.minimumWage = minimumWage;
   }
   
@@ -150,8 +151,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_MAXIMUM_WAGE)
-  public void setMaximumWage(double maximumWage) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_MAXIMUM_WAGE )
+  public void setMaximumWage( double maximumWage ) {
     this.maximumWage = maximumWage;
   }
   
@@ -161,8 +162,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_VARIATION_WAGE)
-  public void setVariationWage(double variationWage) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_VARIATION_WAGE )
+  public void setVariationWage( double variationWage ) {
     this.variationWage = variationWage;
   }
   
@@ -172,8 +173,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_MINIMUM_PRICE)
-  public void setMinimumPrice(double minimumPrice) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_MINIMUM_PRICE )
+  public void setMinimumPrice( double minimumPrice ) {
     this.minimumPrice = minimumPrice;
   }
   
@@ -183,8 +184,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_MAXIMUM_PRICE)
-  public void setMaximumPrice(double maximumPrice) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_MAXIMUM_PRICE )
+  public void setMaximumPrice( double maximumPrice ) {
     this.maximumPrice = maximumPrice;
   }
   
@@ -194,8 +195,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_VARIATION_PRICE)
-  public void setVariationPrice(double variationPrice) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_VARIATION_PRICE )
+  public void setVariationPrice( double variationPrice ) {
     this.variationPrice = variationPrice;
   }
   
@@ -205,8 +206,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_DENOUNCE_ALPHA)
-  public void setDenounceAlpha(double denounceAlpha) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_DENOUNCE_ALPHA )
+  public void setDenounceAlpha( double denounceAlpha ) {
     this.denounceAlpha = denounceAlpha;
   }
   
@@ -216,8 +217,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_COLLABORATION_PROBABILITY)
-  public void setCollaborationProbability(double collaborationProbability) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_COLLABORATION_PROBABILITY )
+  public void setCollaborationProbability( double collaborationProbability ) {
     this.collaborationProbability = collaborationProbability;
   }
   
@@ -227,8 +228,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_AFFILIATE_THRESHOLD)
-  public void setAffiliateThreshold(double affiliateThreshold) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_AFFILIATE_THRESHOLD )
+  public void setAffiliateThreshold( double affiliateThreshold ) {
     this.affiliateThreshold = affiliateThreshold;
   }
   
@@ -238,8 +239,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_AFFILIATED)
-  public void setAffiliated(boolean affiliated) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_AFFILIATED )
+  public void setAffiliated( boolean affiliated ) {
     this.affiliated = affiliated;
   }
   
@@ -249,8 +250,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_ENTREPRENEUR_REPUTATION)
-  public void setReputationConf(EReputationConf reputationConf) {
+  @XmlElement ( name = Constants.TAG_ENTREPRENEUR_REPUTATION )
+  public void setReputationConf( EReputationConf reputationConf ) {
     this.reputationConf = reputationConf;
   }
   
@@ -260,8 +261,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_XML)
-  public void setNormativeXML(String normativeXML) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_XML )
+  public void setNormativeXML( String normativeXML ) {
     this.normativeXML = normativeXML;
   }
   
@@ -271,8 +272,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_XSD)
-  public void setNormativeXSD(String normativeXSD) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_XSD )
+  public void setNormativeXSD( String normativeXSD ) {
     this.normativeXSD = normativeXSD;
   }
   
@@ -282,8 +283,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT)
-  public void setIndividualWeight(double individualWeight) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT )
+  public void setIndividualWeight( double individualWeight ) {
     this.individualWeight = individualWeight;
   }
   
@@ -293,8 +294,8 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT)
-  public void setNormativeWeight(double normativeWeight) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT )
+  public void setNormativeWeight( double normativeWeight ) {
     this.normativeWeight = normativeWeight;
   }
   
@@ -304,9 +305,9 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_NORMS_SALIENCE)
-  @XmlJavaTypeAdapter(NormSalienceAdapter.class)
-  public void setSaliences(Map<Integer, NormSalienceConf> salienceConf) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_NORMS_SALIENCE )
+  @XmlJavaTypeAdapter ( NormSalienceAdapter.class )
+  public void setSaliences( Map<Integer, NormSalienceConf> salienceConf ) {
     this.salienceConf = salienceConf;
   }
   
@@ -316,9 +317,9 @@ public class EntrepreneurConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_CHANGES)
-  @XmlElement(name = Constants.TAG_CHANGE)
-  public void setChangesConf(List<ChangeConf> changesConf) {
+  @XmlElementWrapper ( name = Constants.TAG_CHANGES )
+  @XmlElement ( name = Constants.TAG_CHANGE )
+  public void setChangesConf( List<ChangeConf> changesConf ) {
     this.changesConf = changesConf;
   }
 }

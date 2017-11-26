@@ -4,5 +4,5 @@ import gloderss.engine.devs.AbstractEventSimulator;
 
 public abstract class AbstractEvent implements Comparable {
   
-  public abstract void execute(AbstractEventSimulator simulator);
+  public abstract void execute( AbstractEventSimulator simulator );
 }

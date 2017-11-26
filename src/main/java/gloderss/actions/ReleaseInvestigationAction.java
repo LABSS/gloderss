@@ -1,8 +1,8 @@
 package gloderss.actions;
 
+import java.util.HashMap;
 import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
-import java.util.HashMap;
 
 public class ReleaseInvestigationAction extends ActionAbstract {
   
@@ -21,12 +21,12 @@ public class ReleaseInvestigationAction extends ActionAbstract {
    *          Entrepreneur identification
    * @return none
    */
-  public ReleaseInvestigationAction(int policeOfficerId, int entrepreneurId) {
-    super(Actions.SPECIFIC_INVESTIGATION.ordinal(),
-        Actions.SPECIFIC_INVESTIGATION.name());
+  public ReleaseInvestigationAction( int policeOfficerId, int entrepreneurId ) {
+    super( Actions.SPECIFIC_INVESTIGATION.ordinal(),
+        Actions.SPECIFIC_INVESTIGATION.name() );
     
     this.params = new HashMap<Object, Object>();
-    this.params.put(Param.POLICE_OFFICER_ID, policeOfficerId);
-    this.params.put(Param.ENTREPRENEUR_ID, entrepreneurId);
+    this.params.put( Param.POLICE_OFFICER_ID, policeOfficerId );
+    this.params.put( Param.ENTREPRENEUR_ID, entrepreneurId );
   }
 }

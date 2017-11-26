@@ -11,6 +11,6 @@ public class ComplianceDeviation extends DeviationAbstract {
    * @return none
    */
   public ComplianceDeviation() {
-    super(Type.COMPLIANCE);
+    super( Type.COMPLIANCE );
   }
 }

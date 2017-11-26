@@ -18,26 +18,26 @@ public class Const implements Function {
   
   
   @Override
-  public FunctionResult execute(final Evaluator evaluator,
-      final String arguments) throws FunctionException {
+  public FunctionResult execute( final Evaluator evaluator,
+      final String arguments ) throws FunctionException {
     Double result = null;
     
-    @SuppressWarnings("rawtypes")
-    ArrayList numbers = FunctionHelper.getDoubles(arguments,
-        EvaluationConstants.FUNCTION_ARGUMENT_SEPARATOR);
+    @SuppressWarnings ( "rawtypes" )
+    ArrayList numbers = FunctionHelper.getDoubles( arguments,
+        EvaluationConstants.FUNCTION_ARGUMENT_SEPARATOR );
     
-    if(numbers.size() != 1) {
-      throw new FunctionException("One numeric arguments is required.");
+    if ( numbers.size() != 1 ) {
+      throw new FunctionException( "One numeric arguments is required." );
     }
     
     try {
-      result = ((Double) numbers.get(0)).doubleValue();
+      result = ((Double) numbers.get( 0 )).doubleValue();
       
-    } catch(Exception e) {
-      throw new FunctionException("One numeric arguments is required.", e);
+    } catch ( Exception e ) {
+      throw new FunctionException( "One numeric arguments is required.", e );
     }
     
-    return new FunctionResult(result.toString(),
-        FunctionConstants.FUNCTION_RESULT_TYPE_NUMERIC);
+    return new FunctionResult( result.toString(),
+        FunctionConstants.FUNCTION_RESULT_TYPE_NUMERIC );
   }
 }

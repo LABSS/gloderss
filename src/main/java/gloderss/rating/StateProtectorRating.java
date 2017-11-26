@@ -1,18 +1,18 @@
 package gloderss.rating;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gloderss.actions.DenounceExtortionAction;
 import gloderss.actions.DenounceExtortionAffiliatedAction;
 import gloderss.actions.DenouncePunishmentAction;
 import gloderss.actions.DenouncePunishmentAffiliatedAction;
 import gloderss.actions.ImprisonmentAction;
 import gloderss.actions.StateCompensationAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StateProtectorRating extends ReputationAbstract {
   
   private final static Logger logger = LoggerFactory
-      .getLogger(StateProtectorRating.class);
+      .getLogger( StateProtectorRating.class );
   
   private int                 numDenounces;
   
@@ -27,8 +27,8 @@ public class StateProtectorRating extends ReputationAbstract {
   private double              value;
   
   
-  public StateProtectorRating(double unknownValue) {
-    super(unknownValue);
+  public StateProtectorRating( double unknownValue ) {
+    super( unknownValue );
     
     this.numDenounces = 0;
     this.numImprisonment = 0;
@@ -41,87 +41,87 @@ public class StateProtectorRating extends ReputationAbstract {
   
   
   @Override
-  public boolean isUnknown(int... target) {
+  public boolean isUnknown( int... target ) {
     return this.unknown;
   }
   
   
   @Override
-  public double getReputation(int... target) {
+  public double getReputation( int... target ) {
     return this.value;
   }
   
   
   @Override
-  public void setReputation(int target, double value) {
+  public void setReputation( int target, double value ) {
     this.unknown = false;
     this.value = value;
   }
   
   
   @Override
-  public void updateReputation(Object action) {
+  public void updateReputation( Object action ) {
     
     boolean updated = false;
     // State compensation
-    if(action instanceof StateCompensationAction) {
+    if ( action instanceof StateCompensationAction ) {
       updated = true;
       this.numStateCompensation++;
       
       // Denounce extortion
-    } else if(action instanceof DenounceExtortionAction) {
+    } else if ( action instanceof DenounceExtortionAction ) {
       updated = true;
       this.numDenounces++;
       
       // Denounce extortion affiliated
-    } else if(action instanceof DenounceExtortionAffiliatedAction) {
+    } else if ( action instanceof DenounceExtortionAffiliatedAction ) {
       updated = true;
       this.numDenounces++;
       
       // Denounce punishment
-    } else if(action instanceof DenouncePunishmentAction) {
+    } else if ( action instanceof DenouncePunishmentAction ) {
       updated = true;
       this.numDenounces++;
       this.numDenouncePunishment++;
       
       // Denounce punishment Affiliated
-    } else if(action instanceof DenouncePunishmentAffiliatedAction) {
+    } else if ( action instanceof DenouncePunishmentAffiliatedAction ) {
       updated = true;
       this.numDenounces++;
       this.numDenouncePunishment++;
       
       // Imprisonment
-    } else if(action instanceof ImprisonmentAction) {
+    } else if ( action instanceof ImprisonmentAction ) {
       updated = true;
       this.numImprisonment++;
       
     }
     
-    if(updated) {
+    if ( updated ) {
       this.unknown = false;
       
       this.value = 0.0;
       
       int divisor = 0;
-      if(this.numDenounces > 0) {
+      if ( this.numDenounces > 0 ) {
         this.value += (double) this.numImprisonment
             / (double) this.numDenounces;
         divisor++;
       }
       
-      if(this.numDenouncePunishment > 0) {
+      if ( this.numDenouncePunishment > 0 ) {
         this.value += (double) this.numStateCompensation
             / (double) this.numDenouncePunishment;
         divisor++;
       }
       
-      if(divisor > 0) {
+      if ( divisor > 0 ) {
         this.value = (double) this.value / (double) divisor;
       }
       
-      this.value = Math.max(0.0, Math.min(1.0, this.value));
+      this.value = Math.max( 0.0, Math.min( 1.0, this.value ) );
       
-      logger.debug("[PROTECTOR_STATE_REPUTATION] " + this.value);
+      logger.debug( "[PROTECTOR_STATE_REPUTATION] " + this.value );
     }
   }
 }

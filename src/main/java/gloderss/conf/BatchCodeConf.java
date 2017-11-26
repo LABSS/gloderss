@@ -1,12 +1,13 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_BATCH_CONTENT,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_BATCH_CONTENT,
+    namespace = Constants.TAG_NAMESPACE )
 public class BatchCodeConf {
   
   private String code;
@@ -19,8 +20,8 @@ public class BatchCodeConf {
   }
   
   
-  @XmlAttribute(name = Constants.TAG_BATCH_CODE)
-  public void setCode(String code) {
+  @XmlAttribute ( name = Constants.TAG_BATCH_CODE )
+  public void setCode( String code ) {
     this.code = code;
   }
   
@@ -31,7 +32,7 @@ public class BatchCodeConf {
   
   
   @XmlValue
-  public void setContent(String content) {
+  public void setContent( String content ) {
     this.content = content;
   }
 }

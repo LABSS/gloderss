@@ -16,12 +16,12 @@ public class RandomUtil {
   
   
   private static void init() {
-    generator = new MersenneTwister64((int) System.currentTimeMillis());
+    generator = new MersenneTwister64( (int) System.currentTimeMillis() );
   }
   
   
-  public static void setSeed(int seed) {
-    generator = new MersenneTwister64(seed);
+  public static void setSeed( int seed ) {
+    generator = new MersenneTwister64( seed );
   }
   
   
@@ -30,9 +30,9 @@ public class RandomUtil {
   }
   
   
-  public static int nextIntFromTo(int min, int max) {
-    Uniform uni = new Uniform(min, max, generator);
-    return uni.nextIntFromTo(min, max);
+  public static int nextIntFromTo( int min, int max ) {
+    Uniform uni = new Uniform( min, max, generator );
+    return uni.nextIntFromTo( min, max );
   }
   
   
@@ -41,9 +41,9 @@ public class RandomUtil {
   }
   
   
-  public static double nextDoubleFromTo(double min, double max) {
-    Uniform uni = new Uniform(min, max, generator);
-    return uni.nextDoubleFromTo(min, max);
+  public static double nextDoubleFromTo( double min, double max ) {
+    Uniform uni = new Uniform( min, max, generator );
+    return uni.nextDoubleFromTo( min, max );
   }
   
   
@@ -57,19 +57,19 @@ public class RandomUtil {
   }
   
   
-  public static double nextExponential(double mean) {
-    return -mean * Math.log(RandomUtil.nextDouble());
+  public static double nextExponential( double mean ) {
+    return -mean * Math.log( RandomUtil.nextDouble() );
   }
   
   
-  public static double nextNormal(double mean, double stDev) {
-    Normal normal = new Normal(mean, stDev, generator);
+  public static double nextNormal( double mean, double stDev ) {
+    Normal normal = new Normal( mean, stDev, generator );
     return normal.nextDouble();
   }
   
   
-  public static double nextPoisson(double lambda) {
-    Poisson poisson = new Poisson(lambda, generator);
+  public static double nextPoisson( double lambda ) {
+    Poisson poisson = new Poisson( lambda, generator );
     return poisson.nextDouble();
   }
 }

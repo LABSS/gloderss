@@ -40,11 +40,11 @@ public class Message {
    * @param content
    *          Message content
    */
-  public Message(double time, int sender, int receiver, Object content) {
+  public Message( double time, int sender, int receiver, Object content ) {
     this.time = time;
     this.sender = sender;
     this.receiver = new ArrayList<Integer>();
-    this.receiver.add(receiver);
+    this.receiver.add( receiver );
     this.content = content;
   }
   
@@ -61,8 +61,7 @@ public class Message {
    * @param content
    *          Message content
    */
-  public Message(double time, int sender, List<Integer> receiver,
-      Object content) {
+  public Message( double time, int sender, List<Integer> receiver, Object content ) {
     this.time = time;
     this.sender = sender;
     this.receiver = receiver;
@@ -88,7 +87,7 @@ public class Message {
    *          Time of submission
    * @return none
    */
-  public void setTime(double time) {
+  public void setTime( double time ) {
     this.time = time;
   }
   
@@ -111,7 +110,7 @@ public class Message {
    *          Sender identification
    * @return none
    */
-  public void setSender(int sender) {
+  public void setSender( int sender ) {
     this.sender = sender;
   }
   
@@ -134,7 +133,7 @@ public class Message {
    *          List of receivers' identification
    * @return none
    */
-  public void setReceiver(List<Integer> receiver) {
+  public void setReceiver( List<Integer> receiver ) {
     this.receiver = receiver;
   }
   
@@ -157,7 +156,7 @@ public class Message {
    *          Message content
    * @return none
    */
-  public void setContent(Object content) {
+  public void setContent( Object content ) {
     this.content = content;
   }
   

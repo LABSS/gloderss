@@ -10,7 +10,7 @@ public interface IConsumer {
   public void buyProduct();
   
   
-  public void receiveProduct(DeliverProductAction action);
+  public void receiveProduct( DeliverProductAction action );
   
   
   public void finalizeSim();

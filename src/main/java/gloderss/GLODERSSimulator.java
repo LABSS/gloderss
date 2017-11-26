@@ -7,24 +7,24 @@ import gloderss.main.RunSimulation;
 public class GLODERSSimulator {
   
   private final static Logger logger = LoggerFactory
-      .getLogger(GLODERSSimulator.class);
+      .getLogger( GLODERSSimulator.class );
   
   
-  public static void main(String[] args) {
-    if(args.length < 2) {
+  public static void main( String[] args ) {
+    if ( args.length < 2 ) {
       System.out
-          .println("Syntax: GLODERSSimulator [XML Filename] [XSD Filename]");
-      System.exit(1);
+          .println( "Syntax: GLODERSSimulator [XML Filename] [XSD Filename]" );
+      System.exit( 1 );
     }
     
     long startTime = System.currentTimeMillis();
-    logger.debug("[START_TIME] " + startTime);
-    RunSimulation gloderss = new RunSimulation(args[0], args[1]);
+    logger.debug( "[START_TIME] " + startTime );
+    RunSimulation gloderss = new RunSimulation( args[0], args[1] );
     gloderss.run();
     
     long endTime = System.currentTimeMillis();
-    logger.debug("[END_TIME] " + endTime);
+    logger.debug( "[END_TIME] " + endTime );
     
-    logger.debug("[ELAPSED] " + (endTime - startTime));
+    logger.debug( "[ELAPSED] " + (endTime - startTime) );
   }
 }

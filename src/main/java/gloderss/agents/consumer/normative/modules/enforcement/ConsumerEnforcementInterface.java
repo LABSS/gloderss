@@ -4,6 +4,6 @@ import emilia.EmiliaAbstract;
 
 public interface ConsumerEnforcementInterface {
   
-  public void setController(EmiliaAbstract normative);
+  public void setController( EmiliaAbstract normative );
   
 }

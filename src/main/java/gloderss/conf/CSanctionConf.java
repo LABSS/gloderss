@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class CSanctionConf {
   
@@ -15,8 +15,8 @@ public class CSanctionConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_SANCTION_THRESHOLD)
-  public void setThreshold(double threshold) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_SANCTION_THRESHOLD )
+  public void setThreshold( double threshold ) {
     this.threshold = threshold;
   }
   
@@ -26,8 +26,8 @@ public class CSanctionConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_SANCTION_DISCERNABILITY)
-  public void setDiscernability(double discernability) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_SANCTION_DISCERNABILITY )
+  public void setDiscernability( double discernability ) {
     this.discernability = discernability;
   }
 }

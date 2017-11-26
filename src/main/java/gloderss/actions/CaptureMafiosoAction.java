@@ -1,8 +1,8 @@
 package gloderss.actions;
 
+import java.util.HashMap;
 import emilia.entity.action.ActionAbstract;
 import gloderss.Constants.Actions;
-import java.util.HashMap;
 
 public class CaptureMafiosoAction extends ActionAbstract {
   
@@ -24,13 +24,12 @@ public class CaptureMafiosoAction extends ActionAbstract {
    *          Mafioso identification
    * @return none
    */
-  public CaptureMafiosoAction(int extortionId, int policeOfficerId,
-      int mafiosoId, boolean extortion) {
-    super(Actions.CAPTURE_MAFIOSO.ordinal(), Actions.CAPTURE_MAFIOSO.name());
+  public CaptureMafiosoAction( int extortionId, int policeOfficerId, int mafiosoId, boolean extortion ) {
+    super( Actions.CAPTURE_MAFIOSO.ordinal(), Actions.CAPTURE_MAFIOSO.name() );
     
     this.params = new HashMap<Object, Object>();
-    this.params.put(Param.EXTORTION_ID, extortionId);
-    this.params.put(Param.POLICE_OFFICER_ID, policeOfficerId);
-    this.params.put(Param.MAFIOSO_ID, mafiosoId);
+    this.params.put( Param.EXTORTION_ID, extortionId );
+    this.params.put( Param.POLICE_OFFICER_ID, policeOfficerId );
+    this.params.put( Param.MAFIOSO_ID, mafiosoId );
   }
 }

@@ -1,11 +1,12 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_RANDOM_BATCH_CHANGE,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_RANDOM_BATCH_CHANGE,
+    namespace = Constants.TAG_NAMESPACE )
 public class RandomBatchChangeConf {
   
   private String name;
@@ -22,8 +23,8 @@ public class RandomBatchChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_RANDOM_BATCH_NAME)
-  public void setName(String name) {
+  @XmlElement ( name = Constants.TAG_RANDOM_BATCH_NAME )
+  public void setName( String name ) {
     this.name = name;
   }
   
@@ -33,8 +34,8 @@ public class RandomBatchChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_RANDOM_BATCH_PARAMETER)
-  public void setParameter(String parameter) {
+  @XmlElement ( name = Constants.TAG_RANDOM_BATCH_PARAMETER )
+  public void setParameter( String parameter ) {
     this.parameter = parameter;
   }
   
@@ -44,8 +45,8 @@ public class RandomBatchChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_RANDOM_BATCH_TYPE)
-  public void setType(String type) {
+  @XmlElement ( name = Constants.TAG_RANDOM_BATCH_TYPE )
+  public void setType( String type ) {
     this.type = type;
   }
   
@@ -55,8 +56,8 @@ public class RandomBatchChangeConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_RANDOM_BATCH_VALUE)
-  public void setValue(String value) {
+  @XmlElement ( name = Constants.TAG_RANDOM_BATCH_VALUE )
+  public void setValue( String value ) {
     this.value = value;
   }
   

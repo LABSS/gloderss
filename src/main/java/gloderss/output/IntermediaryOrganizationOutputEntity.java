@@ -12,7 +12,7 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
     private DataType type;
     
     
-    Field(String name, DataType type) {
+    Field( String name, DataType type ) {
       this.name = name;
       this.type = type;
     }
@@ -33,8 +33,8 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
   private Object[] entity;
   
   
-  public IntermediaryOrganizationOutputEntity(int id, String separator) {
-    super(id);
+  public IntermediaryOrganizationOutputEntity( int id, String separator ) {
+    super( id );
     this.separator = separator;
     this.entity = new Object[Field.values().length];
     
@@ -45,20 +45,20 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
   
   
   @Override
-  public void setValue(String fieldStr, Object value) {
+  public void setValue( String fieldStr, Object value ) {
     
-    Field field = Field.valueOf(fieldStr);
+    Field field = Field.valueOf( fieldStr );
     
-    if(field.getType().equals(DataType.BOOLEAN)) {
+    if ( field.getType().equals( DataType.BOOLEAN ) ) {
       this.entity[field.ordinal()] = (Boolean) value;
       
-    } else if(field.getType().equals(DataType.DOUBLE)) {
+    } else if ( field.getType().equals( DataType.DOUBLE ) ) {
       this.entity[field.ordinal()] = (Double) value;
       
-    } else if(field.getType().equals(DataType.INTEGER)) {
+    } else if ( field.getType().equals( DataType.INTEGER ) ) {
       this.entity[field.ordinal()] = (Integer) value;
       
-    } else if(field.getType().equals(DataType.STRING)) {
+    } else if ( field.getType().equals( DataType.STRING ) ) {
       this.entity[field.ordinal()] = (String) value;
       
     }
@@ -66,8 +66,8 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
   
   
   @Override
-  public Object getValue(String fieldStr) {
-    return this.entity[Field.valueOf(fieldStr).ordinal()];
+  public Object getValue( String fieldStr ) {
+    return this.entity[Field.valueOf( fieldStr ).ordinal()];
   }
   
   
@@ -76,16 +76,16 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
     String line = new String();
     
     Object value;
-    for(Field field : Field.values()) {
+    for ( Field field : Field.values() ) {
       value = this.entity[field.ordinal()];
-      if(value == null) {
+      if ( value == null ) {
         value = (String) "";
-      } else if(field.getType().equals(DataType.DOUBLE)) {
-        value = String.format("%.2f", value);
+      } else if ( field.getType().equals( DataType.DOUBLE ) ) {
+        value = String.format( "%.2f", value );
       }
       line += value + this.separator;
     }
-    line = line.substring(0, line.length() - 1);
+    line = line.substring( 0, line.length() - 1 );
     
     return line;
   }
@@ -95,10 +95,10 @@ public class IntermediaryOrganizationOutputEntity extends AbstractEntity {
   public String getHeader() {
     String header = new String();
     
-    for(Field field : Field.values()) {
+    for ( Field field : Field.values() ) {
       header += field.getName() + this.separator;
     }
-    header = header.substring(0, header.length() - 1);
+    header = header.substring( 0, header.length() - 1 );
     
     return header;
   }

@@ -1,13 +1,13 @@
 package gloderss.agents;
 
+import java.util.List;
+import java.util.Map;
 import gloderss.communication.CommunicationController;
 import gloderss.communication.IComm;
 import gloderss.communication.InfoAbstract;
 import gloderss.communication.Message;
 import gloderss.engine.devs.EventSimulator;
 import gloderss.engine.event.EventHandler;
-import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractAgent implements IComm, EventHandler {
   
@@ -30,12 +30,12 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          Event simulator
    * @return none
    */
-  public AbstractAgent(int id, EventSimulator simulator) {
+  public AbstractAgent( int id, EventSimulator simulator ) {
     this.id = id;
     this.simulator = simulator;
     
     this.comm = CommunicationController.getInstance();
-    this.comm.subscribe(id, this);
+    this.comm.subscribe( id, this );
   }
   
   
@@ -57,9 +57,9 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          Message
    * @return none
    */
-  public void sendMsg(Message msg) {
-    if(msg != null) {
-      this.comm.sendMessage(msg);
+  public void sendMsg( Message msg ) {
+    if ( msg != null ) {
+      this.comm.sendMessage( msg );
     }
   }
   
@@ -71,11 +71,11 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          Information request or set
    * @return Requested data
    */
-  public Object sendInfo(Object info) {
+  public Object sendInfo( Object info ) {
     Object result = null;
     
-    if(info instanceof InfoAbstract) {
-      result = this.comm.sendInfo((InfoAbstract) info);
+    if ( info instanceof InfoAbstract ) {
+      result = this.comm.sendInfo( (InfoAbstract) info );
     }
     
     return result;
@@ -102,9 +102,9 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          List of agents to be observed
    * @return none
    */
-  public void addObservation(int observer, List<Integer> observedList) {
-    if((observedList != null) && (!observedList.isEmpty())) {
-      this.comm.addObservation(observer, observedList);
+  public void addObservation( int observer, List<Integer> observedList ) {
+    if ( (observedList != null) && (!observedList.isEmpty()) ) {
+      this.comm.addObservation( observer, observedList );
     }
   }
   
@@ -118,8 +118,8 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          Observed agent
    * @return none
    */
-  public void addObservation(int observer, int observed) {
-    this.comm.addObservation(observer, observed);
+  public void addObservation( int observer, int observed ) {
+    this.comm.addObservation( observer, observed );
   }
   
   
@@ -132,9 +132,9 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          List of agents to remove observation
    * @return none
    */
-  public void removeObservation(int observer, List<Integer> observedList) {
-    if((observedList != null) && (!observedList.isEmpty())) {
-      this.comm.removeObservation(observer, observedList);
+  public void removeObservation( int observer, List<Integer> observedList ) {
+    if ( (observedList != null) && (!observedList.isEmpty()) ) {
+      this.comm.removeObservation( observer, observedList );
     }
   }
   
@@ -148,7 +148,7 @@ public abstract class AbstractAgent implements IComm, EventHandler {
    *          Observed agent
    * @return none
    */
-  public void removeObservation(int observer, int observed) {
-    this.comm.removeObservation(observer, observed);
+  public void removeObservation( int observer, int observed ) {
+    this.comm.removeObservation( observer, observed );
   }
 }

@@ -1,14 +1,15 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_GENERAL,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_GENERAL,
+    namespace = Constants.TAG_NAMESPACE )
 public class GeneralConf {
   
   private int           numReplications;
@@ -31,8 +32,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NUMBER_REPLICATIONS)
-  public void setNumberReplications(int numReplications) {
+  @XmlElement ( name = Constants.TAG_NUMBER_REPLICATIONS )
+  public void setNumberReplications( int numReplications ) {
     this.numReplications = numReplications;
   }
   
@@ -42,8 +43,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NUMBER_CYCLES)
-  public void setNumberCycles(double numCycles) {
+  @XmlElement ( name = Constants.TAG_NUMBER_CYCLES )
+  public void setNumberCycles( double numCycles ) {
     this.numCycles = numCycles;
   }
   
@@ -53,8 +54,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NETWORK_TOPOLOGY)
-  public void setNetworkTopology(String networkTopology) {
+  @XmlElement ( name = Constants.TAG_NETWORK_TOPOLOGY )
+  public void setNetworkTopology( String networkTopology ) {
     this.networkTopology = networkTopology;
   }
   
@@ -64,8 +65,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CITIZENS_DISTRIBUTION)
-  public void setCitizensDistribution(String citizensDistribution) {
+  @XmlElement ( name = Constants.TAG_CITIZENS_DISTRIBUTION )
+  public void setCitizensDistribution( String citizensDistribution ) {
     this.citizensDistribution = citizensDistribution;
   }
   
@@ -75,9 +76,9 @@ public class GeneralConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_SEEDS)
-  @XmlElement(name = Constants.TAG_SEED)
-  public void setSeedsConf(List<Integer> seedsConf) {
+  @XmlElementWrapper ( name = Constants.TAG_SEEDS )
+  @XmlElement ( name = Constants.TAG_SEED )
+  public void setSeedsConf( List<Integer> seedsConf ) {
     this.seedsConf = seedsConf;
   }
   
@@ -87,8 +88,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_OUTPUT)
-  public void setOutputConf(OutputConf outputConf) {
+  @XmlElement ( name = Constants.TAG_OUTPUT )
+  public void setOutputConf( OutputConf outputConf ) {
     this.outputConf = outputConf;
   }
   
@@ -98,8 +99,8 @@ public class GeneralConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_FILENAME)
-  public void setFilenameConf(FilenameConf filenameConf) {
+  @XmlElement ( name = Constants.TAG_FILENAME )
+  public void setFilenameConf( FilenameConf filenameConf ) {
     this.filenameConf = filenameConf;
   }
 }

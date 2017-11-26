@@ -1,9 +1,5 @@
 package gloderss.communication;
 
-import gloderss.conf.ActionConf;
-import gloderss.conf.CommunicationConf;
-import gloderss.conf.TypeConf;
-import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -11,11 +7,15 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import gloderss.conf.ActionConf;
+import gloderss.conf.CommunicationConf;
+import gloderss.conf.TypeConf;
+import gloderss.util.random.RandomUtil;
 
 public class CommunicationController {
   
   private static Logger logger = LoggerFactory
-      .getLogger(CommunicationController.class);
+      .getLogger( CommunicationController.class );
   
   public enum Visibility {
     NONE,
@@ -41,24 +41,24 @@ public class CommunicationController {
    * @param none
    * @return none
    */
-  private CommunicationController(CommunicationConf conf) {
+  private CommunicationController( CommunicationConf conf ) {
     this.actionVisibility = new HashMap<String, Double>();
     
     Map<String, Double> types = new HashMap<String, Double>();
-    for(TypeConf type : conf.getTypesConf()) {
-      types.put(type.getName(), type.getProbability());
+    for ( TypeConf type : conf.getTypesConf() ) {
+      types.put( type.getName(), type.getProbability() );
     }
     
     double probability;
-    for(ActionConf action : conf.getActionsConf()) {
+    for ( ActionConf action : conf.getActionsConf() ) {
       
-      if(types.containsKey(action.getType())) {
-        probability = types.get(action.getType());
+      if ( types.containsKey( action.getType() ) ) {
+        probability = types.get( action.getType() );
       } else {
         probability = 0.0;
       }
       
-      this.actionVisibility.put(action.getName(), probability);
+      this.actionVisibility.put( action.getName(), probability );
     }
     
     this.agents = new HashMap<Integer, IComm>();
@@ -75,9 +75,9 @@ public class CommunicationController {
    *          Communication configuration
    * @return Communication Controller instance
    */
-  public static CommunicationController getInstance(CommunicationConf conf) {
-    if(instance == null) {
-      instance = new CommunicationController(conf);
+  public static CommunicationController getInstance( CommunicationConf conf ) {
+    if ( instance == null ) {
+      instance = new CommunicationController( conf );
     }
     
     return instance;
@@ -103,11 +103,11 @@ public class CommunicationController {
    * @param callback
    *          Agent callback
    */
-  public boolean subscribe(int id, IComm callback) {
+  public boolean subscribe( int id, IComm callback ) {
     boolean registered = false;
     
-    if(!this.agents.containsKey(id)) {
-      this.agents.put(id, callback);
+    if ( !this.agents.containsKey( id ) ) {
+      this.agents.put( id, callback );
       registered = true;
     }
     
@@ -122,9 +122,9 @@ public class CommunicationController {
    *          Agent identification
    * @return none
    */
-  public void unregister(int id) {
-    if(this.agents.containsKey(id)) {
-      this.agents.remove(id);
+  public void unregister( int id ) {
+    if ( this.agents.containsKey( id ) ) {
+      this.agents.remove( id );
     }
   }
   
@@ -136,24 +136,24 @@ public class CommunicationController {
    *          Communication configuration
    * @return none
    */
-  public void reset(CommunicationConf conf) {
+  public void reset( CommunicationConf conf ) {
     this.actionVisibility = new HashMap<String, Double>();
     
     Map<String, Double> types = new HashMap<String, Double>();
-    for(TypeConf type : conf.getTypesConf()) {
-      types.put(type.getName(), type.getProbability());
+    for ( TypeConf type : conf.getTypesConf() ) {
+      types.put( type.getName(), type.getProbability() );
     }
     
     double probability;
-    for(ActionConf action : conf.getActionsConf()) {
+    for ( ActionConf action : conf.getActionsConf() ) {
       
-      if(types.containsKey(action.getType())) {
-        probability = types.get(action.getType());
+      if ( types.containsKey( action.getType() ) ) {
+        probability = types.get( action.getType() );
       } else {
         probability = 0.0;
       }
       
-      this.actionVisibility.put(action.getName(), probability);
+      this.actionVisibility.put( action.getName(), probability );
     }
     
     this.agents = new HashMap<Integer, IComm>();
@@ -168,27 +168,28 @@ public class CommunicationController {
    *          Message
    * @return none
    */
-  public void sendMessage(Message msg) {
+  public void sendMessage( Message msg ) {
     
     int sender = msg.getSender();
-    if(this.agents.containsKey(sender)) {
+    if ( this.agents.containsKey( sender ) ) {
       
       List<Integer> observers = new ArrayList<Integer>();
       
       // Receivers specified
-      if(msg.getReceiver() != null) {
-        for(Integer receiver : msg.getReceiver()) {
-          if(this.agents.containsKey(receiver)) {
-            IComm callback = this.agents.get(receiver);
-            callback.handleMessage(msg);
+      if ( msg.getReceiver() != null ) {
+        for ( Integer receiver : msg.getReceiver() ) {
+          if ( this.agents.containsKey( receiver ) ) {
+            IComm callback = this.agents.get( receiver );
+            callback.handleMessage( msg );
             
-            logger.debug("[SENDMSG] [" + msg.toString() + "]");
+            logger.debug( "[SENDMSG] [" + msg.toString() + "]" );
             
             // Add agents as observers
-            if(this.observe.containsKey(receiver)) {
-              for(Integer observer : this.observe.get(receiver)) {
-                if((observer != sender) && (!observers.contains(observer))) {
-                  observers.add(observer);
+            if ( this.observe.containsKey( receiver ) ) {
+              for ( Integer observer : this.observe.get( receiver ) ) {
+                if ( (observer != sender)
+                    && (!observers.contains( observer )) ) {
+                  observers.add( observer );
                 }
               }
             }
@@ -196,37 +197,37 @@ public class CommunicationController {
         }
         
         // Send sent message to registered observer
-        if(this.observe.containsKey(sender)) {
+        if ( this.observe.containsKey( sender ) ) {
           
           List<Integer> receivers = msg.getReceiver();
-          if(receivers == null) {
+          if ( receivers == null ) {
             receivers = new ArrayList<Integer>();
           }
           
           // Add agents as observers
-          for(Integer observer : this.observe.get(sender)) {
-            if((!receivers.contains(observer))
-                && (!observers.contains(observer))) {
-              observers.add(observer);
+          for ( Integer observer : this.observe.get( sender ) ) {
+            if ( (!receivers.contains( observer ))
+                && (!observers.contains( observer )) ) {
+              observers.add( observer );
             }
           }
         }
         
         String action = msg.getContent().getClass().getName();
-        if(this.actionVisibility.containsKey(action)) {
+        if ( this.actionVisibility.containsKey( action ) ) {
           
-          double probability = this.actionVisibility.get(action);
+          double probability = this.actionVisibility.get( action );
           
-          for(Integer observer : observers) {
-            if(RandomUtil.nextDouble() < probability) {
-              IComm callback = this.agents.get(observer);
-              callback.handleObservation(msg);
+          for ( Integer observer : observers ) {
+            if ( RandomUtil.nextDouble() < probability ) {
+              IComm callback = this.agents.get( observer );
+              callback.handleObservation( msg );
               
               logger.debug(
-                  "[OBSERVED] [" + observer + "] [" + msg.toString() + "]");
+                  "[OBSERVED] [" + observer + "] [" + msg.toString() + "]" );
             } else {
-              logger.debug("[NOT_OBSERVATION] [" + observer + "] ["
-                  + msg.toString() + "]");
+              logger.debug( "[NOT_OBSERVATION] [" + observer + "] ["
+                  + msg.toString() + "]" );
             }
           }
         }
@@ -234,16 +235,16 @@ public class CommunicationController {
         // Broadcast message
       } else {
         String action = msg.getContent().getClass().getName();
-        if(this.actionVisibility.containsKey(action)) {
+        if ( this.actionVisibility.containsKey( action ) ) {
           
-          double probability = this.actionVisibility.get(action);
+          double probability = this.actionVisibility.get( action );
           
-          for(Integer receiver : this.agents.keySet()) {
-            if(RandomUtil.nextDouble() < probability) {
-              IComm callback = this.agents.get(receiver);
-              callback.handleMessage(msg);
+          for ( Integer receiver : this.agents.keySet() ) {
+            if ( RandomUtil.nextDouble() < probability ) {
+              IComm callback = this.agents.get( receiver );
+              callback.handleMessage( msg );
               
-              logger.debug("[BROADCAST] [" + msg.toString() + "]");
+              logger.debug( "[BROADCAST] [" + msg.toString() + "]" );
             }
           }
         }
@@ -259,13 +260,13 @@ public class CommunicationController {
    *          Information request or set
    * @return Information requested or set result
    */
-  public Object sendInfo(InfoAbstract info) {
+  public Object sendInfo( InfoAbstract info ) {
     Object result = null;
     
-    if(this.agents.containsKey(info.getSender())
-        && (this.agents.containsKey(info.getReceiver()))) {
-      IComm agent = this.agents.get(info.getReceiver());
-      result = agent.handleInfo(info);
+    if ( this.agents.containsKey( info.getSender() )
+        && (this.agents.containsKey( info.getReceiver() )) ) {
+      IComm agent = this.agents.get( info.getReceiver() );
+      result = agent.handleInfo( info );
     }
     
     return result;
@@ -292,18 +293,18 @@ public class CommunicationController {
    *          List of agents to be observed
    * @return none
    */
-  public void addObservation(int observer, List<Integer> observedList) {
+  public void addObservation( int observer, List<Integer> observedList ) {
     List<Integer> aux;
-    for(Integer observed : observedList) {
-      if(this.observe.containsKey(observed)) {
-        aux = this.observe.get(observed);
+    for ( Integer observed : observedList ) {
+      if ( this.observe.containsKey( observed ) ) {
+        aux = this.observe.get( observed );
       } else {
         aux = new ArrayList<Integer>();
       }
       
-      if(!aux.contains(observer)) {
-        aux.add(observer);
-        this.observe.put(observed, aux);
+      if ( !aux.contains( observer ) ) {
+        aux.add( observer );
+        this.observe.put( observed, aux );
       }
     }
   }
@@ -318,17 +319,17 @@ public class CommunicationController {
    *          Observed agent
    * @return none
    */
-  public void addObservation(int observer, int observed) {
+  public void addObservation( int observer, int observed ) {
     List<Integer> aux;
-    if(this.observe.containsKey(observed)) {
-      aux = this.observe.get(observed);
+    if ( this.observe.containsKey( observed ) ) {
+      aux = this.observe.get( observed );
     } else {
       aux = new ArrayList<Integer>();
     }
     
-    if(!aux.contains(observer)) {
-      aux.add(observer);
-      this.observe.put(observed, aux);
+    if ( !aux.contains( observer ) ) {
+      aux.add( observer );
+      this.observe.put( observed, aux );
     }
   }
   
@@ -342,13 +343,13 @@ public class CommunicationController {
    *          List of agents to remove observation
    * @return none
    */
-  public void removeObservation(int observer, List<Integer> observedList) {
-    for(Integer observed : observedList) {
-      if(this.observe.containsKey(observed)) {
-        List<Integer> aux = this.observe.get(observed);
-        if(aux.contains(observer)) {
-          aux.remove(new Integer(observer));
-          this.observe.put(observed, aux);
+  public void removeObservation( int observer, List<Integer> observedList ) {
+    for ( Integer observed : observedList ) {
+      if ( this.observe.containsKey( observed ) ) {
+        List<Integer> aux = this.observe.get( observed );
+        if ( aux.contains( observer ) ) {
+          aux.remove( new Integer( observer ) );
+          this.observe.put( observed, aux );
         }
       }
     }
@@ -364,12 +365,12 @@ public class CommunicationController {
    *          Observed agent
    * @return none
    */
-  public void removeObservation(int observer, int observed) {
-    if(this.observe.containsKey(observed)) {
-      List<Integer> aux = this.observe.get(observed);
-      if(aux.contains(observer)) {
-        aux.remove(new Integer(observer));
-        this.observe.put(observed, aux);
+  public void removeObservation( int observer, int observed ) {
+    if ( this.observe.containsKey( observed ) ) {
+      List<Integer> aux = this.observe.get( observed );
+      if ( aux.contains( observer ) ) {
+        aux.remove( new Integer( observer ) );
+        this.observe.put( observed, aux );
       }
     }
   }

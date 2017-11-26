@@ -21,7 +21,7 @@ public class NormContent implements NormContentInterface {
    *          Negated action
    * @return none
    */
-  public NormContent(Actions action, Actions notAction) {
+  public NormContent( Actions action, Actions notAction ) {
     this.action = action;
     this.notAction = notAction;
   }
@@ -50,11 +50,11 @@ public class NormContent implements NormContentInterface {
   
   
   @Override
-  public boolean match(Object value) {
+  public boolean match( Object value ) {
     
-    if(value instanceof String) {
-      if((this.action.name().equalsIgnoreCase((String) value))
-          || (this.notAction.name().equalsIgnoreCase((String) value))) {
+    if ( value instanceof String ) {
+      if ( (this.action.name().equalsIgnoreCase( (String) value ))
+          || (this.notAction.name().equalsIgnoreCase( (String) value )) ) {
         return true;
       }
     }
@@ -64,10 +64,10 @@ public class NormContent implements NormContentInterface {
   
   
   @Override
-  public boolean comply(Object value) {
+  public boolean comply( Object value ) {
     
-    if(value instanceof String) {
-      if(this.action.name().equalsIgnoreCase((String) value)) {
+    if ( value instanceof String ) {
+      if ( this.action.name().equalsIgnoreCase( (String) value ) ) {
         return true;
       }
     }

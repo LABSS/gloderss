@@ -1,14 +1,14 @@
 package gloderss.rating;
 
-import gloderss.actions.MafiaPunishmentAction;
-import gloderss.actions.NotPayExtortionAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import gloderss.actions.MafiaPunishmentAction;
+import gloderss.actions.NotPayExtortionAction;
 
 public class MafiaPunisherRating extends ReputationAbstract {
   
   private final static Logger logger = LoggerFactory
-      .getLogger(MafiaPunisherRating.class);
+      .getLogger( MafiaPunisherRating.class );
   
   private int                 numNoPayers;
   
@@ -19,8 +19,8 @@ public class MafiaPunisherRating extends ReputationAbstract {
   private double              value;
   
   
-  public MafiaPunisherRating(double unknownValue) {
-    super(unknownValue);
+  public MafiaPunisherRating( double unknownValue ) {
+    super( unknownValue );
     
     this.numNoPayers = 0;
     this.numPunishments = 0;
@@ -31,44 +31,44 @@ public class MafiaPunisherRating extends ReputationAbstract {
   
   
   @Override
-  public boolean isUnknown(int... target) {
+  public boolean isUnknown( int... target ) {
     return this.unknown;
   }
   
   
   @Override
-  public double getReputation(int... target) {
+  public double getReputation( int... target ) {
     return this.value;
   }
   
   
   @Override
-  public void setReputation(int target, double value) {
+  public void setReputation( int target, double value ) {
     this.unknown = false;
     this.value = value;
   }
   
   
   @Override
-  public void updateReputation(Object action) {
+  public void updateReputation( Object action ) {
     
     boolean updated = false;
-    if(action instanceof NotPayExtortionAction) {
+    if ( action instanceof NotPayExtortionAction ) {
       updated = true;
       this.numNoPayers++;
-    } else if(action instanceof MafiaPunishmentAction) {
+    } else if ( action instanceof MafiaPunishmentAction ) {
       updated = true;
       this.numPunishments++;
     }
     
-    if(updated) {
+    if ( updated ) {
       this.unknown = false;
       
-      this.value = Math.min(1.0,
-          ((double) this.numPunishments / (double) this.numNoPayers));
+      this.value = Math.min( 1.0,
+          ((double) this.numPunishments / (double) this.numNoPayers) );
       
-      logger.debug("[PUNISHER_MAFIA_REPUTATION] " + this.numNoPayers + " "
-          + this.numPunishments + " " + this.value);
+      logger.debug( "[PUNISHER_MAFIA_REPUTATION] " + this.numNoPayers + " "
+          + this.numPunishments + " " + this.value );
     }
   }
 }

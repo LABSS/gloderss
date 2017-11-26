@@ -1,11 +1,11 @@
 package gloderss.util.network;
 
-import gloderss.util.random.RandomUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import gloderss.util.random.RandomUtil;
 
 public class Network<E> {
   
@@ -34,27 +34,27 @@ public class Network<E> {
    *          List of nodes to structure as a scale-free network
    * @return none
    */
-  public void generateBarabasiAlbertScaleFreeNetwork(Collection<E> nodes) {
+  public void generateBarabasiAlbertScaleFreeNetwork( Collection<E> nodes ) {
     
-    if((nodes != null) && (!nodes.isEmpty())) {
+    if ( (nodes != null) && (!nodes.isEmpty()) ) {
       this.network = new HashMap<E, List<E>>();
       this.degree = 0;
-      for(E newNode : nodes) {
+      for ( E newNode : nodes ) {
         
         List<E> newNeighbors = new ArrayList<E>();
         boolean hasConnection = false;
-        while((!this.network.isEmpty()) && (!hasConnection)) {
+        while ( (!this.network.isEmpty()) && (!hasConnection) ) {
           
-          for(E oldNode : this.network.keySet()) {
-            List<E> oldNeighbors = this.network.get(oldNode);
+          for ( E oldNode : this.network.keySet() ) {
+            List<E> oldNeighbors = this.network.get( oldNode );
             
-            if((this.degree == 0)
+            if ( (this.degree == 0)
                 || ((RandomUtil.nextDouble() < ((double) oldNeighbors.size()
-                    / (double) this.degree)))) {
-              newNeighbors.add(oldNode);
+                    / (double) this.degree))) ) {
+              newNeighbors.add( oldNode );
               
-              oldNeighbors.add(newNode);
-              this.network.put(oldNode, oldNeighbors);
+              oldNeighbors.add( newNode );
+              this.network.put( oldNode, oldNeighbors );
               
               hasConnection = true;
               this.degree++;
@@ -62,7 +62,7 @@ public class Network<E> {
           }
         }
         
-        this.network.put(newNode, newNeighbors);
+        this.network.put( newNode, newNeighbors );
       }
     }
   }
@@ -71,15 +71,15 @@ public class Network<E> {
   /**
    * 
    */
-  public void generateMeshNetwork(Collection<E> nodes) {
+  public void generateMeshNetwork( Collection<E> nodes ) {
     
-    if((nodes != null) && (!nodes.isEmpty())) {
+    if ( (nodes != null) && (!nodes.isEmpty()) ) {
       this.network = new HashMap<E, List<E>>();
-      for(E newNode : nodes) {
+      for ( E newNode : nodes ) {
         List<E> newNeighbors = new ArrayList<E>();
-        newNeighbors.addAll(nodes);
-        newNeighbors.remove(newNode);
-        this.network.put(newNode, newNeighbors);
+        newNeighbors.addAll( nodes );
+        newNeighbors.remove( newNode );
+        this.network.put( newNode, newNeighbors );
       }
       this.degree = (int) ((double) (nodes.size() * (nodes.size() - 1))
           / (double) 2);
@@ -105,12 +105,12 @@ public class Network<E> {
    *          Node of the network
    * @return Number of neighbors
    */
-  public int getDegree(E node) {
+  public int getDegree( E node ) {
     int nodeDegree = 0;
     
-    if(this.network.containsKey(node)) {
-      List<E> neighbors = this.network.get(node);
-      if(neighbors != null) {
+    if ( this.network.containsKey( node ) ) {
+      List<E> neighbors = this.network.get( node );
+      if ( neighbors != null ) {
         nodeDegree = neighbors.size();
       }
     }
@@ -126,11 +126,11 @@ public class Network<E> {
    *          Node to obtain the neighbors from
    * @return List of neighbors
    */
-  public List<E> getNeighbors(E node) {
+  public List<E> getNeighbors( E node ) {
     List<E> neighbors;
     
-    if(this.network.containsKey(node)) {
-      neighbors = this.network.get(node);
+    if ( this.network.containsKey( node ) ) {
+      neighbors = this.network.get( node );
     } else {
       neighbors = new ArrayList<E>();
     }

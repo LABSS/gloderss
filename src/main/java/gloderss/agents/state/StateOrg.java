@@ -1,5 +1,13 @@
 package gloderss.agents.state;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import gloderss.Constants;
 import gloderss.Constants.Norms;
 import gloderss.actions.CaptureMafiosoAction;
@@ -40,21 +48,13 @@ import gloderss.output.OutputController;
 import gloderss.output.StateOutputEntity;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 import net.sourceforge.jeval.EvaluationException;
 import net.sourceforge.jeval.Evaluator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class StateOrg extends AbstractAgent implements IStateOrg {
   
   private final static Logger              logger        = LoggerFactory
-      .getLogger(StateOrg.class);
+      .getLogger( StateOrg.class );
   
   private static final String              COLLABORATION = "COLLABORATION";
   
@@ -134,10 +134,8 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    *          List of all entrepreneurs
    * @return none
    */
-  public StateOrg(Integer id, EventSimulator simulator, StateConf conf,
-      Map<Integer, ConsumerAgent> consumers,
-      Map<Integer, EntrepreneurAgent> entrepreneurs) {
-    super(id, simulator);
+  public StateOrg( Integer id, EventSimulator simulator, StateConf conf, Map<Integer, ConsumerAgent> consumers, Map<Integer, EntrepreneurAgent> entrepreneurs ) {
+    super( id, simulator );
     
     this.changesConf = conf.getChangesConf();
     
@@ -158,16 +156,16 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
     this.proportionTransferFondo = conf.getProportionTransferFondo();
     
     this.custodyDurationPDF = PDFAbstract
-        .getInstance(conf.getCustodyDurationPDF());
+        .getInstance( conf.getCustodyDurationPDF() );
     
     this.imprisonmentDurationPDF = PDFAbstract
-        .getInstance(conf.getImprisonmentDurationPDF());
+        .getInstance( conf.getImprisonmentDurationPDF() );
     
     this.timeToCompensationPDF = PDFAbstract
-        .getInstance(conf.getTimeToCompensationPDF());
+        .getInstance( conf.getTimeToCompensationPDF() );
     
     this.periodicityFondoPDF = PDFAbstract
-        .getInstance(conf.getPeriodicityFondoPDF());
+        .getInstance( conf.getPeriodicityFondoPDF() );
     
     this.collaborationConvictionFunction = conf
         .getCollaborationConvictionFunction();
@@ -190,23 +188,23 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
     
     // Make Entrepreneur recognize the State identification
     this.entrepreneurs = entrepreneurs;
-    for(Integer entrepreneurId : this.entrepreneurs.keySet()) {
-      InfoSet infoSet = new InfoSet(id, entrepreneurId,
-          Constants.PARAMETER_STATE_ID, id);
-      this.sendInfo(infoSet);
+    for ( Integer entrepreneurId : this.entrepreneurs.keySet() ) {
+      InfoSet infoSet = new InfoSet( id, entrepreneurId,
+          Constants.PARAMETER_STATE_ID, id );
+      this.sendInfo( infoSet );
       
-      infoSet = new InfoSet(id, entrepreneurId,
+      infoSet = new InfoSet( id, entrepreneurId,
           Constants.PARAMETER_STATE_PUNISHMENT,
-          conf.getNoCollaborationPunishment());
-      this.sendInfo(infoSet);
+          conf.getNoCollaborationPunishment() );
+      this.sendInfo( infoSet );
     }
     
     PoliceOfficerAgent police;
     int policeId = id + 1;
     this.policeOfficers = new HashMap<Integer, PoliceOfficerAgent>();
-    for(int i = 0; i < conf.getNumberPoliceOfficers(); i++, policeId++) {
-      police = new PoliceOfficerAgent(policeId, simulator, conf, this.id);
-      this.policeOfficers.put(policeId, police);
+    for ( int i = 0; i < conf.getNumberPoliceOfficers(); i++, policeId++ ) {
+      police = new PoliceOfficerAgent( policeId, simulator, conf, this.id );
+      this.policeOfficers.put( policeId, police );
     }
     
     this.mafiosiBlackList = new ArrayList<Integer>();
@@ -230,7 +228,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   }
   
   
-  public void setIOId(int ioId) {
+  public void setIOId( int ioId ) {
     this.ioId = ioId;
   }
   
@@ -248,68 +246,69 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   
   @Override
   public void initializeSim() {
-    for(PoliceOfficerAgent police : this.policeOfficers.values()) {
+    for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
       police.initializeSim();
     }
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(AbstractEntity.EntityType.STATE);
-    outputEntity.setValue(StateOutputEntity.Field.TIME.name(),
-        this.simulator.now());
-    outputEntity.setValue(StateOutputEntity.Field.FONDO.name(), 0.0);
+        .getEntity( AbstractEntity.EntityType.STATE );
+    outputEntity.setValue( StateOutputEntity.Field.TIME.name(),
+        this.simulator.now() );
+    outputEntity.setValue( StateOutputEntity.Field.FONDO.name(), 0.0 );
     outputEntity.setActive();
     
-    Event event = new Event(this.simulator.now(), this,
-        Constants.EVENT_RESOURCE_FONDO);
-    this.simulator.insert(event);
+    Event event = new Event( this.simulator.now(), this,
+        Constants.EVENT_RESOURCE_FONDO );
+    this.simulator.insert( event );
     
     this.spreadInfoFunction.clearVariables();
     double nextSpreadInfo = 0.0;
     try {
       nextSpreadInfo = this.spreadInfoFunction
-          .getNumberResult(this.spreadInfoFunctionStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.spreadInfoFunctionStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    event = new Event(this.simulator.now() + nextSpreadInfo, this,
-        Constants.EVENT_SPREAD_INFORMATION);
-    this.simulator.insert(event);
+    event = new Event( this.simulator.now() + nextSpreadInfo, this,
+        Constants.EVENT_SPREAD_INFORMATION );
+    this.simulator.insert( event );
     
     // Schedule changes
-    for(ChangeConf change : this.changesConf) {
-      event = new Event(change.getTime(), this, change.getParameter(), change);
-      this.simulator.insert(event);
+    for ( ChangeConf change : this.changesConf ) {
+      event = new Event( change.getTime(), this, change.getParameter(),
+          change );
+      this.simulator.insert( event );
     }
   }
   
   
   @Override
-  public void decideInvestigateExtortion(DenounceExtortionAction action) {
+  public void decideInvestigateExtortion( DenounceExtortionAction action ) {
     
     int extortionId = (int) action
-        .getParam(DenounceExtortionAction.Param.EXTORTION_ID);
+        .getParam( DenounceExtortionAction.Param.EXTORTION_ID );
     
     int entrepreneurId = (int) action
-        .getParam(DenounceExtortionAction.Param.ENTREPRENEUR_ID);
+        .getParam( DenounceExtortionAction.Param.ENTREPRENEUR_ID );
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     
-    if((!this.investigateEntrepreneurs.contains(entrepreneurId))
+    if ( (!this.investigateEntrepreneurs.contains( entrepreneurId ))
         && (this.policeOfficers.size() > 0)
-        && (RandomUtil.nextDouble() < this.specificInvestigationProbability)) {
+        && (RandomUtil.nextDouble() < this.specificInvestigationProbability) ) {
       
       int mafiosoId = (int) action
-          .getParam(DenounceExtortionAction.Param.MAFIOSO_ID);
+          .getParam( DenounceExtortionAction.Param.MAFIOSO_ID );
       
-      if(!this.mafiosiBlackList.contains(mafiosoId)) {
-        this.mafiosiBlackList.add(mafiosoId);
+      if ( !this.mafiosiBlackList.contains( mafiosoId ) ) {
+        this.mafiosiBlackList.add( mafiosoId );
         
-        for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-          InfoSet set = new InfoSet(this.id, police.getId(),
-              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
-          this.sendInfo(set);
+        for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+          InfoSet set = new InfoSet( this.id, police.getId(),
+              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId );
+          this.sendInfo( set );
         }
       }
       
@@ -317,26 +316,26 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
       do {
         
         policeOfficerId = (int) this.policeOfficers.keySet()
-            .toArray()[RandomUtil.nextIntFromTo(0,
-                (this.policeOfficers.size() - 1))];
+            .toArray()[RandomUtil.nextIntFromTo( 0,
+                (this.policeOfficers.size() - 1) )];
         
-      } while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+      } while ( this.allocatedPoliceOfficers.contains( policeOfficerId ) );
       
       SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-          extortionId, policeOfficerId, entrepreneurId);
+          extortionId, policeOfficerId, entrepreneurId );
       
-      Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
-          investigation);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, policeOfficerId,
+          investigation );
+      this.sendMsg( msg );
       
       // Output
       outputEntity.setValue(
-          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true);
+          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true );
       
     } else {
       
       outputEntity.setValue(
-          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false);
+          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false );
       outputEntity.setActive();
     }
   }
@@ -344,31 +343,31 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   
   @Override
   public void decideInvestigateExtortionAffiliated(
-      DenounceExtortionAffiliatedAction action) {
+      DenounceExtortionAffiliatedAction action ) {
     
     int extortionId = (int) action
-        .getParam(DenounceExtortionAffiliatedAction.Param.EXTORTION_ID);
+        .getParam( DenounceExtortionAffiliatedAction.Param.EXTORTION_ID );
     
     int entrepreneurId = (int) action
-        .getParam(DenounceExtortionAffiliatedAction.Param.ENTREPRENEUR_ID);
+        .getParam( DenounceExtortionAffiliatedAction.Param.ENTREPRENEUR_ID );
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     
-    if((!this.investigateEntrepreneurs.contains(entrepreneurId))
+    if ( (!this.investigateEntrepreneurs.contains( entrepreneurId ))
         && (this.policeOfficers.size() > 0)
-        && (RandomUtil.nextDouble() < this.specificInvestigationProbability)) {
+        && (RandomUtil.nextDouble() < this.specificInvestigationProbability) ) {
       
       int mafiosoId = (int) action
-          .getParam(DenounceExtortionAffiliatedAction.Param.MAFIOSO_ID);
+          .getParam( DenounceExtortionAffiliatedAction.Param.MAFIOSO_ID );
       
-      if(!this.mafiosiBlackList.contains(mafiosoId)) {
-        this.mafiosiBlackList.add(mafiosoId);
+      if ( !this.mafiosiBlackList.contains( mafiosoId ) ) {
+        this.mafiosiBlackList.add( mafiosoId );
         
-        for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-          InfoSet set = new InfoSet(this.id, police.getId(),
-              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
-          this.sendInfo(set);
+        for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+          InfoSet set = new InfoSet( this.id, police.getId(),
+              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId );
+          this.sendInfo( set );
         }
       }
       
@@ -376,53 +375,53 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
       do {
         
         policeOfficerId = (int) this.policeOfficers.keySet()
-            .toArray()[RandomUtil.nextIntFromTo(0,
-                (this.policeOfficers.size() - 1))];
+            .toArray()[RandomUtil.nextIntFromTo( 0,
+                (this.policeOfficers.size() - 1) )];
         
-      } while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+      } while ( this.allocatedPoliceOfficers.contains( policeOfficerId ) );
       
       SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-          extortionId, policeOfficerId, entrepreneurId);
+          extortionId, policeOfficerId, entrepreneurId );
       
-      Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
-          investigation);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, policeOfficerId,
+          investigation );
+      this.sendMsg( msg );
       
       // Output
       outputEntity.setValue(
-          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true);
+          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), true );
       
     } else {
       
       outputEntity.setValue(
-          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false);
+          ExtortionOutputEntity.Field.INVESTIGATED_EXTORTION.name(), false );
       outputEntity.setActive();
     }
   }
   
   
   @Override
-  public void decideInvestigatePunishment(DenouncePunishmentAction action) {
+  public void decideInvestigatePunishment( DenouncePunishmentAction action ) {
     
     int extortionId = (int) action
-        .getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
+        .getParam( DenouncePunishmentAction.Param.EXTORTION_ID );
     
     int entrepreneurId = (int) action
-        .getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
+        .getParam( DenouncePunishmentAction.Param.ENTREPRENEUR_ID );
     
     int mafiosoId = (int) action
-        .getParam(DenouncePunishmentAction.Param.MAFIOSO_ID);
+        .getParam( DenouncePunishmentAction.Param.MAFIOSO_ID );
     
-    if((!this.investigateEntrepreneurs.contains(entrepreneurId))
-        && (this.policeOfficers.size() > 0)) {
+    if ( (!this.investigateEntrepreneurs.contains( entrepreneurId ))
+        && (this.policeOfficers.size() > 0) ) {
       
-      if(!this.mafiosiBlackList.contains(mafiosoId)) {
-        this.mafiosiBlackList.add(mafiosoId);
+      if ( !this.mafiosiBlackList.contains( mafiosoId ) ) {
+        this.mafiosiBlackList.add( mafiosoId );
         
-        for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-          InfoSet set = new InfoSet(this.id, police.getId(),
-              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
-          this.sendInfo(set);
+        for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+          InfoSet set = new InfoSet( this.id, police.getId(),
+              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId );
+          this.sendInfo( set );
         }
       }
       
@@ -430,63 +429,63 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
       do {
         
         policeOfficerId = (int) this.policeOfficers.keySet()
-            .toArray()[RandomUtil.nextIntFromTo(0,
-                (this.policeOfficers.size() - 1))];
+            .toArray()[RandomUtil.nextIntFromTo( 0,
+                (this.policeOfficers.size() - 1) )];
         
-      } while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+      } while ( this.allocatedPoliceOfficers.contains( policeOfficerId ) );
       
       SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-          extortionId, policeOfficerId, entrepreneurId);
+          extortionId, policeOfficerId, entrepreneurId );
       
-      Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
-          investigation);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, policeOfficerId,
+          investigation );
+      this.sendMsg( msg );
     }
     
     // Add Entrepreneur in a queue to receive compensation for the punishment
-    this.assistQueue.add(action);
+    this.assistQueue.add( action );
     
     // Spread action Denounce Punishment
-    Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
-        action);
-    this.spreadActionInformation(msg);
+    Message msg = new Message( this.simulator.now(), entrepreneurId, this.id,
+        action );
+    this.spreadActionInformation( msg );
     
     // Output
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     outputEntity.setValue(
-        ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true);
+        ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true );
     
     Event event = new Event(
         this.simulator.now() + this.timeToCompensationPDF.nextValue(), this,
-        Constants.EVENT_ASSIST_ENTREPRENEUR);
-    this.simulator.insert(event);
+        Constants.EVENT_ASSIST_ENTREPRENEUR );
+    this.simulator.insert( event );
   }
   
   
   @Override
   public void decideInvestigatePunishmentAffiliated(
-      DenouncePunishmentAffiliatedAction action) {
+      DenouncePunishmentAffiliatedAction action ) {
     
     int extortionId = (int) action
-        .getParam(DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID);
+        .getParam( DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID );
     
     int entrepreneurId = (int) action
-        .getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID);
+        .getParam( DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID );
     
     int mafiosoId = (int) action
-        .getParam(DenouncePunishmentAffiliatedAction.Param.MAFIOSO_ID);
+        .getParam( DenouncePunishmentAffiliatedAction.Param.MAFIOSO_ID );
     
-    if((!this.investigateEntrepreneurs.contains(entrepreneurId))
-        && (this.policeOfficers.size() > 0)) {
+    if ( (!this.investigateEntrepreneurs.contains( entrepreneurId ))
+        && (this.policeOfficers.size() > 0) ) {
       
-      if(!this.mafiosiBlackList.contains(mafiosoId)) {
-        this.mafiosiBlackList.add(mafiosoId);
+      if ( !this.mafiosiBlackList.contains( mafiosoId ) ) {
+        this.mafiosiBlackList.add( mafiosoId );
         
-        for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-          InfoSet set = new InfoSet(this.id, police.getId(),
-              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId);
-          this.sendInfo(set);
+        for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+          InfoSet set = new InfoSet( this.id, police.getId(),
+              Constants.PARAMETER_ADD_MAFIOSO, mafiosoId );
+          this.sendInfo( set );
         }
       }
       
@@ -494,199 +493,201 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
       do {
         
         policeOfficerId = (int) this.policeOfficers.keySet()
-            .toArray()[RandomUtil.nextIntFromTo(0,
-                (this.policeOfficers.size() - 1))];
+            .toArray()[RandomUtil.nextIntFromTo( 0,
+                (this.policeOfficers.size() - 1) )];
         
-      } while(this.allocatedPoliceOfficers.contains(policeOfficerId));
+      } while ( this.allocatedPoliceOfficers.contains( policeOfficerId ) );
       
       SpecificInvestigationAction investigation = new SpecificInvestigationAction(
-          extortionId, policeOfficerId, entrepreneurId);
+          extortionId, policeOfficerId, entrepreneurId );
       
-      Message msg = new Message(this.simulator.now(), this.id, policeOfficerId,
-          investigation);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, policeOfficerId,
+          investigation );
+      this.sendMsg( msg );
     }
     
     // Add Entrepreneur in a queue to receive compensation for the punishment
-    this.assistQueue.add(action);
+    this.assistQueue.add( action );
     
     // Spread action Denounce Punishment
-    Message msg = new Message(this.simulator.now(), entrepreneurId, this.id,
-        action);
-    this.spreadActionInformation(msg);
+    Message msg = new Message( this.simulator.now(), entrepreneurId, this.id,
+        action );
+    this.spreadActionInformation( msg );
     
     // Output
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     outputEntity.setValue(
-        ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true);
+        ExtortionOutputEntity.Field.INVESTIGATED_PUNISHMENT.name(), true );
     
     Event event = new Event(
         this.simulator.now() + this.timeToCompensationPDF.nextValue(), this,
-        Constants.EVENT_ASSIST_ENTREPRENEUR);
-    this.simulator.insert(event);
+        Constants.EVENT_ASSIST_ENTREPRENEUR );
+    this.simulator.insert( event );
   }
   
   
   @Override
-  public void releaseInvestigation(ReleaseInvestigationAction action) {
+  public void releaseInvestigation( ReleaseInvestigationAction action ) {
     
     int policeOfficerId = (int) action
-        .getParam(ReleaseInvestigationAction.Param.POLICE_OFFICER_ID);
+        .getParam( ReleaseInvestigationAction.Param.POLICE_OFFICER_ID );
     
-    if(this.allocatedPoliceOfficers.contains(policeOfficerId)) {
-      this.allocatedPoliceOfficers.remove(policeOfficerId);
+    if ( this.allocatedPoliceOfficers.contains( policeOfficerId ) ) {
+      this.allocatedPoliceOfficers.remove( policeOfficerId );
     }
   }
   
   
   @Override
-  public void decideCustody(CaptureMafiosoAction action) {
+  public void decideCustody( CaptureMafiosoAction action ) {
     
     int extortionId = (int) action
-        .getParam(CaptureMafiosoAction.Param.EXTORTION_ID);
+        .getParam( CaptureMafiosoAction.Param.EXTORTION_ID );
     
     int mafiosoId = (int) action
-        .getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
+        .getParam( CaptureMafiosoAction.Param.MAFIOSO_ID );
     
-    CustodyAction custody = new CustodyAction(extortionId, this.id, mafiosoId,
-        this.custodyDurationPDF.nextValue());
+    CustodyAction custody = new CustodyAction( extortionId, this.id, mafiosoId,
+        this.custodyDurationPDF.nextValue() );
     
-    Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
-        custody);
-    this.sendMsg(msg);
+    Message msg = new Message( this.simulator.now(), this.id, mafiosoId,
+        custody );
+    this.sendMsg( msg );
     
     // Spread action
-    this.spreadActionInformation(msg);
+    this.spreadActionInformation( msg );
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     
     // Collaboration evidence collection
-    if(RandomUtil.nextDouble() < this.evidenceProbability) {
+    if ( RandomUtil.nextDouble() < this.evidenceProbability ) {
       
-      InfoRequest info = new InfoRequest(this.id, mafiosoId,
-          Constants.REQUEST_COLLECT_PAYERS);
+      InfoRequest info = new InfoRequest( this.id, mafiosoId,
+          Constants.REQUEST_COLLECT_PAYERS );
       
-      @SuppressWarnings("unchecked")
-      List<Integer> evidences = (List<Integer>) this.sendInfo(info);
-      if(!evidences.isEmpty()) {
-        for(Integer entrepreneurId : evidences) {
+      @SuppressWarnings ( "unchecked" )
+      List<Integer> evidences = (List<Integer>) this.sendInfo( info );
+      if ( !evidences.isEmpty() ) {
+        for ( Integer entrepreneurId : evidences ) {
           CollaborationRequestAction collaboration = new CollaborationRequestAction(
-              mafiosoId, entrepreneurId);
+              mafiosoId, entrepreneurId );
           
-          msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-              collaboration);
-          this.sendMsg(msg);
+          msg = new Message( this.simulator.now(), this.id, entrepreneurId,
+              collaboration );
+          this.sendMsg( msg );
         }
       }
       
       outputEntity.setValue(
           ExtortionOutputEntity.Field.EVIDENCE_COLLECTED.name(),
-          evidences.size());
+          evidences.size() );
     }
     
     // Output
-    if(extortionId >= 0) {
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIOSO_CUSTODY.name(),
-          true);
+    if ( extortionId >= 0 ) {
+      outputEntity.setValue( ExtortionOutputEntity.Field.MAFIOSO_CUSTODY.name(),
+          true );
     }
     
     Event event = new Event(
         this.simulator.now() + this.custodyDurationPDF.nextValue(), this,
-        Constants.EVENT_RELEASE_CUSTODY);
-    this.simulator.insert(event);
+        Constants.EVENT_RELEASE_CUSTODY );
+    this.simulator.insert( event );
     
-    this.custodyQueue.offer(action);
+    this.custodyQueue.offer( action );
   }
   
   
   @Override
-  public void decideConviction(CaptureMafiosoAction action) {
+  public void decideConviction( CaptureMafiosoAction action ) {
     
     int mafiosoId = (int) action
-        .getParam(CaptureMafiosoAction.Param.MAFIOSO_ID);
+        .getParam( CaptureMafiosoAction.Param.MAFIOSO_ID );
     
     int extortionId = (int) action
-        .getParam(CaptureMafiosoAction.Param.EXTORTION_ID);
+        .getParam( CaptureMafiosoAction.Param.EXTORTION_ID );
     
     AbstractEntity outputEntity = null;
-    if(extortionId >= 0) {
+    if ( extortionId >= 0 ) {
       outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.EXTORTION, extortionId);
+          .getEntity( EntityType.EXTORTION, extortionId );
     }
     
     // Calculate conviction probability
     double convictionProb = this.convictionProbability;
-    if(this.collaborations.containsKey(mafiosoId)) {
-      int numCollaborations = this.collaborations.get(mafiosoId);
+    if ( this.collaborations.containsKey( mafiosoId ) ) {
+      int numCollaborations = this.collaborations.get( mafiosoId );
       
       Evaluator eval = new Evaluator();
-      eval.putVariable(COLLABORATION,
-          (new Integer(numCollaborations)).toString());
+      eval.putVariable( COLLABORATION,
+          (new Integer( numCollaborations )).toString() );
       
       try {
         convictionProb += eval
-            .getNumberResult(this.collaborationConvictionFunction);
-      } catch(EvaluationException e) {
-        logger.debug(e.toString());
+            .getNumberResult( this.collaborationConvictionFunction );
+      } catch ( EvaluationException e ) {
+        logger.debug( e.toString() );
       }
     }
     
     // Decide whether the Mafioso is going to be imprisoned
-    if(RandomUtil.nextDouble() < Math.max(0, Math.min(1, convictionProb))) {
+    if ( RandomUtil.nextDouble() < Math.max( 0,
+        Math.min( 1, convictionProb ) ) ) {
       
-      InfoRequest wealthRequest = new InfoRequest(this.id, mafiosoId,
-          Constants.REQUEST_WEALTH);
-      double wealth = (double) this.sendInfo(wealthRequest);
+      InfoRequest wealthRequest = new InfoRequest( this.id, mafiosoId,
+          Constants.REQUEST_WEALTH );
+      double wealth = (double) this.sendInfo( wealthRequest );
       
       this.fondoSolidarieta += wealth * this.proportionTransferFondo;
       
-      InfoSet wealthSet = new InfoSet(this.id, mafiosoId,
-          Constants.PARAMETER_WEALTH, 0.0);
-      this.sendInfo(wealthSet);
+      InfoSet wealthSet = new InfoSet( this.id, mafiosoId,
+          Constants.PARAMETER_WEALTH, 0.0 );
+      this.sendInfo( wealthSet );
       
       double duration = this.imprisonmentDurationPDF.nextValue();
       
-      ImprisonmentAction imprisonment = new ImprisonmentAction(mafiosoId,
-          duration);
+      ImprisonmentAction imprisonment = new ImprisonmentAction( mafiosoId,
+          duration );
       
-      Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
-          imprisonment);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, mafiosoId,
+          imprisonment );
+      this.sendMsg( msg );
       
-      this.prisonQueue.add(imprisonment);
+      this.prisonQueue.add( imprisonment );
       
-      Event releasePrison = new Event(this.simulator.now() + duration, this,
-          Constants.EVENT_RELEASE_PRISON);
-      this.simulator.insert(releasePrison);
+      Event releasePrison = new Event( this.simulator.now() + duration, this,
+          Constants.EVENT_RELEASE_PRISON );
+      this.simulator.insert( releasePrison );
       
       // Spread action
-      this.spreadActionInformation(msg);
+      this.spreadActionInformation( msg );
       
       // Output
-      if(extortionId >= 0) {
+      if ( extortionId >= 0 ) {
         outputEntity.setValue(
-            ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), true);
+            ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), true );
         outputEntity.setActive();
       }
       
       // Release the Mafioso of custody
     } else {
       
-      ReleaseCustodyAction releaseCustody = new ReleaseCustodyAction(mafiosoId);
+      ReleaseCustodyAction releaseCustody = new ReleaseCustodyAction(
+          mafiosoId );
       
-      Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
-          releaseCustody);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, mafiosoId,
+          releaseCustody );
+      this.sendMsg( msg );
       
       // Spread action
-      this.spreadActionInformation(msg);
+      this.spreadActionInformation( msg );
       
       // Output
-      if(extortionId >= 0) {
+      if ( extortionId >= 0 ) {
         outputEntity.setValue(
-            ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), false);
+            ExtortionOutputEntity.Field.MAFIOSO_CONVICTED.name(), false );
         outputEntity.setActive();
       }
     }
@@ -694,76 +695,77 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   
   
   @Override
-  public void receivePentito(PentitoAction action) {
+  public void receivePentito( PentitoAction action ) {
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ( "unchecked" )
     List<Integer> mafiosoList = (List<Integer>) action
-        .getParam(PentitoAction.Param.MAFIOSI_LIST);
+        .getParam( PentitoAction.Param.MAFIOSI_LIST );
     
-    if(mafiosoList != null) {
-      for(Integer mafiosoId : mafiosoList) {
-        if(!this.mafiosiBlackList.contains(mafiosoId)) {
-          this.mafiosiBlackList.add(mafiosoId);
+    if ( mafiosoList != null ) {
+      for ( Integer mafiosoId : mafiosoList ) {
+        if ( !this.mafiosiBlackList.contains( mafiosoId ) ) {
+          this.mafiosiBlackList.add( mafiosoId );
         }
       }
     }
     
-    int mafiosoId = (int) action.getParam(PentitoAction.Param.MAFIOSO_ID);
+    int mafiosoId = (int) action.getParam( PentitoAction.Param.MAFIOSO_ID );
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings ( "unchecked" )
     List<Integer> entrepreneurList = (List<Integer>) action
-        .getParam(PentitoAction.Param.ENTREPRENEUR_LIST);
+        .getParam( PentitoAction.Param.ENTREPRENEUR_LIST );
     
-    if(entrepreneurList != null) {
-      for(Integer entrepreneurId : entrepreneurList) {
+    if ( entrepreneurList != null ) {
+      for ( Integer entrepreneurId : entrepreneurList ) {
         CollaborationRequestAction collaboration = new CollaborationRequestAction(
-            mafiosoId, entrepreneurId);
+            mafiosoId, entrepreneurId );
         
-        Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-            collaboration);
-        this.sendMsg(msg);
+        Message msg = new Message( this.simulator.now(), this.id,
+            entrepreneurId, collaboration );
+        this.sendMsg( msg );
       }
     }
     
     // Spread action
-    Message msg = new Message(this.simulator.now(), mafiosoId, this.id, action);
-    this.spreadActionInformation(msg);
+    Message msg = new Message( this.simulator.now(), mafiosoId, this.id,
+        action );
+    this.spreadActionInformation( msg );
   }
   
   
   @Override
-  public void receiveCollaboration(CollaborateAction action) {
-    int mafiosoId = (int) action.getParam(CollaborateAction.Param.MAFIOSO_ID);
+  public void receiveCollaboration( CollaborateAction action ) {
+    int mafiosoId = (int) action.getParam( CollaborateAction.Param.MAFIOSO_ID );
     
     int numCollaborations = 0;
-    if(this.collaborations.containsKey(mafiosoId)) {
-      numCollaborations = this.collaborations.get(mafiosoId);
+    if ( this.collaborations.containsKey( mafiosoId ) ) {
+      numCollaborations = this.collaborations.get( mafiosoId );
     }
     numCollaborations++;
-    this.collaborations.put(mafiosoId, numCollaborations);
+    this.collaborations.put( mafiosoId, numCollaborations );
   }
   
   
   @Override
-  public void decideStatePunishment(NotCollaborateAction action) {
+  public void decideStatePunishment( NotCollaborateAction action ) {
     
-    if(RandomUtil.nextDouble() < this.noCollaborationPunishmentProbability) {
+    if ( RandomUtil.nextDouble() < this.noCollaborationPunishmentProbability ) {
       int entrepreneurId = (int) action
-          .getParam(NotCollaborateAction.Param.ENTREPRENEUR_ID);
+          .getParam( NotCollaborateAction.Param.ENTREPRENEUR_ID );
       
-      if(this.assistQueue.contains(entrepreneurId)) {
-        this.assistQueue.remove(entrepreneurId);
+      if ( this.assistQueue.contains( entrepreneurId ) ) {
+        this.assistQueue.remove( entrepreneurId );
       }
       
-      StatePunishmentAction punishment = new StatePunishmentAction(this.id,
-          entrepreneurId, this.noCollaborationPunishment);
+      StatePunishmentAction punishment = new StatePunishmentAction( this.id,
+          entrepreneurId, this.noCollaborationPunishment );
       
-      Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-          punishment);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, entrepreneurId,
+          punishment );
+      this.sendMsg( msg );
       
       // Spread action
-      this.spreadActionInformation(msg);
+      this.spreadActionInformation( msg );
     }
   }
   
@@ -771,73 +773,73 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   @Override
   public void decideStateCompensation() {
     
-    if(!this.assistQueue.isEmpty()) {
+    if ( !this.assistQueue.isEmpty() ) {
       Object obj = this.assistQueue.poll();
       
       int extortionId = -1;
       int entrepreneurId = -1;
       double punishment = -1;
-      if(obj instanceof DenouncePunishmentAction) {
+      if ( obj instanceof DenouncePunishmentAction ) {
         DenouncePunishmentAction action = (DenouncePunishmentAction) obj;
         
         extortionId = (int) action
-            .getParam(DenouncePunishmentAction.Param.EXTORTION_ID);
+            .getParam( DenouncePunishmentAction.Param.EXTORTION_ID );
         
         entrepreneurId = (int) action
-            .getParam(DenouncePunishmentAction.Param.ENTREPRENEUR_ID);
+            .getParam( DenouncePunishmentAction.Param.ENTREPRENEUR_ID );
         
         punishment = (double) action
-            .getParam(DenouncePunishmentAction.Param.PUNISHMENT);
+            .getParam( DenouncePunishmentAction.Param.PUNISHMENT );
         
-      } else if(obj instanceof DenouncePunishmentAffiliatedAction) {
+      } else if ( obj instanceof DenouncePunishmentAffiliatedAction ) {
         DenouncePunishmentAffiliatedAction action = (DenouncePunishmentAffiliatedAction) obj;
         
         extortionId = (int) action
-            .getParam(DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID);
+            .getParam( DenouncePunishmentAffiliatedAction.Param.EXTORTION_ID );
         
-        entrepreneurId = (int) action
-            .getParam(DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID);
+        entrepreneurId = (int) action.getParam(
+            DenouncePunishmentAffiliatedAction.Param.ENTREPRENEUR_ID );
         
         punishment = (double) action
-            .getParam(DenouncePunishmentAffiliatedAction.Param.PUNISHMENT);
+            .getParam( DenouncePunishmentAffiliatedAction.Param.PUNISHMENT );
       }
       
       // State has enough money to compensate the Entrepreneur
-      if(this.fondoSolidarieta >= punishment) {
+      if ( this.fondoSolidarieta >= punishment ) {
         
         this.fondoSolidarieta -= punishment;
         
         StateCompensationAction compensation = new StateCompensationAction(
-            extortionId, this.id, entrepreneurId, punishment);
+            extortionId, this.id, entrepreneurId, punishment );
         
-        Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-            compensation);
-        this.sendMsg(msg);
+        Message msg = new Message( this.simulator.now(), this.id,
+            entrepreneurId, compensation );
+        this.sendMsg( msg );
         
         // Spread action
-        this.spreadActionInformation(msg);
+        this.spreadActionInformation( msg );
         
         // Output
         AbstractEntity outputEntity = OutputController.getInstance()
-            .getEntity(EntityType.COMPENSATION, extortionId);
+            .getEntity( EntityType.COMPENSATION, extortionId );
         outputEntity.setValue(
-            CompensationOutputEntity.Field.STATE_COMPENSATED.name(), true);
+            CompensationOutputEntity.Field.STATE_COMPENSATED.name(), true );
         outputEntity.setValue(
             CompensationOutputEntity.Field.STATE_TIME_COMPENSATION.name(),
-            this.simulator.now());
+            this.simulator.now() );
         outputEntity.setValue(
             CompensationOutputEntity.Field.STATE_COMPENSATION.name(),
-            punishment);
+            punishment );
         
         // Entrepreneur goes back to the queue
       } else {
         
-        this.assistQueue.add(obj);
+        this.assistQueue.add( obj );
         
         Event event = new Event(
             this.simulator.now() + this.timeToCompensationPDF.nextValue(), this,
-            Constants.EVENT_ASSIST_ENTREPRENEUR);
-        this.simulator.insert(event);
+            Constants.EVENT_ASSIST_ENTREPRENEUR );
+        this.simulator.insert( event );
         
       }
     }
@@ -848,102 +850,103 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   public void spreadNormativeInformation() {
     
     // Spread information to Consumers
-    NormInvocationAction notBuyPayExtortion = new NormInvocationAction(this.id,
-        Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name());
+    NormInvocationAction notBuyPayExtortion = new NormInvocationAction( this.id,
+        Norms.BUY_FROM_NOT_PAYING_ENTREPRENEURS.name() );
     
     this.proportionConsumers.clearVariables();
     
     double propConsumers = 0.0;
     try {
       propConsumers = this.proportionConsumers
-          .getNumberResult(this.proportionConsumersStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.proportionConsumersStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    propConsumers = Math.max(0, Math.min(1.0, propConsumers));
+    propConsumers = Math.max( 0, Math.min( 1.0, propConsumers ) );
     
     int numConsumers = (int) (this.consumers.size() * propConsumers);
     List<Integer> consumerIds = new ArrayList<Integer>();
-    while(consumerIds.size() < numConsumers) {
+    while ( consumerIds.size() < numConsumers ) {
       
       int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
-          .nextIntFromTo(0, (this.consumers.size() - 1))];
+          .nextIntFromTo( 0, (this.consumers.size() - 1) )];
       
-      if(!consumerIds.contains(consumerId)) {
-        consumerIds.add(consumerId);
+      if ( !consumerIds.contains( consumerId ) ) {
+        consumerIds.add( consumerId );
         
-        Message msg = new Message(this.simulator.now(), this.id, consumerId,
-            notBuyPayExtortion);
-        this.sendMsg(msg);
+        Message msg = new Message( this.simulator.now(), this.id, consumerId,
+            notBuyPayExtortion );
+        this.sendMsg( msg );
       }
     }
     
-    NormInvocationAction notPayExtortion = new NormInvocationAction(this.id,
-        Norms.NOT_PAY_EXTORTION.name());
+    NormInvocationAction notPayExtortion = new NormInvocationAction( this.id,
+        Norms.NOT_PAY_EXTORTION.name() );
     
-    NormInvocationAction denounceExtortion = new NormInvocationAction(this.id,
-        Norms.DENOUNCE.name());
+    NormInvocationAction denounceExtortion = new NormInvocationAction( this.id,
+        Norms.DENOUNCE.name() );
     
     this.proportionEntrepreneurs.clearVariables();
     
     double propEntrepreneurs = 0.0;
     try {
       propEntrepreneurs = this.proportionEntrepreneurs
-          .getNumberResult(this.proportionEntrepreneursStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.proportionEntrepreneursStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
+    propEntrepreneurs = Math.max( 0, Math.min( 1.0, propEntrepreneurs ) );
     
     int numEntrepreneurs = (int) (this.entrepreneurs.size()
         * propEntrepreneurs);
     List<Integer> entrepreneurIds = new ArrayList<Integer>();
     int qtyEntrepreneurs = this.entrepreneurs.size();
-    while(entrepreneurIds.size() < numEntrepreneurs) {
+    while ( entrepreneurIds.size() < numEntrepreneurs ) {
       
       int entrepreneurId = (int) this.entrepreneurs.keySet()
-          .toArray()[RandomUtil.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
+          .toArray()[RandomUtil.nextIntFromTo( 0, (qtyEntrepreneurs - 1) )];
       
-      if(!entrepreneurIds.contains(entrepreneurId)) {
-        entrepreneurIds.add(entrepreneurId);
+      if ( !entrepreneurIds.contains( entrepreneurId ) ) {
+        entrepreneurIds.add( entrepreneurId );
         
-        Message msgNP = new Message(this.simulator.now(), this.id,
-            entrepreneurId, notPayExtortion);
-        this.sendMsg(msgNP);
+        Message msgNP = new Message( this.simulator.now(), this.id,
+            entrepreneurId, notPayExtortion );
+        this.sendMsg( msgNP );
         
-        Message msgD = new Message(this.simulator.now(), this.id,
-            entrepreneurId, denounceExtortion);
-        this.sendMsg(msgD);
+        Message msgD = new Message( this.simulator.now(), this.id,
+            entrepreneurId, denounceExtortion );
+        this.sendMsg( msgD );
       }
     }
     
     // Output
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.NORMATIVE);
-    outputEntity.setValue(NormativeOutputEntity.Field.TIME.name(),
-        this.simulator.now());
-    outputEntity.setValue(NormativeOutputEntity.Field.AGENT_ID.name(), this.id);
-    outputEntity.setValue(NormativeOutputEntity.Field.NUMBER_CONSUMERS.name(),
-        numConsumers);
+        .getEntity( EntityType.NORMATIVE );
+    outputEntity.setValue( NormativeOutputEntity.Field.TIME.name(),
+        this.simulator.now() );
+    outputEntity.setValue( NormativeOutputEntity.Field.AGENT_ID.name(),
+        this.id );
+    outputEntity.setValue( NormativeOutputEntity.Field.NUMBER_CONSUMERS.name(),
+        numConsumers );
     outputEntity.setValue(
         NormativeOutputEntity.Field.NUMBER_ENTREPRENEURS.name(),
-        numEntrepreneurs);
+        numEntrepreneurs );
     outputEntity.setActive();
     
     this.spreadInfoFunction.clearVariables();
     double nextSpreadInfo = 0.0;
     try {
       nextSpreadInfo = this.spreadInfoFunction
-          .getNumberResult(this.spreadInfoFunctionStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.spreadInfoFunctionStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    Event event = new Event(this.simulator.now() + nextSpreadInfo, this,
-        Constants.EVENT_SPREAD_INFORMATION);
-    this.simulator.insert(event);
+    Event event = new Event( this.simulator.now() + nextSpreadInfo, this,
+        Constants.EVENT_SPREAD_INFORMATION );
+    this.simulator.insert( event );
   }
   
   
@@ -959,9 +962,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
     do {
       
       entrepreneurId = (int) this.entrepreneurs.keySet().toArray()[RandomUtil
-          .nextIntFromTo(0, (this.entrepreneurs.size() - 1))];
+          .nextIntFromTo( 0, (this.entrepreneurs.size() - 1) )];
       
-    } while(this.investigateEntrepreneurs.contains(entrepreneurId));
+    } while ( this.investigateEntrepreneurs.contains( entrepreneurId ) );
     
     return entrepreneurId;
   }
@@ -978,17 +981,17 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
     this.fondoSolidarieta += this.resourceFondo;
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(AbstractEntity.EntityType.STATE);
-    outputEntity.setValue(StateOutputEntity.Field.TIME.name(),
-        this.simulator.now());
-    outputEntity.setValue(StateOutputEntity.Field.FONDO.name(),
-        this.fondoSolidarieta);
+        .getEntity( AbstractEntity.EntityType.STATE );
+    outputEntity.setValue( StateOutputEntity.Field.TIME.name(),
+        this.simulator.now() );
+    outputEntity.setValue( StateOutputEntity.Field.FONDO.name(),
+        this.fondoSolidarieta );
     outputEntity.setActive();
     
     Event event = new Event(
         this.simulator.now() + this.periodicityFondoPDF.nextValue(), this,
-        Constants.EVENT_RESOURCE_FONDO);
-    this.simulator.insert(event);
+        Constants.EVENT_RESOURCE_FONDO );
+    this.simulator.insert( event );
   }
   
   
@@ -1000,9 +1003,9 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    */
   private void judgeMafioso() {
     
-    if(!this.custodyQueue.isEmpty()) {
+    if ( !this.custodyQueue.isEmpty() ) {
       CaptureMafiosoAction action = this.custodyQueue.poll();
-      this.decideConviction(action);
+      this.decideConviction( action );
     }
   }
   
@@ -1015,21 +1018,21 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    */
   private void releaseMafioso() {
     
-    if(!this.prisonQueue.isEmpty()) {
+    if ( !this.prisonQueue.isEmpty() ) {
       ImprisonmentAction prison = this.prisonQueue.poll();
       
       int mafiosoId = (int) prison
-          .getParam(ImprisonmentAction.Param.MAFIOSO_ID);
+          .getParam( ImprisonmentAction.Param.MAFIOSO_ID );
       
       ReleaseImprisonmentAction action = new ReleaseImprisonmentAction(
-          mafiosoId);
+          mafiosoId );
       
-      Message msg = new Message(this.simulator.now(), this.id, mafiosoId,
-          action);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, mafiosoId,
+          action );
+      this.sendMsg( msg );
       
       // Spread action
-      this.spreadActionInformation(msg);
+      this.spreadActionInformation( msg );
     }
   }
   
@@ -1042,34 +1045,34 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    *          entrepreneurs, and also to the Intermediary Organization
    * @return none
    */
-  private void spreadActionInformation(Message msg) {
+  private void spreadActionInformation( Message msg ) {
     
     this.proportionConsumers.clearVariables();
     
     double propConsumers = 0.0;
     try {
       propConsumers = this.proportionConsumers
-          .getNumberResult(this.proportionConsumersStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.proportionConsumersStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    propConsumers = Math.max(0, Math.min(1.0, propConsumers));
+    propConsumers = Math.max( 0, Math.min( 1.0, propConsumers ) );
     
     // Spread to a proportion of Consumers
     int numConsumers = (int) (this.consumers.size() * propConsumers);
     List<Integer> consumerIds = new ArrayList<Integer>();
-    while(consumerIds.size() < numConsumers) {
+    while ( consumerIds.size() < numConsumers ) {
       
       int consumerId = (int) this.consumers.keySet().toArray()[RandomUtil
-          .nextIntFromTo(0, (this.consumers.size() - 1))];
+          .nextIntFromTo( 0, (this.consumers.size() - 1) )];
       
-      if(!consumerIds.contains(consumerId)) {
-        consumerIds.add(consumerId);
+      if ( !consumerIds.contains( consumerId ) ) {
+        consumerIds.add( consumerId );
         
-        Message newMsg = new Message(this.simulator.now(), this.id, consumerId,
-            msg);
-        this.sendMsg(newMsg);
+        Message newMsg = new Message( this.simulator.now(), this.id, consumerId,
+            msg );
+        this.sendMsg( newMsg );
       }
     }
     
@@ -1078,35 +1081,36 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
     double propEntrepreneurs = 0.0;
     try {
       propEntrepreneurs = this.proportionEntrepreneurs
-          .getNumberResult(this.proportionEntrepreneursStr);
-    } catch(EvaluationException e) {
-      logger.debug(e.toString());
+          .getNumberResult( this.proportionEntrepreneursStr );
+    } catch ( EvaluationException e ) {
+      logger.debug( e.toString() );
     }
     
-    propEntrepreneurs = Math.max(0, Math.min(1.0, propEntrepreneurs));
+    propEntrepreneurs = Math.max( 0, Math.min( 1.0, propEntrepreneurs ) );
     
     // Spread to a proportion of Entrepreneurs
     int numEntrepreneurs = (int) (this.entrepreneurs.size()
         * propEntrepreneurs);
     List<Integer> entrepreneurIds = new ArrayList<Integer>();
     int qtyEntrepreneurs = this.entrepreneurs.size();
-    while(entrepreneurIds.size() < numEntrepreneurs) {
+    while ( entrepreneurIds.size() < numEntrepreneurs ) {
       
       int entrepreneurId = (int) this.entrepreneurs.keySet()
-          .toArray()[RandomUtil.nextIntFromTo(0, (qtyEntrepreneurs - 1))];
+          .toArray()[RandomUtil.nextIntFromTo( 0, (qtyEntrepreneurs - 1) )];
       
-      if(!entrepreneurIds.contains(entrepreneurId)) {
-        entrepreneurIds.add(entrepreneurId);
+      if ( !entrepreneurIds.contains( entrepreneurId ) ) {
+        entrepreneurIds.add( entrepreneurId );
         
-        Message newMsg = new Message(this.simulator.now(), this.id,
-            entrepreneurId, msg);
-        this.sendMsg(newMsg);
+        Message newMsg = new Message( this.simulator.now(), this.id,
+            entrepreneurId, msg );
+        this.sendMsg( newMsg );
       }
     }
     
     // Send to the Intermediary Organization
-    Message newMsg = new Message(this.simulator.now(), this.id, this.ioId, msg);
-    this.sendMsg(newMsg);
+    Message newMsg = new Message( this.simulator.now(), this.id, this.ioId,
+        msg );
+    this.sendMsg( newMsg );
   }
   
   
@@ -1122,45 +1126,46 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    *******************************/
   
   @Override
-  public synchronized void handleMessage(Message msg) {
+  public synchronized void handleMessage( Message msg ) {
     
     Object content = msg.getContent();
     
-    if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
+    if ( (msg.getSender() != this.id)
+        && (msg.getReceiver().contains( this.id )) ) {
       
       // Denounce extortion
-      if(content instanceof DenounceExtortionAction) {
-        this.decideInvestigateExtortion((DenounceExtortionAction) content);
+      if ( content instanceof DenounceExtortionAction ) {
+        this.decideInvestigateExtortion( (DenounceExtortionAction) content );
         
         // Denounce extortion Affiliated
-      } else if(content instanceof DenounceExtortionAffiliatedAction) {
+      } else if ( content instanceof DenounceExtortionAffiliatedAction ) {
         this.decideInvestigateExtortionAffiliated(
-            (DenounceExtortionAffiliatedAction) content);
+            (DenounceExtortionAffiliatedAction) content );
         
         // Denounce punishment
-      } else if(content instanceof DenouncePunishmentAction) {
-        this.decideInvestigatePunishment((DenouncePunishmentAction) content);
+      } else if ( content instanceof DenouncePunishmentAction ) {
+        this.decideInvestigatePunishment( (DenouncePunishmentAction) content );
         
         // Denounce punishment Affiliated
-      } else if(content instanceof DenouncePunishmentAffiliatedAction) {
+      } else if ( content instanceof DenouncePunishmentAffiliatedAction ) {
         this.decideInvestigatePunishmentAffiliated(
-            (DenouncePunishmentAffiliatedAction) content);
+            (DenouncePunishmentAffiliatedAction) content );
         
         // Pentito
-      } else if(content instanceof PentitoAction) {
-        this.receivePentito((PentitoAction) content);
+      } else if ( content instanceof PentitoAction ) {
+        this.receivePentito( (PentitoAction) content );
         
         // Release investigation
-      } else if(content instanceof ReleaseInvestigationAction) {
-        this.releaseInvestigation((ReleaseInvestigationAction) content);
+      } else if ( content instanceof ReleaseInvestigationAction ) {
+        this.releaseInvestigation( (ReleaseInvestigationAction) content );
         
         // Capture Mafioso
-      } else if(content instanceof CaptureMafiosoAction) {
-        this.decideCustody((CaptureMafiosoAction) content);
+      } else if ( content instanceof CaptureMafiosoAction ) {
+        this.decideCustody( (CaptureMafiosoAction) content );
         
         // Collaboration
-      } else if(content instanceof CollaborateAction) {
-        this.receiveCollaboration((CollaborateAction) content);
+      } else if ( content instanceof CollaborateAction ) {
+        this.receiveCollaboration( (CollaborateAction) content );
         
       }
     }
@@ -1168,13 +1173,13 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   
   
   @Override
-  public Object handleInfo(InfoAbstract info) {
+  public Object handleInfo( InfoAbstract info ) {
     Object infoRequested = null;
     
-    if(info.getType().equals(InfoAbstract.Type.REQUEST)) {
+    if ( info.getType().equals( InfoAbstract.Type.REQUEST ) ) {
       
       InfoRequest request = (InfoRequest) info;
-      switch(request.getInfoRequest()) {
+      switch ( request.getInfoRequest() ) {
         case Constants.REQUEST_ID:
           infoRequested = this.id;
           break;
@@ -1183,7 +1188,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
           break;
       }
       
-    } else if(info.getType().equals(InfoAbstract.Type.SET)) {
+    } else if ( info.getType().equals( InfoAbstract.Type.SET ) ) {
       
     }
     
@@ -1192,7 +1197,7 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
   
   
   @Override
-  public void handleObservation(Message msg) {
+  public void handleObservation( Message msg ) {
     // NOTHING
   }
   
@@ -1204,15 +1209,15 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
    *******************************/
   
   @Override
-  public void handleEvent(Event event) {
+  public void handleEvent( Event event ) {
     
     ChangeConf change = null;
-    if((event.getParameter() != null)
-        && (event.getParameter() instanceof ChangeConf)) {
+    if ( (event.getParameter() != null)
+        && (event.getParameter() instanceof ChangeConf) ) {
       change = (ChangeConf) event.getParameter();
     }
     
-    switch((String) event.getCommand()) {
+    switch ( (String) event.getCommand() ) {
       case Constants.EVENT_RESOURCE_FONDO:
         this.increaseFondo();
         break;
@@ -1229,109 +1234,114 @@ public class StateOrg extends AbstractAgent implements IStateOrg {
         this.spreadNormativeInformation();
         break;
       case Constants.TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF:
-        if(change != null) {
-          for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-            police.setGeneralInvestigationDuration((String) change.getValue());
+        if ( change != null ) {
+          for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+            police
+                .setGeneralInvestigationDuration( (String) change.getValue() );
           }
         }
         break;
       case Constants.TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF:
-        if(change != null) {
-          for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-            police.setBureaucraticActivityDuration((String) change.getValue());
+        if ( change != null ) {
+          for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+            police
+                .setBureaucraticActivityDuration( (String) change.getValue() );
           }
         }
         break;
       case Constants.TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF:
-        if(change != null) {
-          for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-            police.setSpecificInvestigationDuration((String) change.getValue());
+        if ( change != null ) {
+          for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+            police
+                .setSpecificInvestigationDuration( (String) change.getValue() );
           }
         }
         break;
       case Constants.TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY:
-        if(change != null) {
+        if ( change != null ) {
           this.specificInvestigationProbability = Double
-              .valueOf(change.getValue());
+              .valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_CAPTURE_PROBABILITY:
-        if(change != null) {
-          for(PoliceOfficerAgent police : this.policeOfficers.values()) {
-            police.setCaptureProbability(Double.valueOf(change.getValue()));
+        if ( change != null ) {
+          for ( PoliceOfficerAgent police : this.policeOfficers.values() ) {
+            police.setCaptureProbability( Double.valueOf( change.getValue() ) );
           }
         }
         break;
       case Constants.TAG_STATE_EVIDENCE_PROBABILITY:
-        if(change != null) {
-          this.evidenceProbability = Double.valueOf(change.getValue());
+        if ( change != null ) {
+          this.evidenceProbability = Double.valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_CUSTODY_DURATION_PDF:
-        if(change != null) {
-          this.custodyDurationPDF = PDFAbstract.getInstance(change.getValue());
+        if ( change != null ) {
+          this.custodyDurationPDF = PDFAbstract
+              .getInstance( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_CONVICTION_PROBABILITY:
-        if(change != null) {
-          this.convictionProbability = Double.valueOf(change.getValue());
+        if ( change != null ) {
+          this.convictionProbability = Double.valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_COLLABORATION_CONVICTION_FUNCTION:
-        if(change != null) {
+        if ( change != null ) {
           this.collaborationConvictionFunction = change.getValue();
         }
         break;
       case Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF:
-        if(change != null) {
+        if ( change != null ) {
           this.imprisonmentDurationPDF = PDFAbstract
-              .getInstance(change.getValue());
+              .getInstance( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT_PROBABILITY:
-        if(change != null) {
+        if ( change != null ) {
           this.noCollaborationPunishmentProbability = Double
-              .valueOf(change.getValue());
+              .valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT:
-        if(change != null) {
-          this.noCollaborationPunishment = Double.valueOf(change.getValue());
+        if ( change != null ) {
+          this.noCollaborationPunishment = Double.valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_TIME_TO_COMPENSATION_PDF:
-        if(change != null) {
+        if ( change != null ) {
           this.timeToCompensationPDF = PDFAbstract
-              .getInstance(change.getValue());
+              .getInstance( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_RESOURCE_FONDO:
-        if(change != null) {
-          this.resourceFondo = Double.valueOf(change.getValue());
+        if ( change != null ) {
+          this.resourceFondo = Double.valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_PERIODICITY_FONDO_PDF:
-        if(change != null) {
-          this.periodicityFondoPDF = PDFAbstract.getInstance(change.getValue());
+        if ( change != null ) {
+          this.periodicityFondoPDF = PDFAbstract
+              .getInstance( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_PROPORTION_TRANSFER_FONDO:
-        if(change != null) {
-          this.proportionTransferFondo = Double.valueOf(change.getValue());
+        if ( change != null ) {
+          this.proportionTransferFondo = Double.valueOf( change.getValue() );
         }
         break;
       case Constants.TAG_STATE_SPREAD_INFO_FUNCTION:
-        if(change != null) {
+        if ( change != null ) {
           this.spreadInfoFunctionStr = change.getValue();
         }
         break;
       case Constants.TAG_STATE_PROPORTION_CONSUMERS:
-        if(change != null) {
+        if ( change != null ) {
           this.proportionConsumersStr = change.getValue();
         }
         break;
       case Constants.TAG_STATE_PROPORTION_ENTREPRENEURS:
-        if(change != null) {
+        if ( change != null ) {
           this.proportionEntrepreneursStr = change.getValue();
         }
         break;

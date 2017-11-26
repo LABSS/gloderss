@@ -1,13 +1,15 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_STATE, namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_STATE,
+    namespace = Constants.TAG_NAMESPACE )
 public class StateConf {
   
   private int              numberPoliceOfficers;
@@ -59,8 +61,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_NUMBER_POLICE_OFFICERS)
-  public void setNumberPoliceOfficers(int numberPoliceOfficers) {
+  @XmlElement ( name = Constants.TAG_STATE_NUMBER_POLICE_OFFICERS )
+  public void setNumberPoliceOfficers( int numberPoliceOfficers ) {
     this.numberPoliceOfficers = numberPoliceOfficers;
   }
   
@@ -70,9 +72,9 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF)
+  @XmlElement ( name = Constants.TAG_STATE_GENERAL_INVESTIGATION_DURATION_PDF )
   public void setGeneralInvestigationDurationPDF(
-      String generalInvestigationDurationPDF) {
+      String generalInvestigationDurationPDF ) {
     this.generalInvestigationDurationPDF = generalInvestigationDurationPDF;
   }
   
@@ -82,9 +84,9 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF)
+  @XmlElement ( name = Constants.TAG_STATE_BUREAUCRATIC_ACTIVITY_DURATION_PDF )
   public void setBureaucraticActivityDurationPDF(
-      String bureaucraticActivityDurationPDF) {
+      String bureaucraticActivityDurationPDF ) {
     this.bureaucraticActivityDurationPDF = bureaucraticActivityDurationPDF;
   }
   
@@ -94,9 +96,9 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF)
+  @XmlElement ( name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_DURATION_PDF )
   public void setSpecificInvestigationDurationPDF(
-      String specificInvestigationDurationPDF) {
+      String specificInvestigationDurationPDF ) {
     this.specificInvestigationDurationPDF = specificInvestigationDurationPDF;
   }
   
@@ -106,9 +108,9 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY)
+  @XmlElement ( name = Constants.TAG_STATE_SPECIFIC_INVESTIGATION_PROBABILITY )
   public void setSpecificInvestigationProbability(
-      double specificInvestigationProbability) {
+      double specificInvestigationProbability ) {
     this.specificInvestigationProbability = specificInvestigationProbability;
   }
   
@@ -118,8 +120,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_CAPTURE_PROBABILITY)
-  public void setCaptureProbability(double captureProbability) {
+  @XmlElement ( name = Constants.TAG_STATE_CAPTURE_PROBABILITY )
+  public void setCaptureProbability( double captureProbability ) {
     this.captureProbability = captureProbability;
   }
   
@@ -129,8 +131,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_EVIDENCE_PROBABILITY)
-  public void setEvidenceProbability(double evidenceProbability) {
+  @XmlElement ( name = Constants.TAG_STATE_EVIDENCE_PROBABILITY )
+  public void setEvidenceProbability( double evidenceProbability ) {
     this.evidenceProbability = evidenceProbability;
   }
   
@@ -140,8 +142,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_CUSTODY_DURATION_PDF)
-  public void setCustodyDurationPDF(String custodyDurationPDF) {
+  @XmlElement ( name = Constants.TAG_STATE_CUSTODY_DURATION_PDF )
+  public void setCustodyDurationPDF( String custodyDurationPDF ) {
     this.custodyDurationPDF = custodyDurationPDF;
   }
   
@@ -151,8 +153,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_CONVICTION_PROBABILITY)
-  public void setConvictionProbability(double convictionProbability) {
+  @XmlElement ( name = Constants.TAG_STATE_CONVICTION_PROBABILITY )
+  public void setConvictionProbability( double convictionProbability ) {
     this.convictionProbability = convictionProbability;
   }
   
@@ -162,9 +164,9 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_COLLABORATION_CONVICTION_FUNCTION)
+  @XmlElement ( name = Constants.TAG_STATE_COLLABORATION_CONVICTION_FUNCTION )
   public void setCollaborationConvictionFunction(
-      String collaborationConvictionFunction) {
+      String collaborationConvictionFunction ) {
     this.collaborationConvictionFunction = collaborationConvictionFunction;
   }
   
@@ -174,8 +176,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF)
-  public void setImprisonmentDurationPDF(String imprisonmentDurationPDF) {
+  @XmlElement ( name = Constants.TAG_STATE_IMPRISONMENT_DURATION_PDF )
+  public void setImprisonmentDurationPDF( String imprisonmentDurationPDF ) {
     this.imprisonmentDurationPDF = imprisonmentDurationPDF;
   }
   
@@ -185,10 +187,10 @@ public class StateConf {
   }
   
   
-  @XmlElement(
-      name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT_PROBABILITY)
+  @XmlElement (
+      name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT_PROBABILITY )
   public void setNoCollaborationPunishmentProbability(
-      double noCollaborationPunishmentProbability) {
+      double noCollaborationPunishmentProbability ) {
     this.noCollaborationPunishmentProbability = noCollaborationPunishmentProbability;
   }
   
@@ -198,8 +200,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT)
-  public void setNoCollaborationPunishment(double noCollaborationPunishment) {
+  @XmlElement ( name = Constants.TAG_STATE_NO_COLLABORATION_PUNISHMENT )
+  public void setNoCollaborationPunishment( double noCollaborationPunishment ) {
     this.noCollaborationPunishment = noCollaborationPunishment;
   }
   
@@ -209,8 +211,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_TIME_TO_COMPENSATION_PDF)
-  public void setTimeToCompensationPDFPDF(String timeToCompensationPDF) {
+  @XmlElement ( name = Constants.TAG_STATE_TIME_TO_COMPENSATION_PDF )
+  public void setTimeToCompensationPDFPDF( String timeToCompensationPDF ) {
     this.timeToCompensationPDF = timeToCompensationPDF;
   }
   
@@ -220,8 +222,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_RESOURCE_FONDO)
-  public void setResourceFondo(double resourceFondo) {
+  @XmlElement ( name = Constants.TAG_STATE_RESOURCE_FONDO )
+  public void setResourceFondo( double resourceFondo ) {
     this.resourceFondo = resourceFondo;
   }
   
@@ -231,8 +233,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_PERIODICITY_FONDO_PDF)
-  public void setPeriodicityFondoPDF(String periodicityFondoPDF) {
+  @XmlElement ( name = Constants.TAG_STATE_PERIODICITY_FONDO_PDF )
+  public void setPeriodicityFondoPDF( String periodicityFondoPDF ) {
     this.periodicityFondoPDF = periodicityFondoPDF;
   }
   
@@ -242,8 +244,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_PROPORTION_TRANSFER_FONDO)
-  public void setProportionTransferFondo(double proportionTransferFondo) {
+  @XmlElement ( name = Constants.TAG_STATE_PROPORTION_TRANSFER_FONDO )
+  public void setProportionTransferFondo( double proportionTransferFondo ) {
     this.proportionTransferFondo = proportionTransferFondo;
   }
   
@@ -253,8 +255,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_SPREAD_INFO_FUNCTION)
-  public void setSpreadInfoFunction(String spreadInfoFunction) {
+  @XmlElement ( name = Constants.TAG_STATE_SPREAD_INFO_FUNCTION )
+  public void setSpreadInfoFunction( String spreadInfoFunction ) {
     this.spreadInfoFunction = spreadInfoFunction;
   }
   
@@ -264,8 +266,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_PROPORTION_CONSUMERS)
-  public void setProportionConsumers(String proportionConsumers) {
+  @XmlElement ( name = Constants.TAG_STATE_PROPORTION_CONSUMERS )
+  public void setProportionConsumers( String proportionConsumers ) {
     this.proportionConsumers = proportionConsumers;
   }
   
@@ -275,8 +277,8 @@ public class StateConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_STATE_PROPORTION_ENTREPRENEURS)
-  public void setProportionEntrepreneurs(String proportionEntrepreneurs) {
+  @XmlElement ( name = Constants.TAG_STATE_PROPORTION_ENTREPRENEURS )
+  public void setProportionEntrepreneurs( String proportionEntrepreneurs ) {
     this.proportionEntrepreneurs = proportionEntrepreneurs;
   }
   
@@ -286,9 +288,9 @@ public class StateConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_CHANGES)
-  @XmlElement(name = Constants.TAG_CHANGE)
-  public void setChangesConf(List<ChangeConf> changesConf) {
+  @XmlElementWrapper ( name = Constants.TAG_CHANGES )
+  @XmlElement ( name = Constants.TAG_CHANGE )
+  public void setChangesConf( List<ChangeConf> changesConf ) {
     this.changesConf = changesConf;
   }
 }

@@ -16,7 +16,7 @@ public class InfoSet extends InfoAbstract {
    * @return none
    */
   public InfoSet() {
-    super(InfoAbstract.Type.SET);
+    super( InfoAbstract.Type.SET );
   }
   
   
@@ -33,8 +33,8 @@ public class InfoSet extends InfoAbstract {
    *          Parameter value
    * @return TRUE parameter value set, FALSE otherwise
    */
-  public InfoSet(int sender, int receiver, String parameter, Object value) {
-    super(InfoAbstract.Type.SET, sender, receiver);
+  public InfoSet( int sender, int receiver, String parameter, Object value ) {
+    super( InfoAbstract.Type.SET, sender, receiver );
     this.parameter = parameter;
     this.value = value;
   }
@@ -58,7 +58,7 @@ public class InfoSet extends InfoAbstract {
    *          Parameter identification
    * @return none
    */
-  public void setParameter(String parameter) {
+  public void setParameter( String parameter ) {
     this.parameter = parameter;
   }
   
@@ -81,7 +81,7 @@ public class InfoSet extends InfoAbstract {
    *          Parameter value
    * @return none
    */
-  public void setValue(Object value) {
+  public void setValue( Object value ) {
     this.value = value;
   }
 }

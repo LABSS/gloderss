@@ -23,7 +23,7 @@ public abstract class InfoAbstract {
    * @param type
    *          Type of information communication
    */
-  public InfoAbstract(Type type) {
+  public InfoAbstract( Type type ) {
     this.type = type;
   }
   
@@ -38,7 +38,7 @@ public abstract class InfoAbstract {
    * @param receiver
    *          Receiver identification
    */
-  public InfoAbstract(Type type, int sender, int receiver) {
+  public InfoAbstract( Type type, int sender, int receiver ) {
     this.type = type;
     this.sender = sender;
     this.receiver = receiver;
@@ -63,7 +63,7 @@ public abstract class InfoAbstract {
    *          Type of information communication
    * @return none
    */
-  public void setType(Type type) {
+  public void setType( Type type ) {
     this.type = type;
   }
   
@@ -86,7 +86,7 @@ public abstract class InfoAbstract {
    *          Sender identification
    * @return none
    */
-  public void setSender(int sender) {
+  public void setSender( int sender ) {
     this.sender = sender;
   }
   
@@ -109,7 +109,7 @@ public abstract class InfoAbstract {
    *          Receiver identification
    * @return none
    */
-  public void setReceiver(int receiver) {
+  public void setReceiver( int receiver ) {
     this.receiver = receiver;
   }
 }

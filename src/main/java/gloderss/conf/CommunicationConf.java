@@ -1,13 +1,14 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_COMMUNICATION,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_COMMUNICATION,
+    namespace = Constants.TAG_NAMESPACE )
 public class CommunicationConf {
   
   private List<TypeConf>   types;
@@ -20,9 +21,9 @@ public class CommunicationConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_COMMUNICATION_TYPES)
-  @XmlElement(name = Constants.TAG_COMMUNICATION_TYPE)
-  public void setTypesConf(List<TypeConf> types) {
+  @XmlElementWrapper ( name = Constants.TAG_COMMUNICATION_TYPES )
+  @XmlElement ( name = Constants.TAG_COMMUNICATION_TYPE )
+  public void setTypesConf( List<TypeConf> types ) {
     this.types = types;
   }
   
@@ -32,9 +33,9 @@ public class CommunicationConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_COMMUNICATION_ACTIONS)
-  @XmlElement(name = Constants.TAG_COMMUNICATION_ACTION)
-  public void setActionsConf(List<ActionConf> actions) {
+  @XmlElementWrapper ( name = Constants.TAG_COMMUNICATION_ACTIONS )
+  @XmlElement ( name = Constants.TAG_COMMUNICATION_ACTION )
+  public void setActionsConf( List<ActionConf> actions ) {
     this.actions = actions;
   }
 }

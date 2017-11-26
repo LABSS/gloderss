@@ -5,7 +5,7 @@ public class PDConstant extends PDFAbstract {
   private double value;
   
   
-  public PDConstant(double value) {
+  public PDConstant( double value ) {
     this.value = value;
   }
   

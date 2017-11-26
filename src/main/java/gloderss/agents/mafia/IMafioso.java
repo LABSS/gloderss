@@ -17,25 +17,25 @@ public interface IMafioso {
   public void collectExtortion();
   
   
-  public void receivePayment(PayExtortionAction action);
+  public void receivePayment( PayExtortionAction action );
   
   
-  public void decidePunishment(NotPayExtortionAction action);
+  public void decidePunishment( NotPayExtortionAction action );
   
   
-  public void decideBenefit(PayExtortionAction action);
+  public void decideBenefit( PayExtortionAction action );
   
   
-  public void custody(CustodyAction action);
+  public void custody( CustodyAction action );
   
   
   public void releaseCustody();
   
   
-  public void imprisonment(ImprisonmentAction action);
+  public void imprisonment( ImprisonmentAction action );
   
   
-  public void releaseImprisonment(ReleaseImprisonmentAction action);
+  public void releaseImprisonment( ReleaseImprisonmentAction action );
   
   
   public void decidePentito();

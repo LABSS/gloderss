@@ -12,7 +12,7 @@ public class InfoRequest extends InfoAbstract {
    * @return none
    */
   public InfoRequest() {
-    super(InfoAbstract.Type.REQUEST);
+    super( InfoAbstract.Type.REQUEST );
   }
   
   
@@ -27,8 +27,8 @@ public class InfoRequest extends InfoAbstract {
    *          Information requested
    * @return Value of the information requested
    */
-  public InfoRequest(int sender, int receiver, String parameter) {
-    super(InfoAbstract.Type.REQUEST, sender, receiver);
+  public InfoRequest( int sender, int receiver, String parameter ) {
+    super( InfoAbstract.Type.REQUEST, sender, receiver );
     this.parameter = parameter;
   }
   
@@ -38,7 +38,7 @@ public class InfoRequest extends InfoAbstract {
   }
   
   
-  public void setInfoRequest(String parameter) {
+  public void setInfoRequest( String parameter ) {
     this.parameter = parameter;
   }
 }

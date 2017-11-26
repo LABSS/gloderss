@@ -1,13 +1,15 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_MAFIA, namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_MAFIA,
+    namespace = Constants.TAG_NAMESPACE )
 public class MafiaConf {
   
   private int              numberMafiosi;
@@ -47,8 +49,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_NUMBER_MAFIOSI)
-  public void setNumberMafiosi(int numberMafiosi) {
+  @XmlElement ( name = Constants.TAG_MAFIA_NUMBER_MAFIOSI )
+  public void setNumberMafiosi( int numberMafiosi ) {
     this.numberMafiosi = numberMafiosi;
   }
   
@@ -58,8 +60,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_LOGGING_TIME_UNIT)
-  public void setLoggingTimeUnit(int loggingTimeUnit) {
+  @XmlElement ( name = Constants.TAG_MAFIA_LOGGING_TIME_UNIT )
+  public void setLoggingTimeUnit( int loggingTimeUnit ) {
     this.loggingTimeUnit = loggingTimeUnit;
   }
   
@@ -69,8 +71,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_WEALTH)
-  public void setWealth(double wealth) {
+  @XmlElement ( name = Constants.TAG_MAFIA_WEALTH )
+  public void setWealth( double wealth ) {
     this.wealth = wealth;
   }
   
@@ -80,8 +82,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_DEMAND_PDF)
-  public void setDemandPDF(String demandPDF) {
+  @XmlElement ( name = Constants.TAG_MAFIA_DEMAND_PDF )
+  public void setDemandPDF( String demandPDF ) {
     this.demandPDF = demandPDF;
   }
   
@@ -91,9 +93,9 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_DEMAND_AFFILIATED_PROBABILITY)
+  @XmlElement ( name = Constants.TAG_MAFIA_DEMAND_AFFILIATED_PROBABILITY )
   public void
-      setDemandAffiliatedProbability(double demandAffiliatedProbability) {
+      setDemandAffiliatedProbability( double demandAffiliatedProbability ) {
     this.demandAffiliatedProbability = demandAffiliatedProbability;
   }
   
@@ -103,8 +105,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_EXTORTION_LEVEL)
-  public void setExtortionLevel(double extortionLevel) {
+  @XmlElement ( name = Constants.TAG_MAFIA_EXTORTION_LEVEL )
+  public void setExtortionLevel( double extortionLevel ) {
     this.extortionLevel = extortionLevel;
   }
   
@@ -114,8 +116,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_PUNISHMENT_SEVERITY)
-  public void setPunishmentSeverity(double punishmentSeverity) {
+  @XmlElement ( name = Constants.TAG_MAFIA_PUNISHMENT_SEVERITY )
+  public void setPunishmentSeverity( double punishmentSeverity ) {
     this.punishmentSeverity = punishmentSeverity;
   }
   
@@ -125,8 +127,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_COLLECTION_PDF)
-  public void setCollectionPDF(String collectionPDF) {
+  @XmlElement ( name = Constants.TAG_MAFIA_COLLECTION_PDF )
+  public void setCollectionPDF( String collectionPDF ) {
     this.collectionPDF = collectionPDF;
   }
   
@@ -136,8 +138,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_PUNISHMENT_PROBABILITY)
-  public void setPunishmentProbability(double punishmentProbability) {
+  @XmlElement ( name = Constants.TAG_MAFIA_PUNISHMENT_PROBABILITY )
+  public void setPunishmentProbability( double punishmentProbability ) {
     this.punishmentProbability = punishmentProbability;
   }
   
@@ -147,8 +149,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_MINIMUM_BENEFIT)
-  public void setMinimumBenefit(double minimumBenefit) {
+  @XmlElement ( name = Constants.TAG_MAFIA_MINIMUM_BENEFIT )
+  public void setMinimumBenefit( double minimumBenefit ) {
     this.minimumBenefit = minimumBenefit;
   }
   
@@ -158,8 +160,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_MAXIMUM_BENEFIT)
-  public void setMaximumBenefit(double maximumBenefit) {
+  @XmlElement ( name = Constants.TAG_MAFIA_MAXIMUM_BENEFIT )
+  public void setMaximumBenefit( double maximumBenefit ) {
     this.maximumBenefit = maximumBenefit;
   }
   
@@ -169,8 +171,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_PENTITI_PROBABILITY)
-  public void setPentitiProbability(double pentitiProbability) {
+  @XmlElement ( name = Constants.TAG_MAFIA_PENTITI_PROBABILITY )
+  public void setPentitiProbability( double pentitiProbability ) {
     this.pentitiProbability = pentitiProbability;
   }
   
@@ -180,8 +182,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_RECRUITING_THRESHOLD)
-  public void setRecruitingThreshold(double recruitingThreshold) {
+  @XmlElement ( name = Constants.TAG_MAFIA_RECRUITING_THRESHOLD )
+  public void setRecruitingThreshold( double recruitingThreshold ) {
     this.recruitingThreshold = recruitingThreshold;
   }
   
@@ -191,8 +193,8 @@ public class MafiaConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_MAFIA_RECRUITING_PROBABILITY)
-  public void setRecruitingProbability(double recruitingProbability) {
+  @XmlElement ( name = Constants.TAG_MAFIA_RECRUITING_PROBABILITY )
+  public void setRecruitingProbability( double recruitingProbability ) {
     this.recruitingProbability = recruitingProbability;
   }
   
@@ -202,9 +204,9 @@ public class MafiaConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_CHANGES)
-  @XmlElement(name = Constants.TAG_CHANGE)
-  public void setChangesConf(List<ChangeConf> changesConf) {
+  @XmlElementWrapper ( name = Constants.TAG_CHANGES )
+  @XmlElement ( name = Constants.TAG_CHANGE )
+  public void setChangesConf( List<ChangeConf> changesConf ) {
     this.changesConf = changesConf;
   }
 }

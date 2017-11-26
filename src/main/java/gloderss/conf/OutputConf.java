@@ -1,7 +1,7 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlElement;
+import gloderss.Constants;
 
 public class OutputConf {
   
@@ -19,8 +19,8 @@ public class OutputConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_OUTPUT_DIRECTORY)
-  public void setDirectory(String directory) {
+  @XmlElement ( name = Constants.TAG_OUTPUT_DIRECTORY )
+  public void setDirectory( String directory ) {
     this.directory = directory;
   }
   
@@ -30,8 +30,8 @@ public class OutputConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_OUTPUT_APPEND)
-  public void setAppend(boolean append) {
+  @XmlElement ( name = Constants.TAG_OUTPUT_APPEND )
+  public void setAppend( boolean append ) {
     this.append = append;
   }
   
@@ -41,8 +41,8 @@ public class OutputConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_OUTPUT_SEPARATOR)
-  public void setSeparator(String separator) {
+  @XmlElement ( name = Constants.TAG_OUTPUT_SEPARATOR )
+  public void setSeparator( String separator ) {
     this.separator = separator;
   }
   
@@ -52,8 +52,8 @@ public class OutputConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_OUTPUT_TIME_TO_WRITE)
-  public void setTimeToWrite(int timeToWrite) {
+  @XmlElement ( name = Constants.TAG_OUTPUT_TIME_TO_WRITE )
+  public void setTimeToWrite( int timeToWrite ) {
     this.timeToWrite = timeToWrite;
   }
 }

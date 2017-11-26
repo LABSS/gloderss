@@ -1,12 +1,13 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_COMMUNICATION_ACTION,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_COMMUNICATION_ACTION,
+    namespace = Constants.TAG_NAMESPACE )
 public class ActionConf {
   
   private String name;
@@ -19,8 +20,8 @@ public class ActionConf {
   }
   
   
-  @XmlAttribute(name = Constants.TAG_COMMUNICATION_ACTION_NAME)
-  public void setName(String name) {
+  @XmlAttribute ( name = Constants.TAG_COMMUNICATION_ACTION_NAME )
+  public void setName( String name ) {
     this.name = name;
   }
   
@@ -31,7 +32,7 @@ public class ActionConf {
   
   
   @XmlValue
-  public void setType(String type) {
+  public void setType( String type ) {
     this.type = type;
   }
 }

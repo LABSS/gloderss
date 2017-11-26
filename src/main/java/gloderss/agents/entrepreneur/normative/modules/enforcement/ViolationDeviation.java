@@ -1,14 +1,14 @@
 package gloderss.agents.entrepreneur.normative.modules.enforcement;
 
-import emilia.modules.enforcement.DeviationAbstract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import emilia.modules.enforcement.DeviationAbstract;
 
 public class ViolationDeviation extends DeviationAbstract {
   
-  @SuppressWarnings("unused")
+  @SuppressWarnings ( "unused" )
   private static final Logger logger = LoggerFactory
-      .getLogger(ViolationDeviation.class);
+      .getLogger( ViolationDeviation.class );
   
   
   /**
@@ -18,6 +18,6 @@ public class ViolationDeviation extends DeviationAbstract {
    * @return none
    */
   public ViolationDeviation() {
-    super(Type.VIOLATION);
+    super( Type.VIOLATION );
   }
 }

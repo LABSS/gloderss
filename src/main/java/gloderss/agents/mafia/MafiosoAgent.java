@@ -1,5 +1,9 @@
 package gloderss.agents.mafia;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import gloderss.Constants;
 import gloderss.actions.CollectAction;
 import gloderss.actions.CustodyAction;
@@ -27,10 +31,6 @@ import gloderss.output.MafiosiOutputEntity;
 import gloderss.output.OutputController;
 import gloderss.util.distribution.PDFAbstract;
 import gloderss.util.random.RandomUtil;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
@@ -90,12 +90,11 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
    *          State organization identification
    * @return none
    */
-  public MafiosoAgent(int id, EventSimulator simulator, MafiaConf conf,
-      int mafiaId, int stateId) {
-    super(id, simulator);
+  public MafiosoAgent( int id, EventSimulator simulator, MafiaConf conf, int mafiaId, int stateId ) {
+    super( id, simulator );
     
-    this.demandPDF = PDFAbstract.getInstance(conf.getDemandPDF());
-    this.collectionPDF = PDFAbstract.getInstance(conf.getCollectionPDF());
+    this.demandPDF = PDFAbstract.getInstance( conf.getDemandPDF() );
+    this.collectionPDF = PDFAbstract.getInstance( conf.getCollectionPDF() );
     
     this.demandAffiliatedProbability = conf.getDemandAffiliatedProbability();
     
@@ -134,8 +133,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setDemandPDF(String demandPDF) {
-    this.demandPDF = PDFAbstract.getInstance(demandPDF);
+  public void setDemandPDF( String demandPDF ) {
+    this.demandPDF = PDFAbstract.getInstance( demandPDF );
   }
   
   
@@ -144,8 +143,8 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setCollectionPDF(String collectionPDF) {
-    this.collectionPDF = PDFAbstract.getInstance(collectionPDF);
+  public void setCollectionPDF( String collectionPDF ) {
+    this.collectionPDF = PDFAbstract.getInstance( collectionPDF );
   }
   
   
@@ -155,7 +154,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   
   public void
-      setDemandAffiliatedProbability(double demandAffiliatedProbability) {
+      setDemandAffiliatedProbability( double demandAffiliatedProbability ) {
     this.demandAffiliatedProbability = demandAffiliatedProbability;
   }
   
@@ -165,7 +164,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setExtortionLevel(double extortionLevel) {
+  public void setExtortionLevel( double extortionLevel ) {
     this.extortionLevel = extortionLevel;
   }
   
@@ -175,7 +174,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setPunishmentSeverity(double punishmentSeverity) {
+  public void setPunishmentSeverity( double punishmentSeverity ) {
     this.punishmentSeverity = punishmentSeverity;
   }
   
@@ -185,7 +184,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setPunishmentProbability(double punishmentProbability) {
+  public void setPunishmentProbability( double punishmentProbability ) {
     this.punishmentProbability = punishmentProbability;
   }
   
@@ -195,7 +194,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setPentitiProbability(double pentitiProbability) {
+  public void setPentitiProbability( double pentitiProbability ) {
     this.pentitiProbability = pentitiProbability;
   }
   
@@ -205,7 +204,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setNeighbors(List<Integer> neighbors) {
+  public void setNeighbors( List<Integer> neighbors ) {
     this.neighbors = neighbors;
   }
   
@@ -215,7 +214,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setBenefits(Map<Integer, Double> benefits) {
+  public void setBenefits( Map<Integer, Double> benefits ) {
     this.benefits = benefits;
   }
   
@@ -225,7 +224,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setWealth(double wealth) {
+  public void setWealth( double wealth ) {
     this.wealth = wealth;
   }
   
@@ -235,7 +234,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setCustodyStatus(boolean custodyStatus) {
+  public void setCustodyStatus( boolean custodyStatus ) {
     this.custodyStatus = custodyStatus;
   }
   
@@ -245,7 +244,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setPrisonStatus(boolean prisonStatus) {
+  public void setPrisonStatus( boolean prisonStatus ) {
     this.prisonStatus = prisonStatus;
   }
   
@@ -255,7 +254,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   }
   
   
-  public void setPentitoStatus(boolean pentito) {
+  public void setPentitoStatus( boolean pentito ) {
     this.pentito = pentito;
   }
   
@@ -268,85 +267,85 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   @Override
   public void initializeSim() {
-    Event event = new Event(this.demandPDF.nextValue(), this,
-        Constants.EVENT_DEMAND_EXTORTION);
-    this.simulator.insert(event);
+    Event event = new Event( this.demandPDF.nextValue(), this,
+        Constants.EVENT_DEMAND_EXTORTION );
+    this.simulator.insert( event );
   }
   
   
   @Override
   public void decideExtortion() {
     
-    if((!this.prisonStatus) && (!this.custodyStatus) && (!this.pentito)) {
+    if ( (!this.prisonStatus) && (!this.custodyStatus) && (!this.pentito) ) {
       
       // Select a none IO affiliated Entrepreneur to extort
       int targetId = -1;
       boolean affiliated = false;
       do {
         // Get one target with the Mafia Organization
-        InfoRequest targetRequest = new InfoRequest(this.id, this.mafiaId,
-            Constants.REQUEST_TARGET_ID);
-        targetId = (int) this.sendInfo(targetRequest);
+        InfoRequest targetRequest = new InfoRequest( this.id, this.mafiaId,
+            Constants.REQUEST_TARGET_ID );
+        targetId = (int) this.sendInfo( targetRequest );
         
-        InfoRequest affiliationRequest = new InfoRequest(this.id, targetId,
-            Constants.REQUEST_AFFILIATION);
-        affiliated = (boolean) this.sendInfo(affiliationRequest);
+        InfoRequest affiliationRequest = new InfoRequest( this.id, targetId,
+            Constants.REQUEST_AFFILIATION );
+        affiliated = (boolean) this.sendInfo( affiliationRequest );
         
-      } while((affiliated)
-          && (RandomUtil.nextDouble() < this.demandAffiliatedProbability));
+      } while ( (affiliated)
+          && (RandomUtil.nextDouble() < this.demandAffiliatedProbability) );
       
       double wage = 0.0;
-      InfoRequest wageRequest = new InfoRequest(this.id, targetId,
-          Constants.REQUEST_DEFAULT_WAGE);
-      wage = (double) this.sendInfo(wageRequest);
+      InfoRequest wageRequest = new InfoRequest( this.id, targetId,
+          Constants.REQUEST_DEFAULT_WAGE );
+      wage = (double) this.sendInfo( wageRequest );
       
       double extortion = wage * this.extortionLevel;
       double punishment = wage * this.punishmentSeverity;
       
       double benefit = 0.0;
-      if(this.benefits.containsKey(targetId)) {
-        benefit = wage * this.benefits.get(targetId);
+      if ( this.benefits.containsKey( targetId ) ) {
+        benefit = wage * this.benefits.get( targetId );
       }
       
       // Obtains an Extortion Identification
       AbstractEntity outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.EXTORTION);
-      outputEntity.setValue(ExtortionOutputEntity.Field.TIME.name(),
-          this.simulator.now());
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIOSO_ID.name(),
-          this.id);
-      outputEntity.setValue(ExtortionOutputEntity.Field.ENTREPRENEUR_ID.name(),
-          targetId);
-      outputEntity
-          .setValue(ExtortionOutputEntity.Field.ENTREPRENEUR_WAGE.name(), wage);
+          .getEntity( EntityType.EXTORTION );
+      outputEntity.setValue( ExtortionOutputEntity.Field.TIME.name(),
+          this.simulator.now() );
+      outputEntity.setValue( ExtortionOutputEntity.Field.MAFIOSO_ID.name(),
+          this.id );
+      outputEntity.setValue( ExtortionOutputEntity.Field.ENTREPRENEUR_ID.name(),
+          targetId );
+      outputEntity.setValue(
+          ExtortionOutputEntity.Field.ENTREPRENEUR_WAGE.name(), wage );
       outputEntity.setValue(
           ExtortionOutputEntity.Field.ENTREPRENEUR_AFFILIATED.name(),
-          affiliated);
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_EXTORTION.name(),
-          extortion);
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHMENT.name(),
-          punishment);
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFIT.name(),
-          benefit);
+          affiliated );
+      outputEntity.setValue( ExtortionOutputEntity.Field.MAFIA_EXTORTION.name(),
+          extortion );
+      outputEntity.setValue(
+          ExtortionOutputEntity.Field.MAFIA_PUNISHMENT.name(), punishment );
+      outputEntity.setValue( ExtortionOutputEntity.Field.MAFIA_BENEFIT.name(),
+          benefit );
       
       int extortionId = (int) outputEntity
-          .getValue(ExtortionOutputEntity.Field.EXTORTION_ID.name());
+          .getValue( ExtortionOutputEntity.Field.EXTORTION_ID.name() );
       
       // Send an extortion demand to a victim
-      this.demand = new ExtortionAction(extortionId, this.id, targetId,
-          extortion, punishment, benefit);
+      this.demand = new ExtortionAction( extortionId, this.id, targetId,
+          extortion, punishment, benefit );
       
-      Message msg = new Message(this.simulator.now(), this.id, targetId,
-          this.demand);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, targetId,
+          this.demand );
+      this.sendMsg( msg );
       
       // Schedule the collection of extortion
       this.nextCollection = this.simulator.now()
           + this.collectionPDF.nextValue();
       
-      this.event = new Event(this.nextCollection, this,
-          Constants.EVENT_COLLECT_EXTORTION);
-      this.simulator.insert(this.event);
+      this.event = new Event( this.nextCollection, this,
+          Constants.EVENT_COLLECT_EXTORTION );
+      this.simulator.insert( this.event );
     }
   }
   
@@ -354,90 +353,91 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   @Override
   public void collectExtortion() {
     
-    if((this.demand != null) && (!this.prisonStatus) && (!this.custodyStatus)
-        && (!this.pentito)) {
+    if ( (this.demand != null) && (!this.prisonStatus) && (!this.custodyStatus)
+        && (!this.pentito) ) {
       
       int extortionId = (int) this.demand
-          .getParam(ExtortionAction.Param.EXTORTION_ID);
+          .getParam( ExtortionAction.Param.EXTORTION_ID );
       
       int targetId = (int) this.demand
-          .getParam(ExtortionAction.Param.ENTREPRENEUR_ID);
+          .getParam( ExtortionAction.Param.ENTREPRENEUR_ID );
       
       double extortion = (double) this.demand
-          .getParam(ExtortionAction.Param.EXTORTION);
+          .getParam( ExtortionAction.Param.EXTORTION );
       
-      CollectAction collect = new CollectAction(extortionId, this.id, targetId,
-          extortion);
+      CollectAction collect = new CollectAction( extortionId, this.id, targetId,
+          extortion );
       
-      Message msg = new Message(this.simulator.now(), this.id, targetId,
-          collect);
-      this.sendMsg(msg);
+      Message msg = new Message( this.simulator.now(), this.id, targetId,
+          collect );
+      this.sendMsg( msg );
       
       // Schedule the next demand extortion
-      this.event = new Event(this.nextCollection + this.demandPDF.nextValue(),
-          this, Constants.EVENT_DEMAND_EXTORTION);
-      this.simulator.insert(this.event);
+      this.event = new Event( this.nextCollection + this.demandPDF.nextValue(),
+          this, Constants.EVENT_DEMAND_EXTORTION );
+      this.simulator.insert( this.event );
     }
   }
   
   
   @Override
-  public void receivePayment(PayExtortionAction action) {
+  public void receivePayment( PayExtortionAction action ) {
     
     int extortionId = (int) action
-        .getParam(PayExtortionAction.Param.EXTORTION_ID);
+        .getParam( PayExtortionAction.Param.EXTORTION_ID );
     
     int targetId = (int) action
-        .getParam(PayExtortionAction.Param.ENTREPRENEUR_ID);
+        .getParam( PayExtortionAction.Param.ENTREPRENEUR_ID );
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     
-    int mafiosoId = (int) action.getParam(PayExtortionAction.Param.MAFIOSO_ID);
+    int mafiosoId = (int) action
+        .getParam( PayExtortionAction.Param.MAFIOSO_ID );
     
-    if(mafiosoId == this.id) {
+    if ( mafiosoId == this.id ) {
       this.wealth += (Double) action
-          .getParam(PayExtortionAction.Param.EXTORTION);
+          .getParam( PayExtortionAction.Param.EXTORTION );
       
-      outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
-          false);
+      outputEntity.setValue( ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
+          false );
       
-      this.payingEntrepreneurs.add(targetId);
+      this.payingEntrepreneurs.add( targetId );
       
-      this.decideBenefit(action);
+      this.decideBenefit( action );
     }
   }
   
   
   @Override
-  public void decidePunishment(NotPayExtortionAction action) {
+  public void decidePunishment( NotPayExtortionAction action ) {
     
-    if(!this.prisonStatus) {
+    if ( !this.prisonStatus ) {
       int extortionId = (int) action
-          .getParam(NotPayExtortionAction.Param.EXTORTION_ID);
+          .getParam( NotPayExtortionAction.Param.EXTORTION_ID );
       
       int entrepreneurId = (int) action
-          .getParam(NotPayExtortionAction.Param.ENTREPRENEUR_ID);
+          .getParam( NotPayExtortionAction.Param.ENTREPRENEUR_ID );
       
       AbstractEntity outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.EXTORTION, extortionId);
+          .getEntity( EntityType.EXTORTION, extortionId );
       
       // Probability to punish
-      if(RandomUtil.nextDouble() < this.punishmentProbability) {
+      if ( RandomUtil.nextDouble() < this.punishmentProbability ) {
         
-        MafiaPunishmentAction punish = new MafiaPunishmentAction(extortionId,
+        MafiaPunishmentAction punish = new MafiaPunishmentAction( extortionId,
             entrepreneurId, this.id,
-            (double) this.demand.getParam(ExtortionAction.Param.PUNISHMENT));
+            (double) this.demand.getParam( ExtortionAction.Param.PUNISHMENT ) );
         
-        Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-            punish);
-        this.sendMsg(msg);
+        Message msg = new Message( this.simulator.now(), this.id,
+            entrepreneurId, punish );
+        this.sendMsg( msg );
         
-        outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
-            true);
+        outputEntity.setValue(
+            ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(), true );
       } else {
-        outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(),
-            false);
+        outputEntity.setValue(
+            ExtortionOutputEntity.Field.MAFIA_PUNISHED.name(), false );
         outputEntity.setActive();
       }
     }
@@ -445,55 +445,55 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   
   @Override
-  public void decideBenefit(PayExtortionAction action) {
+  public void decideBenefit( PayExtortionAction action ) {
     
     int extortionId = (int) action
-        .getParam(PayExtortionAction.Param.EXTORTION_ID);
+        .getParam( PayExtortionAction.Param.EXTORTION_ID );
     
     int entrepreneurId = (int) action
-        .getParam(PayExtortionAction.Param.ENTREPRENEUR_ID);
+        .getParam( PayExtortionAction.Param.ENTREPRENEUR_ID );
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.EXTORTION, extortionId);
+        .getEntity( EntityType.EXTORTION, extortionId );
     
     double benefitAmount = (double) this.demand
-        .getParam(ExtortionAction.Param.BENEFIT);
-    if(this.wealth < benefitAmount) {
+        .getParam( ExtortionAction.Param.BENEFIT );
+    if ( this.wealth < benefitAmount ) {
       benefitAmount = this.wealth;
     }
     
     this.wealth -= benefitAmount;
     
-    MafiaBenefitAction benefit = new MafiaBenefitAction(extortionId,
-        entrepreneurId, this.id, benefitAmount);
+    MafiaBenefitAction benefit = new MafiaBenefitAction( extortionId,
+        entrepreneurId, this.id, benefitAmount );
     
-    Message msg = new Message(this.simulator.now(), this.id, entrepreneurId,
-        benefit);
-    this.sendMsg(msg);
+    Message msg = new Message( this.simulator.now(), this.id, entrepreneurId,
+        benefit );
+    this.sendMsg( msg );
     
-    outputEntity.setValue(ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
-        true);
+    outputEntity.setValue( ExtortionOutputEntity.Field.MAFIA_BENEFITED.name(),
+        true );
     outputEntity.setActive();
   }
   
   
   @Override
-  public void custody(CustodyAction action) {
-    int mafiosoId = (int) action.getParam(CustodyAction.Param.MAFIOSO_ID);
+  public void custody( CustodyAction action ) {
+    int mafiosoId = (int) action.getParam( CustodyAction.Param.MAFIOSO_ID );
     
-    if(this.id == mafiosoId) {
+    if ( this.id == mafiosoId ) {
       this.custodyStatus = true;
       
       AbstractEntity outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.MAFIOSI);
+          .getEntity( EntityType.MAFIOSI );
       this.outputId = outputEntity.getEntityId();
       
-      outputEntity.setValue(MafiosiOutputEntity.Field.MAFIOSO_ID.name(),
-          this.id);
-      outputEntity.setValue(MafiosiOutputEntity.Field.CUSTODY_TIME.name(),
-          this.simulator.now());
+      outputEntity.setValue( MafiosiOutputEntity.Field.MAFIOSO_ID.name(),
+          this.id );
+      outputEntity.setValue( MafiosiOutputEntity.Field.CUSTODY_TIME.name(),
+          this.simulator.now() );
       
-      this.simulator.cancel(this.event);
+      this.simulator.cancel( this.event );
     }
   }
   
@@ -503,66 +503,69 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
     this.custodyStatus = false;
     
     AbstractEntity outputEntity = OutputController.getInstance()
-        .getEntity(EntityType.MAFIOSI, this.outputId);
+        .getEntity( EntityType.MAFIOSI, this.outputId );
     
-    outputEntity.setValue(MafiosiOutputEntity.Field.TIME.name(),
-        (int) this.simulator.now());
-    outputEntity.setValue(MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
-        this.simulator.now());
+    outputEntity.setValue( MafiosiOutputEntity.Field.TIME.name(),
+        (int) this.simulator.now() );
+    outputEntity.setValue(
+        MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
+        this.simulator.now() );
     outputEntity.setActive();
     
-    if((!this.pentito) && (!this.prisonStatus)) {
+    if ( (!this.pentito) && (!this.prisonStatus) ) {
       // Schedule the next extortion demand
-      Event event = new Event(this.simulator.now() + this.demandPDF.nextValue(),
-          this, Constants.EVENT_DEMAND_EXTORTION);
-      this.simulator.insert(event);
+      Event event = new Event(
+          this.simulator.now() + this.demandPDF.nextValue(), this,
+          Constants.EVENT_DEMAND_EXTORTION );
+      this.simulator.insert( event );
     }
   }
   
   
   @Override
-  public void imprisonment(ImprisonmentAction action) {
+  public void imprisonment( ImprisonmentAction action ) {
     
-    int mafiosoId = (int) action.getParam(ImprisonmentAction.Param.MAFIOSO_ID);
+    int mafiosoId = (int) action
+        .getParam( ImprisonmentAction.Param.MAFIOSO_ID );
     
-    if(this.id == mafiosoId) {
+    if ( this.id == mafiosoId ) {
       this.custodyStatus = false;
       this.prisonStatus = true;
       
       AbstractEntity outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.MAFIOSI, this.outputId);
+          .getEntity( EntityType.MAFIOSI, this.outputId );
       outputEntity.setValue(
           MafiosiOutputEntity.Field.RELEASE_CUSTODY_TIME.name(),
-          this.simulator.now());
-      outputEntity.setValue(MafiosiOutputEntity.Field.IMPRISONED_TIME.name(),
-          this.simulator.now());
+          this.simulator.now() );
+      outputEntity.setValue( MafiosiOutputEntity.Field.IMPRISONED_TIME.name(),
+          this.simulator.now() );
     }
   }
   
   
   @Override
-  public void releaseImprisonment(ReleaseImprisonmentAction action) {
+  public void releaseImprisonment( ReleaseImprisonmentAction action ) {
     
     int mafiosoId = (int) action
-        .getParam(ReleaseImprisonmentAction.Param.MAFIOSO_ID);
+        .getParam( ReleaseImprisonmentAction.Param.MAFIOSO_ID );
     
-    if(this.id == mafiosoId) {
+    if ( this.id == mafiosoId ) {
       this.prisonStatus = false;
       this.custodyStatus = false;
       
       AbstractEntity outputEntity = OutputController.getInstance()
-          .getEntity(EntityType.MAFIOSI, this.outputId);
+          .getEntity( EntityType.MAFIOSI, this.outputId );
       outputEntity.setValue(
           MafiosiOutputEntity.Field.RELEASE_IMPRISONMENT_TIME.name(),
-          this.simulator.now());
+          this.simulator.now() );
       outputEntity.setActive();
       
-      if(!this.pentito) {
+      if ( !this.pentito ) {
         // Schedule the next extortion demand
         Event event = new Event(
             this.simulator.now() + this.demandPDF.nextValue(), this,
-            Constants.EVENT_DEMAND_EXTORTION);
-        this.simulator.insert(event);
+            Constants.EVENT_DEMAND_EXTORTION );
+        this.simulator.insert( event );
       }
     }
   }
@@ -570,18 +573,18 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   @Override
   public void decidePentito() {
-    if(RandomUtil.nextDouble() < this.pentitiProbability) {
+    if ( RandomUtil.nextDouble() < this.pentitiProbability ) {
       
       List<Integer> payerEntrepreneurs = new ArrayList<Integer>();
-      payerEntrepreneurs.addAll(this.payingEntrepreneurs);
+      payerEntrepreneurs.addAll( this.payingEntrepreneurs );
       this.payingEntrepreneurs.clear();
       
       this.pentito = true;
-      PentitoAction pentiti = new PentitoAction(this.id, this.neighbors,
-          payerEntrepreneurs);
-      Message msg = new Message(this.simulator.now(), this.id, this.stateId,
-          pentiti);
-      this.sendMsg(msg);
+      PentitoAction pentiti = new PentitoAction( this.id, this.neighbors,
+          payerEntrepreneurs );
+      Message msg = new Message( this.simulator.now(), this.id, this.stateId,
+          pentiti );
+      this.sendMsg( msg );
     }
   }
   
@@ -600,7 +603,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   private List<Integer> getPayingEntrepreneurs() {
     List<Integer> payers = new ArrayList<Integer>();
     
-    payers.addAll(this.payingEntrepreneurs);
+    payers.addAll( this.payingEntrepreneurs );
     this.payingEntrepreneurs.clear();
     
     return payers;
@@ -614,35 +617,36 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
    *******************************/
   
   @Override
-  public synchronized void handleMessage(Message msg) {
+  public synchronized void handleMessage( Message msg ) {
     
     Object content = msg.getContent();
     
-    if((msg.getSender() != this.id) && (msg.getReceiver().contains(this.id))) {
+    if ( (msg.getSender() != this.id)
+        && (msg.getReceiver().contains( this.id )) ) {
       
       // Pay extortion
-      if(content instanceof PayExtortionAction) {
-        this.receivePayment((PayExtortionAction) content);
+      if ( content instanceof PayExtortionAction ) {
+        this.receivePayment( (PayExtortionAction) content );
         
         // Not pay extortion
-      } else if(content instanceof NotPayExtortionAction) {
-        this.decidePunishment((NotPayExtortionAction) content);
+      } else if ( content instanceof NotPayExtortionAction ) {
+        this.decidePunishment( (NotPayExtortionAction) content );
         
         // Custody
-      } else if(content instanceof CustodyAction) {
-        this.custody((CustodyAction) content);
+      } else if ( content instanceof CustodyAction ) {
+        this.custody( (CustodyAction) content );
         
         // Release custody
-      } else if(content instanceof ReleaseCustodyAction) {
+      } else if ( content instanceof ReleaseCustodyAction ) {
         this.releaseCustody();
         
         // Imprisonment
-      } else if(content instanceof ImprisonmentAction) {
-        this.imprisonment((ImprisonmentAction) content);
+      } else if ( content instanceof ImprisonmentAction ) {
+        this.imprisonment( (ImprisonmentAction) content );
         
         // Release Imprisonment
-      } else if(content instanceof ReleaseImprisonmentAction) {
-        this.releaseImprisonment((ReleaseImprisonmentAction) content);
+      } else if ( content instanceof ReleaseImprisonmentAction ) {
+        this.releaseImprisonment( (ReleaseImprisonmentAction) content );
         
       }
     }
@@ -650,13 +654,13 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   
   @Override
-  public Object handleInfo(InfoAbstract info) {
+  public Object handleInfo( InfoAbstract info ) {
     Object infoRequested = null;
     
-    if(info.getType().equals(InfoAbstract.Type.REQUEST)) {
+    if ( info.getType().equals( InfoAbstract.Type.REQUEST ) ) {
       
       InfoRequest request = (InfoRequest) info;
-      switch(request.getInfoRequest()) {
+      switch ( request.getInfoRequest() ) {
         case Constants.REQUEST_ID:
           infoRequested = this.id;
           break;
@@ -667,10 +671,10 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
           infoRequested = this.getPayingEntrepreneurs();
       }
       
-    } else if(info.getType().equals(InfoAbstract.Type.SET)) {
+    } else if ( info.getType().equals( InfoAbstract.Type.SET ) ) {
       
       InfoSet set = (InfoSet) info;
-      switch(set.getParameter()) {
+      switch ( set.getParameter() ) {
         case Constants.PARAMETER_WEALTH:
           this.wealth = (double) set.getValue();
           break;
@@ -682,7 +686,7 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
   
   
   @Override
-  public void handleObservation(Message msg) {
+  public void handleObservation( Message msg ) {
     // NOTHING
   }
   
@@ -694,9 +698,9 @@ public class MafiosoAgent extends AbstractAgent implements IMafioso {
    *******************************/
   
   @Override
-  public void handleEvent(Event event) {
+  public void handleEvent( Event event ) {
     
-    switch((String) event.getCommand()) {
+    switch ( (String) event.getCommand() ) {
       case Constants.EVENT_DEMAND_EXTORTION:
         this.decideExtortion();
         break;

@@ -19,28 +19,28 @@ public class Event extends AbstractEvent {
   }
   
   
-  public Event(EventHandler eventHandler) {
+  public Event( EventHandler eventHandler ) {
     this.eventHandler = eventHandler;
     this.command = null;
     this.parameter = null;
   }
   
   
-  public Event(EventHandler eventHandler, Object command) {
+  public Event( EventHandler eventHandler, Object command ) {
     this.eventHandler = eventHandler;
     this.command = command;
     this.parameter = null;
   }
   
   
-  public Event(EventHandler eventHandler, Object command, Object parameter) {
+  public Event( EventHandler eventHandler, Object command, Object parameter ) {
     this.eventHandler = eventHandler;
     this.command = command;
     this.parameter = parameter;
   }
   
   
-  public Event(double time, EventHandler eventHandler, Object command) {
+  public Event( double time, EventHandler eventHandler, Object command ) {
     this.time = time;
     this.eventHandler = eventHandler;
     this.command = command;
@@ -48,8 +48,7 @@ public class Event extends AbstractEvent {
   }
   
   
-  public Event(double time, EventHandler eventHandler, Object command,
-      Object parameter) {
+  public Event( double time, EventHandler eventHandler, Object command, Object parameter ) {
     this.time = time;
     this.eventHandler = eventHandler;
     this.command = command;
@@ -62,19 +61,19 @@ public class Event extends AbstractEvent {
   }
   
   
-  public void setTime(double time) {
+  public void setTime( double time ) {
     this.time = time;
   }
   
   
-  public void set(double time, Object command) {
-    this.setTime(time);
+  public void set( double time, Object command ) {
+    this.setTime( time );
     this.command = command;
   }
   
   
-  public void set(double time, Object command, Object parameter) {
-    this.setTime(time);
+  public void set( double time, Object command, Object parameter ) {
+    this.setTime( time );
     this.command = command;
     this.parameter = parameter;
   }
@@ -85,7 +84,7 @@ public class Event extends AbstractEvent {
   }
   
   
-  public void setMessageHandler(EventHandler messageHandler) {
+  public void setMessageHandler( EventHandler messageHandler ) {
     this.eventHandler = messageHandler;
   }
   
@@ -95,7 +94,7 @@ public class Event extends AbstractEvent {
   }
   
   
-  public void setCommand(Object command) {
+  public void setCommand( Object command ) {
     this.command = command;
   }
   
@@ -105,7 +104,7 @@ public class Event extends AbstractEvent {
   }
   
   
-  public void setParameter(Object parameter) {
+  public void setParameter( Object parameter ) {
     this.parameter = parameter;
   }
   
@@ -115,22 +114,22 @@ public class Event extends AbstractEvent {
   }
   
   
-  public void setSimulator(AbstractEventSimulator simulator) {
+  public void setSimulator( AbstractEventSimulator simulator ) {
     this.simulator = simulator;
   }
   
   
   @Override
-  public void execute(AbstractEventSimulator simulator) {
-    if((this.command != null) && (this.eventHandler != null)) {
-      this.eventHandler.handleEvent(this);
+  public void execute( AbstractEventSimulator simulator ) {
+    if ( (this.command != null) && (this.eventHandler != null) ) {
+      this.eventHandler.handleEvent( this );
     }
   }
   
   
   @Override
-  public boolean lessThan(Comparable e) {
-    if(e != null) {
+  public boolean lessThan( Comparable e ) {
+    if ( e != null ) {
       Event event = (Event) e;
       
       return this.time < event.getTime();

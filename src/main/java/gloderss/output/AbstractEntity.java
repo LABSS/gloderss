@@ -27,7 +27,7 @@ public abstract class AbstractEntity {
   private boolean active;
   
   
-  public AbstractEntity(int entityId) {
+  public AbstractEntity( int entityId ) {
     this.entityId = entityId;
     this.active = false;
   }
@@ -48,10 +48,10 @@ public abstract class AbstractEntity {
   }
   
   
-  public abstract void setValue(String fieldStr, Object value);
+  public abstract void setValue( String fieldStr, Object value );
   
   
-  public abstract Object getValue(String fieldStr);
+  public abstract Object getValue( String fieldStr );
   
   
   public abstract String getLine();

@@ -1,6 +1,5 @@
 package gloderss.conf;
 
-import gloderss.Constants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,9 +7,11 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import gloderss.Constants;
 
-@XmlRootElement(name = Constants.TAG_CONSUMER,
-    namespace = Constants.TAG_NAMESPACE)
+@XmlRootElement (
+    name = Constants.TAG_CONSUMER,
+    namespace = Constants.TAG_NAMESPACE )
 public class ConsumerConf {
   
   // Number of consumers
@@ -58,8 +59,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_NUMBER_CONSUMERS)
-  public void setNumberConsumers(int numberConsumers) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_NUMBER_CONSUMERS )
+  public void setNumberConsumers( int numberConsumers ) {
     this.numberConsumers = numberConsumers;
   }
   
@@ -69,8 +70,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_LOGGING_TIME_UNIT)
-  public void setLoggingTimeUnit(int loggingTimeUnit) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_LOGGING_TIME_UNIT )
+  public void setLoggingTimeUnit( int loggingTimeUnit ) {
     this.loggingTimeUnit = loggingTimeUnit;
   }
   
@@ -80,8 +81,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_CLUSTERED)
-  public void setClustered(boolean clustered) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_CLUSTERED )
+  public void setClustered( boolean clustered ) {
     this.clustered = clustered;
   }
   
@@ -91,8 +92,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_BUY_PDF)
-  public void setBuyPDF(String buyPDF) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_BUY_PDF )
+  public void setBuyPDF( String buyPDF ) {
     this.buyPDF = buyPDF;
   }
   
@@ -102,8 +103,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH)
-  public void setNumberEntrepreneursSearch(int numberEntrepreneursSearch) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_NUMBER_ENTREPRENEURS_SEARCH )
+  public void setNumberEntrepreneursSearch( int numberEntrepreneursSearch ) {
     this.numberEntrepreneursSearch = numberEntrepreneursSearch;
   }
   
@@ -113,8 +114,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_REPUTATION)
-  public void setReputationConf(CReputationConf reputationConf) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_REPUTATION )
+  public void setReputationConf( CReputationConf reputationConf ) {
     this.reputationConf = reputationConf;
   }
   
@@ -124,8 +125,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_CONSUMER_SANCTION)
-  public void setSanctionConf(CSanctionConf sanctionConf) {
+  @XmlElement ( name = Constants.TAG_CONSUMER_SANCTION )
+  public void setSanctionConf( CSanctionConf sanctionConf ) {
     this.sanctionConf = sanctionConf;
   }
   
@@ -135,8 +136,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_XML)
-  public void setNormativeXML(String normativeXML) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_XML )
+  public void setNormativeXML( String normativeXML ) {
     this.normativeXML = normativeXML;
   }
   
@@ -146,8 +147,8 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_XSD)
-  public void setNormativeXSD(String normativeXSD) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_XSD )
+  public void setNormativeXSD( String normativeXSD ) {
     this.normativeXSD = normativeXSD;
   }
   
@@ -157,11 +158,11 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT)
-  public void setIndividualWeight(double individualWeight) {
-    if(individualWeight < 0.0) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_INDIVIDUAL_WEIGHT )
+  public void setIndividualWeight( double individualWeight ) {
+    if ( individualWeight < 0.0 ) {
       this.individualWeight = 0.0;
-    } else if(individualWeight > 1.0) {
+    } else if ( individualWeight > 1.0 ) {
       this.individualWeight = 1.0;
     } else {
       this.individualWeight = individualWeight;
@@ -174,11 +175,11 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT)
-  public void setNormativeWeight(double normativeWeight) {
-    if(normativeWeight < 0.0) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_NORMATIVE_WEIGHT )
+  public void setNormativeWeight( double normativeWeight ) {
+    if ( normativeWeight < 0.0 ) {
       this.normativeWeight = 0.0;
-    } else if(normativeWeight > 1.0) {
+    } else if ( normativeWeight > 1.0 ) {
       this.normativeWeight = 1.0;
     } else {
       this.normativeWeight = normativeWeight;
@@ -191,9 +192,9 @@ public class ConsumerConf {
   }
   
   
-  @XmlElement(name = Constants.TAG_NORMATIVE_NORMS_SALIENCE)
-  @XmlJavaTypeAdapter(NormSalienceAdapter.class)
-  public void setSaliences(Map<Integer, NormSalienceConf> salienceConf) {
+  @XmlElement ( name = Constants.TAG_NORMATIVE_NORMS_SALIENCE )
+  @XmlJavaTypeAdapter ( NormSalienceAdapter.class )
+  public void setSaliences( Map<Integer, NormSalienceConf> salienceConf ) {
     this.salienceConf = salienceConf;
   }
   
@@ -203,9 +204,9 @@ public class ConsumerConf {
   }
   
   
-  @XmlElementWrapper(name = Constants.TAG_CHANGES)
-  @XmlElement(name = Constants.TAG_CHANGE)
-  public void setChangesConf(List<ChangeConf> changesConf) {
+  @XmlElementWrapper ( name = Constants.TAG_CHANGES )
+  @XmlElement ( name = Constants.TAG_CHANGE )
+  public void setChangesConf( List<ChangeConf> changesConf ) {
     this.changesConf = changesConf;
   }
 }

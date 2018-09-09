@@ -62,6 +62,7 @@
 			<mafia>mafia.csv</mafia>
 			<mafiosi>mafiosi.csv</mafiosi>
 			<state>state.csv</state>
+			<investigation>investigation.csv</investigation>
 			<intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
 		</filename>
 	</general>

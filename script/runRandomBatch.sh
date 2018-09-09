@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XMLpath=src/main/resources/conf/randomBatch.xml
+XMLpath=src/main/resources/conf/sensitivity-analysis/randomBatch.xml
 XSDpath=src/main/resources/conf/randomBatch.xsd
 
 if [ $# -gt 0 ]
@@ -9,7 +9,7 @@ then
   then
     XMLpath=$1
   else
-    echo "./runBatch.sh [Batch XML path]"
+    echo "./runRandomBatch.sh [Batch XML path]"
     exit 1
   fi
 fi

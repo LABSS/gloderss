@@ -1363,6 +1363,8 @@ public class EntrepreneurAgent extends CitizenAgent
         // Normative process
         this.normative.input( msg );
         
+        this.normative.update();
+        
         // Reputation
         this.mafiaPunisherRep
             .updateReputation( (MafiaPunishmentAction) content );
@@ -1470,9 +1472,7 @@ public class EntrepreneurAgent extends CitizenAgent
                 msg.getReceiver(), pay );
             this.normative.input( newMsg );
           }
-          
         }
-        
       }
     }
   }
@@ -1502,20 +1502,20 @@ public class EntrepreneurAgent extends CitizenAgent
       return infoRequested;
       
     } else if ( info.getType().equals( InfoAbstract.Type.SET ) ) {
-      Object infoResult = new Boolean( false );
+      Object infoResult = Boolean.FALSE;
       
       InfoSet set = (InfoSet) info;
       switch ( set.getParameter() ) {
         case Constants.PARAMETER_STATE_ID:
           if ( set.getValue() instanceof Integer ) {
             this.stateId = (Integer) set.getValue();
-            infoResult = new Boolean( true );
+            infoResult = Boolean.TRUE;
           }
           break;
         case Constants.PARAMETER_STATE_PUNISHMENT:
           if ( set.getValue() instanceof Double ) {
             this.statePunishment = ((Double) set.getValue() * this.defaultWage);
-            infoResult = new Boolean( true );
+            infoResult = Boolean.TRUE;
           }
           break;
       }

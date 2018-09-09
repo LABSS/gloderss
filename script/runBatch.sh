@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XMLpath=src/main/resources/conf/sampleBatch.xml
+XMLpath=src/main/resources/conf/batch/batch.xml
 XSDpath=src/main/resources/conf/batch.xsd
 
 if [ $# -gt 0 ]

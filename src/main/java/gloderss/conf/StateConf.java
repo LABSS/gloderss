@@ -14,6 +14,8 @@ public class StateConf {
   
   private int              numberPoliceOfficers;
   
+  private int              loggingTimeUnit;
+  
   private String           generalInvestigationDurationPDF;
   
   private String           bureaucraticActivityDurationPDF;
@@ -64,6 +66,17 @@ public class StateConf {
   @XmlElement ( name = Constants.TAG_STATE_NUMBER_POLICE_OFFICERS )
   public void setNumberPoliceOfficers( int numberPoliceOfficers ) {
     this.numberPoliceOfficers = numberPoliceOfficers;
+  }
+  
+  
+  public int getLoggingTimeUnit() {
+    return this.loggingTimeUnit;
+  }
+  
+  
+  @XmlElement ( name = Constants.TAG_STATE_LOGGING_TIME_UNIT )
+  public void setLoggingTimeUnit( int loggingTimeUnit ) {
+    this.loggingTimeUnit = loggingTimeUnit;
   }
   
   

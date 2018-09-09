@@ -1,6 +1,10 @@
 Changes
 =======
 
+09/07/2018
+----------
+1. (New Feature) Log the number of General and Specific Investigations conducted and requested
+
 08/05/2017
 ----------
 1. (New Feature) Created the GLODERSRandomBatch that allows the execution of a set of

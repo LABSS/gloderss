@@ -23,6 +23,8 @@ public class FilenameConf {
   
   private String state;
   
+  private String investigation;
+  
   private String intermediaryOrganization;
   
   
@@ -122,6 +124,17 @@ public class FilenameConf {
   @XmlElement ( name = Constants.TAG_FILENAME_STATE )
   public void setState( String state ) {
     this.state = state;
+  }
+  
+  
+  public String getInvestigation() {
+    return this.investigation;
+  }
+  
+  
+  @XmlElement ( name = Constants.TAG_FILENAME_INVESTIGATION )
+  public void setInvestigation( String investigation ) {
+    this.investigation = investigation;
   }
   
   

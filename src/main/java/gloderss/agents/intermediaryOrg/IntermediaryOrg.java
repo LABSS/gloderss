@@ -189,7 +189,7 @@ public class IntermediaryOrg extends AbstractAgent implements IIntermediaryOrg {
     
     this.spreadInfoFunction.clearVariables();
     this.spreadInfoFunction.putVariable( NUMBER_ACTIONS,
-        (new Integer( this.numActions )).toString() );
+        Integer.valueOf( this.numActions ).toString() );
     
     double probSpreadInfo = 0.0;
     try {

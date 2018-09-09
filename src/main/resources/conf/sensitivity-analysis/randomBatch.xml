@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <randomBatch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="randomBatch.xsd">
-	
-	<outputDir>./output</outputDir>
+
+	<outputDir>/data/downloads/garbage/SS17/0.49-0.51/data/sensitivity-analysis</outputDir>
 	<outputFile>config.csv</outputFile>
-	<replica>500</replica>
-	
-	<xmlScenario>./src/main/resources/conf/scenario.xml</xmlScenario>
-	<xsdScenario>./src/main/resources/conf/scenario.xsd</xsdScenario>
-	
+	<replica>400</replica>
+
+	<xmlScenario>src/main/resources/conf/sensitivity-analysis/scenario.xml</xmlScenario>
+	<xsdScenario>src/main/resources/conf/scenario.xsd</xsdScenario>
+
 	<changes>
 <!-- 		<change>
 			<name>numberPoliceOfficers</name>

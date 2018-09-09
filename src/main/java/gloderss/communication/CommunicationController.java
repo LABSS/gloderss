@@ -348,7 +348,7 @@ public class CommunicationController {
       if ( this.observe.containsKey( observed ) ) {
         List<Integer> aux = this.observe.get( observed );
         if ( aux.contains( observer ) ) {
-          aux.remove( new Integer( observer ) );
+          aux.remove( Integer.valueOf( observer ) );
           this.observe.put( observed, aux );
         }
       }
@@ -369,7 +369,7 @@ public class CommunicationController {
     if ( this.observe.containsKey( observed ) ) {
       List<Integer> aux = this.observe.get( observed );
       if ( aux.contains( observer ) ) {
-        aux.remove( new Integer( observer ) );
+        aux.remove( Integer.valueOf( observer ) );
         this.observe.put( observed, aux );
       }
     }

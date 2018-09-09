@@ -1,6 +1,6 @@
 #!/bin/bash
 
-XMLpath=src/test/resources/conf/sampleScenario.xml
+XMLpath=src/test/resources/conf/scenario.xml
 XSDpath=src/main/resources/conf/scenario.xsd
 
 if [ $# -gt 0 ]

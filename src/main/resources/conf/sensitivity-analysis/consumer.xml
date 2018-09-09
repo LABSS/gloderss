@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<emilia xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="emilia.xsd">
+
+	<eventClassifierClass>gloderss.agents.consumer.normative.modules.classifier.EventClassifier</eventClassifierClass>
+	<normRecognitionClass>gloderss.normative.modules.recognition.NormRecognitionController</normRecognitionClass>
+	<normAdoptionClass>gloderss.normative.modules.adoption.NormAdoptionController</normAdoptionClass>
+	<normSalienceClass>gloderss.normative.modules.salience.NormSalienceController</normSalienceClass>
+	<normEnforcementClass>gloderss.agents.consumer.normative.modules.enforcement.NormEnforcementController</normEnforcementClass>
+	<normComplianceClass>gloderss.normative.modules.compliance.NormComplianceController</normComplianceClass>
+	<normativeBoardClass>gloderss.normative.board.NormativeBoard</normativeBoardClass>
+</emilia>

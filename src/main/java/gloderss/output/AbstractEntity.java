@@ -12,6 +12,7 @@ public abstract class AbstractEntity {
     MAFIA,
     MAFIOSI,
     STATE,
+    INVESTIGATION,
     INTERMEDIARY_ORGANIZATION;
   }
   

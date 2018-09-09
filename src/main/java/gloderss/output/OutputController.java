@@ -200,7 +200,7 @@ public class OutputController implements EventHandler {
       entity = this.getEntity( type, id );
       
       if ( entity != null ) {
-        this.entityId.put( type, id + 1 );
+        this.entityId.put( type, id + 1);
       }
     }
     
@@ -255,6 +255,9 @@ public class OutputController implements EventHandler {
           break;
         case STATE:
           entity = new StateOutputEntity( id, this.separator );
+          break;
+        case INVESTIGATION:
+          entity = new InvestigationOutputEntity( id, this.separator );
           break;
         case INTERMEDIARY_ORGANIZATION:
           entity = new IntermediaryOrganizationOutputEntity( id,

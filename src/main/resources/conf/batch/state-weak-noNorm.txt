@@ -2,6 +2,7 @@
 	<state>
 		<!-- Police -->
 		<numberPoliceOfficers>5</numberPoliceOfficers>
+		<loggingTimeUnit>100</loggingTimeUnit>
 		<generalInvestigationDurationPDF>NORMAL(10,5)</generalInvestigationDurationPDF>
 		<bureaucraticActivityDurationPDF>NORMAL(100,5)</bureaucraticActivityDurationPDF>
 		<specificInvestigationDurationPDF>NORMAL(10,5)</specificInvestigationDurationPDF>

@@ -66,6 +66,7 @@
       <mafia>mafia.csv</mafia>
       <mafiosi>mafiosi.csv</mafiosi>
       <state>state.csv</state>
+      <investigation>investigation.csv</investigation>
       <intermediaryOrganization>intermediaryOrganization.csv</intermediaryOrganization>
     </filename>
   </general>
@@ -242,6 +243,7 @@
   <state>
     <!-- Police -->
     <numberPoliceOfficers>20</numberPoliceOfficers>
+    <loggingTimeUnit>100</loggingTimeUnit>
     <generalInvestigationDurationPDF>NORMAL(100,10)</generalInvestigationDurationPDF>
     <bureaucraticActivityDurationPDF>NORMAL(50,10)</bureaucraticActivityDurationPDF>
     <specificInvestigationDurationPDF>NORMAL(300,10)</specificInvestigationDurationPDF>

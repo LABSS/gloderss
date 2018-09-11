@@ -17,3 +17,6 @@ hs_err_pid*
 /log
 *.csv
 *.log
+
+# Visual Studio Code
+.vscode

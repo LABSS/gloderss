@@ -16,7 +16,7 @@
     <emilia.version>0.1</emilia.version>
     <junit.version>[4.13.1,)</junit.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <logback.version>1.2.3</logback.version>
+    <logback.version>1.3.12</logback.version>
     <colt.version>1.2.0</colt.version>
     <jeval.version>0.9.4</jeval.version>
     <javaassist.version>3.12.1.GA</javaassist.version>
